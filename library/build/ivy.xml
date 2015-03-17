@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-  <info organisation="AndroidCommons" module="library" revision="unspecified" status="integration" publication="20150313134110">
+  <info organisation="AndroidCommons" module="library" revision="unspecified" status="integration" publication="20150316133610">
     <description/>
   </info>
   <configurations>
