@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/E:/workspace_androidstudio/AndroidCommons/library/src/main/res/values-sw720dp/ac__booleans.xml -->
-    <eat-comment/>
-    <bool name="isTablet">true</bool>
-</resources>
