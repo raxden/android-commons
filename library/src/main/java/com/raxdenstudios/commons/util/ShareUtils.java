@@ -38,7 +38,7 @@ public class ShareUtils {
 			this.mediaType = mediaType;
 		}
 	}
-	
+
 	public static final void share(Context context, String titleChooser, ShareContainer toShare) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType(toShare.mediaType != null ? toShare.mediaType.toString() : MediaType.TEXT_PLAIN.toString());
@@ -56,10 +56,10 @@ public class ShareUtils {
 		}
 		
 		Log.d(TAG, "==============");
-		Log.d(TAG, titleChooser);
-		Log.d(TAG, intent.getType());
-		Log.d(TAG, intent.getExtras().getString(Intent.EXTRA_SUBJECT));
-		Log.d(TAG, intent.getExtras().getString(Intent.EXTRA_TEXT));
+		Log.d(TAG, "title: "+ titleChooser);
+		Log.d(TAG, "type:" +intent.getType());
+		Log.d(TAG, "subject:" +intent.getExtras().getString(Intent.EXTRA_SUBJECT));
+		Log.d(TAG, "text:" +intent.getExtras().getString(Intent.EXTRA_TEXT));
 		Log.d(TAG, "==============");
 		
 		context.startActivity(Intent.createChooser(intent, titleChooser));
