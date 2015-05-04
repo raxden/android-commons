@@ -297,7 +297,11 @@ public class Utils {
 	    }
 	    return true;
 	}	
-	
+
+    public static String getApplicationName(Context context) {
+        return context.getString(context.getApplicationInfo().labelRes);
+    }
+
 	public static String getPackageName(Context context) {
 		String packageName = "";
 		try {
