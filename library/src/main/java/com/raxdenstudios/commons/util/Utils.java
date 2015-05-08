@@ -23,7 +23,6 @@ import android.view.Display;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,8 +38,7 @@ import java.util.Map.Entry;
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
-		
-	@SuppressWarnings("rawtypes")
+
 	public static boolean hasValue(Object value) {
 		if (value == null) { 
 			return false;
@@ -60,7 +58,7 @@ public class Utils {
 			if (((Map)value).isEmpty()) return false;
 		} else if (value instanceof List) {
 			if (((List)value).isEmpty()) return false;
-		} else if (value instanceof TextView || value instanceof EditText) {
+		} else if (value instanceof TextView) {
 			if (((TextView)value).getText() == null) return false;
 			if (((TextView)value).getText().toString() == null) return false;
 			if (((TextView)value).getText().toString().equals("")) return false;
@@ -271,32 +269,32 @@ public class Utils {
 	 * the Google Play Store or enable it in the device's system settings.
 	 */
 	public static boolean checkPlayServices(Context context) {
-		
-		final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-		
-		if (context == null || !((context instanceof FragmentActivity) || (context instanceof Activity))) {
-			throw new IllegalStateException("Context must be FragmentActivity instance.");
-		}
-	    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-	    if (resultCode != ConnectionResult.SUCCESS) {
-	        if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-	        	if (context instanceof FragmentActivity) {
-	        		GooglePlayServicesUtil.getErrorDialog(resultCode, (FragmentActivity)context, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-	        	} else if (context instanceof Activity) {
-	        		GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity)context, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-	        	}
-	        } else {
-	        	Log.i(TAG, "This device is not supported.");
-	        	if (context instanceof FragmentActivity) {
-	        		((FragmentActivity)context).finish();
-	        	} else if (context instanceof Activity) {
-	        		((Activity)context).finish();
-	        	}
-	        }
-	        return false;
-	    }
-	    return true;
-	}	
+
+        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+        if (context == null || !((context instanceof FragmentActivity) || (context instanceof Activity))) {
+            throw new IllegalStateException("Context must be FragmentActivity instance.");
+        }
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                if (context instanceof FragmentActivity) {
+                    GooglePlayServicesUtil.getErrorDialog(resultCode, (FragmentActivity) context, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                } else if (context instanceof Activity) {
+                    GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity) context, PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                }
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                if (context instanceof FragmentActivity) {
+                    ((FragmentActivity) context).finish();
+                } else if (context instanceof Activity) {
+                    ((Activity) context).finish();
+                }
+            }
+            return false;
+        }
+        return true;
+    }
 
     public static String getApplicationName(Context context) {
         return context.getString(context.getApplicationInfo().labelRes);

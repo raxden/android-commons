@@ -29,13 +29,13 @@ public class NotificationUtils {
         return INSTANCE;
     }
 
-    public void sendNotification(Context context, int notificationId, int smallIcon, String contentTitle, String bigText, String contentText, String ticker) {
+    public void sendNotification(Context context, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker) {
         Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT);
-        sendNotification(context, pendingIntent, notificationId, smallIcon, contentTitle, bigText, contentText, ticker);
+        sendNotification(context, pendingIntent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker);
     }
 
-    public void sendNotification(Context context, PendingIntent pendingIntent, int notificationId, int smallIcon, String contentTitle, String bigText, String contentText, String ticker) {
+    public void sendNotification(Context context, PendingIntent pendingIntent, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         if (smallIcon != 0) builder.setSmallIcon(smallIcon);
         if (Utils.hasValue(contentTitle)) builder.setContentTitle(contentTitle);
