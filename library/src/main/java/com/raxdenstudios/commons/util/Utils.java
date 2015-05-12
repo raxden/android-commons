@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * Created by Raxden on 11/05/2015.
+ */
 public class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
