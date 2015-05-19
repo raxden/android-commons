@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-	    compile 'com.github.raxden:AndroidCommons:v2.0.1@aar'
+	    compile 'com.github.raxden:AndroidCommons:v2.0.0@aar'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
 	    <groupId>com.github.raxden</groupId>
 	    <artifactId>AndroidCommons</artifactId>
-	    <version>v2.0.1</version>
+	    <version>v2.0.0</version>
 </dependency>
 ```
 
