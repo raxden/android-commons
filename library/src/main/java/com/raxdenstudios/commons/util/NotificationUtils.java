@@ -30,7 +30,7 @@ public class NotificationUtils {
     }
 
     public void sendNotification(Context context, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker) {
-        Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).addCategory(Utils.getPackageName(context)).putExtra("notificationId", notificationId);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT);
         sendNotification(context, pendingIntent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker);
     }
