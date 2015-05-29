@@ -36,7 +36,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Created by Raxden on 11/05/2015.
+ *
+ * @author Angel Gomez
  */
 public class Utils {
 

@@ -1,7 +1,5 @@
 package com.raxdenstudios.commons.manager;
 
-import java.util.Locale;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -9,6 +7,12 @@ import android.support.v4.app.FragmentActivity;
 
 import com.raxdenstudios.commons.util.Utils;
 
+import java.util.Locale;
+
+/**
+ *
+ * @author Angel Gomez
+ */
 public class LocaleManager {
 	
     public static final String DEFAULT_LANGUAGE = "en_us";

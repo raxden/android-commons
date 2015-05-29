@@ -6,6 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class MemoryUtils {
 
     private static final String TAG = MemoryUtils.class.getSimpleName();

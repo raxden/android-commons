@@ -4,6 +4,10 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public abstract class ObjectUtils {
 
 	private static final int INITIAL_HASH = 7;

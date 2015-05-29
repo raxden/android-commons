@@ -3,7 +3,7 @@ package com.raxdenstudios.commons.util;
 /**
  * Exception thrown when encountering an invalid Base64 input character.
  *
- * @author nelson
+ * @author Angel Gomez
  */
 public class Base64DecoderException extends Exception {
     public Base64DecoderException() {

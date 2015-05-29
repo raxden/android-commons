@@ -3,6 +3,10 @@ package com.raxdenstudios.commons.util;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class ResourceUtils {
 
 	public static int getResourceId(Context context, String name) {

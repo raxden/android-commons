@@ -1,5 +1,9 @@
 package com.raxdenstudios.commons.util;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class ConvertUtils {
 
 	public static int longToInt(long value) {

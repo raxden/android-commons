@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class GZIPUtils {
 
 	public static byte[] compress(String string) throws IOException {

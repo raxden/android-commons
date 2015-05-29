@@ -6,7 +6,8 @@ import android.content.DialogInterface;
 import android.view.View;
 
 /**
- * Created by Raxden on 11/05/2015.
+ *
+ * @author Angel Gomez
  */
 public class AlertDialogUtils {
 

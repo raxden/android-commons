@@ -8,6 +8,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class ReflectionUtils {
 
     private static final String TAG = ReflectionUtils.class.getSimpleName();

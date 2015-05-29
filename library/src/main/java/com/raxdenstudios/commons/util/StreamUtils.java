@@ -20,6 +20,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
+/**
+ *
+ * @author Angel Gomez
+ */
 public class StreamUtils {
 
     private static final String TAG = StreamUtils.class.getSimpleName();

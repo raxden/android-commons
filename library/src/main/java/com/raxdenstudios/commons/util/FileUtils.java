@@ -8,6 +8,10 @@ import android.util.Log;
 
 import java.io.File;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class FileUtils {
 
     private static final String TAG = FileUtils.class.getSimpleName();

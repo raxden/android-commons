@@ -4,6 +4,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class NetworkUtils {
 		
 	public static boolean isNetworkAvailable(Context context) {

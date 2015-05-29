@@ -15,6 +15,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class HttpClientUtils {
 
     private static final String TAG = HttpClientUtils.class.getSimpleName();

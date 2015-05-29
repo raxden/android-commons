@@ -13,6 +13,8 @@ import java.util.Map;
  * while allowing for contains, get and remove calls with any case of key.
  *
  * <p>Does <i>not</i> support <code>null</code> keys.
+ *
+ * @author Angel Gomez
  */
 @SuppressWarnings("serial")
 public class LinkedCaseInsensitiveMap<V> extends LinkedHashMap<String, V> {

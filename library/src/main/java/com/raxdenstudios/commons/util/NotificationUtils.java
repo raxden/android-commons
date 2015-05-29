@@ -8,7 +8,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 /**
- * Created by agomez on 23/04/2015.
+ *
+ * @author Angel Gomez
  */
 public class NotificationUtils {
 

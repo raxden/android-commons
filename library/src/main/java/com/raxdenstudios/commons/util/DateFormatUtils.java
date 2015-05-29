@@ -8,6 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class DateFormatUtils {
 
     private static final String TAG = DateFormatUtils.class.getSimpleName();

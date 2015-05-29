@@ -20,6 +20,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class BitmapUtils {
 
     private static final String TAG = BitmapUtils.class.getSimpleName();

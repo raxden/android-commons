@@ -3,6 +3,10 @@ package com.raxdenstudios.commons.util;
 import android.view.View;
 import android.view.ViewGroup;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class ViewUtils {
 
 	public static final void changeViewVisibility(View view, int visibility) {

@@ -8,6 +8,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class EncryptUtils {
 
     private static final String TAG = EncryptUtils.class.getSimpleName();

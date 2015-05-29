@@ -10,6 +10,10 @@ import com.raxdenstudios.commons.R;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @author Angel Gomez
+ */
 public class NavigationUtils {
 
     private static final String TAG = NavigationUtils.class.getSimpleName();

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-
+/**
+ *
+ * @author Angel Gomez
+ */
 public class ShareUtils {
 
     private static final String TAG = ShareUtils.class.getSimpleName();
@@ -39,6 +42,23 @@ public class ShareUtils {
 		}
 	}
 
+    public static final void shareViaEmail(Context context, String to) {
+        shareViaEmail(context, null, to);
+    }
+
+    public static final void shareViaEmail(Context context, String titleChooser, String to) {
+        shareViaEmail(context, titleChooser, Uri.fromParts("mailto", to, null));
+    }
+
+    public static final void shareViaEmail(Context context, String titleChooser, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        context.startActivity(titleChooser != null ? Intent.createChooser(intent, titleChooser) : intent);
+    }
+
+    public static final void share(Context context, ShareContainer toShare) {
+        share(context, null, toShare);
+    }
+
 	public static final void share(Context context, String titleChooser, ShareContainer toShare) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType(toShare.mediaType != null ? toShare.mediaType.toString() : MediaType.TEXT_PLAIN.toString());
@@ -61,8 +81,8 @@ public class ShareUtils {
 		Log.d(TAG, "subject:" +intent.getExtras().getString(Intent.EXTRA_SUBJECT));
 		Log.d(TAG, "text:" +intent.getExtras().getString(Intent.EXTRA_TEXT));
 		Log.d(TAG, "==============");
-		
-		context.startActivity(Intent.createChooser(intent, titleChooser));
+
+        context.startActivity(titleChooser != null ? Intent.createChooser(intent, titleChooser) : intent);
 	}
 
 }

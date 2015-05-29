@@ -13,7 +13,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 
-
+/**
+ *
+ * @author Angel Gomez
+ */
 public class MediaType implements Comparable<MediaType> {
 
 	/**

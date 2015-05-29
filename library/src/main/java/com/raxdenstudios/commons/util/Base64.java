@@ -6,6 +6,8 @@ package com.raxdenstudios.commons.util;
  *
  * <p>Note {@link CharBase64} is a GWT-compatible implementation of this
  * class.
+ *
+ * @author Angel Gomez
  */
 public class Base64 {
     /** Specify encoding (value is {@code true}). */

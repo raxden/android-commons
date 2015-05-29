@@ -7,7 +7,8 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 
 /**
- * Created by agomez on 19/01/2015.
+ *
+ * @author Angel Gomez
  */
 public class DrawableUtils {
 
