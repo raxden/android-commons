@@ -1,23 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven'
 
 group = 'com.raxdenstudios'
-version = '2.0.13'
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.groupId = group
-            pom.artifactId = rootProject.name
-            pom.version = version
-            repository(url: "file://${buildDir}/repo")
-        }
-    }
-}
+version = '2.0.14'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         minSdkVersion 10
@@ -37,6 +26,7 @@ android {
     }
 
 }
+
 repositories {
     maven { url "https://jitpack.io" }
 }
@@ -46,3 +36,32 @@ dependencies {
     compile 'com.google.android.gms:play-services:+'
     compile 'com.android.support:appcompat-v7:+'
 }
+
+// build a jar with source files
+//task sourcesJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    classifier = 'sources'
+//}
+//artifacts {
+//    archives sourcesJar
+//}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.groupId = group
+            pom.artifactId = rootProject.name
+            pom.version = version
+            repository(url: "file://${buildDir}/repo")
+        }
+    }
+}
+
+// uncomment to build a jar file in addition to the default aar file
+//android.libraryVariants.all { variant ->
+//    def name = variant.buildType.name
+//    def task = project.tasks.create "jar${name.capitalize()}", Jar
+//    task.dependsOn variant.javaCompile
+//    task.from variant.javaCompile.destinationDir
+//    artifacts.add('archives', task);
+//}
