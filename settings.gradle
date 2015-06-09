@@ -1,2 +1,2 @@
-rootProject.name = 'androidcommons'
 include ':library'
+rootProject.name = 'androidcommons'
