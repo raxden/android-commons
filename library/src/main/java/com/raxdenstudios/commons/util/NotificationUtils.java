@@ -30,13 +30,13 @@ public class NotificationUtils {
         return INSTANCE;
     }
 
-    public void sendNotification(Context context, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker) {
+    public void sendNotification(Context context, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker, int defaults) {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(Utils.getPackageName(context)).putExtra("notificationId", notificationId);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT);
-        sendNotification(context, pendingIntent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker);
+        sendNotification(context, pendingIntent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker, defaults);
     }
 
-    public void sendNotification(Context context, PendingIntent pendingIntent, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker) {
+    public void sendNotification(Context context, PendingIntent pendingIntent, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker, int defaults) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         if (smallIcon != 0) builder.setSmallIcon(smallIcon);
         if (Utils.hasValue(contentTitle)) builder.setContentTitle(contentTitle);
@@ -44,6 +44,7 @@ public class NotificationUtils {
         if (Utils.hasValue(contentText)) builder.setContentText(contentText);
         if (Utils.hasValue(ticker)) builder.setTicker(ticker);
         if (pendingIntent != null) builder.setContentIntent(pendingIntent);
+        builder.setDefaults(defaults);
         sendNotification(context, notificationId, builder.build());
     }
 
