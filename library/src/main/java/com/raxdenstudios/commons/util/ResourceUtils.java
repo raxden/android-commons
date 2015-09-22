@@ -18,12 +18,23 @@ public class ResourceUtils {
 			resID = getStringId(context,name);
 		}
 		if(resID == 0) {
-			resID = getLayoutId(context,name);
+			resID = getLayoutId(context, name);
 		}
-		
+		if(resID == 0) {
+			resID = getColorId(context,name);
+		}
+
 		return resID;
 	}
-	
+
+	public static int getColorId(Context context, String name) {
+		int resID = 0;
+		if(Utils.hasValue(name)) {
+			resID = context.getResources().getIdentifier(name.replaceAll("R.color.", ""), "color", context.getPackageName());
+		}
+		return resID;
+	}
+
 	public static int getStringId(Context context, String name) {
 		int resID = 0;
 		if(Utils.hasValue(name)) {
