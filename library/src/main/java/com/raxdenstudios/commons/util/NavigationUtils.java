@@ -80,12 +80,12 @@ public class NavigationUtils {
             intent.putExtra(name, (Serializable)value);
         }
         if (context instanceof FragmentActivity) {
-            ((FragmentActivity)context).overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
             if (requestCode > 0) {
                 ((FragmentActivity)context).startActivityForResult(intent, requestCode);
             } else {
                 context.startActivity(intent);
             }
+            ((FragmentActivity)context).overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
         } else {
             context.startActivity(intent);
         }

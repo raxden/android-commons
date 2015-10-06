@@ -31,7 +31,13 @@ public class NotificationUtils {
     }
 
     public void sendNotification(Context context, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker, int defaults) {
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(Utils.getPackageName(context)).putExtra("notificationId", notificationId);
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(Utils.getPackageName(context));
+        intent.putExtra("notificationId", notificationId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        sendNotification(context, intent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker, defaults);
+    }
+
+    public void sendNotification(Context context, Intent intent, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker, int defaults) {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT);
         sendNotification(context, pendingIntent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker, defaults);
     }
