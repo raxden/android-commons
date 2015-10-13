@@ -16,21 +16,29 @@ public class EncryptUtils {
 
     private static final String TAG = EncryptUtils.class.getSimpleName();
 
-    public enum AlgorithmType {SHA,MD5};
+    public enum AlgorithmType {SHA, SHA_1, MD5}
         
 	public static String hashKey(String key){
-		return hashKey(key,AlgorithmType.MD5,HTTP.UTF_8);
-	}	
-	
-	public static String hashKey(String key, AlgorithmType algorithmType, String encoding){ 	
+		return hashKey(key, AlgorithmType.MD5, HTTP.UTF_8);
+	}
+
+	public static String hashKey(String key, AlgorithmType algorithmType) {
+		return hashKey(key, algorithmType, HTTP.UTF_8);
+	}
+
+	public static String hashKey(String key, AlgorithmType algorithmType, String encoding){
 		byte[] digestBytes = getDigest(key, algorithmType, encoding);
 		return Base64.encodeWebSafe(digestBytes, true);
 	}
-	
-    public static String hashKeyForDisk(String key) {
-		return hashKeyForDisk(key,AlgorithmType.MD5,HTTP.UTF_8);
-    }	
-	
+
+	public static String hashKeyForDisk(String key) {
+		return hashKeyForDisk(key, AlgorithmType.MD5, HTTP.UTF_8);
+    }
+
+	public static String hashKeyForDisk(String key, AlgorithmType algorithmType) {
+		return hashKeyForDisk(key, algorithmType, HTTP.UTF_8);
+	}
+
 	public static String hashKeyForDisk(String key, AlgorithmType algorithmType, String encoding){ 	
 		byte[] digestBytes = getDigest(key, algorithmType, encoding);
         return bytesToHexString(digestBytes);
@@ -54,6 +62,7 @@ public class EncryptUtils {
 	private static String getAlgorithm(AlgorithmType algorithmType){
 		switch(algorithmType){
 			case SHA:	return "SHA";
+			case SHA_1:	return "SHA-1";
 			case MD5:	return "MD5";
 			default:  	return "MD5";
 		}
