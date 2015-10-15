@@ -148,7 +148,7 @@ public class StreamUtils {
 		HttpURLConnection urlConnection = null;
 		InputStream is = null;
 		try {
-			HttpClientUtils.disableConnectionReuseIfNecessary();
+//			HttpClientUtils.disableConnectionReuseIfNecessary();
 			urlConnection = (HttpURLConnection) url.openConnection();  
 			is = urlConnection.getInputStream();
 			file = downloadDataToFile(context, filename, is, encoding, listener);
@@ -192,7 +192,7 @@ public class StreamUtils {
 		HttpURLConnection urlConnection = null;
 		InputStream is = null;
 		try {
-			HttpClientUtils.disableConnectionReuseIfNecessary();
+//			HttpClientUtils.disableConnectionReuseIfNecessary();
 			urlConnection = (HttpURLConnection) url.openConnection();  
 			is = urlConnection.getInputStream();
 			final int contentLength = urlConnection.getContentLength();
@@ -242,7 +242,7 @@ public class StreamUtils {
 		HttpURLConnection urlConnection = null;
 		InputStream is = null;
 		try {
-			HttpClientUtils.disableConnectionReuseIfNecessary();
+//			HttpClientUtils.disableConnectionReuseIfNecessary();
 			urlConnection = (HttpURLConnection) url.openConnection();  
 			is = urlConnection.getInputStream();
 			final int contentLength = urlConnection.getContentLength();

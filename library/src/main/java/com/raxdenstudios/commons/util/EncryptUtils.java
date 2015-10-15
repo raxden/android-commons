@@ -2,7 +2,6 @@ package com.raxdenstudios.commons.util;
 
 import android.util.Log;
 
-import org.apache.http.protocol.HTTP;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -19,11 +18,11 @@ public class EncryptUtils {
     public enum AlgorithmType {SHA, SHA_1, MD5}
         
 	public static String hashKey(String key){
-		return hashKey(key, AlgorithmType.MD5, HTTP.UTF_8);
+		return hashKey(key, AlgorithmType.MD5, "UTF-8");
 	}
 
 	public static String hashKey(String key, AlgorithmType algorithmType) {
-		return hashKey(key, algorithmType, HTTP.UTF_8);
+		return hashKey(key, algorithmType, "UTF-8");
 	}
 
 	public static String hashKey(String key, AlgorithmType algorithmType, String encoding){
@@ -32,11 +31,11 @@ public class EncryptUtils {
 	}
 
 	public static String hashKeyForDisk(String key) {
-		return hashKeyForDisk(key, AlgorithmType.MD5, HTTP.UTF_8);
+		return hashKeyForDisk(key, AlgorithmType.MD5, "UTF-8");
     }
 
 	public static String hashKeyForDisk(String key, AlgorithmType algorithmType) {
-		return hashKeyForDisk(key, algorithmType, HTTP.UTF_8);
+		return hashKeyForDisk(key, algorithmType, "UTF-8");
 	}
 
 	public static String hashKeyForDisk(String key, AlgorithmType algorithmType, String encoding){ 	
