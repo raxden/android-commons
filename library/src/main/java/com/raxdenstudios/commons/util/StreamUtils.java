@@ -31,12 +31,12 @@ public class StreamUtils {
 	
     private static final int IO_BUFFER_SIZE = 8 * 1024;
 	
-	public static interface OnAmountDownloadListener {
-		public void onAmountDownload(int amountComplete);
+	public interface OnAmountDownloadListener {
+		void onAmountDownload(int amountComplete);
 	}
     
-	public static interface OnProgressDownloadListener {
-		public void onProgressDownload(float progressComplete);
+	public interface OnProgressDownloadListener {
+		void onProgressDownload(float progressComplete);
 	}
 	
 	public static String readFileStream(File file) {
@@ -148,7 +148,6 @@ public class StreamUtils {
 		HttpURLConnection urlConnection = null;
 		InputStream is = null;
 		try {
-//			HttpClientUtils.disableConnectionReuseIfNecessary();
 			urlConnection = (HttpURLConnection) url.openConnection();  
 			is = urlConnection.getInputStream();
 			file = downloadDataToFile(context, filename, is, encoding, listener);
@@ -192,7 +191,6 @@ public class StreamUtils {
 		HttpURLConnection urlConnection = null;
 		InputStream is = null;
 		try {
-//			HttpClientUtils.disableConnectionReuseIfNecessary();
 			urlConnection = (HttpURLConnection) url.openConnection();  
 			is = urlConnection.getInputStream();
 			final int contentLength = urlConnection.getContentLength();
@@ -242,7 +240,6 @@ public class StreamUtils {
 		HttpURLConnection urlConnection = null;
 		InputStream is = null;
 		try {
-//			HttpClientUtils.disableConnectionReuseIfNecessary();
 			urlConnection = (HttpURLConnection) url.openConnection();  
 			is = urlConnection.getInputStream();
 			final int contentLength = urlConnection.getContentLength();

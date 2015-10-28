@@ -168,6 +168,15 @@ public class Utils {
 		imm.hideSoftInputFromWindow(binder, 0);
 	}
 
+	/**
+	 * Open keyboard on screen.
+	 * @param context
+	 */
+	public static void openKeyboard(Context context) {
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+	}
+
     /**
      * Este método retorna la cuenta principal de google. Si el usuario tiene más de una cuenta
      * configurada se retornará la primera. El uso de este método requiere del siguiente permiso
@@ -368,6 +377,15 @@ public class Utils {
      */
 	public static boolean isTablet(Context context) {
 	    return context.getResources().getBoolean(R.bool.isTablet);
+	}
+
+	/**
+	 * Checks if device is on landscape
+	 * @param context
+	 * @return <code>true</code> if device is a tablet.
+	 */
+	public static boolean isLandscape(Context context) {
+		return context.getResources().getBoolean(R.bool.isLandscape);
 	}
 
 
