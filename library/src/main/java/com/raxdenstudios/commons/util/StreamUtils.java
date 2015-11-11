@@ -150,6 +150,16 @@ public class StreamUtils {
 
     /* ========================================================================================== */
 
+    public static boolean downloadData(byte[] data, File file, OnProgressDownloadListener listener) {
+        boolean operation = false;
+        try {
+            operation = downloadData(data, new FileOutputStream(file), listener);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return operation;
+    }
+
     public static boolean downloadData(String source, File file, OnProgressDownloadListener listener) {
         boolean operation = false;
         try {
@@ -168,6 +178,18 @@ public class StreamUtils {
             Log.e(TAG, e.getMessage());
         }
         return operation;
+    }
+
+    public static boolean downloadData(final byte[] data, OutputStream os, final OnProgressDownloadListener listener) {
+        return writeData(data, os, new OnAmountWritenListener() {
+
+            @Override
+            public void onAmountWriten(int amountWriten) {
+                float progress = (float) ((double) amountWriten / (double) data.length * 100.0);
+                Log.d(TAG, String.format("Downloaded %s of %s bytes (%f) for file", amountWriten, data.length, progress));
+                if (listener != null) listener.onProgressDownload(progress);
+            }
+        });
     }
 
     public static boolean downloadData(String source, OutputStream os, OnProgressDownloadListener listener) {

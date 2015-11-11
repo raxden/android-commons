@@ -48,7 +48,7 @@ public class ResourceManager {
 					}			
 					break;
 				case STRING:
-					object = StreamUtils.readInputStream(is);
+					object = StreamUtils.readContent(is);
 					break;
 				case PROPERTIES: 
 					object = new Properties();
