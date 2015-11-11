@@ -1,12 +1,12 @@
 package com.raxdenstudios.commons.util;
 
-import android.content.Context;
 import android.util.Log;
 import android.util.Xml.Encoding;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,90 +31,73 @@ public class StreamUtils {
 	
     private static final int IO_BUFFER_SIZE = 8 * 1024;
 	
-	public interface OnAmountDownloadListener {
-		void onAmountDownload(int amountComplete);
+	public interface OnAmountWritenListener {
+		void onAmountWriten(int amountWriten);
 	}
     
 	public interface OnProgressDownloadListener {
 		void onProgressDownload(float progressComplete);
 	}
-	
-	public static String readFileStream(File file) {
-		return readFileStream(file, Encoding.UTF_8);
+
+	/* ========================================================================================== */
+
+	public static String readContent(File file) {
+		if (file == null) return "";
+		return readContent(file, Encoding.UTF_8);
 	}
-	
-	public static String readFileStream(File file, Encoding encoding) {
-		if (file == null) return null;
+
+	public static String readContent(String source) {
+		if (source == null) return "";
+		return readContent(source, Encoding.UTF_8);
+	}
+
+	public static String readContent(URL url) {
+		if (url == null) return "";
+		return readContent(url, Encoding.UTF_8);
+	}
+
+	public static String readContent(InputStream is) {
+		if (is == null) return "";
+		return readContent(is, Encoding.UTF_8);
+	}
+
+	/* ========================================================================================== */
+
+	public static String readContent(File file, Encoding encoding) {
+		if (file == null) return "";
 		if (encoding == null) encoding = Encoding.UTF_8;
-		
+		return readContent(readInputStream(file), encoding);
+	}
+
+	public static String readContent(String source, Encoding encoding) {
+		if (source == null) return "";
+		if (encoding == null) encoding = Encoding.UTF_8;
+
 		String content = "";
 		try {
-			content = readInputStream(new FileInputStream(file), encoding);
-		} catch (FileNotFoundException e) {
+			content = readContent(new URL(source), encoding);
+		} catch (MalformedURLException e) {
 			Log.e(TAG, e.getMessage());
 		}
 		return content;
 	}
-    
-	public static String readURLStream(String urlString) {
-		return readURLStream(urlString, Encoding.UTF_8);
-	}
-	
-	public static String readURLStream(String urlString, Encoding encoding) {
-		URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			Log.e(TAG, e.getMessage());
-		}
-		return readURLStream(url, encoding);
-	}
-	
-	public static String readURLStream(URL url) {
-		return readURLStream(url, Encoding.UTF_8);
-	}
-	
-	public static String readURLStream(URL url, Encoding encoding) {
-		if (url == null) return null;
+
+	public static String readContent(URL url, Encoding encoding) {
+		if (url == null) return "";
 		if (encoding == null) encoding = Encoding.UTF_8;
-		
-		InputStream is = readURLInputStream(url);
-		
-		return (is != null) ? readInputStream(is, encoding) : null;
-	}
-		
-	public static InputStream readURLInputStream(String urlString) {
-		URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			Log.e(TAG, e.getMessage());
-		}
-		return readURLInputStream(url);
-	}
-	
-	public static InputStream readURLInputStream(URL url) {
-		if (url == null) return null;
-		
-		InputStream is = null;
-		try {
-			is = url.openStream();
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
-		}
-		return is;
+		return readContent(readInputStream(url), encoding);
 	}
 
-	public static String readInputStream(InputStream is) {
-		return readInputStream(is, Encoding.UTF_8);
-	}
-	
-	public static String readInputStream(InputStream is, Encoding encoding) {
+	public static String readContent(InputStream is, Encoding encoding) {
+		if (is == null) return "";
+		if (encoding == null) encoding = Encoding.UTF_8;
+
+		String encodingString = StringUtils.encodingToString(encoding);
 		StringBuilder sb = new StringBuilder();
 		String line;
 
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, StringUtils.encodingToString(encoding)));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, encodingString));
 			while ((line = reader.readLine()) != null) {
 				sb.append(line).append("\n");
 			}
@@ -124,170 +107,155 @@ public class StreamUtils {
 			Log.e(TAG, e.getMessage());
 		} finally {
 			try {
-				is.close();
-				is = null;
+				if (is != null) is.close();
 			} catch (IOException e) {
 				Log.e(TAG, e.getMessage());
 			}
-		}		
+		}
+
 		return sb.toString();
 	}
-				
-	public static File downloadDataToFile(Context context, String filename, String urlString, Encoding encoding, OnAmountDownloadListener listener) {
-		URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
-			Log.e(TAG, e.getMessage());
-		}
-		return downloadDataToFile(context, filename, url, encoding, listener);
-	}    
-    
-	public static File downloadDataToFile(Context context, String filename, URL url, Encoding encoding, OnAmountDownloadListener listener) {
-		File file = null;
-		HttpURLConnection urlConnection = null;
+
+	/* ========================================================================================== */
+
+	public static InputStream readInputStream(File file) {
 		InputStream is = null;
 		try {
-			urlConnection = (HttpURLConnection) url.openConnection();  
-			is = urlConnection.getInputStream();
-			file = downloadDataToFile(context, filename, is, encoding, listener);
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-                urlConnection = null;
-            }
-    		closeInputStream(is);
-		}
-		return file;
-	}    
-	
-	public static File downloadDataToFile(Context context, String filename, InputStream is, Encoding encoding, OnAmountDownloadListener listener) {
-		File file = null;		
-		try {
-			file = FileUtils.getDiskCacheDir(context, filename);
-			if (!downloadDataToOutputStream(is, encoding, new FileOutputStream(file), listener)) {
-				file = null;
-			}
+			if (file != null) is = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
-		return file;
-	}
-	
-	public static boolean downloadDataToFile(String urlString, Encoding encoding, File file, OnProgressDownloadListener listener) {		
-		URL url = null;
-		try {
-			url = new URL(urlString);
-		} catch (MalformedURLException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		return downloadDataToFile(url, encoding, file, listener);
-	}
-	
-	public static boolean downloadDataToFile(URL url, Encoding encoding, File file, final OnProgressDownloadListener listener) {		
-		boolean operation = false;
-		HttpURLConnection urlConnection = null;
-		InputStream is = null;
-		try {
-			urlConnection = (HttpURLConnection) url.openConnection();  
-			is = urlConnection.getInputStream();
-			final int contentLength = urlConnection.getContentLength();
-			operation = downloadDataToOutputStream(is, encoding, new FileOutputStream(file), new OnAmountDownloadListener() {
-				
-				@Override
-				public void onAmountDownload(int amountComplete) {
-					float progress = (float)((double)amountComplete / (double)contentLength * 100.0);
-					Log.d(TAG, String.format("Downloaded %s of %s bytes (%f) for file", amountComplete, contentLength, progress));
-					if (listener != null) listener.onProgressDownload(progress);
-				}
-			});			
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-                urlConnection = null;
-            }
-    		closeInputStream(is);
-		}
-		return operation;
-	}	
-	
-	public static boolean downloadDataToFile(InputStream is, Encoding encoding, File file, OnAmountDownloadListener listener) {
-		boolean operation = false;
-		try {
-			operation = downloadDataToOutputStream(is, encoding, new FileOutputStream(file), listener);
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
-		return operation;
+		return is;
 	}
 
-    public static boolean downloadDataToOutputStream(String urlString, Encoding encoding, OutputStream outputStream, OnProgressDownloadListener listener) {
-		URL url = null;
+	public static InputStream readInputStream(String source) {
+		InputStream is = null;
 		try {
-			url = new URL(urlString);
+			is = readInputStream(new URL(source));
 		} catch (MalformedURLException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		return downloadDataToOutputStream(url, encoding, outputStream, listener);
-    }		
+		return is;
+	}
 	
-	private static boolean downloadDataToOutputStream(URL url, Encoding encoding, OutputStream os, final OnProgressDownloadListener listener) {
-		boolean operation = false;
-		HttpURLConnection urlConnection = null;
+	public static InputStream readInputStream(URL url) {
 		InputStream is = null;
 		try {
-			urlConnection = (HttpURLConnection) url.openConnection();  
-			is = urlConnection.getInputStream();
-			final int contentLength = urlConnection.getContentLength();
-			operation = downloadDataToOutputStream(is, encoding, os, new OnAmountDownloadListener() {
-				
-				@Override
-				public void onAmountDownload(int amountComplete) {
-					float progress = (float)((double)amountComplete / (double)contentLength * 100.0);
-					Log.d(TAG, String.format("Downloaded %s of %s bytes (%f) for file", amountComplete, contentLength, progress));
-					if (listener != null) listener.onProgressDownload(progress);
-				}
-			});
+			is = url.openStream();
 		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-                urlConnection = null;
-            }
-    		closeInputStream(is);
+			Log.e(TAG, e.getMessage());
 		}
-		return operation;
+		return is;
 	}
 
-	public static boolean downloadDataToOutputStream(InputStream is, Encoding encoding, OutputStream os, OnAmountDownloadListener listener) {		
-		boolean operation = false;
-		BufferedOutputStream bos = null;
-		try {
-			BufferedInputStream bis = (is instanceof BufferedInputStream) ? (BufferedInputStream)is : new BufferedInputStream(is, IO_BUFFER_SIZE);
-			bos = (os instanceof BufferedOutputStream) ? bos = (BufferedOutputStream)os : new BufferedOutputStream(os, IO_BUFFER_SIZE);
-						
-			int numBytesRead = 0;
-			int amountComplete = 0;
-			byte bufeer[] = new byte[IO_BUFFER_SIZE];
-			
+    /* ========================================================================================== */
+
+    public static boolean downloadData(String source, File file, OnProgressDownloadListener listener) {
+        boolean operation = false;
+        try {
+            operation = downloadData(new URL(source), file, listener);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return operation;
+    }
+
+    public static boolean downloadData(URL url, File file, OnProgressDownloadListener listener) {
+        boolean operation = false;
+        try {
+            operation = downloadData(url, new FileOutputStream(file), listener);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return operation;
+    }
+
+    public static boolean downloadData(String source, OutputStream os, OnProgressDownloadListener listener) {
+        boolean operation = false;
+        try {
+            operation = downloadData(new URL(source), os, listener);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return operation;
+    }
+
+    private static boolean downloadData(URL url, OutputStream os, final OnProgressDownloadListener listener) {
+        boolean operation = false;
+        HttpURLConnection urlConnection = null;
+        InputStream is = null;
+        try {
+            urlConnection = (HttpURLConnection) url.openConnection();
+            is = urlConnection.getInputStream();
+            final int contentLength = urlConnection.getContentLength();
+            operation = writeData(is, os, new OnAmountWritenListener() {
+
+                @Override
+                public void onAmountWriten(int amountWriten) {
+                    float progress = (float) ((double) amountWriten / (double) contentLength * 100.0);
+                    Log.d(TAG, String.format("Downloaded %s of %s bytes (%f) for file", amountWriten, contentLength, progress));
+                    if (listener != null) listener.onProgressDownload(progress);
+                }
+            });
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            closeInputStream(is);
+        }
+        return operation;
+    }
+
+	/* ========================================================================================== */
+
+    public static boolean writeData(byte[] data, File file, OnAmountWritenListener listener) {
+        return writeData(new ByteArrayInputStream(data), file, listener);
+    }
+
+    public static boolean writeData(byte[] data, OutputStream os, OnAmountWritenListener listener) {
+        return writeData(new ByteArrayInputStream(data), os, listener);
+    }
+
+    public static boolean writeData(InputStream is, File file, OnAmountWritenListener listener) {
+        boolean operation = false;
+        try {
+            operation = writeData(is, new FileOutputStream(file), listener);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return operation;
+    }
+
+	public static boolean writeData(InputStream is, OutputStream os, OnAmountWritenListener listener) {
+        BufferedInputStream bis = (is instanceof BufferedInputStream) ? (BufferedInputStream)is : new BufferedInputStream(is, IO_BUFFER_SIZE);
+        BufferedOutputStream bos = (os instanceof BufferedOutputStream) ? (BufferedOutputStream)os : new BufferedOutputStream(os, IO_BUFFER_SIZE);
+        return writeData(bis, bos, listener);
+	}
+
+    public static boolean writeData(BufferedInputStream bis, BufferedOutputStream bos, OnAmountWritenListener listener) {
+        boolean operation = false;
+        try {
+            int numBytesRead = 0;
+            int amountComplete = 0;
+            byte bufeer[] = new byte[IO_BUFFER_SIZE];
+
             while ((numBytesRead = bis.read(bufeer)) > 0) {
-				amountComplete += numBytesRead;
-				bos.write(bufeer, 0, numBytesRead);
-				if (listener != null) listener.onAmountDownload(amountComplete);
-			}
+                amountComplete += numBytesRead;
+                bos.write(bufeer, 0, numBytesRead);
+                if (listener != null) listener.onAmountWriten(amountComplete);
+            }
             operation = true;
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} finally {
-			closeOutputStream(bos);
-		}
-		return operation;
-	}
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } finally {
+            closeOutputStream(bos);
+        }
+        return operation;
+    }
+
+	/* ========================================================================================== */
 
 	public static void closeInputStream(InputStream is) {
 		if (is != null) {
