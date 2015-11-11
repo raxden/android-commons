@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.raxdenstudios'
-version = '2.1.19'
+version = '2.1.20'
 
 android {
     compileSdkVersion 23
