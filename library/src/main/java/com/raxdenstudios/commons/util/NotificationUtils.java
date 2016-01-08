@@ -33,7 +33,7 @@ public class NotificationUtils {
 
     public void sendNotification(Context context, Bundle extras, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker, int defaults) {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(Utils.getPackageName(context));
-        intent.putExtras(extras);
+        if (extras != null) intent.putExtras(extras);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         sendNotification(context, intent, notificationId, smallIcon, contentTitle, contentText, bigText, ticker, defaults);
     }
