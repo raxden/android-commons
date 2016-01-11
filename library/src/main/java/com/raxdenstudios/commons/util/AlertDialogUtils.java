@@ -3,109 +3,134 @@ package com.raxdenstudios.commons.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.view.View;
 
 /**
+ * A class that allows you to create simple dialogs alert to display.
  *
  * @author Angel Gomez
  */
 public class AlertDialogUtils {
 
+	/**
+	 * Bundle class containing the title button and listener to be invoked when the button of the dialog is pressed.
+	 */
 	public static class AlertDialogButton {
 		public String title;
 		public int titleId;
-		public DialogInterface.OnClickListener onClickListener;
-		
-		public AlertDialogButton(int titleId, DialogInterface.OnClickListener onClickListener) {
-			this.titleId = titleId;
-			this.onClickListener = onClickListener;
+		public DialogInterface.OnClickListener listener;
+
+		/**
+		 * Creates a AlertDialogButton containing the title button and listener to be invoked when the button of the dialog is pressed.
+		 *
+		 * @param title the resource id to use as the title
+		 * @param listener The {@link DialogInterface.OnClickListener} to use.
+		 */
+		public AlertDialogButton(@StringRes int title, DialogInterface.OnClickListener listener) {
+			this.titleId = title;
+			this.listener = listener;
 		}
-		
-		public AlertDialogButton(String title, DialogInterface.OnClickListener onClickListener) {
+
+		/**
+		 * Creates a AlertDialogButton containing the title button and listener to be invoked when the button of the dialog is pressed.
+		 *
+		 * @param title the string to use as the title
+		 * @param listener The {@link DialogInterface.OnClickListener} to use.
+		 */
+		public AlertDialogButton(String title, DialogInterface.OnClickListener listener) {
 			this.title = title;
-			this.onClickListener = onClickListener;
+			this.listener = listener;
 		}
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+     * @param context the parent context
+     * @param title the resource id to use as the title
+     * @param message the resource id to use as the message
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, int title, int message) {
+	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message) {
 		return showAlertDialog(context, title, message, null, null, null);
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the resource id to use as the title
+	 * @param message the resource id to use as the message
+	 * @param button the button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, int title, int message, AlertDialogButton button) {
+	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, AlertDialogButton button) {
 		return showAlertDialog(context, title, message, button, null);
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
-     * @param positiveButton
-     * @param negativeButton
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the resource id to use as the title
+	 * @param message the resource id to use as the message
+     * @param positiveButton the positive button of the dialog
+     * @param negativeButton the negative button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, int title, int message, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
+	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
 		return showAlertDialog(context, title, message, null, positiveButton, negativeButton);
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
-     * @param view
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the resource id to use as the title
+	 * @param message the resource id to use as the message
+     * @param view the custom view to be used within the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, int title, int message, View view) {
+	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, View view) {
 		return showAlertDialog(context, title, message, view, null);
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
-     * @param view
-     * @param button
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the resource id to use as the title
+	 * @param message the resource id to use as the message
+	 * @param view the custom view to be used within the dialog
+	 * @param button the button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, int title, int message, View view, AlertDialogButton button) {
+	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, View view, AlertDialogButton button) {
 		return showAlertDialog(context, title, message, view, button, null);
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
-     * @param view
-     * @param positiveButton
-     * @param negativeButton
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the resource id to use as the title
+	 * @param message the resource id to use as the message
+	 * @param view the custom view to be used within the dialog
+	 * @param positiveButton the positive button of the dialog
+	 * @param negativeButton the negative button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, int title, int message, View view, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
+	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, View view, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
 	    return showAlertDialog(context, title != 0 ? context.getResources().getString(title) : "", message != 0 ? context.getResources().getString(message) : "", view, positiveButton, negativeButton);
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the string to use as the title
+	 * @param message the string to use as the message
      * @return AlertDialog
      */
 	public static AlertDialog showAlertDialog(Context context, String title, String message) {
@@ -113,11 +138,12 @@ public class AlertDialogUtils {
 	}
 
     /**
-     * Show alert dialog.
-     * @param context
-     * @param title
-     * @param message
-     * @param button
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the string to use as the title
+	 * @param message the string to use as the message
+	 * @param button the button of the dialog
      * @return AlertDialog
      */
 	public static AlertDialog showAlertDialog(Context context, String title, String message, AlertDialogButton button) {
@@ -125,12 +151,13 @@ public class AlertDialogUtils {
 	}
 
     /**
-     * Show alert dialog
-     * @param context
-     * @param title
-     * @param message
-     * @param positiveButton
-     * @param negativeButton
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the string to use as the title
+	 * @param message the string to use as the message
+	 * @param positiveButton the positive button of the dialog
+	 * @param negativeButton the negative button of the dialog
      * @return AlertDialog
      */
 	public static AlertDialog showAlertDialog(Context context, String title, String message, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
@@ -138,11 +165,12 @@ public class AlertDialogUtils {
 	}
 
     /**
-     * Show alert dialog
-     * @param context
-     * @param title
-     * @param message
-     * @param view
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the string to use as the title
+	 * @param message the string to use as the message
+	 * @param view the custom view to be used within the dialog
      * @return AlertDialog
      */
 	public static AlertDialog showAlertDialog(Context context, String title, String message, View view) {
@@ -150,12 +178,13 @@ public class AlertDialogUtils {
 	}
 
     /**
-     * Show alert dialog
-     * @param context
-     * @param title
-     * @param message
-     * @param view
-     * @param button
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the string to use as the title
+	 * @param message the string to use as the message
+	 * @param view the custom view to be used within the dialog
+	 * @param button the button of the dialog
      * @return AlertDialog
      */
 	public static AlertDialog showAlertDialog(Context context, String title, String message, View view, AlertDialogButton button) {
@@ -163,13 +192,14 @@ public class AlertDialogUtils {
 	}
 
     /**
-     * Show alert dialog
-     * @param context
-     * @param title
-     * @param message
-     * @param view
-     * @param positiveButton
-     * @param negativeButton
+	 * Creates an {@link AlertDialog} with the arguments supplied and immediately displays the dialog.
+	 *
+	 * @param context the parent context
+	 * @param title the string to use as the title
+	 * @param message the string to use as the message
+	 * @param view the custom view to be used within the dialog
+	 * @param positiveButton the positive button of the dialog
+	 * @param negativeButton the negative button of the dialog
      * @return AlertDialog
      */
 	public static AlertDialog showAlertDialog(Context context, String title, String message, View view, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
@@ -177,8 +207,8 @@ public class AlertDialogUtils {
 		if (view != null) builder.setView(view);
 		if (Utils.hasValue(title)) builder.setTitle(title);
 	    if (Utils.hasValue(message)) builder.setMessage(message);
-	    if (positiveButton != null) builder.setPositiveButton(Utils.hasValue(positiveButton.title) ? positiveButton.title : context.getResources().getString(positiveButton.titleId), positiveButton.onClickListener);
-	    if (negativeButton != null)	builder.setNegativeButton(Utils.hasValue(negativeButton.title) ? negativeButton.title : context.getResources().getString(negativeButton.titleId), negativeButton.onClickListener);
+	    if (positiveButton != null) builder.setPositiveButton(Utils.hasValue(positiveButton.title) ? positiveButton.title : context.getResources().getString(positiveButton.titleId), positiveButton.listener);
+	    if (negativeButton != null)	builder.setNegativeButton(Utils.hasValue(negativeButton.title) ? negativeButton.title : context.getResources().getString(negativeButton.titleId), negativeButton.listener);
 	    return builder.show();
 	}	
 }
