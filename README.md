@@ -43,4 +43,4 @@ dependencies {
 
 ### Documentation 
 
-For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://github.com/raxden/AndroidCommons/wiki).
+For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/v2.1.23/javadoc/).
