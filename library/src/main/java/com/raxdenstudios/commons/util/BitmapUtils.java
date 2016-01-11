@@ -7,13 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
@@ -31,6 +31,16 @@ import java.io.IOException;
 public class BitmapUtils {
 
     private static final String TAG = BitmapUtils.class.getSimpleName();
+
+	public static Bitmap rotate(Bitmap bm, int rotation) {
+		if (rotation != 0) {
+			Matrix matrix = new Matrix();
+			matrix.postRotate(rotation);
+			Bitmap bmOut = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+			return bmOut;
+		}
+		return bm;
+	}
 
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
@@ -110,17 +120,7 @@ public class BitmapUtils {
 	    view.destroyDrawingCache();
 	    return b;
 	}
-    
-	public static Bitmap drawableToBitmap (Drawable drawable) {
-		if (drawable == null) return null;
-	    if (drawable instanceof BitmapDrawable) return ((BitmapDrawable)drawable).getBitmap();
-	    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
-	    Canvas canvas = new Canvas(bitmap); 
-	    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-	    drawable.draw(canvas);
-	    return bitmap;
-	}	
-	
+
     /**
      * Calculate an inSampleSize for use in a {@link BitmapFactory.Options} object when decoding
      * bitmaps using the decode* methods from {@link BitmapFactory}. This implementation calculates

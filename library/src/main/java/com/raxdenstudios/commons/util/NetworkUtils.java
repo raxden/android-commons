@@ -16,8 +16,7 @@ public class NetworkUtils {
 	
 	public static boolean isNetworkAvailable(ConnectivityManager cm) {
 		return 	(cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null && cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting()) ||
-				(cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting()) ||
-				(cm.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET) != null && cm.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET).isConnectedOrConnecting());
+				(cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null && cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting());
 	}
 	
 	public static boolean isWifiAvailable(Context context) {

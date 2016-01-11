@@ -59,7 +59,7 @@ public class ResourceUtils {
 		return resID;
 	}
 	
-	public static final String getString(Context context, String name){
+	public static String getString(Context context, String name){
 		int resId = getStringId(context, name);
 		if(resId != 0){
 			return context.getResources().getString(resId);
@@ -68,7 +68,7 @@ public class ResourceUtils {
 		}	
 	}
 	
-	public static final Drawable getDrawable(Context context, String name) {
+	public static Drawable getDrawable(Context context, String name) {
 		Drawable drawable = null;
 		
 		// Delete extension if exists

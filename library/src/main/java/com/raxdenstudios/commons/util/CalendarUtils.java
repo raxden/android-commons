@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * @author agomez
  *
  *  <?xml version="1.0" encoding="utf-8"?>
  *	<manifest xmlns:android="http://schemas.android.com/apk/res/android"...>
@@ -22,71 +21,14 @@ import java.util.List;
  *    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
  *	    ...
  *	</manifest>
+ *
+ * @author Angel Gomez
  */
 public class CalendarUtils {
 
     private static final String TAG = CalendarUtils.class.getSimpleName();
-	
-	public static class CalendarEvent {
-		public long calendarId;
-		public String title;
-		public String description;
-		public String location;
-		public String timeZone;
-		public long eventStart;
-		public long eventEnd;
-		public boolean alarm;
-		private List<CalendarReminder> reminders = new ArrayList<CalendarReminder>();
 
-		public CalendarEvent(Context context, long eventStart, long eventEnd) {
-			this(getCalendarId(context), eventStart, eventEnd);
-		}
-		
-		private CalendarEvent(long calendarId, long eventStart, long eventEnd) {
-			this.calendarId = calendarId;
-			this.eventStart = eventStart;
-			this.eventEnd = eventEnd;
-		}
-				
-		public ContentValues getContentValues() {
-			ContentValues values = new ContentValues();
-			values.put("calendar_id", calendarId);
-			values.put("title", Utils.hasValue(title) ? title.replaceAll("'", "") : "");
-			values.put("description", Utils.hasValue(description) ? description.replaceAll("'", "") : "");
-			values.put("eventLocation", Utils.hasValue(location) ? location : "");
-			values.put("eventTimezone", Utils.hasValue(timeZone) ? timeZone : Calendar.getInstance().getTimeZone().getDisplayName());
-			values.put("dtstart", eventStart);
-			values.put("dtend", eventEnd);
-			values.put("hasAlarm", alarm ? 1 : 0);
-			return values;
-		}
-		
-		public void addReminders(CalendarReminder reminder) {
-			reminder.calendarId = calendarId;
-			reminders.add(reminder);
-		}
-	}
-
-	public static class CalendarReminder {
-		private long calendarId;
-		public int method;
-		public int minutes;
-		
-		public CalendarReminder(int method, int minutes) {
-			this.method = method;
-			this.minutes = minutes;
-		}
-		
-		public ContentValues getContentValues() {
-			ContentValues values = new ContentValues();
-            values.put("event_id", calendarId);
-            values.put("method", method);
-            values.put("minutes", minutes);
-            return values;
-		}
-	}
-	
-	public static final boolean saveCalendarEvent(Context context, CalendarEvent calendarEvent) {
+	public static boolean saveCalendarEvent(Context context, CalendarEvent calendarEvent) {
 		boolean operation = false;
 		
 		if (calendarEvent != null) {
@@ -109,7 +51,7 @@ public class CalendarUtils {
 	}
 	
 	@SuppressLint("NewApi")
-	public static final long getCalendarId(Context context) {
+	public static long getCalendarId(Context context) {
 		long calId = 0;
 		
 		Uri calendars;
@@ -155,5 +97,65 @@ public class CalendarUtils {
 		}else{
 			return Uri.parse(getContentUri()+"/reminders");
 		}
-	}		
+	}
+
+	public static class CalendarEvent {
+		public long calendarId;
+		public String title;
+		public String description;
+		public String location;
+		public String timeZone;
+		public long eventStart;
+		public long eventEnd;
+		public boolean alarm;
+		private List<CalendarReminder> reminders = new ArrayList<CalendarReminder>();
+
+		public CalendarEvent(Context context, long eventStart, long eventEnd) {
+			this(getCalendarId(context), eventStart, eventEnd);
+		}
+
+		private CalendarEvent(long calendarId, long eventStart, long eventEnd) {
+			this.calendarId = calendarId;
+			this.eventStart = eventStart;
+			this.eventEnd = eventEnd;
+		}
+
+		public ContentValues getContentValues() {
+			ContentValues values = new ContentValues();
+			values.put("calendar_id", calendarId);
+			values.put("title", Utils.hasValue(title) ? title.replaceAll("'", "") : "");
+			values.put("description", Utils.hasValue(description) ? description.replaceAll("'", "") : "");
+			values.put("eventLocation", Utils.hasValue(location) ? location : "");
+			values.put("eventTimezone", Utils.hasValue(timeZone) ? timeZone : Calendar.getInstance().getTimeZone().getDisplayName());
+			values.put("dtstart", eventStart);
+			values.put("dtend", eventEnd);
+			values.put("hasAlarm", alarm ? 1 : 0);
+			return values;
+		}
+
+		public void addReminders(CalendarReminder reminder) {
+			reminder.calendarId = calendarId;
+			reminders.add(reminder);
+		}
+	}
+
+	public static class CalendarReminder {
+		private long calendarId;
+		public int method;
+		public int minutes;
+
+		public CalendarReminder(int method, int minutes) {
+			this.method = method;
+			this.minutes = minutes;
+		}
+
+		public ContentValues getContentValues() {
+			ContentValues values = new ContentValues();
+			values.put("event_id", calendarId);
+			values.put("method", method);
+			values.put("minutes", minutes);
+			return values;
+		}
+	}
+
 }

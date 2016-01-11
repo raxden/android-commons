@@ -42,28 +42,28 @@ public class ShareUtils {
 		}
 	}
 
-    public static final void shareViaEmail(Context context, String to) {
+    public static void shareViaEmail(Context context, String to) {
         shareViaEmail(context, null, to);
     }
 
-    public static final void shareViaEmail(Context context, String titleChooser, String to) {
+    public static void shareViaEmail(Context context, String titleChooser, String to) {
         shareViaEmail(context, titleChooser, Uri.fromParts("mailto", to, null));
     }
 
-    public static final void shareViaEmail(Context context, String titleChooser, Uri uri) {
+    public static void shareViaEmail(Context context, String titleChooser, Uri uri) {
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         context.startActivity(titleChooser != null ? Intent.createChooser(intent, titleChooser) : intent);
     }
 
-    public static final void share(Context context, ShareContainer toShare) {
+    public static void share(Context context, ShareContainer toShare) {
         share(context, null, toShare);
     }
 
-	public static final void share(Context context, String titleChooser, ShareContainer toShare) {
+	public static void share(Context context, String titleChooser, ShareContainer toShare) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setType(toShare.mediaType != null ? toShare.mediaType.toString() : MediaType.TEXT_PLAIN.toString());
-		
+
 		if (toShare != null) {
+			intent.setType(toShare.mediaType != null ? toShare.mediaType.toString() : MediaType.TEXT_PLAIN.toString());
 			if (Utils.hasValue(toShare.subject))
 				intent.putExtra(Intent.EXTRA_SUBJECT, toShare.subject);
 			if (Utils.hasValue(toShare.text))

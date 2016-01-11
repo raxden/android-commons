@@ -1,10 +1,14 @@
 package com.raxdenstudios.commons.util;
 
+import org.xml.sax.Attributes;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.xml.sax.Attributes;
-
+/**
+ *
+ * @author Angel Gomez
+ */
 public class MapUtils {
 
 	public static Map<String, Object> attributesToHashMap(Attributes atts) {
