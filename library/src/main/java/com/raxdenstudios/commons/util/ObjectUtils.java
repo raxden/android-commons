@@ -61,9 +61,9 @@ public abstract class ObjectUtils {
 	 * that is, neither a RuntimeException nor an Error.
 	 * @param ex the throwable to check
 	 * @return whether the throwable is a checked exception
-	 * @see java.lang.Exception
-	 * @see java.lang.RuntimeException
-	 * @see java.lang.Error
+	 * @see Exception
+	 * @see RuntimeException
+	 * @see Error
 	 */
 	public static boolean isCheckedException(Throwable ex) {
 		return !(ex instanceof RuntimeException || ex instanceof Error);
@@ -188,7 +188,7 @@ public abstract class ObjectUtils {
 	 * @param o1 first Object to compare
 	 * @param o2 second Object to compare
 	 * @return whether the given objects are equal
-	 * @see java.util.Arrays#equals
+	 * @see Arrays#equals
 	 */
 	public static boolean nullSafeEquals(Object o1, Object o2) {
 		if (o1 == o2) {

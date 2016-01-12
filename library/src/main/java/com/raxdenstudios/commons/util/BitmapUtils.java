@@ -35,7 +35,7 @@ import java.net.URL;
  */
 public class BitmapUtils {
 
-    private static final String TAG = com.raxdenstudios.commons.util.BitmapUtils.class.getSimpleName();
+    private static final String TAG = BitmapUtils.class.getSimpleName();
 
     public static Bitmap resize(Bitmap bitmap, int maxSize) {
         float aspectRatio = (float) bitmap.getWidth() / (float) bitmap.getHeight();

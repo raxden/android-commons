@@ -55,7 +55,7 @@ public class CalendarUtils {
 		long calId = 0;
 		
 		Uri calendars;
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			calendars = CalendarContract.Calendars.CONTENT_URI;
 		}else{
 			calendars = Uri.parse(getContentUri()+"/calendars");
@@ -73,7 +73,7 @@ public class CalendarUtils {
 	@SuppressLint("NewApi")
 	private static String getContentUri(){
 		String AUTHORITY = "";
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO){
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO){
 			AUTHORITY = "com.android.calendar";
 		}else{
 			AUTHORITY = "calendar";
@@ -83,7 +83,7 @@ public class CalendarUtils {
 	
 	@SuppressLint("NewApi")
 	private static Uri getEventsContentUri(){
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			return CalendarContract.Events.CONTENT_URI;
 		}else{
 			return Uri.parse(getContentUri()+"/events");
@@ -92,7 +92,7 @@ public class CalendarUtils {
 	
 	@SuppressLint("NewApi")
 	private static Uri getRemindersContentUri(){
-		if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
 			return CalendarContract.Reminders.CONTENT_URI;
 		}else{
 			return Uri.parse(getContentUri()+"/reminders");

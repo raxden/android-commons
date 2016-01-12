@@ -85,7 +85,7 @@ public abstract class StringUtils {
 	 * @param str the CharSequence to check (may be <code>null</code>)
 	 * @return <code>true</code> if the CharSequence is not <code>null</code>,
 	 * its length is greater than 0, and it does not contain whitespace only
-	 * @see java.lang.Character#isWhitespace
+	 * @see Character#isWhitespace
 	 */
 	public static boolean hasText(CharSequence str) {
 		if (!hasLength(str)) {
@@ -118,7 +118,7 @@ public abstract class StringUtils {
 	 * @param str the CharSequence to check (may be <code>null</code>)
 	 * @return <code>true</code> if the CharSequence is not empty and
 	 * contains at least 1 whitespace character
-	 * @see java.lang.Character#isWhitespace
+	 * @see Character#isWhitespace
 	 */
 	public static boolean containsWhitespace(CharSequence str) {
 		if (!hasLength(str)) {
@@ -148,7 +148,7 @@ public abstract class StringUtils {
 	 * Trim leading and trailing whitespace from the given String.
 	 * @param str the String to check
 	 * @return the trimmed String
-	 * @see java.lang.Character#isWhitespace
+	 * @see Character#isWhitespace
 	 */
 	public static String trimWhitespace(String str) {
 		if (!hasLength(str)) {
@@ -169,7 +169,7 @@ public abstract class StringUtils {
 	 * leading, trailing, and inbetween characters.
 	 * @param str the String to check
 	 * @return the trimmed String
-	 * @see java.lang.Character#isWhitespace
+	 * @see Character#isWhitespace
 	 */
 	public static String trimAllWhitespace(String str) {
 		if (!hasLength(str)) {
@@ -192,7 +192,7 @@ public abstract class StringUtils {
 	 * Trim leading whitespace from the given String.
 	 * @param str the String to check
 	 * @return the trimmed String
-	 * @see java.lang.Character#isWhitespace
+	 * @see Character#isWhitespace
 	 */
 	public static String trimLeadingWhitespace(String str) {
 		if (!hasLength(str)) {
@@ -209,7 +209,7 @@ public abstract class StringUtils {
 	 * Trim trailing whitespace from the given String.
 	 * @param str the String to check
 	 * @return the trimmed String
-	 * @see java.lang.Character#isWhitespace
+	 * @see Character#isWhitespace
 	 */
 	public static String trimTrailingWhitespace(String str) {
 		if (!hasLength(str)) {
@@ -261,7 +261,7 @@ public abstract class StringUtils {
 	 * ignoring upper/lower case.
 	 * @param str the String to check
 	 * @param prefix the prefix to look for
-	 * @see java.lang.String#startsWith
+	 * @see String#startsWith
 	 */
 	public static boolean startsWithIgnoreCase(String str, String prefix) {
 		if (str == null || prefix == null) {
@@ -283,7 +283,7 @@ public abstract class StringUtils {
 	 * ignoring upper/lower case.
 	 * @param str the String to check
 	 * @param suffix the suffix to look for
-	 * @see java.lang.String#endsWith
+	 * @see String#endsWith
 	 */
 	public static boolean endsWithIgnoreCase(String str, String suffix) {
 		if (str == null || suffix == null) {
@@ -890,8 +890,8 @@ public abstract class StringUtils {
 	 * @param delimiters the delimiter characters, assembled as String
 	 * (each of those characters is individually considered as delimiter).
 	 * @return an array of the tokens
-	 * @see java.util.StringTokenizer
-	 * @see java.lang.String#trim()
+	 * @see StringTokenizer
+	 * @see String#trim()
 	 * @see #delimitedListToStringArray
 	 */
 	public static String[] tokenizeToStringArray(String str, String delimiters) {
@@ -913,8 +913,8 @@ public abstract class StringUtils {
 	 * will not consider subsequent delimiters as token in the first place).
 	 * @return an array of the tokens (<code>null</code> if the input String
 	 * was <code>null</code>)
-	 * @see java.util.StringTokenizer
-	 * @see java.lang.String#trim()
+	 * @see StringTokenizer
+	 * @see String#trim()
 	 * @see #delimitedListToStringArray
 	 */
 	public static String[] tokenizeToStringArray(
