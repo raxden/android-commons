@@ -13,16 +13,21 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
-import android.os.Environment;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  *
@@ -30,7 +35,121 @@ import java.io.IOException;
  */
 public class BitmapUtils {
 
-    private static final String TAG = BitmapUtils.class.getSimpleName();
+    private static final String TAG = com.raxdenstudios.commons.util.BitmapUtils.class.getSimpleName();
+
+    public static Bitmap resize(Bitmap bitmap, int maxSize) {
+        float aspectRatio = (float) bitmap.getWidth() / (float) bitmap.getHeight();
+        int width = 0, height = 0;
+        if (bitmap.getWidth() > maxSize) {
+            width = maxSize;
+            height = Math.round(maxSize / aspectRatio);
+        } else if (bitmap.getHeight() > maxSize){
+            width = Math.round(maxSize / aspectRatio);
+            height = maxSize;
+        }
+        bitmap = BitmapUtils.resize(bitmap, width, height);
+        return resize(bitmap, width, height);
+    }
+
+    public static Bitmap resize(Bitmap bitmap, int width, int height) {
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+
+    public static Bitmap decode(URL url) {
+        HttpURLConnection connection = null;
+        InputStream is = StreamUtils.readInputStream(url);
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            is = connection.getInputStream();
+            return decode(is);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } finally {
+            StreamUtils.closeInputStream(is);
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return null;
+    }
+
+    public static Bitmap decode(URL url, int width, int height) {
+        HttpURLConnection connection = null;
+        InputStream is = StreamUtils.readInputStream(url);
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            is = connection.getInputStream();
+            return decode(is, width, height);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        } finally {
+            StreamUtils.closeInputStream(is);
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return null;
+    }
+
+    public static Bitmap decode(InputStream is) {
+        return BitmapFactory.decodeStream(is);
+    }
+
+    public static Bitmap decode(InputStream is, int width, int height) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(is, null, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(is, null, options);
+    }
+
+    public static Bitmap decode(Context context, int resId) {
+        return BitmapFactory.decodeResource(context.getResources(), resId);
+    }
+
+    public static Bitmap decode(Context context, int resId, int width, int height) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(context.getResources(), resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(context.getResources(), resId, options);
+    }
+
+    public static Bitmap decode(Context context, Uri uri) {
+        try {
+            InputStream is = context.getContentResolver().openInputStream(uri);
+            return BitmapFactory.decodeStream(is);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static Bitmap decode(Context context, Uri uri, int width, int height) {
+        try {
+            InputStream is = context.getContentResolver().openInputStream(uri);
+            return decode(is, width, height);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
+    }
 
 	public static Bitmap rotate(Bitmap bm, int rotation) {
 		if (rotation != 0) {
@@ -42,7 +161,7 @@ public class BitmapUtils {
 		return bm;
 	}
 
-	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+	public static Bitmap rounded(Bitmap bitmap, int pixels) {
 		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
 		Canvas canvas = new Canvas(output);
 
@@ -63,7 +182,7 @@ public class BitmapUtils {
 		return output;
 	}
 
-	public static Bitmap createBitmapFromView(View view) {
+	public static Bitmap fromView(View view) {
 		int width = view.getWidth();
 		int height = view.getHeight();
 
@@ -74,32 +193,56 @@ public class BitmapUtils {
 		view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
 		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
 		
-		Bitmap b = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		Bitmap b = Bitmap.createBitmap(width, height, Config.ARGB_8888);
 		Canvas c = new Canvas(b);
 		view.draw(c);
 		
 		return b;
 	}
-	
-	public static String saveBitmap(Context context, Bitmap bitmap, String uniqueName) {
-		File imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), uniqueName+".png");
-		try {
+
+    public static Bitmap fromFile(File file) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Config.ARGB_8888;
+        return BitmapFactory.decodeFile(file.getPath(), options);
+    }
+
+    public static Bitmap compress(Bitmap bitmap) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        return BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+    }
+
+    public static Bitmap compress(Bitmap bitmap, Bitmap.CompressFormat format, int quality) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(format, quality, out);
+        return BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+    }
+
+    public static File toFile(Context context, Bitmap bitmap, String uniqueName) {
+        return toFile(context, bitmap, uniqueName, Bitmap.CompressFormat.PNG, 100, true);
+    }
+
+	public static File toFile(Context context, Bitmap bitmap, String uniqueName, Bitmap.CompressFormat format, int quality, boolean scan) {
+        File imageFile = FileUtils.getDiskCacheDir(context, uniqueName);
+        try {
             FileOutputStream fos = new FileOutputStream(imageFile.getPath());
             BufferedOutputStream bos = new BufferedOutputStream(fos);
 
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, bos);
+            bitmap.compress(format, quality, bos);
             bos.flush();
             fos.getFD().sync();
             bos.close();
 
-            MediaScannerConnection.scanFile(context, new String[]{imageFile.getPath()}, new String[]{"image/png"}, null);
-
-            if (!bitmap.isRecycled()) {
-            	bitmap.recycle();
+            if (scan) {
+                String mimeType = "";
+                switch (format) {
+                    case JPEG: mimeType = "image/jpeg"; break;
+                    case PNG: mimeType = "image/png"; break;
+                }
+                MediaScannerConnection.scanFile(context, new String[]{imageFile.getPath()}, new String[]{mimeType}, null);
             }
 
-            return imageFile.getPath();
-            
+            return imageFile;
         } catch (IOException e) {
         	Log.e(TAG, e.getMessage(), e);
         }
@@ -171,26 +314,14 @@ public class BitmapUtils {
         Log.d(TAG, "inSampleSize: " + inSampleSize);
         return inSampleSize;
     }
-       
-    
-    /**
-     * Get the size in bytes of a bitmap.
-     * @param value
-     * @return size in bytes
-     */
-    @TargetApi(12)
-    public static int getBitmapSize(BitmapDrawable value) {
-    	Bitmap bitmap = value.getBitmap();
-    	return getBitmapSize(bitmap);
-    }
-    
+
     /**
      * Get the size in bytes of a bitmap.
      * @param bitmap
      * @return size in bytes
      */
     @TargetApi(12)
-    public static int getBitmapSize(Bitmap bitmap) {
+    public static int size(Bitmap bitmap) {
         if (Utils.hasHoneycombMR1()) {
             return bitmap.getByteCount();
         }

@@ -1,13 +1,10 @@
 package com.raxdenstudios.commons.util;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 
 /**
  *
@@ -25,10 +22,21 @@ public class DrawableUtils {
         return bitmap;
     }
 
-    public static Drawable getTintedDrawable(Resources res, @DrawableRes int drawableResId, @ColorRes int colorResId) {
-        Drawable drawable = res.getDrawable(drawableResId);
-        int color = res.getColor(colorResId);
-        drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+    public static int size(Drawable drawable) {
+        Bitmap bitmap;
+        if (drawable instanceof BitmapDrawable) {
+            bitmap = ((BitmapDrawable)drawable).getBitmap();
+        } else {
+            bitmap = toBitmap(drawable);
+        }
+        if (bitmap != null) {
+            return BitmapUtils.size(bitmap);
+        }
+        return -1;
+    }
+
+    public static Drawable tinted(Drawable drawable, int color) {
+        if (drawable != null) drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
         return drawable;
     }
 
