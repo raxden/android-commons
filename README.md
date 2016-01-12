@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-	    compile 'com.github.raxden:AndroidCommons:v2.1.26@aar'
+	    compile 'com.github.raxden:AndroidCommons:v2.1.27@aar'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 <dependency>
 	    <groupId>com.github.raxden</groupId>
 	    <artifactId>AndroidCommons</artifactId>
-	    <version>v2.1.26</version>
+	    <version>v2.1.27</version>
 </dependency>
 ```
 
@@ -43,4 +43,4 @@ dependencies {
 
 ### Documentation 
 
-For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/v2.1.26/javadoc/).
+For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/v2.1.27/javadoc/).
