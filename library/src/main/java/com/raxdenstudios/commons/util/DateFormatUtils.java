@@ -15,31 +15,65 @@ import java.util.Locale;
 public class DateFormatUtils {
 
     private static final String TAG = DateFormatUtils.class.getSimpleName();
-	
-	public static final DateFormat DEFAULT_RSS = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
-	public static final DateFormat YOUTUBE_RSS = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());	
-	
-	public static String dateToString(long time) {
-		return dateToString(new Date(time));
+
+	public static final DateFormat RSS_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
+	public static final DateFormat YOUTUBE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+
+
+	/**
+	 * Converts miliseconds parameter in a friendly date.
+	 *
+	 * @param dateInMilliseconds date in miliseconds
+	 * @return friendly date
+	 */
+	public static String dateToString(long dateInMilliseconds) {
+		return dateToString(new Date(dateInMilliseconds));
 	}
-	
-	public static String dateToString(long time, String dateFormat) {
+
+	/**
+	 * Converts miliseconds parameter in a friendly date through of the format date.
+	 *
+	 * @param dateInMilliseconds date in milliseconds
+	 * @param dateFormat format date
+	 * @return friendly date
+	 */
+	public static String dateToString(long dateInMilliseconds, String dateFormat) {
 		if(Utils.hasValue(dateFormat)){
 			DateFormat df =  new SimpleDateFormat(dateFormat, Locale.getDefault());
-			return dateToString(new Date(time), df);
+			return dateToString(new Date(dateInMilliseconds), df);
 		}else{
-			return dateToString(new Date(time));
+			return dateToString(new Date(dateInMilliseconds));
 		}
 	}
-	
-	public static String dateToString(long time, DateFormat sdf) {
-		return sdf.format(new Date(time));
+
+	/**
+	 * Converts miliseconds parameter in a friendly date through of the format date.
+	 *
+	 * @param dateInMilliseconds date in milliseconds
+	 * @param dateFormat format date
+	 * @return friendly date
+	 */
+	public static String dateToString(long dateInMilliseconds, DateFormat dateFormat) {
+		return dateFormat.format(new Date(dateInMilliseconds));
 	}
-	
+
+	/**
+	 * Converts date parameter in a friendly date.
+	 *
+	 * @param date date
+	 * @return friendly date
+	 */
 	public static String dateToString(Date date) {
-		return dateToString(date, DEFAULT_RSS);
+		return dateToString(date, RSS_FORMAT);
 	}
-	
+
+	/**
+	 * Converts date parameter in a friendly date through of the format date.
+	 *
+	 * @param date date
+	 * @param dateFormat format date
+	 * @return friendly date
+	 */
 	public static String dateToString(Date date, String dateFormat) {
 		if(Utils.hasValue(dateFormat)){
 			DateFormat df =  new SimpleDateFormat(dateFormat, Locale.getDefault());
@@ -47,17 +81,26 @@ public class DateFormatUtils {
 		}else{
 			return dateToString(date);
 		}
-	}	
-	
-	public static String dateToString(Date date, DateFormat sdf) {
-		return sdf.format(date);
 	}
-	
-	public static Date stringToDate(String dateString) {
-		return stringToDate(dateString, DEFAULT_RSS);
+
+	/**
+	 * Converts date parameter in a friendly date through of the format date.
+	 *
+	 * @param date date
+	 * @param dateFormat format date
+	 * @return friendly date
+	 */
+	public static String dateToString(Date date, DateFormat dateFormat) {
+		return dateFormat.format(date);
 	}
-	
-	public static Date stringToDate(String dateString, String dateFormat) {
+
+	/**
+	 * Converts friendly date in a Date object through of the format date.
+	 * @param date date
+	 * @param dateFormat format date
+	 * @return Date object
+	 */
+	public static Date stringToDate(String date, String dateFormat) {
 		DateFormat df = null;
 		try {
 			df = new SimpleDateFormat(dateFormat, Locale.getDefault());
@@ -67,21 +110,28 @@ public class DateFormatUtils {
 			Log.e(TAG, e.getMessage(), e);
 		} finally {
 			if (df == null) {
-				df = DEFAULT_RSS;
+				df = RSS_FORMAT;
 			}
 		}
-		return stringToDate(dateString,df);
+		return stringToDate(date, df);
 	}
-	
-	public static Date stringToDate(String dateString, DateFormat dateFormat) {
+
+	/**
+	 * Converts friendly date in a Date object through of the format date.
+	 * @param date date
+	 * @param dateFormat format date
+	 * @return Date object
+	 */
+	public static Date stringToDate(String date, DateFormat dateFormat) {
 		Date dateOut = null;
 		try {
-			if(Utils.hasValue(dateString)) {
-				dateOut = dateFormat.parse(dateString);
+			if(Utils.hasValue(date)) {
+				dateOut = dateFormat.parse(date);
 			}
 		} catch (ParseException e) {
 			Log.e(TAG, e.getMessage(), e);
 		}
 		return dateOut;
-	}		
+	}
+
 }
