@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- *
+ * A class with a list of utils for collections like List, Map, Enum...
  * @author Angel Gomez
  */
 public abstract class CollectionUtils {

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
+ * A class that allows you parse any date easy and quickly.
  *
  * @author Angel Gomez
  */
@@ -18,7 +19,6 @@ public class DateFormatUtils {
 
 	public static final DateFormat RSS_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
 	public static final DateFormat YOUTUBE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-
 
 	/**
 	 * Converts miliseconds parameter in a friendly date.
