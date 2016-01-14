@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 
 /**
  *
@@ -29,10 +28,10 @@ public class NotificationUtils {
     }
 
     public static void sendNotification(Context context, PendingIntent pendingIntent, int notificationId, int smallIcon, String contentTitle, String contentText, String bigText, String ticker, int defaults) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        Notification.Builder builder = new Notification.Builder(context);
         if (smallIcon != 0) builder.setSmallIcon(smallIcon);
         if (Utils.hasValue(contentTitle)) builder.setContentTitle(contentTitle);
-        if (Utils.hasValue(bigText)) builder.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
+        if (Utils.hasValue(bigText)) builder.setStyle(new Notification.BigTextStyle().bigText(bigText));
         if (Utils.hasValue(contentText)) builder.setContentText(contentText);
         if (Utils.hasValue(ticker)) builder.setTicker(ticker);
         if (pendingIntent != null) builder.setContentIntent(pendingIntent);

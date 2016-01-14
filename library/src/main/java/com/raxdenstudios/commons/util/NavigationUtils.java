@@ -1,10 +1,10 @@
 package com.raxdenstudios.commons.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
 
 import com.raxdenstudios.commons.R;
 
@@ -64,13 +64,13 @@ public class NavigationUtils {
         } else if (value != null && value instanceof Serializable) {
             intent.putExtra(name, (Serializable)value);
         }
-        if (context instanceof FragmentActivity) {
+        if (context instanceof Activity) {
             if (requestCode > 0) {
-                ((FragmentActivity)context).startActivityForResult(intent, requestCode);
+                ((Activity)context).startActivityForResult(intent, requestCode);
             } else {
                 context.startActivity(intent);
             }
-            ((FragmentActivity)context).overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+            ((Activity)context).overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
         } else {
             context.startActivity(intent);
         }

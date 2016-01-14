@@ -17,9 +17,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings.Secure;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Display;
 import android.view.Surface;
 import android.view.ViewConfiguration;
@@ -28,14 +28,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.raxdenstudios.commons.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  *
@@ -228,7 +226,7 @@ public class Utils {
 	}
 	
 	@SuppressWarnings("serial")
-	private static final Map<Integer,String> dpiMap = new HashMap<Integer, String>() {
+	private static final SparseArray<String> dpiMap = new SparseArray<String>() {
 		{
 			put(120, "l");
 			put(160, "m");
@@ -242,16 +240,17 @@ public class Utils {
 	public static String getDensityKeyDisplay(Context context) {
 		String dpi = null;
 		int value = getDensityDisplay(context);
-		if (dpiMap.containsKey(value)) {
+		if (dpiMap.get(value) != null) {
 			dpi = dpiMap.get(value);
 		} else {
 			int rest = 999;
-			for (Entry<Integer, String> entry : dpiMap.entrySet()) {
-				if (rest >= Math.abs(value - entry.getKey())) {
-					rest = Math.abs(value - entry.getKey());
-					dpi = entry.getValue();
+			for(int i = 0; i < dpiMap.size(); i++) {
+				int key = dpiMap.keyAt(i);
+				if (rest >= Math.abs(value - key)) {
+					rest = Math.abs(value - key);
+					dpi = dpiMap.get(key);
 				}
-			}				
+			}
 		}
 		return dpi;
 	}		
@@ -535,31 +534,22 @@ public class Utils {
      * @return <code>true</code> if device contains Google Play Services.
      */
 	public static boolean checkPlayServices(Context context) {
-
         final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-        if (context == null || !((context instanceof FragmentActivity) || (context instanceof Activity))) {
-            throw new IllegalStateException("Context must be FragmentActivity instance.");
+        if (context == null || !(context instanceof Activity)) {
+            throw new IllegalStateException("Context must be Activity instance.");
         }
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                if (context instanceof FragmentActivity) {
-                    GooglePlayServicesUtil.getErrorDialog(resultCode, (FragmentActivity) context, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-                } else if (context instanceof Activity) {
-                    GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity) context, PLAY_SERVICES_RESOLUTION_REQUEST).show();
-                }
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                if (context instanceof FragmentActivity) {
-                    ((FragmentActivity) context).finish();
-                } else if (context instanceof Activity) {
-                    ((Activity) context).finish();
-                }
-            }
-            return false;
-        }
-        return true;
+		GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+        int code = api.isGooglePlayServicesAvailable(context);
+		if (code == ConnectionResult.SUCCESS) {
+			return true;
+		} else if (api.isUserResolvableError(code)) {
+			api.showErrorDialogFragment((Activity)context, code, PLAY_SERVICES_RESOLUTION_REQUEST);
+			return false;
+		} else {
+			Log.e(TAG, "This device is not supported.");
+			((Activity) context).finish();
+			return false;
+		}
     }
 
     /**

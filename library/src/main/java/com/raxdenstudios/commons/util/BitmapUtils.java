@@ -13,6 +13,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.util.Log;
@@ -181,6 +183,16 @@ public class BitmapUtils {
 
 		return output;
 	}
+
+    public static Bitmap fromDrawable(Drawable drawable) {
+        if (drawable == null) return null;
+        if (drawable instanceof BitmapDrawable) return ((BitmapDrawable)drawable).getBitmap();
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
 
 	public static Bitmap fromView(View view) {
 		int width = view.getWidth();

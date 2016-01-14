@@ -3,7 +3,6 @@ package com.raxdenstudios.commons.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.StringRes;
 import android.view.View;
 
 /**
@@ -27,7 +26,7 @@ public class AlertDialogUtils {
 		 * @param title the resource id to use as the title
 		 * @param listener The {@link DialogInterface.OnClickListener} to use.
 		 */
-		public AlertDialogButton(@StringRes int title, DialogInterface.OnClickListener listener) {
+		public AlertDialogButton(int title, DialogInterface.OnClickListener listener) {
 			this.titleId = title;
 			this.listener = listener;
 		}
@@ -52,7 +51,7 @@ public class AlertDialogUtils {
      * @param message the resource id to use as the message
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message) {
+	public static AlertDialog showAlertDialog(Context context, int title, int message) {
 		return showAlertDialog(context, title, message, null, null, null);
 	}
 
@@ -65,7 +64,7 @@ public class AlertDialogUtils {
 	 * @param button the button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, AlertDialogButton button) {
+	public static AlertDialog showAlertDialog(Context context, int title, int message, AlertDialogButton button) {
 		return showAlertDialog(context, title, message, button, null);
 	}
 
@@ -79,7 +78,7 @@ public class AlertDialogUtils {
      * @param negativeButton the negative button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
+	public static AlertDialog showAlertDialog(Context context, int title, int message, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
 		return showAlertDialog(context, title, message, null, positiveButton, negativeButton);
 	}
 
@@ -92,7 +91,7 @@ public class AlertDialogUtils {
      * @param view the custom view to be used within the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, View view) {
+	public static AlertDialog showAlertDialog(Context context, int title, int message, View view) {
 		return showAlertDialog(context, title, message, view, null);
 	}
 
@@ -106,7 +105,7 @@ public class AlertDialogUtils {
 	 * @param button the button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, View view, AlertDialogButton button) {
+	public static AlertDialog showAlertDialog(Context context, int title, int message, View view, AlertDialogButton button) {
 		return showAlertDialog(context, title, message, view, button, null);
 	}
 
@@ -121,7 +120,7 @@ public class AlertDialogUtils {
 	 * @param negativeButton the negative button of the dialog
      * @return AlertDialog
      */
-	public static AlertDialog showAlertDialog(Context context, @StringRes int title, @StringRes int message, View view, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
+	public static AlertDialog showAlertDialog(Context context, int title, int message, View view, AlertDialogButton positiveButton, AlertDialogButton negativeButton) {
 	    return showAlertDialog(context, title != 0 ? context.getResources().getString(title) : "", message != 0 ? context.getResources().getString(message) : "", view, positiveButton, negativeButton);
 	}
 

@@ -3,7 +3,6 @@ package com.raxdenstudios.commons.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.support.v4.app.FragmentActivity;
 
 import com.raxdenstudios.commons.util.Utils;
 
@@ -79,7 +78,7 @@ public class LocaleManager {
 	}
 		
 	private SharedPreferences getLocalePreferences(Context context) {
-	    return ((FragmentActivity)context).getSharedPreferences(Utils.getPackageName(context), Context.MODE_PRIVATE);
+	    return context.getSharedPreferences(Utils.getPackageName(context), Context.MODE_PRIVATE);
 	}
 	
 }
