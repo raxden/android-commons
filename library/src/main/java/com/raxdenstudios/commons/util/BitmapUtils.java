@@ -40,14 +40,21 @@ public class BitmapUtils {
     private static final String TAG = BitmapUtils.class.getSimpleName();
 
     public static Bitmap resize(Bitmap bitmap, int maxSize) {
-        float aspectRatio = (float) bitmap.getWidth() / (float) bitmap.getHeight();
-        int width = 0, height = 0;
-        if (bitmap.getWidth() > maxSize) {
-            width = maxSize;
-            height = Math.round(maxSize / aspectRatio);
-        } else if (bitmap.getHeight() > maxSize){
-            width = Math.round(maxSize / aspectRatio);
-            height = maxSize;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float aspectRatio;
+        if (bitmap.getWidth() > bitmap.getHeight()) {
+            aspectRatio = width / height;
+            if (bitmap.getWidth() > maxSize) {
+                width = maxSize;
+            }
+            height = Math.round(width / aspectRatio);
+        } else {
+            aspectRatio = height / width;
+            if (bitmap.getHeight() > maxSize) {
+                height = maxSize;
+            }
+            width = Math.round(height / aspectRatio);
         }
         bitmap = BitmapUtils.resize(bitmap, width, height);
         return resize(bitmap, width, height);

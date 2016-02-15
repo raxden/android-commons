@@ -1,5 +1,6 @@
 package com.raxdenstudios.commons.util;
 
+import android.util.Base64;
 import android.util.Log;
 
 
@@ -27,7 +28,7 @@ public class EncryptUtils {
 
 	public static String hashKey(String key, AlgorithmType algorithmType, String encoding){
 		byte[] digestBytes = getDigest(key, algorithmType, encoding);
-		return Base64.encodeWebSafe(digestBytes, true);
+		return Base64.encodeToString(digestBytes, Base64.URL_SAFE);
 	}
 
 	public static String hashKeyForDisk(String key) {

@@ -2,6 +2,7 @@ package com.raxdenstudios.commons.util;
 
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -25,7 +26,10 @@ public class DrawableUtils {
     }
 
     public static Drawable tinted(Drawable drawable, int color) {
-        if (drawable != null) drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        PorterDuffColorFilter pdcf = new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        if (pdcf != null) {
+            drawable.setColorFilter(pdcf);
+        }
         return drawable;
     }
 
