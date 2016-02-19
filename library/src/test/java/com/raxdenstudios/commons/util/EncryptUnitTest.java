@@ -1,16 +1,21 @@
 package com.raxdenstudios.commons.util;
 
 
+import com.raxdenstudios.commons.BuildConfig;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.annotation.Config;
+
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by agomez on 11/02/2016.
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(RobolectricGradleTestRunner.class)
+@Config(constants = BuildConfig.class, sdk = 21)
 public class EncryptUnitTest {
 
     private static final String KEY = "thisIsAKeyToEncryptWithNumbersByExample23";
