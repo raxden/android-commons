@@ -28,7 +28,7 @@ public class EncryptUtils {
 
 	public static String hashKey(String key, AlgorithmType algorithmType, String encoding){
 		byte[] digestBytes = getDigest(key, algorithmType, encoding);
-		return Base64.encodeToString(digestBytes, Base64.URL_SAFE);
+		return Base64.encodeToString(digestBytes, Base64.URL_SAFE|Base64.NO_WRAP);
 	}
 
 	public static String hashKeyForDisk(String key) {
