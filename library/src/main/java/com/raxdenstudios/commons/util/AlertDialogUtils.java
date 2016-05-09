@@ -209,5 +209,6 @@ public class AlertDialogUtils {
 	    if (positiveButton != null) builder.setPositiveButton(Utils.hasValue(positiveButton.title) ? positiveButton.title : context.getResources().getString(positiveButton.titleId), positiveButton.listener);
 	    if (negativeButton != null)	builder.setNegativeButton(Utils.hasValue(negativeButton.title) ? negativeButton.title : context.getResources().getString(negativeButton.titleId), negativeButton.listener);
 	    return builder.show();
-	}	
+	}
+
 }
