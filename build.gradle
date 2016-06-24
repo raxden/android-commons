@@ -41,13 +41,12 @@ ext {
 }
 
 ext.deps = [
-        // Android
-        androidv7:          "com.android.support:appcompat-v7:$supportLibraryVersion",
-        playServices:       "com.google.android.gms:play-services:$playServicesVersion",
+    // Android
+    androidv7:          "com.android.support:appcompat-v7:$supportLibraryVersion",
+    playServices:       "com.google.android.gms:play-services:$playServicesVersion",
 
-        // Third Party
-        gson:               "com.google.code.gson:gson:$gsonVersion",
-        junit:              "junit:junit:${jUnitVersion}",
-        asserj:             "org.assertj:assertj-core:${jUnitVersion}",
-        robolectric:        "org.robolectric:robolectric:${roboelectricVersion}"
+    // Third Party
+    junit:              "junit:junit:${jUnitVersion}",
+    asserj:             "org.assertj:assertj-core:${assertJVersion}",
+    robolectric:        "org.robolectric:robolectric:${roboelectricVersion}"
 ]

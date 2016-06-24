@@ -21,8 +21,8 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     testCompile deps.junit
-    testCompile "org.assertj:assertj-core:1.7.0"
-    testCompile "org.robolectric:robolectric:3.0"
+    testCompile deps.asserj
+    testCompile deps.robolectric
 
     compile deps.androidv7
     compile deps.playServices
