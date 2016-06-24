@@ -3,7 +3,8 @@ Android Commons
 
 Android Commons is a util library with a set of useful classes to help to developer. Works on Android 4.1 (API level 16) and upwards.
 
-[![Release](https://img.shields.io/github/release/raxden/AndroidCommons.svg?label=maven central)](https://jitpack.io/#raxden/AndroidCommons/) [![API](https://img.shields.io/badge/API-16%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=16)
+[![Release](https://img.shields.io/github/tag/raxden/AndroidCommons.svg?label=maven central)](https://jitpack.io/#raxden/AndroidCommons/) 
+[![API](https://img.shields.io/badge/API-16%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=16)
 
 ## Usage
 
@@ -18,7 +19,7 @@ repositories {
 }
 
 dependencies {
-	    compile 'com.github.raxden:AndroidCommons:v2.2.5@aar'
+	    compile 'com.github.raxden:AndroidCommons:2.2.6@aar'
 }
 ```
 
@@ -33,7 +34,7 @@ dependencies {
 <dependency>
 	    <groupId>com.github.raxden</groupId>
 	    <artifactId>AndroidCommons</artifactId>
-	    <version>v2.2.5</version>
+	    <version>2.2.6</version>
 </dependency>
 ```
 
@@ -43,4 +44,4 @@ dependencies {
 
 ### Documentation 
 
-For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/v2.2.5/javadoc/).
+For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/2.2.6/javadoc/).
