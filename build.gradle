@@ -31,7 +31,7 @@ ext {
 
     // App dependencies
     supportLibraryVersion = '24.0.0'
-    playServicesVersion = '8.4.0'
+    firebaseVersion = '9.0.0'
     gsonVersion = '2.6.2'   // https://github.com/google/gson
 
     // Test dependencies
@@ -43,7 +43,7 @@ ext {
 ext.deps = [
     // Android
     androidv7:          "com.android.support:appcompat-v7:$supportLibraryVersion",
-    playServices:       "com.google.android.gms:play-services:$playServicesVersion",
+    firebaseCore:       "com.google.firebase:firebase-core:$firebaseVersion",
 
     // Third Party
     junit:              "junit:junit:${jUnitVersion}",

@@ -25,7 +25,7 @@ dependencies {
     testCompile deps.robolectric
 
     compile deps.androidv7
-    compile deps.playServices
+    compile deps.firebaseCore
 }
 
 apply from: 'build_javadoc.gradle'
