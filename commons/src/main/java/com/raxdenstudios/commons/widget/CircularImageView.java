@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ImageView;
 
+import com.raxdenstudios.commons.R;
 import com.raxdenstudios.commons.util.BitmapUtils;
 
 public class CircularImageView extends ImageView {
