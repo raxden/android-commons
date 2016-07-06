@@ -133,8 +133,8 @@
     <orderEntry type="library" exported="" name="play-services-basement-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-tasks-9.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="robolectric-resources-3.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="robolectric-annotations-3.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-24.0.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="robolectric-annotations-3.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-24.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-24.0.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="sqlite4java-0.282" level="project" />
