@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidCommons.iml" filepath="$PROJECT_DIR$/AndroidCommons.iml" />
       <module fileurl="file://$PROJECT_DIR$/commons/commons.iml" filepath="$PROJECT_DIR$/commons/commons.iml" />
-      <module fileurl="file://$PROJECT_DIR$/commons/library.iml" filepath="$PROJECT_DIR$/commons/library.iml" />
     </modules>
   </component>
 </project>
