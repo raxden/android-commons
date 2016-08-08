@@ -302,7 +302,7 @@ public class Utils {
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
 		
-		if (hasHoneycombMR2()) {
+		if (SDKUtils.hasHoneycombMR2()) {
 			Point size = new Point();
 			display.getSize(size);
 			dimensions[0] = size.x;
@@ -386,63 +386,6 @@ public class Utils {
 	public static boolean isLandscape(Context context) {
 		return context.getResources().getBoolean(R.bool.isLandscape);
 	}
-
-
-    /**
-     * Checks if the device has Froyo or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasFroyo() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
-    }
-
-    /**
-     * Checks if the device has Gingerbread or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasGingerbread() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
-    }
-
-    /**
-     * Checks if the device has Honeycomb or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasHoneycomb() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-    }
-
-    /**
-     * Checks if the device has HoneycombMR1 or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasHoneycombMR1() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
-    }
-
-    /**
-     * Checks if the device has HoneycombMR2 or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasHoneycombMR2() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2;
-    }
-
-    /**
-     * Checks if the device has JellyBean or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasJellyBean() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-    }
-
-    /**
-     * Checks if the device has KitKat or higher version.
-     * @return <code>true</code> if device is a tablet.
-     */
-    public static boolean hasKitKat() {
-		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-    }
 
     /**
      * Checks if the device has network provider enabled.
