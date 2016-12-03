@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -284,7 +285,9 @@ public class StreamUtils {
 			if (is instanceof BufferedInputStream) {
 				closeInputStream((BufferedInputStream)is);
 			} else if (is instanceof FileInputStream) {
-				closeInputStream((FileInputStream)is);
+				closeInputStream((FileInputStream) is);
+			} else if (is instanceof ObjectInputStream) {
+				closeInputStream((ObjectInputStream) is);
 			} else {
 				try {
 					is.close();
@@ -324,7 +327,18 @@ public class StreamUtils {
 			fis = null;
 		}
 	}
-    
+
+	private static void closeInputStream(ObjectInputStream ois) {
+		if (ois != null) {
+			try {
+				ois.close();
+			} catch (IOException e) {
+				Log.e(TAG, e.getMessage(), e);
+			}
+			ois = null;
+		}
+	}
+
 	private static void closeInputStream(BufferedInputStream bis) {
 		if (bis != null) {
 			try {
