@@ -141,7 +141,7 @@ public class NavigationUtils {
                 activity.startActivity(intent);
             }
             if (transitions.length > 1) {
-                activity.overridePendingTransition(android.R.animator.fade_in, android.R.animator.fade_out);
+                activity.overridePendingTransition(transitions[0], transitions[1]);
             }
         } else {
             context.startActivity(intent);

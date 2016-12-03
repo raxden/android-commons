@@ -341,7 +341,7 @@ public class BitmapUtils {
      */
     @TargetApi(12)
     public static int size(Bitmap bitmap) {
-        if (Utils.hasHoneycombMR1()) {
+        if (SDKUtils.hasHoneycombMR1()) {
             return bitmap.getByteCount();
         }
         // Pre HC-MR1

@@ -45,7 +45,7 @@ public class FileUtils {
     public static File getExternalCacheDir(Context context) {
         File file = null;
 	    	
-    	if (Utils.hasFroyo()) {
+    	if (SDKUtils.hasFroyo()) {
     		file = context.getExternalCacheDir();
         }
 	
@@ -99,7 +99,7 @@ public class FileUtils {
      */
     @TargetApi(9)
     public static long getUsableSpace(File path) {
-        if (Utils.hasGingerbread()) {
+        if (SDKUtils.hasGingerbread()) {
             return path.getUsableSpace();
         }
         final StatFs stats = new StatFs(path.getPath());
@@ -114,7 +114,7 @@ public class FileUtils {
      */
     @TargetApi(9)
     public static boolean isExternalStorageRemovable() {
-        if (Utils.hasGingerbread()) {
+        if (SDKUtils.hasGingerbread()) {
             return Environment.isExternalStorageRemovable();
         }
         return true;
