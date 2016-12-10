@@ -15,6 +15,11 @@ public class NavigationUtils {
 
     private static final String TAG = NavigationUtils.class.getSimpleName();
 
+    private static int[] animations = new int[] {
+            android.R.animator.fade_in,
+            android.R.animator.fade_out
+    };
+
     public static void navigateToActivity(Context context, Class<?> classToStartIntent) {
         performNavigationToActivity(context, classToStartIntent, null, 0);
     }
@@ -129,7 +134,7 @@ public class NavigationUtils {
     }
 
     private static void performNavigationToActivity(Context context, Intent intent, int requestCode) {
-        performNavigationToActivity(context, intent, requestCode, new int[] {android.R.animator.fade_in, android.R.animator.fade_out});
+        performNavigationToActivity(context, intent, requestCode, new int[] {animations[0], animations[1]});
     }
 
     private static void performNavigationToActivity(Context context, Intent intent, int requestCode, int[] transitions) {

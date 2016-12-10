@@ -1,5 +1,6 @@
 package com.raxdenstudios.commons.manager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,13 @@ public class NavigationManager {
 
     public void launch() {
         NavigationUtils.navigateToActivityForResult(context, intent, requestCode, transitions);
+    }
+
+    public void launchAndFinish() {
+        launch();
+        if (context instanceof Activity) {
+            ((Activity)context).finish();
+        }
     }
 
     public static class Builder {
