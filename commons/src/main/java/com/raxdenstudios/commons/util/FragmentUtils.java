@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.util;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -28,7 +29,7 @@ public class FragmentUtils {
 
     /* ========================= Get Fragment methods =========================== */
 
-    public static Fragment getFragmentByTag(FragmentManager fm, String tag) {
+    public static Fragment getFragment(FragmentManager fm, String tag) {
         Fragment fragment = null;
         if (fm != null) {
             fragment = fm.findFragmentByTag(tag);
@@ -36,7 +37,7 @@ public class FragmentUtils {
         return fragment;
     }
 
-    public static Fragment getFragmentFromContainerId(FragmentManager fm, int containerId) {
+    public static Fragment getFragment(FragmentManager fm, int containerId) {
         Fragment fragment = null;
         if (fm != null) {
             fragment = fm.findFragmentById(containerId);
@@ -45,6 +46,38 @@ public class FragmentUtils {
     }
 
     /* =========================  Add / Replace Fragment methods ========================= */
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, animations);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, boolean addToBackStack) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, animations, addToBackStack);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, int[] animations) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, animations, false);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, int[] animations, boolean addToBackStack) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, getDefaultTagFromFragment(fragment), animations, addToBackStack);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, String tag) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, tag, animations);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, String tag, boolean addToBackStack) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, tag, animations, addToBackStack);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, String tag, int[] animations) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, tag, animations, false);
+    }
+
+    public static int loadFragment(Activity activity, int containerId, Fragment fragment, String tag, int[] animations, boolean addToBackStack) {
+        return loadFragment(activity.getFragmentManager(), containerId, fragment, tag, animations, addToBackStack);
+    }
 
     public static int loadFragment(FragmentManager fm, int containerId, Fragment fragment) {
         return loadFragment(fm, containerId, fragment, animations);
@@ -116,14 +149,14 @@ public class FragmentUtils {
 
     public static int removeFragment(FragmentManager fm, String tag) {
         if (fm != null) {
-            return removeFragment(fm, getFragmentByTag(fm, tag));
+            return removeFragment(fm, getFragment(fm, tag));
         }
         return 0;
     }
 
     public static int removeFragment(FragmentManager fm, int containerId) {
         if (fm != null) {
-            return removeFragment(fm, getFragmentFromContainerId(fm, containerId));
+            return removeFragment(fm, getFragment(fm, containerId));
         }
         return 0;
     }
