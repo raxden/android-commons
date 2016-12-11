@@ -99,7 +99,6 @@ public class NavigationFragmentManager {
 
     public static class Builder {
 
-        private Activity activity;
         private FragmentManager fm;
         private FragmentTransaction ft;
         private int containerId;
@@ -116,8 +115,11 @@ public class NavigationFragmentManager {
         private Operation operation;
 
         public Builder(Activity activity) {
-            this.activity = activity;
             this.fm = activity.getFragmentManager();
+        }
+
+        public Builder(FragmentManager fragmentManager) {
+            this.fm = fragmentManager;
         }
 
         public Builder setEnterAnimation(int animation) {

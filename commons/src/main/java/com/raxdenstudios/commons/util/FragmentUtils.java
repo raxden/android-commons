@@ -29,6 +29,14 @@ public class FragmentUtils {
 
     /* ========================= Get Fragment methods =========================== */
 
+    public static Fragment getFragment(Activity activity, String tag) {
+        return getFragment(activity.getFragmentManager(), tag);
+    }
+
+    public static Fragment getFragment(Activity activity, int containerId) {
+        return getFragment(activity.getFragmentManager(), containerId);
+    }
+
     public static Fragment getFragment(FragmentManager fm, String tag) {
         Fragment fragment = null;
         if (fm != null) {
