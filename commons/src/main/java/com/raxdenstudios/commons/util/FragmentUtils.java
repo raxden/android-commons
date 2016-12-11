@@ -104,7 +104,9 @@ public class FragmentUtils {
                 ft = ft.replace(containerId, fragment);
             }
             setCustomAnimations(ft, animations);
-            addToBackStack(ft, fragment);
+            if (addToBackStack) {
+                addToBackStack(ft, fragment);
+            }
             return performTransaction(ft);
         }
         return 0;
@@ -144,14 +146,14 @@ public class FragmentUtils {
 
     /* =========================  Support methods ========================= */
 
-    private static int getBackStackSize(FragmentManager fm) {
+    public static int getBackStackSize(FragmentManager fm) {
         if (fm != null) {
             return fm.getBackStackEntryCount();
         }
         return 0;
     }
 
-    private static void setCustomAnimations(FragmentTransaction ft, int[] animations) {
+    public static void setCustomAnimations(FragmentTransaction ft, int[] animations) {
         if (ft != null && (animations != null && animations.length == 2 || animations.length == 4)) {
             if (animations.length == 2) {
                 ft.setCustomAnimations(animations[0], animations[1]);
@@ -161,13 +163,13 @@ public class FragmentUtils {
         }
     }
 
-    private static void addToBackStack(FragmentTransaction ft, Fragment fragment) {
+    public static void addToBackStack(FragmentTransaction ft, Fragment fragment) {
         if (ft != null && fragment != null) {
             ft.addToBackStack(fragment.getClass().getName());
         }
     }
 
-    private static String getDefaultTagFromFragment(Fragment fragment) {
+    public static String getDefaultTagFromFragment(Fragment fragment) {
         String tag = null;
         if (fragment != null) {
             tag = fragment.getClass().getName();
@@ -175,14 +177,14 @@ public class FragmentUtils {
         return tag;
     }
 
-    private static FragmentTransaction initFragmentTransaction(FragmentManager fm) {
+    public static FragmentTransaction initFragmentTransaction(FragmentManager fm) {
         if (fm != null) {
             return fm.beginTransaction();
         }
         return null;
     }
 
-    private static int performTransaction(FragmentTransaction ft) {
+    public static int performTransaction(FragmentTransaction ft) {
         try {
             return ft.commit();
         } catch (IllegalStateException e) {

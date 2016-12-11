@@ -1,7 +1,6 @@
 package com.raxdenstudios.commons.manager;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,13 +12,13 @@ import java.util.Map;
 
 public class NavigationManager {
 
-    private Context context;
+    private Activity activity;
     private Intent intent;
     private int requestCode;
     private int[] transitions;
 
     public NavigationManager(Builder builder) {
-        context = builder.context;
+        activity = builder.activity;
         requestCode = builder.requestCode;
         transitions = builder.transitions;
 
@@ -27,7 +26,7 @@ public class NavigationManager {
             intent = builder.intent;
         } else if (builder.classToStartIntent != null) {
             intent = new Intent();
-            intent.setClass(context, builder.classToStartIntent);
+            intent.setClass(activity, builder.classToStartIntent);
         }
         intent.addFlags(builder.flags);
         if (builder.extras != null) {
@@ -40,19 +39,17 @@ public class NavigationManager {
     }
 
     public void launch() {
-        NavigationUtils.navigateToActivityForResult(context, intent, requestCode, transitions);
+        NavigationUtils.navigateToActivityForResult(activity, intent, requestCode, transitions);
     }
 
     public void launchAndFinish() {
         launch();
-        if (context instanceof Activity) {
-            ((Activity)context).finish();
-        }
+        activity.finish();
     }
 
     public static class Builder {
 
-        private Context context;
+        private Activity activity;
         private Intent intent;
         private Class<?> classToStartIntent;
         private Bundle extras = new Bundle();
@@ -62,8 +59,8 @@ public class NavigationManager {
                 android.R.animator.fade_in,
                 android.R.animator.fade_out};
 
-        public Builder(Context context) {
-            this.context = context;
+        public Builder(Activity activity) {
+            this.activity = activity;
         }
 
         public Builder putData(Bundle extras) {

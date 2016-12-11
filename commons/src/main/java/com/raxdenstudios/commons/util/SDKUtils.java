@@ -84,4 +84,12 @@ public class SDKUtils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
+    /**
+     * Checks if the device has Marshmallow or higher version.
+     * @return <code>true</code> if device is a tablet.
+     */
+    public static boolean hasNougat() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+    }
+
 }
