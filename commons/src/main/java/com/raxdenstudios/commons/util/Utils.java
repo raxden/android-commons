@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -15,6 +16,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings.Secure;
 import android.util.DisplayMetrics;
@@ -503,6 +505,21 @@ public class Utils {
     public static String getApplicationName(Context context) {
         return context.getString(context.getApplicationInfo().labelRes);
     }
+
+	public static String getMetadaDataValue(Context context, String key) {
+		String value = null;
+		try {
+			ApplicationInfo applicationInfo = context.getPackageManager()
+					.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+			Bundle bundle = applicationInfo.metaData;
+			value = bundle != null ? bundle.getString(key) : null;
+		} catch (NameNotFoundException e) {
+			Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage());
+		} catch (NullPointerException e) {
+			Log.e(TAG, "Failed to load meta-data, NullPointer: " + e.getMessage());
+		}
+		return value;
+	}
 
     /**
      * Get application package
