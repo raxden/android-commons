@@ -1,12 +1,30 @@
 package com.raxdenstudios.commons.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 /**
  * @author Angel Gomez
  */
 public class ResourceUtils {
+
+    public static Uri getResourceUri(Context context, int resourceId) {
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                context.getResources().getResourcePackageName(resourceId) + '/' +
+                context.getResources().getResourceTypeName(resourceId) + '/' +
+                context.getResources().getResourceEntryName(resourceId));
+    }
+
+    public static Uri getDrawableUri(Context context, String name) {
+        Uri uri = null;
+        int resId = getDrawableId(context, name);
+        if (resId != 0) {
+            uri = getResourceUri(context, resId);
+        }
+        return uri;
+    }
 
     public static int getResourceId(Context context, String name) {
         int resID = getDrawableId(context, name);
