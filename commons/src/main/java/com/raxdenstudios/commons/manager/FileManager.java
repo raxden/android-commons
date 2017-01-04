@@ -13,24 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.raxdenstudios.commons.util;
+package com.raxdenstudios.commons.manager;
 
-import org.xml.sax.Attributes;
+public class FileManager {
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-/**
- *
- */
-public class MapUtils {
-
-	public static Map<String, Object> attributesToHashMap(Attributes atts) {
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		for (int i=0; i<atts.getLength(); i++) {
-			map.put(atts.getLocalName(i), atts.getValue(i));
-		}
-		return map;
-	}
+    private static final String TAG = FileManager.class.getSimpleName();
+	
 	
 }
