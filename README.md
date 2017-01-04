@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-	    compile 'com.github.raxden:AndroidCommons:2.3.0@aar'
+	    compile 'com.github.raxden:AndroidCommons:2.3.8@aar'
 }
 ```
 
@@ -34,7 +34,7 @@ dependencies {
 <dependency>
 	    <groupId>com.github.raxden</groupId>
 	    <artifactId>AndroidCommons</artifactId>
-	    <version>2.3.0</version>
+	    <version>2.3.8</version>
 </dependency>
 ```
 
@@ -44,7 +44,7 @@ dependencies {
 
 ### Documentation 
 
-For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/2.3.0/javadoc/).
+For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/2.3.8/javadoc/).
 
 ## LICENSE
 
