@@ -87,7 +87,7 @@ task uploadRelease << {
     createUpdateReadmeFileTask(versionName)
     tasks.updateReadmeFile.execute()
     sleep(5000)
-    createUploadReleaseToGitTask(versionName, "library update from gradle")
+    createUploadReleaseToGitTask(versionName, "Release " + versionName + " created")
     tasks.uploadReleaseToGit.execute()
 }
 
