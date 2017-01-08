@@ -19,7 +19,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -44,8 +43,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.raxdenstudios.commons.R;
 
 import java.util.ArrayList;
@@ -484,32 +481,6 @@ public class Utils {
 		}
 		return false;
 	}	 
-
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     * @param context
-     * @return <code>true</code> if device contains Google Play Services.
-     */
-	public static boolean checkPlayServices(Context context) {
-        final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-        if (context == null || !(context instanceof Activity)) {
-            throw new IllegalStateException("Context must be Activity instance.");
-        }
-		GoogleApiAvailability api = GoogleApiAvailability.getInstance();
-        int code = api.isGooglePlayServicesAvailable(context);
-		if (code == ConnectionResult.SUCCESS) {
-			return true;
-		} else if (api.isUserResolvableError(code)) {
-			api.showErrorDialogFragment((Activity)context, code, PLAY_SERVICES_RESOLUTION_REQUEST);
-			return false;
-		} else {
-			Log.e(TAG, "This device is not supported.");
-			((Activity) context).finish();
-			return false;
-		}
-    }
 
     /**
      * Get application name
