@@ -71,8 +71,8 @@ public class NavigationManager {
         private int flags;
         private int requestCode;
         private int[] transitions = new int[] {
-                android.R.animator.fade_in,
-                android.R.animator.fade_out};
+                android.R.anim.fade_in,
+                android.R.anim.fade_out};
 
         public Builder(Activity activity) {
             this.activity = activity;

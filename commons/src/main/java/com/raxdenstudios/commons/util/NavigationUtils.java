@@ -28,11 +28,9 @@ import java.util.Map;
  */
 public class NavigationUtils {
 
-    private static final String TAG = NavigationUtils.class.getSimpleName();
-
     private static int[] animations = new int[] {
-            android.R.animator.fade_in,
-            android.R.animator.fade_out
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
     };
 
     public static void navigateToActivity(Context context, Class<?> classToStartIntent) {
