@@ -32,11 +32,13 @@ public class NavigationManager {
     private List<Intent> intentList;
     private int requestCode;
     private int[] transitions;
+    private Bundle options;
 
     public NavigationManager(Builder builder) {
         activity = builder.activity;
         requestCode = builder.requestCode;
         transitions = builder.transitions;
+        options = builder.options;
 
         if (builder.intentList != null && !builder.intentList.isEmpty()) {
             intentList = builder.intentList;
@@ -58,33 +60,9 @@ public class NavigationManager {
         }
     }
 
-     /**
-     * Show the activity using the
-     * perform the navigation to the activity
-     */
-    public void launch() {
-        if (intentList.size() == 1) {
-            Intent intent = intentList.get(0);
-            if (requestCode > 0) {
-                activity.startActivityForResult(intent, requestCode);
-            } else {
-                activity.startActivity(intent);
-            }
-            if (transitions.length > 1) {
-                activity.overridePendingTransition(transitions[0], transitions[1]);
-            }
-        } else {
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(activity);
-            for (Intent intent : intentList) {
-                stackBuilder.addNextIntentWithParentStack(intent);
-            }
-            stackBuilder.startActivities();
-        }
-    }
-
 
     /**
-     * Launch the an activity and finish the current.
+     * Launch the an activity and finish the showed one
      */
     public void launchAndFinish() {
         launch();
@@ -92,7 +70,55 @@ public class NavigationManager {
     }
 
     /**
-     *
+     * Show the activity using the
+     * {@link com.raxdenstudios.commons.util.NavigationUtils#navigateToActivityForResult} method, to
+     * perform the navigation to the activity
+     */
+    public void launch() {
+        if (hasMultipleIntentToLaunch()) {
+            launchActivityStack(intentList);
+        } else {
+            launchActivity(intentList.get(0), options);
+        }
+    }
+
+    private void launchActivity(Intent intent, Bundle options) {
+        if (hasRequestCode()) {
+            activity.startActivityForResult(intent, requestCode, options);
+        } else {
+            activity.startActivity(intent, options);
+        }
+        overridePendingTransition();
+    }
+
+    private void launchActivityStack(List<Intent> intentList) {
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(activity);
+        for (Intent intent : intentList) {
+            stackBuilder.addNextIntentWithParentStack(intent);
+        }
+        stackBuilder.startActivities();
+    }
+
+    private void overridePendingTransition() {
+        if (hasTransitions()) {
+            activity.overridePendingTransition(transitions[0], transitions[1]);
+        }
+    }
+
+    private boolean hasMultipleIntentToLaunch() {
+        return intentList.size() > 1;
+    }
+
+    private boolean hasTransitions() {
+        return transitions.length == 2;
+    }
+
+    private boolean hasRequestCode() {
+        return requestCode > 0;
+    }
+
+    /**
+     * Class to simulate the creation of fragments
      */
     public static class Builder {
 
@@ -100,6 +126,7 @@ public class NavigationManager {
         private List<Intent> intentList;
         private Class<?> classToStartIntent;
         private Bundle extras = new Bundle();
+        private Bundle options;
         private int flags;
         private int requestCode;
         private int[] transitions = new int[] {
@@ -177,21 +204,13 @@ public class NavigationManager {
 
         /**
          * Set the data to the intent of the activity
-         * @param transition in extra to set to the intent
+         * @param transitionIn in extra to set to the intent
+         * @param transitionOut out extra to set to the intent
          * @return builder with the set data
          */
-        public Builder setTransitionIn(int transition) {
-            this.transitions[0] = transition;
-            return this;
-        }
-
-        /**
-         * Set the data to the intent of the activity
-         * @param transition out extra to set to the intent
-         * @return builder with the set data
-         */
-        public Builder setTransitionOut(int transition) {
-            this.transitions[1] = transition;
+        public Builder setTransition(int transitionIn, int transitionOut) {
+            this.transitions[0] = transitionIn;
+            this.transitions[1] = transitionOut;
             return this;
         }
 
@@ -201,10 +220,20 @@ public class NavigationManager {
          * @return NavigationManager with the intent
          */
         public NavigationManager navigateTo(Intent intent) {
+            return navigateTo(intent, null);
+        }
+
+        /**
+         * Set the intent to the {@link com.raxdenstudios.commons.manager.NavigationManager}
+         * @param intent to initialize the NavigationManager
+         * @return NavigationManager with the intent
+         */
+        public NavigationManager navigateTo(Intent intent, Bundle options) {
             if (intentList == null) {
                 intentList = new ArrayList<>();
             }
             intentList.add(intent);
+            this.options = options;
             return new NavigationManager(this);
         }
 
@@ -227,7 +256,17 @@ public class NavigationManager {
          * @return NavigationManager intent to start
          */
         public NavigationManager navigateTo(Class<?> classToStartIntent) {
+            return navigateTo(classToStartIntent, null);
+        }
+
+        /**
+         * Navigate to the intent
+         * @param classToStartIntent to start the intent
+         * @return NavigationManager intent to start
+         */
+        public NavigationManager navigateTo(Class<?> classToStartIntent, Bundle options) {
             this.classToStartIntent = classToStartIntent;
+            this.options = options;
             return new NavigationManager(this);
         }
 
