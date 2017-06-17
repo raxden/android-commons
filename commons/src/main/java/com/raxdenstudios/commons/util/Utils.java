@@ -52,15 +52,14 @@ import java.util.Map;
 /**
  *
  */
-public class Utils {
+public final class Utils {
 
     private static final String TAG = Utils.class.getSimpleName();
 
     /**
      * Check whether the given String has actual text.
      * @param value the String to check (may be <code>null</code>)
-     * @return <code>true</code> if the String is not <code>null</code>, its length is
-     * greater than 0, and it does not contain whitespace only
+     * @return <code>true</code> if the String is not <code>null</code>, its length is     * greater than 0, and it does not contain whitespace only
      */
     public static boolean hasValue(String value) {
         return value != null && StringUtils.hasText((String)value) && (!"null".equals((String)value));
