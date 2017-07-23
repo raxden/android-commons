@@ -1,16 +1,5 @@
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
 
 ext {
-
-    // Sdk and tools
-    minSdkVersion = 16
-    targetSdkVersion = 25
-    compileSdkVersion = 25
-    buildToolsVersion = '25.0.0'
 
     // Android dependencies
     multidexVersion = '1.0.1'
@@ -28,8 +17,8 @@ ext {
 
     libraryDependencies = [
             compile    : [
-                    "com.android.support:appcompat-v7:${supportLibraryVersion}",
-                    "com.google.firebase:firebase-core:${servicesVersion}",
+                    "com.android.support:support-core-ui:25.4.0"
+//                    "com.google.firebase:firebase-core:${servicesVersion}"
             ],
             testCompile: [
                     "junit:junit:${jUnitVersion}",

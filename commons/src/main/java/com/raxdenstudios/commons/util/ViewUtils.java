@@ -15,24 +15,10 @@
  */
 package com.raxdenstudios.commons.util;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
-
- */
 public class ViewUtils {
-
-    /**
-     * Set the background of a view
-     * @param view
-     * @param drawable
-     */
-    public static void setBackground(View view, Drawable drawable) {
-        ViewCompat.setBackground(view, drawable);
-    }
 
     public static void setVisibility(View view, int visibility) {
         if (view instanceof ViewGroup) {
