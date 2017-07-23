@@ -2,12 +2,7 @@
 ext {
 
     // Android dependencies
-    multidexVersion = '1.0.1'
-    supportLibraryVersion = '25.0.0'
-    servicesVersion = '9.8.0'
-
-    // Libraries
-    gsonVersion = '2.6.2'               // https://github.com/google/gson
+    supportLibraryVersion = '25.4.0'
 
     // Testing
     jUnitVersion = '4.12'
@@ -17,8 +12,7 @@ ext {
 
     libraryDependencies = [
             compile    : [
-                    "com.android.support:support-core-ui:25.4.0"
-//                    "com.google.firebase:firebase-core:${servicesVersion}"
+                    "com.android.support:support-core-ui:${supportLibraryVersion}"
             ],
             testCompile: [
                     "junit:junit:${jUnitVersion}",
