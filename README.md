@@ -3,7 +3,7 @@ Android Commons
 
 Android Commons is a util library with a set of useful classes to help to developer. Works on Android 4.1 (API level 16) and upwards.
 
-[![Release](https://img.shields.io/github/tag/raxden/AndroidCommons.svg?label=Download)](https://jitpack.io/#raxden/AndroidCommons/)
+[![Release](https://img.shields.io/github/tag/raxden/android-commons.svg?label=Download)](https://jitpack.io/#raxden/android-commons/)
 [![API](https://img.shields.io/badge/API-16%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=16)
 
 ## Usage
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-	    compile 'com.github.raxden:AndroidCommons:3.0.11@aar'
+	    compile 'com.github.raxden:AndroidCommons:3.0.13@aar'
 }
 ```
 
@@ -34,7 +34,7 @@ dependencies {
 <dependency>
 	    <groupId>com.github.raxden</groupId>
 	    <artifactId>AndroidCommons</artifactId>
-	    <version>3.0.11</version>
+	    <version>3.0.13</version>
 </dependency>
 ```
 
@@ -44,7 +44,7 @@ dependencies {
 
 ### Documentation 
 
-For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/3.0.11/javadoc/).
+For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/3.0.13/javadoc/).
 
 ## LICENSE
 
