@@ -3,7 +3,7 @@ Android Commons
 
 Android Commons is a util library with a set of useful classes to help to developer. Works on Android 4.1 (API level 16) and upwards.
 
-[![Release](https://img.shields.io/github/tag/raxden/AndroidCommons.svg?label=Download)](https://jitpack.io/#raxden/AndroidCommons/)
+[![Release](https://img.shields.io/github/tag/raxden/android-commons.svg?label=Download)](https://jitpack.io/#raxden/android-commons/)
 [![API](https://img.shields.io/badge/API-16%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=16)
 
 ## Usage
