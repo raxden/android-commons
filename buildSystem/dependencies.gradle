@@ -3,9 +3,6 @@ ext {
 
     // Android dependencies
     supportLibraryVersion = '26.1.0'
-    servicesVersion = '11.4.2'
-    multidexVersion = '1.0.1'
-    constraintsLayoutVersion = '1.0.2'      // https://developer.android.com/reference/android/support/constraint/ConstraintLayout.html
 
     // Testing
     junitVersion = '4.12'
@@ -25,29 +22,6 @@ ext {
                     ],
                     compileOnly : [
                             "com.android.support:support-v13:${supportLibraryVersion}",
-                    ],
-                    testImplementation : [
-                            "junit:junit:${junitVersion}"
-                    ],
-                    androidTestImplementation : [
-                            "com.android.support.test:runner:${runnerVersion}",
-                            "com.android.support.test.espresso:espresso-core:${espressoVersion}"
-                    ]
-            ],
-            sample: [
-                    implementation: [
-                            "com.android.support:appcompat-v7:${supportLibraryVersion}",
-                            "com.android.support:support-v13:${supportLibraryVersion}",
-                            "com.android.support.constraint:constraint-layout:${constraintsLayoutVersion}"
-                    ],
-                    api: [
-
-                    ],
-                    annotationProcessor : [
-
-                    ],
-                    compileOnly : [
-
                     ],
                     testImplementation : [
                             "junit:junit:${junitVersion}"

@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.widget;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -73,14 +74,13 @@ public class DrawerFullLayout extends DrawerLayout {
 
     boolean isDrawerView(View child) {
         final int gravity = ((LayoutParams) child.getLayoutParams()).gravity;
-        final int absGravity = Gravity.getAbsoluteGravity(gravity,
-                child.getLayoutDirection());
+        final int absGravity = Gravity.getAbsoluteGravity(gravity, ViewCompat.getLayoutDirection(child));
         return (absGravity & (Gravity.LEFT | Gravity.RIGHT)) != 0;
     }
 
     int getDrawerViewGravity(View drawerView) {
         final int gravity = ((LayoutParams) drawerView.getLayoutParams()).gravity;
-        return Gravity.getAbsoluteGravity(gravity, drawerView.getLayoutDirection());
+        return Gravity.getAbsoluteGravity(gravity, ViewCompat.getLayoutDirection(drawerView));
     }
 
     static String gravityToString(int gravity) {
