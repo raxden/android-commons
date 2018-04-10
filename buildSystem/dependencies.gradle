@@ -2,7 +2,8 @@
 ext {
 
     // Android dependencies
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '27.0.2'
+    constraintsLayoutVersion = '1.0.2'
 
     // Testing
     junitVersion = '4.12'
@@ -12,18 +13,30 @@ ext {
 
     deps = [
             commons: [
-                    implementation : [
-
-                    ],
-                    api: [
-
-                    ],
-                    annotationProcessor : [
-
-                    ],
+                    implementation : [],
+                    api: [],
+                    annotationProcessor : [],
                     compileOnly : [
-                            "com.android.support:support-v13:${supportLibraryVersion}",
+                            "com.android.support:support-v13:${supportLibraryVersion}"
                     ],
+                    testImplementation : [
+                            "junit:junit:${junitVersion}",
+                            "org.robolectric:robolectric:${robolectricVersion}",
+                            "org.robolectric:shadows-multidex:${robolectricVersion}"
+                    ],
+                    androidTestImplementation : [
+                            "com.android.support.test:runner:${runnerVersion}",
+                            "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+                    ]
+            ],
+            commons_sample: [
+                    implementation : [
+                            "com.android.support:appcompat-v7:${supportLibraryVersion}",
+                            "com.android.support.constraint:constraint-layout:${constraintsLayoutVersion}"
+                    ],
+                    api: [],
+                    annotationProcessor : [],
+                    compileOnly : [],
                     testImplementation : [
                             "junit:junit:${junitVersion}",
                             "org.robolectric:robolectric:${robolectricVersion}",
