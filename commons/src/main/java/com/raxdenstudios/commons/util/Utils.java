@@ -439,7 +439,8 @@ public final class Utils {
 		return result;
 	}
 
-	public static boolean hastNavigationBar(Context context) {
+	public static boolean hasNavigationBar(Context context) {
+    	if (SDKUtils.isEmulator()) return true;
 		int id = context.getResources().getIdentifier("config_showNavigationBar", "bool", "android");
 		return id > 0 && context.getResources().getBoolean(id);
 	}
