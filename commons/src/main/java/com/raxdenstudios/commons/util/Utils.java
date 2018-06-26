@@ -439,6 +439,10 @@ public final class Utils {
 		return result;
 	}
 
+	public static boolean hastNavigationBar(Context context) {
+		int id = context.getResources().getIdentifier("config_showNavigationBar", "bool", "android");
+		return id > 0 && context.getResources().getBoolean(id);
+	}
 
 	public static int getNavigationBarHeight(Context context) {
 		int result = 0;
