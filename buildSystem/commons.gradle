@@ -29,7 +29,7 @@ task uploadRelease {
         def message = "Release " + versionName + " created"
         exec { commandLine "git", "commit", "-m", message }
         exec { commandLine "git", "push" }
-        exec { commandLine "git", "tag", "-a", versionName }
+        exec { commandLine "git", "tag", "-a", versionName, "-m", message }
         exec { commandLine "git", "push", "origin", tag }
     }
 }
