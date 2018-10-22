@@ -1,23 +1,34 @@
 import java.util.regex.Pattern
 
-task uploadLibrary {
+task updateLibrary {
     doLast {
         exec { commandLine "git", "fetch" }
         exec { commandLine "git", "pull" }
-        increaseBuildVersion()
+    }
+}
+
+task uploadLibrary {
+    dependsOn updateLibrary
+    doLast {
+        def versionName = getVersionName()
+        updateReadmeFile(versionName)
         exec { commandLine "git", "add", "-A" }
-        def message = "Release "+getVersionName()+" created"
+        def message = "Update library"
         exec { commandLine "git", "commit", "-m", message}
         exec { commandLine "git", "push"}
     }
 }
 
 task uploadRelease {
-    dependsOn uploadLibrary
+    dependsOn updateLibrary
     doLast {
+        increaseBuildVersion()
         def versionName = getVersionName()
-        exec { commandLine "git", "tag", "-a", versionName}
-        exec { commandLine "git", "push", "origin", versionName}
+        updateReadmeFile(versionName)
+        exec { commandLine "git", "add", "-A" }
+        def message = "Release "+versionName+" created"
+        exec { commandLine "git", "commit", "-m", message}
+        exec { commandLine "git", "push"}
     }
 }
 
