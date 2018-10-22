@@ -5,6 +5,8 @@ ext {
     supportLibraryVersion = '27.0.2'
     constraintsLayoutVersion = '1.0.2'
 
+    kotlinVersion = '1.2.71'
+
     // Testing
     junitVersion = '4.12'
     robolectricVersion = '3.6.1'
@@ -13,7 +15,9 @@ ext {
 
     deps = [
             commons: [
-                    implementation : [],
+                    implementation : [
+                            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}"
+                    ],
                     api: [],
                     annotationProcessor : [],
                     compileOnly : [
@@ -32,7 +36,8 @@ ext {
             commons_sample: [
                     implementation : [
                             "com.android.support:appcompat-v7:${supportLibraryVersion}",
-                            "com.android.support.constraint:constraint-layout:${constraintsLayoutVersion}"
+                            "com.android.support.constraint:constraint-layout:${constraintsLayoutVersion}",
+                            "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}"
                     ],
                     api: [],
                     annotationProcessor : [],
