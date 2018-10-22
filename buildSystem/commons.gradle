@@ -1,5 +1,7 @@
 import java.util.regex.Pattern
 
+// ========== TASKS ================================================================================
+
 task updateLibrary {
     doLast {
         exec { commandLine "git", "fetch" }
@@ -26,11 +28,9 @@ task uploadLibrary {
 task uploadRelease {
     dependsOn updateLibrary, increaseBuildVersion
     doLast {
-        increaseBuildVersion()
         def versionName = getVersionName()
-        updateReadmeFile(versionName)
-        exec { commandLine "git", "add", "-A" }
         def message = "Release " + versionName + " created"
+        exec { commandLine "git", "add", "-A" }
         exec { commandLine "git", "commit", "-m", message }
         exec { commandLine "git", "push" }
         exec { commandLine "git", "tag", "-a", versionName, "-m", message }
@@ -38,7 +38,7 @@ task uploadRelease {
     }
 }
 
-
+// ========== METHODS ==============================================================================
 
 void increaseBuildVersion() {
     println(":increaseBuildVersion - Incrementing build version...")
