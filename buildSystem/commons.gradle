@@ -1,30 +1,40 @@
+import java.util.regex.Pattern
 
 task uploadLibrary {
     doLast {
         exec { commandLine "git", "fetch" }
         exec { commandLine "git", "pull" }
+        increaseBuildVersion()
+        def versionName = getVersionName()
         exec { commandLine "git", "add", "-A" }
-        exec { commandLine "git", "commit", "-m", "library updated"}
+        exec { commandLine "git", "commit", "-m", "Release "+versionName+" created"}
+        exec { commandLine "git", "push", "-m", "Release "+versionName+" created"}
+    }
+}
+
+task uploadRelease {
+    dependsOn uploadLibrary
+    doLast {
+        def versionName = getVersionName()
+        exec { commandLine "git", "tag", "-a", versionName, "-m", message}
+        exec { commandLine "git", "push", "origin", versionName}
     }
 }
 
 task increaseBuildVersion {
     doLast {
-        def versionName = increaseBuildVersion()
-        updateReadmeFile(versionName)
+        increaseBuildVersion()
+        updateReadmeFile(getVersionName())
     }
 }
 
-
-
-String increaseBuildVersion() {
+void increaseBuildVersion() {
     println(":increaseBuildVersion - Incrementing build version...")
-    def versionName
     def gradlePropsFile = file('../gradle.properties')
     if (gradlePropsFile.isFile() && gradlePropsFile.canRead()) {
         Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(gradlePropsFile))
-        versionName = versionProps['VERSION_NAME']
+        def versionName = versionProps['VERSION_NAME']
         def patternVersionNumber = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)")
         def matcherVersionNumber = patternVersionNumber.matcher(versionName)
         if (matcherVersionNumber.find()) {
@@ -39,6 +49,16 @@ String increaseBuildVersion() {
         throw new GradleException(":increaseBuildVersion - Could not read version.properties!")
     }
     println(":increaseBuildVersion - build version incremented to " + versionName)
+}
+
+String getVersionName() {
+    def versionName
+    def gradlePropsFile = file('../gradle.properties')
+    if (gradlePropsFile.isFile() && gradlePropsFile.canRead()) {
+        Properties versionProps = new Properties()
+        versionProps.load(new FileInputStream(gradlePropsFile))
+        versionName = versionProps['VERSION_NAME']
+    }
     return versionName
 }
 
