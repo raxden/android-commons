@@ -23,7 +23,6 @@ allprojects {
         minSdkVersion = 19
         targetSdkVersion = 28
         compileSdkVersion = 28
-        buildToolsVersion = '26.0.2'
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }

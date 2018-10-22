@@ -18,10 +18,10 @@ ext {
     // ========== LIBRARIES ========================================================================
 
     def androidLibs = [
-            appCompat   : [group: 'androidx.appcompat', name: 'appcompat', version: appCompatLibraryVersion],
-            material   : [group: 'com.google.android.material', name: 'material', version: materialVersion],
-            constraintLayout  : [group: 'androidx.constraintlayout', name: 'constraintlayout', version: constraintLayoutVersion],
-            kotlin  : [group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: kotlinVersion]
+            appCompat: [group: 'androidx.appcompat', name: 'appcompat', version: appCompatLibraryVersion],
+            constraintLayout: [group: 'androidx.constraintlayout', name: 'constraintlayout', version: constraintLayoutVersion],
+            material: [group: 'com.google.android.material', name: 'material', version: materialVersion],
+            kotlin: [group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk7', version: kotlinVersion]
     ]
 
     def libs = [
