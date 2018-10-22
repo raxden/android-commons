@@ -7,20 +7,24 @@ task updateLibrary {
     }
 }
 
+task increaseBuildVersion {
+    doLast {
+        increaseBuildVersion()
+        updateReadmeFile(getVersionName())
+    }
+}
+
 task uploadLibrary {
     dependsOn updateLibrary
     doLast {
-        def versionName = getVersionName()
-        updateReadmeFile(versionName)
         exec { commandLine "git", "add", "-A" }
-        def message = "Update library"
-        exec { commandLine "git", "commit", "-m", message }
+        exec { commandLine "git", "commit", "-m", "Update library" }
         exec { commandLine "git", "push" }
     }
 }
 
 task uploadRelease {
-    dependsOn updateLibrary
+    dependsOn updateLibrary, increaseBuildVersion
     doLast {
         increaseBuildVersion()
         def versionName = getVersionName()
@@ -34,12 +38,7 @@ task uploadRelease {
     }
 }
 
-task increaseBuildVersion {
-    doLast {
-        increaseBuildVersion()
-        updateReadmeFile(getVersionName())
-    }
-}
+
 
 void increaseBuildVersion() {
     println(":increaseBuildVersion - Incrementing build version...")
