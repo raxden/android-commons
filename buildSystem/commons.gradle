@@ -5,10 +5,10 @@ task uploadLibrary {
         exec { commandLine "git", "fetch" }
         exec { commandLine "git", "pull" }
         increaseBuildVersion()
-        def versionName = getVersionName()
         exec { commandLine "git", "add", "-A" }
-        exec { commandLine "git", "commit", "-m", "Release "+versionName+" created"}
-        exec { commandLine "git", "push", "-m", "Release "+versionName+" created"}
+        def message = "Release "+getVersionName()+" created"
+        exec { commandLine "git", "commit", "-m", message}
+        exec { commandLine "git", "push", "-m", message}
     }
 }
 
@@ -16,7 +16,7 @@ task uploadRelease {
     dependsOn uploadLibrary
     doLast {
         def versionName = getVersionName()
-        exec { commandLine "git", "tag", "-a", versionName, "-m", message}
+        exec { commandLine "git", "tag", "-a", versionName}
         exec { commandLine "git", "push", "origin", versionName}
     }
 }
