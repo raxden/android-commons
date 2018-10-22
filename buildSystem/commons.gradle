@@ -8,7 +8,7 @@ task uploadLibrary {
         exec { commandLine "git", "add", "-A" }
         def message = "Release "+getVersionName()+" created"
         exec { commandLine "git", "commit", "-m", message}
-        exec { commandLine "git", "push", "-m", message}
+        exec { commandLine "git", "push"}
     }
 }
 
