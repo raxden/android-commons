@@ -89,6 +89,9 @@ def createUpdateReadmeFileTask(version) {
 }
 
 // gradlew uploadLibrary -Pmessage=messageToUpload
+//The Task.leftShift(Closure) method has been deprecated and is scheduled to be removed in Gradle 5.0. Please use Task.doLast(Action) instead.
+//        at commons_3yphgylfqqd6qgeth13a362u7.run(C:\workspace\libraries\AndroidCommons\buildSystem\commons.gradle:92)
+//        (Run with --stacktrace to get the full stack trace of this deprecation warning.)
 task uploadLibraryWithMessage << {
     def message = "$message"
     createUploadLibraryToGitTask(message)

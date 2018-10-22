@@ -14,12 +14,13 @@ import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.ImageView;
 
 import com.raxdenstudios.commons.R;
 import com.raxdenstudios.commons.util.BitmapUtils;
 
-public class CircularImageView extends ImageView {
+import androidx.appcompat.widget.AppCompatImageView;
+
+public class CircularImageView extends AppCompatImageView {
 	// Border & Selector configuration variables
 	private boolean hasBorder;
 	private boolean hasSelector;

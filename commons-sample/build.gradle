@@ -30,10 +30,7 @@ dependencies {
 
     implementation project(':commons')
 
-    implementation deps.commons_sample.implementation
-    api deps.commons_sample.api
-    annotationProcessor deps.commons_sample.annotationProcessor
-    compileOnly deps.commons_sample.compileOnly
-    testImplementation deps.commons_sample.testImplementation
-    androidTestImplementation deps.commons_sample.androidTestImplementation
+    rootProject.appDependencies.each {
+        add(it.configuration, it.dependency, it.options)
+    }
 }

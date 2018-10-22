@@ -20,13 +20,14 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Sub-class of ImageView which automatically notifies the drawable when it is
  * being displayed.
  */
-public class RecyclingImageView extends ImageView {
+public class RecyclingImageView extends AppCompatImageView {
 
     public RecyclingImageView(Context context) {
         super(context);
@@ -39,10 +40,7 @@ public class RecyclingImageView extends ImageView {
 	public RecyclingImageView(Context context, AttributeSet attrs, int defStyle) {
 	    super(context, attrs, defStyle);
 	}
-	
-    /**
-     * @see ImageView#onDetachedFromWindow()
-     */
+
     @Override
     protected void onDetachedFromWindow() {
         // This has been detached from Window, so clear the drawable
@@ -51,9 +49,6 @@ public class RecyclingImageView extends ImageView {
         super.onDetachedFromWindow();
     }
 
-    /**
-     * @see ImageView#setImageDrawable(Drawable)
-     */
     @Override
     public void setImageDrawable(Drawable drawable) {
         // Keep hold of previous Drawable

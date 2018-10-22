@@ -24,12 +24,9 @@ android {
 dependencies {
     implementation fileTree(include: '*.jar', dir: 'libs')
 
-    implementation deps.commons.implementation
-    api deps.commons.api
-    annotationProcessor deps.commons.annotationProcessor
-    compileOnly deps.commons.compileOnly
-    testImplementation deps.commons.testImplementation
-    androidTestImplementation deps.commons.androidTestImplementation
+    rootProject.libDependencies.each {
+        add(it.configuration, it.dependency, it.options)
+    }
 }
 
 apply from: '../buildSystem/commons.gradle'
