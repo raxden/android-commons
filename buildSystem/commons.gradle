@@ -14,8 +14,8 @@ task uploadLibrary {
         updateReadmeFile(versionName)
         exec { commandLine "git", "add", "-A" }
         def message = "Update library"
-        exec { commandLine "git", "commit", "-m", message}
-        exec { commandLine "git", "push"}
+        exec { commandLine "git", "commit", "-m", message }
+        exec { commandLine "git", "push" }
     }
 }
 
@@ -26,9 +26,11 @@ task uploadRelease {
         def versionName = getVersionName()
         updateReadmeFile(versionName)
         exec { commandLine "git", "add", "-A" }
-        def message = "Release "+versionName+" created"
-        exec { commandLine "git", "commit", "-m", message}
-        exec { commandLine "git", "push"}
+        def message = "Release " + versionName + " created"
+        exec { commandLine "git", "commit", "-m", message }
+        exec { commandLine "git", "push" }
+        exec { commandLine "git", "tag", "-a", versionName }
+        exec { commandLine "git", "push", "origin", tag }
     }
 }
 
