@@ -1,11 +1,10 @@
 package com.raxdenstudios.commons.view;
 
+import android.support.v4.view.PagerAdapter;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
-
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 public class ViewPagerAdapter<T> extends PagerAdapter {
 
@@ -62,12 +61,12 @@ public class ViewPagerAdapter<T> extends PagerAdapter {
 	}
 	
 	@Override
-	public Object instantiateItem(View collection, int index) {
+	public Object instantiateItem(ViewGroup collection, int index) {
 		View view = callbacks.onInflateView(this, index);
 		
 		if (view != null) {
 			callbacks.onInitView(this, view, index);
-			((ViewPager)collection).addView(view);
+			collection.addView(view);
 			callbacks.onLoadView(this, view, index);
 		}
 		
@@ -79,8 +78,8 @@ public class ViewPagerAdapter<T> extends PagerAdapter {
 	}
 	
 	@Override
-	public void destroyItem(View collection, int index, Object object) {
-		((ViewPager)collection).removeView((View)object);
+	public void destroyItem(ViewGroup collection, int index, Object object) {
+		collection.removeView((View)object);
 		callbacks.onDestroyView(this, (View)object, index);
 	}
 	

@@ -12,13 +12,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Shader;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.raxdenstudios.commons.R;
 import com.raxdenstudios.commons.util.BitmapUtils;
-
-import androidx.appcompat.widget.AppCompatImageView;
 
 public class CircularImageView extends AppCompatImageView {
 	// Border & Selector configuration variables

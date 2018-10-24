@@ -19,9 +19,8 @@ package com.raxdenstudios.commons.widget;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-
-import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Sub-class of ImageView which automatically notifies the drawable when it is
