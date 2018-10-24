@@ -37,7 +37,7 @@ ext {
     // ========== MODULES DEPENDENCIES =============================================================
 
     def modules = [
-            sample: ':sample',
+            sample: ':commons-sample',
             commons: ':commons'
     ]
 
