@@ -70,7 +70,6 @@ public class BitmapUtils {
             }
             width = Math.round(height / aspectRatio);
         }
-        bitmap = BitmapUtils.resize(bitmap, width, height);
         return resize(bitmap, width, height);
     }
 
