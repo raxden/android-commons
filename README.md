@@ -1,50 +1,23 @@
 Android Commons
 ==========
 
-Android Commons is a util library with a set of useful classes to help to developer. Works on Android 4.1 (API level 16) and upwards.
+<a href='https://github.com/raxden/android-commons/actions/workflows/deploy_library.yml'><img src='https://github.com/raxden/android-commons/workflows/Continuous%20Delivery/badge.svg'></a>
+[![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg?token=E55S5DHJ9B)](https://codecov.io/gh/raxden/android-commons)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons)
 
-[![Release](https://img.shields.io/github/tag/raxden/android-commons.svg?label=Download)](https://jitpack.io/#raxden/android-commons/)
-[![API](https://img.shields.io/badge/API-16%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=16)
+Android Preferences is a component to android that allow the developers put objects in SharedPreferences using Google Json Library. Works on Android 4.1 (API level 16) and upwards.
 
-## Usage
+## Getting started
 
-In order to use the library, there are 3 options:
+### Setting up the dependency
 
-**1. Gradle dependency**
+The first step is to include Android Preferences into your project, for example, as a Gradle compile dependency:
 
- - 	Add the following to your `build.gradle`:
- ```gradle
-repositories {
-	    maven { url "https://jitpack.io" }
-}
-
-dependencies {
-	    compile 'com.github.raxden:AndroidCommons:3.0.35@aar'
-}
+```groovy
+implementation "com.raxdenstudios.commons:x.y.z"
 ```
 
-**2. Maven**
-- Add the following to your `pom.xml`:
- ```xml
-<repository>
-       	<id>jitpack.io</id>
-	    <url>https://jitpack.io</url>
-</repository>
-
-<dependency>
-	    <groupId>com.github.raxden</groupId>
-	    <artifactId>AndroidCommons</artifactId>
-	    <version>3.0.35</version>
-</dependency>
-```
-
-**3. clone whole repository**
- - Open your **commandline-input** and navigate to your desired destination folder (where you want to put the library)
- - Use the command `git clone https://github.com/raxden/AndroidCommons.git` to download the full AndroidCommons repository to your computer (this includes the folder of the library project as well as the example project)
-
-### Documentation 
-
-For a **detailed documentation**, please have a look at the [**Wiki**](https://github.com/raxden/AndroidCommons/wiki) or the [**Javadocs**](https://jitpack.io/com/github/raxden/AndroidCommons/3.0.35/javadoc/).
+(Please replace `x`, `y` and `z` with the latest version numbers: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons))
 
 ## LICENSE
 
