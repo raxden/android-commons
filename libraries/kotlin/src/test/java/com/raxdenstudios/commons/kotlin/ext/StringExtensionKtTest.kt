@@ -3,7 +3,7 @@ package com.raxdenstudios.commons.kotlin.ext
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class StringExtensionKtTest {
+internal class StringExtensionKtTest {
 
   @Test
   fun `Given a random text, When toMD5 extension is called, Then random text is codified to MD5`() {

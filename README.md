@@ -3,18 +3,26 @@ Android Commons
 
 <a href='https://github.com/raxden/android-commons/actions/workflows/deploy_library.yml'><img src='https://github.com/raxden/android-commons/workflows/Continuous%20Delivery/badge.svg'></a>
 [![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg?token=E55S5DHJ9B)](https://codecov.io/gh/raxden/android-commons)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-kotlin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons)
 
-Android Preferences is a component to android that allow the developers put objects in SharedPreferences using Google Json Library. Works on Android 4.1 (API level 16) and upwards.
+Android Commons is a util library with a set of useful classes to help to developer. Works on Android 5.0 (API level 21) and upwards.
 
 ## Getting started
 
 ### Setting up the dependency
 
-The first step is to include Android Preferences into your project, for example, as a Gradle compile dependency:
+The first step is to include Android Commons into your project, for example, as a Gradle compile dependency:
 
 ```groovy
-implementation "com.raxdenstudios.commons:x.y.z"
+implementation "com.raxdenstudios:commons-kotlin:x.y.z"
+implementation "com.raxdenstudios:commons-android:x.y.z"
+implementation "com.raxdenstudios:commons-coroutines:x.y.z"
+implementation "com.raxdenstudios:commons-glide:x.y.z"
+implementation "com.raxdenstudios:commons-retrofit:x.y.z"
+implementation "com.raxdenstudios:commons-threeten:x.y.z"
+implementation "com.raxdenstudios:commons-test:x.y.z"
+implementation "com.raxdenstudios:commons-test-unit:x.y.z"
+implementation "com.raxdenstudios:commons-android-test:x.y.z"
 ```
 
 (Please replace `x`, `y` and `z` with the latest version numbers: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons))
