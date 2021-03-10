@@ -1,1 +1,2 @@
-include ':commons', ':commons-sample'
+include ':libraries:test'
+include ':libraries:kotlin'
