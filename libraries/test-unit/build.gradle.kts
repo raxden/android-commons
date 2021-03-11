@@ -25,6 +25,9 @@ dependencies {
   implementation(platform(KotlinLibraries.coroutinesBom))
   implementation(TestLibraries.coroutinesTest)
 
+  implementation(Libraries.rxAndroid)
+  implementation(Libraries.rxKotlin)
+
   implementation(TestLibraries.archCoreTest)
   implementation(TestLibraries.atslJunit)
   implementation(TestLibraries.atslRules)

@@ -15,3 +15,14 @@ inline fun <reified T : Activity> Context.intentFor(params: Parcelable? = null) 
 fun Intent.startActivity(activity: Activity, options: Bundle? = null) {
   ContextCompat.startActivity(activity, this, options)
 }
+
+fun Intent.startActivityAndFinishCurrent(activity: Activity, options: Bundle? = null) {
+  ContextCompat.startActivity(activity, this, options)
+  activity.finish()
+}
+
+fun Intent.startActivityAndFinishAll(activity: Activity, options: Bundle? = null) {
+  flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+  ContextCompat.startActivity(activity, this, options)
+}
+

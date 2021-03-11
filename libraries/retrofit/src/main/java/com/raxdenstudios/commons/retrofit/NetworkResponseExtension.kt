@@ -1,7 +1,7 @@
 package com.raxdenstudios.commons.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.raxdenstudios.commons.kotlin.ResultData
+import com.raxdenstudios.commons.android.ResultData
 
 fun <T : Any, U : Any, R : Any> NetworkResponse<T, U>.toResult(
   message: String,

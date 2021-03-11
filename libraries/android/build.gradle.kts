@@ -22,13 +22,30 @@ publishLibrary {
 }
 
 android {
+  buildTypes {
+    getByName("debug") {
+      isTestCoverageEnabled = true
+    }
+  }
   buildFeatures {
     viewBinding = true
   }
 }
 
 dependencies {
-  implementation(project(Modules.libraryKotlin))
+  implementation(KotlinLibraries.kotlinStdlib)
+  implementation(KotlinLibraries.kotlinReflect)
+
+  implementation(platform(KotlinLibraries.coroutinesBom))
+  implementation(KotlinLibraries.coroutinesAndroid)
+
+  implementation(Libraries.rxAndroid)
+  implementation(Libraries.rxKotlin)
+
+  implementation(Libraries.glide)
+  implementation(Libraries.glideCompiler)
+
+  implementation(Libraries.threetenabp)
 
   implementation(AndroidLibraries.kotlinCore)
   implementation(AndroidLibraries.kotlinActivity)
@@ -43,4 +60,6 @@ dependencies {
   implementation(AndroidLibraries.lifecycleRuntime)
   implementation(AndroidLibraries.lifecycleCommon)
   implementation(AndroidLibraries.lifecycleViewModel)
+
+  testImplementation(TestLibraries.atslJunit)
 }

@@ -31,7 +31,7 @@ jobs:
 
       - name: Unit tests
 #        run: bash ./gradlew --console=plain detekt testDebugUnitTest jacocoTestReportDebug --stacktrace
-        run: bash ./gradlew --console=plain testDebugUnitTest jacocoTestReportDebug --stacktrace
+        run: bash ./gradlew --console=plain testDebugUnitTest jacocoTestReportDebug
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v1

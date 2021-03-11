@@ -32,6 +32,10 @@ object Libraries {
   const val koinScope = "org.koin:koin-androidx-scope:${Versions.koin}"
   const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
 
+  // RX
+  const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
+  const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
+
   // Room
   const val roomRunTime = "androidx.room:room-runtime:${Versions.room}"
   const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"

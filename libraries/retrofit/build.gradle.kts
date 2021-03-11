@@ -22,9 +22,15 @@ publishLibrary {
 }
 
 dependencies {
-  api(project(Modules.libraryKotlin))
+  implementation(project(Modules.libraryAndroid))
 
-  api(Libraries.retrofit)
-  api(Libraries.retrofitGsonConverter)
-  api(Libraries.retrofitNetworkResponseAdapter)
+  implementation(platform(Libraries.okHttpBom))
+  implementation(Libraries.okHttp)
+  implementation(Libraries.okHttpLoggingInterceptor)
+
+  implementation(Libraries.retrofit)
+  implementation(Libraries.retrofitGsonConverter)
+  implementation(Libraries.retrofitNetworkResponseAdapter)
+
+  implementation(Libraries.timber)
 }

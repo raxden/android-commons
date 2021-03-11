@@ -15,6 +15,10 @@ plugins {
   id("com.raxdenstudios.android-releasing").version("0.41")
 }
 
+junitJacoco {
+
+}
+
 releasing {
   versionFilePath = "./config/version.properties"
 }

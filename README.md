@@ -14,12 +14,8 @@ Android Commons is a util library with a set of useful classes to help to develo
 The first step is to include Android Commons into your project, for example, as a Gradle compile dependency:
 
 ```groovy
-implementation "com.raxdenstudios:commons-kotlin:x.y.z"
 implementation "com.raxdenstudios:commons-android:x.y.z"
-implementation "com.raxdenstudios:commons-coroutines:x.y.z"
-implementation "com.raxdenstudios:commons-glide:x.y.z"
 implementation "com.raxdenstudios:commons-retrofit:x.y.z"
-implementation "com.raxdenstudios:commons-threeten:x.y.z"
 implementation "com.raxdenstudios:commons-test:x.y.z"
 implementation "com.raxdenstudios:commons-test-unit:x.y.z"
 implementation "com.raxdenstudios:commons-android-test:x.y.z"
