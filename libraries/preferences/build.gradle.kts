@@ -27,9 +27,6 @@ android {
       isTestCoverageEnabled = true
     }
   }
-  buildFeatures {
-    viewBinding = true
-  }
 }
 
 dependencies {

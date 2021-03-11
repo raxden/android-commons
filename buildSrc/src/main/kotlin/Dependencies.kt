@@ -44,6 +44,7 @@ object Libraries {
 
   // Retrofit
   const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+  const val retrofitRxAdapter = "com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}"
   const val retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
   const val retrofitNetworkResponseAdapter = "com.github.haroldadmin:NetworkResponseAdapter:${Versions.retrofitNetworkResponseAdapter}"
 

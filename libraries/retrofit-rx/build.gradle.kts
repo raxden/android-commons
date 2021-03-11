@@ -12,8 +12,8 @@ versioning {
 }
 
 publishLibrary {
-  name = "Retrofit Commons"
-  description = "Retrofit commons is a library with a set of useful classes to help to developer to work with retrofit."
+  name = "Retrofit Rx Commons"
+  description = "Retrofit rx commons is a library with a set of useful classes to help to developer to work with retrofit."
   url = "https://github.com/raxden/android-commons"
   developerId = "raxden"
   developerName = "Ángel Gómez"
@@ -22,15 +22,8 @@ publishLibrary {
 }
 
 dependencies {
-  implementation(project(Modules.libraryAndroid))
+  api(project(Modules.libraryRetrofit))
+  api(Libraries.retrofitRxAdapter)
 
-  api(platform(Libraries.okHttpBom))
-  api(Libraries.okHttp)
-  api(Libraries.okHttpLoggingInterceptor)
-
-  api(Libraries.retrofit)
-  api(Libraries.retrofitGsonConverter)
-  api(Libraries.retrofitNetworkResponseAdapter)
-
-  implementation(Libraries.timber)
+  implementation(Libraries.rxAndroid)
 }
