@@ -20,6 +20,7 @@ publishLibrary {
   developerEmail = "raxden.dev@gmail.com"
   coordinates = Coordinates.default.copy(artifactId = "commons-retrofit")
 }
+
 dependencies {
   api(project(Modules.libraryKotlin))
 
