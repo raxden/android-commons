@@ -12,13 +12,13 @@ versioning {
 }
 
 publishLibrary {
-  name = "Rx Coroutines"
-  description = "Coroutines commons is a library with a set of useful classes to help to developer to work with coroutines."
+  name = "Glide Commons"
+  description = "Glide commons is a library with a set of useful classes to help to developer to work with glide."
   url = "https://github.com/raxden/android-commons"
   developerId = "raxden"
   developerName = "Ángel Gómez"
   developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-coroutines")
+  coordinates = Coordinates.default.copy(artifactId = "commons-glide")
 }
 
 android {
@@ -30,6 +30,6 @@ android {
 }
 
 dependencies {
-  api(platform(KotlinLibraries.coroutinesBom))
-  api(KotlinLibraries.coroutinesAndroid)
+  api(Libraries.glide)
+  api(Libraries.glideCompiler)
 }

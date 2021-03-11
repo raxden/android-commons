@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons.android.ext
+package com.raxdenstudios.commons.glide.ext
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

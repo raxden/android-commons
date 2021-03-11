@@ -36,9 +36,6 @@ dependencies {
   implementation(KotlinLibraries.kotlinStdlib)
   implementation(KotlinLibraries.kotlinReflect)
 
-  implementation(Libraries.glide)
-  implementation(Libraries.glideCompiler)
-
   implementation(Libraries.threetenabp)
 
   implementation(AndroidLibraries.kotlinCore)
