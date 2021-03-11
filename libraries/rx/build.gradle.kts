@@ -12,18 +12,24 @@ versioning {
 }
 
 publishLibrary {
-  name = "Retrofit Rx Commons"
-  description = "Retrofit rx commons is a library with a set of useful classes to help to developer to work with retrofit."
+  name = "Rx Commons"
+  description = "Rx commons is a library with a set of useful classes to help to developer to work with rx."
   url = "https://github.com/raxden/android-commons"
   developerId = "raxden"
   developerName = "Ángel Gómez"
   developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-retrofit-rx")
+  coordinates = Coordinates.default.copy(artifactId = "commons-rx")
+}
+
+android {
+  buildTypes {
+    getByName("debug") {
+      isTestCoverageEnabled = true
+    }
+  }
 }
 
 dependencies {
-  api(project(Modules.libraryRetrofit))
-  api(Libraries.retrofitRxAdapter)
-
-  implementation(Libraries.rxAndroid)
+  api(Libraries.rxAndroid)
+  api(Libraries.rxKotlin)
 }

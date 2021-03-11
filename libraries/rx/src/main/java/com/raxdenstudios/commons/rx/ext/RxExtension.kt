@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons.android.ext
+package com.raxdenstudios.commons.rx.ext
 
 import io.reactivex.Completable
 import io.reactivex.Flowable
