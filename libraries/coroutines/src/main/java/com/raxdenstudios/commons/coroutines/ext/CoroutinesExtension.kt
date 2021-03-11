@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons.android.ext
+package com.raxdenstudios.commons.coroutines.ext
 
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
