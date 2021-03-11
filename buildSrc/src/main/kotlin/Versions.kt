@@ -32,6 +32,7 @@ object Versions {
   const val atsl = "1.3.0"
   const val atslJunit = "1.1.2"
   const val archCoreTest = "2.0.0"
+  const val robolectric = "4.3.1"
   const val threetenabp = "1.2.0"
   const val timber = "4.7.1"
   const val timberJunit = "1.0.1"

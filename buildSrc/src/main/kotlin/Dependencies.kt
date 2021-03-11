@@ -79,6 +79,9 @@ object TestLibraries {
   const val atslRunner = "androidx.test:runner:${Versions.atsl}"
   const val atslRules = "androidx.test:rules:${Versions.atsl}"
 
+  // Robolectric
+  const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
+
   // MOCKK
   const val mockkCore = "io.mockk:mockk:${Versions.mockk}"
   const val mockkAndroid = "io.mockk:mockk-android:${Versions.mockk}"
