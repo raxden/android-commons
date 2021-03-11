@@ -5,14 +5,14 @@ buildscript {
     maven("https://plugins.gradle.org/m2/")
   }
   dependencies {
-    classpath("com.raxdenstudios:android-plugins:0.39")
+    classpath("com.raxdenstudios:android-plugins:0.41")
   }
 }
 
 plugins {
   id("com.vanniktech.android.junit.jacoco").version("0.16.0")
   id("io.codearte.nexus-staging").version("0.22.0")
-  id("com.raxdenstudios.android-releasing").version("0.39")
+  id("com.raxdenstudios.android-releasing").version("0.41")
 }
 
 releasing {
