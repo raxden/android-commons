@@ -36,8 +36,6 @@ dependencies {
   implementation(KotlinLibraries.kotlinStdlib)
   implementation(KotlinLibraries.kotlinReflect)
 
-  implementation(Libraries.threetenabp)
-
   implementation(AndroidLibraries.kotlinCore)
   implementation(AndroidLibraries.kotlinActivity)
   implementation(AndroidLibraries.kotlinFragment)
