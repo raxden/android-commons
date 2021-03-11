@@ -57,7 +57,7 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
     fun onFragmentPageTitle(position: Int): String
   }
 
-  private val viewPager2: ViewPager2
+  private val viewPager2: ViewPager2 = callback.onCreateViewPager()
 
   var onPageScroll: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit =
     { _, _, _ -> }
@@ -82,7 +82,6 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
     get() = viewPager2.isLastPage()
 
   init {
-    viewPager2 = callback.onCreateViewPager()
     viewPager2.offscreenPageLimit = 2
     viewPager2.adapter = FragmentStateAdapterDelegate(fragmentManager, lifecycle)
     viewPager2.registerOnPageChangeCallback(
