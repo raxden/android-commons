@@ -18,7 +18,7 @@ publishLibrary {
   developerId = "raxden"
   developerName = "Ángel Gómez"
   developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-test-unit")
+  coordinates = Coordinates.default.copy(artifactId = "commons-unit-test")
 }
 
 dependencies {

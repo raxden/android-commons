@@ -15,9 +15,13 @@ The first step is to include Android Commons into your project, for example, as 
 
 ```groovy
 implementation "com.raxdenstudios:commons-android:x.y.z"
+implementation "com.raxdenstudios:commons-coroutines:x.y.z"
+implementation "com.raxdenstudios:commons-glide:x.y.z"
+implementation "com.raxdenstudios:commons-preferences:x.y.z"
 implementation "com.raxdenstudios:commons-retrofit:x.y.z"
-implementation "com.raxdenstudios:commons-test:x.y.z"
-implementation "com.raxdenstudios:commons-test-unit:x.y.z"
+implementation "com.raxdenstudios:commons-retrofit-rx:x.y.z"
+implementation "com.raxdenstudios:commons-rx:x.y.z"
+implementation "com.raxdenstudios:commons-unit-test:x.y.z"
 implementation "com.raxdenstudios:commons-android-test:x.y.z"
 ```
 
