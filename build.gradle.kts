@@ -24,7 +24,7 @@ val nexusUsername: String? by project
 val nexusPassword: String? by project
 
 nexusStaging {
-  packageGroup = "com.raxdenstudios"
+  packageGroup = "com.raxdenstudios.commons"
   stagingProfileId = nexusId ?: System.getenv("OSSRH_ID") ?: ""
   username = nexusUsername ?: System.getenv("OSSRH_USERNAME") ?: ""
   password = nexusPassword ?: System.getenv("OSSRH_PASSWORD") ?: ""

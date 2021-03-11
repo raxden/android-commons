@@ -8,7 +8,7 @@ plugins {
 
 versioning {
   versionFilePath = "./config/version.properties"
-  group = "com.raxdenstudios"
+  group = "com.raxdenstudios.commons"
 }
 
 publishLibrary {
