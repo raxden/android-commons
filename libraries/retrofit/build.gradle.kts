@@ -22,7 +22,7 @@ publishLibrary {
 }
 
 dependencies {
-  implementation(project(Modules.libraryAndroid))
+  implementation(project(Modules.libraryBase))
 
   api(platform(Libraries.okHttpBom))
   api(Libraries.okHttp)

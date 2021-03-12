@@ -1,6 +1,7 @@
 object Modules {
   const val libraryKotlin = ":libraries:kotlin"
   const val libraryCoroutines = ":libraries:coroutines"
+  const val libraryBase = ":libraries:base"
   const val libraryAndroid = ":libraries:android"
   const val libraryPreferences = ":libraries:preferences"
   const val libraryKoin = ":libraries:koin"
