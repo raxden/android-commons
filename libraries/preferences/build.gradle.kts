@@ -13,7 +13,7 @@ versioning {
 
 publishLibrary {
   name = "AdvancedPreferences"
-  description = "Improve your shared preferences with the power of Gson"
+  description = "Improve your shared preferences with the power of Gson. Persist and restore objects from your preferences using Gson library transparently"
   url = "https://github.com/raxden/android-commons"
   developerId = "raxden"
   developerName = "Ángel Gómez"
