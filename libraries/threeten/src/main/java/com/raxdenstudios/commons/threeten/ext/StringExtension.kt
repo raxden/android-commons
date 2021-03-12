@@ -3,20 +3,18 @@ package com.raxdenstudios.commons.threeten.ext
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
-fun String.toLocalDate(vararg pattern: String): LocalDate? {
-  pattern.forEach { format ->
-    try {
-      LocalDate.parse(this, DateTimeFormatter.ofPattern(format))?.also { return it }
-    } catch (e: Exception) {
-    }
+fun String.toLocalDate(vararg patterns: String): LocalDate? {
+  patterns.forEach { format ->
+    val dateTimeFormatter = DateTimeFormatter.ofPattern(format)
+    toLocalDate(dateTimeFormatter)?.also { localDate -> return localDate }
   }
   return null
 }
 
-fun String.toLocalDate(vararg formatter: DateTimeFormatter): LocalDate? {
-  formatter.forEach { dtf ->
+fun String.toLocalDate(vararg formatters: DateTimeFormatter): LocalDate? {
+  formatters.forEach { dateTimeFormatter ->
     try {
-      LocalDate.parse(this, dtf)?.also { return it }
+      LocalDate.parse(this, dateTimeFormatter)?.also { localDate -> return localDate }
     } catch (e: Exception) {
     }
   }

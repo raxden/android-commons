@@ -23,4 +23,6 @@ publishLibrary {
 
 dependencies {
   api(Libraries.threetenabp)
+
+  testImplementation(TestLibraries.atslJunit)
 }
