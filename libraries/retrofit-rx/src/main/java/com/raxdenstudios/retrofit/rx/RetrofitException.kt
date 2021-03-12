@@ -11,29 +11,29 @@ sealed class RetrofitException(
   /**
    * A non-200 HTTP status code was received from the server.
    */
-  data class Unauthenticated(
-    val url: String,
-    val response: Response<*>,
-    val retrofit: Retrofit,
-  ) : RetrofitException(null)
+  sealed class Non200Http : RetrofitException(null) {
+    abstract val url: String
+    abstract val response: Response<*>
+    abstract val retrofit: Retrofit
 
-  /**
-   * A non-200 HTTP status code was received from the server.
-   */
-  data class Client(
-    val url: String,
-    val response: Response<*>,
-    val retrofit: Retrofit,
-  ) : RetrofitException(null)
+    data class Unauthenticated(
+      override val url: String,
+      override val response: Response<*>,
+      override val retrofit: Retrofit,
+    ) : Non200Http()
 
-  /**
-   * A non-200 HTTP status code was received from the server.
-   */
-  data class Server(
-    val url: String,
-    val response: Response<*>,
-    val retrofit: Retrofit,
-  ) : RetrofitException(null)
+    data class Client(
+      override val url: String,
+      override val response: Response<*>,
+      override val retrofit: Retrofit,
+    ) : Non200Http()
+
+    data class Server(
+      override val url: String,
+      override val response: Response<*>,
+      override val retrofit: Retrofit,
+    ) : Non200Http()
+  }
 
   /**
    * An [IOException] occurred while communicating to the server.

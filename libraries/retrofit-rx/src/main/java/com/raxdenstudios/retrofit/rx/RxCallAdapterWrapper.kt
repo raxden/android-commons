@@ -58,16 +58,16 @@ internal class RxCallAdapterWrapper<R>(
     val url = exception.response()?.raw()?.request?.url.toString()
     return exception.response()?.let { response ->
       when (response.code()) {
-        401 -> RetrofitException.Unauthenticated(url, response, retrofit)
+        401 -> RetrofitException.Non200Http.Unauthenticated(url, response, retrofit)
         in 400..499 -> clientError(url, response)
-        in 500..599 -> RetrofitException.Server(url, response, retrofit)
+        in 500..599 -> RetrofitException.Non200Http.Server(url, response, retrofit)
         else -> RetrofitException.Unexpected(exception)
       }
     } ?: RetrofitException.Unexpected(exception)
   }
 
   private fun clientError(url: String, response: Response<*>): Throwable {
-    val exception = RetrofitException.Client(url, response, retrofit)
+    val exception = RetrofitException.Non200Http.Client(url, response, retrofit)
     return errorHandler.httpError(exception)
   }
 }

@@ -23,5 +23,3 @@ class RxErrorHandlingCallAdapterFactory private constructor(
   ): CallAdapter<*, *> =
     RxCallAdapterWrapper(retrofit, callAdapter.get(returnType, annotations, retrofit), errorHandler)
 }
-
-
