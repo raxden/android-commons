@@ -3,7 +3,7 @@ package com.raxdenstudios.commons.retrofit
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.raxdenstudios.commons.android.ResultData
 
-fun <T : Any, U : Any, R : Any> NetworkResponse<T, U>.toResult(
+inline fun <T : Any, U : Any, reified R : Any> NetworkResponse<T, U>.toResultData(
   message: String,
   transform: (value: T) -> R
 ): ResultData<R> = when (this) {

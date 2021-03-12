@@ -4,7 +4,7 @@ import com.raxdenstudios.commons.android.ResultData
 import retrofit2.Response
 import java.io.IOException
 
-fun <T : Any> Response<T>.toResult(
+fun <T : Any> Response<T>.toResultData(
   exceptionMessage: String
 ): ResultData<T> {
   if (isSuccessful) {
@@ -19,7 +19,7 @@ fun <T : Any> Response<T>.toResult(
   return ResultData.Error(IOException(exceptionMessage))
 }
 
-fun <T : Any, R : Any> Response<T>.toResult(
+fun <T : Any, R : Any> Response<T>.toResultData(
   exceptionMessage: String,
   map: (T) -> R
 ): ResultData<R> {
