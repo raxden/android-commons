@@ -1,3 +1,5 @@
+include ':libraries:pagination-rx'
+include ':libraries:pagination'
 include ':libraries:base'
 include ':libraries:threeten'
 include ':libraries:glide'

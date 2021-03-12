@@ -22,23 +22,23 @@ publishLibrary {
 }
 
 dependencies {
-  implementation(platform(KotlinLibraries.coroutinesBom))
-  implementation(TestLibraries.coroutinesTest)
+  api(platform(KotlinLibraries.coroutinesBom))
+  api(TestLibraries.coroutinesTest)
 
-  implementation(Libraries.rxAndroid)
-  implementation(Libraries.rxKotlin)
+  api(Libraries.rxAndroid)
+  api(Libraries.rxKotlin)
 
-  implementation(TestLibraries.archCoreTest)
-  implementation(TestLibraries.atslJunit)
-  implementation(TestLibraries.atslRules)
-  implementation(TestLibraries.atslRunner)
+  api(TestLibraries.archCoreTest)
+  api(TestLibraries.atslJunit)
+  api(TestLibraries.atslRules)
+  api(TestLibraries.atslRunner)
 
-  implementation(TestLibraries.mockkCore)
-  implementation(TestLibraries.mockkAndroid)
+  api(TestLibraries.mockkCore)
+  api(TestLibraries.mockkAndroid)
 
-  implementation(TestLibraries.koinTest)
+  api(TestLibraries.koinTest)
 
-  implementation(TestLibraries.threetenabp)
+  api(TestLibraries.threetenabp)
 
-  implementation(TestLibraries.timberJunit)
+  api(TestLibraries.timberJunit)
 }

@@ -50,5 +50,5 @@ dependencies {
   implementation(AndroidLibraries.lifecycleCommon)
   implementation(AndroidLibraries.lifecycleViewModel)
 
-  testImplementation(TestLibraries.atslJunit)
+  testImplementation(project(Modules.libraryTest))
 }

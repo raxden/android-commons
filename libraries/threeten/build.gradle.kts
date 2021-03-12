@@ -24,5 +24,5 @@ publishLibrary {
 dependencies {
   api(Libraries.threetenabp)
 
-  testImplementation(TestLibraries.atslJunit)
+  testImplementation(project(Modules.libraryTest))
 }

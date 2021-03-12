@@ -12,13 +12,13 @@ versioning {
 }
 
 publishLibrary {
-  name = "AdvancedPreferences"
-  description = "Improve your shared preferences with the power of Gson"
+  name = "Pagination"
+  description = "Pagination library"
   url = "https://github.com/raxden/android-commons"
   developerId = "raxden"
   developerName = "Ángel Gómez"
   developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-preferences")
+  coordinates = Coordinates.default.copy(artifactId = "commons-pagination-rx")
 }
 
 android {
@@ -30,8 +30,8 @@ android {
 }
 
 dependencies {
-  api(AndroidLibraries.kotlinPreferences)
-  api(Libraries.gson)
+  api(project(Modules.libraryPagination))
+  api(project(Modules.libraryRx))
 
   testImplementation(project(Modules.libraryTest))
 }

@@ -6,7 +6,7 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
-class RxTestRule : TestWatcher() {
+class RxSchedulerRule : TestWatcher() {
 
   companion object {
     private val SCHEDULER_INSTANCE = Schedulers.trampoline()
