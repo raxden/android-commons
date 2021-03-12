@@ -31,6 +31,4 @@ dependencies {
   api(Libraries.retrofit)
   api(Libraries.retrofitGsonConverter)
   api(Libraries.retrofitNetworkResponseAdapter)
-
-  implementation(Libraries.timber)
 }

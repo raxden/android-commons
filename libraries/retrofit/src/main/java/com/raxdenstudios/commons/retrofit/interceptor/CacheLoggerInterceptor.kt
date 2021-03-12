@@ -4,8 +4,9 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import timber.log.Timber
 
-// TODO -> CUSTOM LOGGER
-class CacheLoggerInterceptor : Interceptor {
+class CacheLoggerInterceptor(
+  private val printMessage: (message: String) -> Unit
+) : Interceptor {
 
   override fun intercept(chain: Interceptor.Chain): Response {
     val response = chain.proceed(chain.request())
@@ -14,9 +15,5 @@ class CacheLoggerInterceptor : Interceptor {
     if (response.cacheResponse != null)
       printMessage("(HIT) Response from cache")
     return response
-  }
-
-  private fun printMessage(message: String) {
-    Timber.tag("OkHttp").d(message)
   }
 }
