@@ -41,4 +41,6 @@ dependencies {
   api(TestLibraries.threetenabp)
 
   api(TestLibraries.timberJunit)
+
+  api(TestLibraries.robolectric)
 }
