@@ -2,7 +2,6 @@ package com.raxdenstudios.commons.retrofit.interceptor
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import timber.log.Timber
 
 class CacheLoggerInterceptor(
   private val printMessage: (message: String) -> Unit
