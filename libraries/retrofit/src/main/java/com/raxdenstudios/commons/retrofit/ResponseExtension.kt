@@ -1,6 +1,6 @@
 package com.raxdenstudios.commons.retrofit
 
-import com.raxdenstudios.commons.android.ResultData
+import com.raxdenstudios.commons.ResultData
 import retrofit2.Response
 import java.io.IOException
 

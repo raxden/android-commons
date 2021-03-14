@@ -22,6 +22,9 @@ publishLibrary {
 }
 
 dependencies {
+  implementation(KotlinLibraries.kotlinStdlib)
+  implementation(KotlinLibraries.kotlinReflect)
+
   api(TestLibraries.archCoreTest)
   api(TestLibraries.atslJunit)
   api(TestLibraries.atslRules)

@@ -30,6 +30,9 @@ android {
 }
 
 dependencies {
+  implementation(KotlinLibraries.kotlinStdlib)
+  implementation(KotlinLibraries.kotlinReflect)
+
   api(AndroidLibraries.kotlinPreferences)
   api(Libraries.gson)
 

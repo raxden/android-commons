@@ -1,7 +1,7 @@
 package com.raxdenstudios.commons.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.raxdenstudios.commons.android.ResultData
+import com.raxdenstudios.commons.ResultData
 import okhttp3.Headers
 import org.junit.Assert.assertEquals
 import org.junit.Test

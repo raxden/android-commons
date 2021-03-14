@@ -1,6 +1,6 @@
 package com.raxdenstudios.commons.pagination
 
-import com.raxdenstudios.commons.android.ResultData
+import com.raxdenstudios.commons.ResultData
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList

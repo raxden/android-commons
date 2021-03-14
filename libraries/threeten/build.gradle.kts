@@ -22,6 +22,9 @@ publishLibrary {
 }
 
 dependencies {
+  implementation(KotlinLibraries.kotlinStdlib)
+  implementation(KotlinLibraries.kotlinReflect)
+
   api(Libraries.threetenabp)
 
   testImplementation(project(Modules.libraryTest))

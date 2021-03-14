@@ -22,6 +22,9 @@ publishLibrary {
 }
 
 dependencies {
+  implementation(KotlinLibraries.kotlinStdlib)
+  implementation(KotlinLibraries.kotlinReflect)
+
   api(platform(KotlinLibraries.coroutinesBom))
   api(TestLibraries.coroutinesTest)
 
