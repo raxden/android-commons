@@ -27,14 +27,17 @@ internal class PaginationTest {
     mockk(relaxed = true)
 
   private val pagination: Pagination<String> by lazy {
-    Pagination(configuration, compositeDisposable)
+    Pagination(
+      config = configuration,
+      compositeDisposable = compositeDisposable
+    )
   }
 
   @Test
   fun `When requestPage is called, Then a Loading and Content states are returned`() {
-    givenAPageWithResults(Page.firstPage)
+    givenAPageWithResults(Page(0))
 
-    requestPage(PageIndex.firstPage)
+    requestPage(PageIndex.first)
 
     verifyOrder {
       pageResponse.invoke(PageResult.Loading)
@@ -45,9 +48,9 @@ internal class PaginationTest {
 
   @Test
   fun `Given a first page with incomplete results (less than 10), When requestPage is called several times, Then loading, content and noMoreResults states are returned`() {
-    givenAPageWithIncompleteResults(Page.firstPage)
+    givenAPageWithIncompleteResults(Page(0))
 
-    for (index in PageIndex.firstPage.value..10) requestPage(PageIndex(index))
+    for (index in PageIndex.first.value..10) requestPage(PageIndex(index))
 
     verifyOrder {
       pageResponse.invoke(PageResult.Loading)
@@ -68,14 +71,14 @@ internal class PaginationTest {
 
   @Test
   fun `Given a first page, When requestPage is called several times, Then loading, content states are returned for every page`() {
-    givenAPageWithResults(Page.firstPage)
+    givenAPageWithResults(Page(0))
     givenAPageWithResults(Page(1))
     givenAPageWithResults(Page(2))
     givenAPageWithResults(Page(3))
     givenAPageWithResults(Page(4))
     givenAPageWithResults(Page(5))
 
-    for (index in PageIndex.firstPage.value..48) requestPage(PageIndex(index))
+    for (index in PageIndex.first.value..48) requestPage(PageIndex(index))
 
     verifyOrder {
       pageResponse.invoke(PageResult.Loading)

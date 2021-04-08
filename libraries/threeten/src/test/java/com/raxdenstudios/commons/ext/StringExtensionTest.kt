@@ -1,6 +1,6 @@
 package com.raxdenstudios.commons.ext
 
-import com.raxdenstudios.commons.ext.toLocalDate
+import com.raxdenstudios.commons.threeten.ext.toLocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.threeten.bp.LocalDate

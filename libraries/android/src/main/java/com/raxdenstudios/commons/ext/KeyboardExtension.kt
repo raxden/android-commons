@@ -50,4 +50,6 @@ fun Activity.openKeyboard() {
   imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 }
 
-fun Fragment.openKeyboard() { requireActivity().openKeyboard() }
+fun Fragment.openKeyboard() {
+  requireActivity().openKeyboard()
+}

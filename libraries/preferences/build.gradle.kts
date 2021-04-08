@@ -1,40 +1,12 @@
-import com.raxdenstudios.publishing.model.Coordinates
-
 plugins {
-  id("com.raxdenstudios.android-versioning")
   id("com.raxdenstudios.android-library")
-  id("com.raxdenstudios.publish-library")
-}
-
-versioning {
-  versionFilePath = "./config/version.properties"
-  group = "com.raxdenstudios"
-}
-
-publishLibrary {
-  name = "AdvancedPreferences"
-  description = "Improve your shared preferences with the power of Gson. Persist and restore objects from your preferences using Gson library transparently"
-  url = "https://github.com/raxden/android-commons"
-  developerId = "raxden"
-  developerName = "Ángel Gómez"
-  developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-preferences")
-}
-
-android {
-  buildTypes {
-    getByName("debug") {
-      isTestCoverageEnabled = true
-    }
-  }
 }
 
 dependencies {
-  implementation(KotlinLibraries.kotlinStdlib)
-  implementation(KotlinLibraries.kotlinReflect)
+  api(project(Modules.libraryBase))
 
   api(AndroidLibraries.kotlinPreferences)
   api(Libraries.gson)
 
-  testImplementation(project(Modules.libraryTest))
+  testImplementation(project(Modules.libraryTestCo))
 }

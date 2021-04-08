@@ -19,6 +19,15 @@ import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.raxdenstudios.commons.property.ViewBindingDelegate
 
+fun View.setPaddingTop(padding: Int) {
+  setPaddingRelative(
+    paddingStart,
+    padding,
+    paddingEnd,
+    paddingBottom
+  )
+}
+
 fun View.onFocusGained(onFocusGained: (View) -> Unit = {}) {
   onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
     if (hasFocus) onFocusGained(view)

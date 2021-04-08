@@ -27,6 +27,13 @@ object KotlinLibraries {
   const val coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android"
 }
 
+object FirebaseLibraries {
+  const val firebaseBoom = "com.google.firebase:firebase-bom:${Versions.firebase}"
+  const val firebaseMessaging = "com.google.firebase:firebase-messaging-ktx"
+  const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+  const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-ktx"
+}
+
 object Libraries {
   // Koin
   const val koinScope = "org.koin:koin-androidx-scope:${Versions.koin}"
@@ -100,6 +107,8 @@ object TestLibraries {
 }
 
 object TestAndroidLibraries {
+  const val fragmentTest = "androidx.fragment:fragment-testing:${Versions.fragmentTest}"
+
   const val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
   const val espressoContrib = "androidx.test.espresso:espresso-contrib:${Versions.espresso}"
   const val espressoWebView = "androidx.test.espresso:espresso-web:${Versions.espresso}"

@@ -33,5 +33,5 @@ dependencies {
   api(project(Modules.libraryPagination))
   api(project(Modules.libraryRx))
 
-  testImplementation(project(Modules.libraryTest))
+  testImplementation(project(Modules.libraryTestRx))
 }

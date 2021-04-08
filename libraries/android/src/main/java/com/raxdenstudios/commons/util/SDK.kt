@@ -23,7 +23,18 @@ object SDK {
   }
 
   fun getVirtualNavigationBarHeight(context: Context): Int {
+    if (!hasVirtualNavigationBar(context)) return 0
     val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0) {
+      context.resources.getDimensionPixelSize(resourceId)
+    } else 0
+  }
+
+  /**
+   * Only works when is called in onCreate
+   */
+  fun getStatusBarHeight(context: Context): Int {
+    val resourceId: Int = context.resources.getIdentifier("status_bar_height", "dimen", "android")
     return if (resourceId > 0) {
       context.resources.getDimensionPixelSize(resourceId)
     } else 0

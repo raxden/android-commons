@@ -1,5 +1,6 @@
 package com.raxdenstudios.retrofit.rx
 
+import com.raxdenstudios.commons.retrofit.RetrofitException
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -55,7 +56,7 @@ internal class RxCallAdapterWrapper<R>(
   }
 
   private fun httpError(exception: HttpException): Throwable {
-    val url = exception.response()?.raw()?.request?.url.toString()
+    val url = exception.response()?.raw()?.request()?.url().toString()
     return exception.response()?.let { response ->
       when (response.code()) {
         401 -> RetrofitException.Non200Http.Unauthenticated(url, response, retrofit)

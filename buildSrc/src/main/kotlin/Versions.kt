@@ -20,6 +20,7 @@ object Versions {
   const val rxKotlin = "2.3.0"
   const val koin = "2.1.6"
   const val room = "2.2.5"
+  const val firebase = "26.2.0"
   const val gson = "2.8.6"
   const val okHttp = "4.5.0"
   const val restMock = "0.4.3"
@@ -28,6 +29,7 @@ object Versions {
   const val leakcanary = "2.5"
 
   const val espresso = "3.3.0"
+  const val fragmentTest = "1.1.0"
   const val mockk = "1.9.2"
   const val atsl = "1.3.0"
   const val atslJunit = "1.1.2"

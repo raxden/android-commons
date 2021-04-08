@@ -12,16 +12,17 @@ import io.reactivex.rxkotlin.addTo
 
 class Pagination<T>(
   private val config: Config = Config.default,
+  private val logger: (message: String) -> Unit = {},
   private val compositeDisposable: CompositeDisposable
 ) {
 
   private val history: MutableMap<Page, List<T>> = mutableMapOf()
-  private var currentPage: Page = Page.firstPage
+  private var currentPage: Page = config.initialPage
   private var itemsLoaded: Int = 0
   private var status: Status = Status.Empty
 
   fun requestPage(
-    pageIndex: PageIndex = PageIndex.firstPage,
+    pageIndex: PageIndex = PageIndex.first,
     pageRequest: (page: Page, pageSize: PageSize) -> Single<PageList<T>>,
     pageResponse: (pageResult: PageResult<T>) -> Unit
   ) {
@@ -35,7 +36,7 @@ class Pagination<T>(
     pageRequest: (page: Page, pageSize: PageSize) -> Single<PageList<T>>,
     pageResponse: (pageResult: PageResult<T>) -> Unit
   ) {
-    if (currentPage == Page.firstPage) return
+    if (currentPage == config.initialPage) return
     val previousPage = Page(currentPage.value - 1)
     makeRequest(previousPage, pageRequest, pageResponse)
   }
@@ -44,7 +45,7 @@ class Pagination<T>(
 
   fun clear() {
     history.clear()
-    currentPage = Page.firstPage
+    currentPage = config.initialPage
     itemsLoaded = 0
     status = Status.Empty
   }
@@ -121,8 +122,12 @@ class Pagination<T>(
   }
 
   private fun PageIndex.toPage(): Page {
-    return if (this == PageIndex.firstPage) config.initialPage
-    else Page((this.value + config.prefetchDistance) / config.pageSize.value)
+    return if (this == PageIndex.first) config.initialPage
+    else {
+      val indexWithPrefetchDistance = value + 1 + config.prefetchDistance
+      val pageSize = config.pageSize.value
+      Page(indexWithPrefetchDistance / pageSize + config.initialPage.value)
+    }
   }
 
   private fun shouldMakeRequest(
@@ -138,8 +143,11 @@ class Pagination<T>(
     }
   }
 
-  private fun indexItsEndOfTheList(pageIndex: PageIndex, itemsLoaded: Int) =
-    pageIndex.value >= (itemsLoaded - config.prefetchDistance)
+  private fun indexItsEndOfTheList(pageIndex: PageIndex, itemsLoaded: Int): Boolean {
+    val endOfTheList = pageIndex.value >= (itemsLoaded - config.prefetchDistance)
+    logger("$endOfTheList <- ${pageIndex.value} >= ($itemsLoaded - ${config.prefetchDistance})")
+    return endOfTheList
+  }
 
   private sealed class Status {
     object Empty : Status()
@@ -156,7 +164,7 @@ class Pagination<T>(
 
     companion object {
       val default = Config(
-        initialPage = Page.firstPage,
+        initialPage = Page(0),
         pageSize = PageSize.defaultSize,
         prefetchDistance = 2
       )

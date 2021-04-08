@@ -12,6 +12,25 @@ import com.raxdenstudios.commons.property.ActivityArgumentDelegate
 import com.raxdenstudios.commons.property.ActivityContentViewDelegate
 import com.raxdenstudios.commons.property.ActivityViewBindingDelegate
 import com.raxdenstudios.commons.property.FragmentActivityByIdDelegate
+import com.raxdenstudios.commons.util.SDK
+
+fun Activity.setVirtualNavigationBarSafeArea(view: View) {
+  view.setPaddingRelative(
+    view.paddingStart,
+    view.paddingTop,
+    view.paddingEnd,
+    view.paddingBottom + SDK.getVirtualNavigationBarHeight(this)
+  )
+}
+
+fun Activity.setStatusBarSafeArea(view: View) {
+  view.setPaddingRelative(
+    view.paddingStart,
+    view.paddingTop + SDK.getStatusBarHeight(this),
+    view.paddingEnd,
+    view.paddingBottom
+  )
+}
 
 fun Activity.setFullScreen() {
   window.decorView.apply {
