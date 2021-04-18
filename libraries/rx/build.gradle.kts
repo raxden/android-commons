@@ -7,7 +7,6 @@ plugins {
 }
 
 versioning {
-  versionFilePath = "./config/version.properties"
   group = "com.raxdenstudios"
 }
 
@@ -19,14 +18,6 @@ publishLibrary {
   developerName = "Ángel Gómez"
   developerEmail = "raxden.dev@gmail.com"
   coordinates = Coordinates.default.copy(artifactId = "commons-rx")
-}
-
-android {
-  buildTypes {
-    getByName("debug") {
-      isTestCoverageEnabled = true
-    }
-  }
 }
 
 dependencies {

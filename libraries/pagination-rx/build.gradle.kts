@@ -7,7 +7,6 @@ plugins {
 }
 
 versioning {
-  versionFilePath = "./config/version.properties"
   group = "com.raxdenstudios"
 }
 
@@ -33,5 +32,5 @@ dependencies {
   api(project(Modules.libraryPagination))
   api(project(Modules.libraryRx))
 
-  testImplementation(project(Modules.libraryTestRx))
+  testImplementation(project(Modules.libraryRxTest))
 }

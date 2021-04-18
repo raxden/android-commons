@@ -19,10 +19,6 @@ junitJacoco {
 
 }
 
-releasing {
-  versionFilePath = "./config/version.properties"
-}
-
 val nexusId: String? by project
 val nexusUsername: String? by project
 val nexusPassword: String? by project
