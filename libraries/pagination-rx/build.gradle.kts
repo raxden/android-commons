@@ -33,4 +33,7 @@ dependencies {
   api(project(Modules.libraryRx))
 
   testImplementation(project(Modules.libraryRxTest))
+  testImplementation(TestLibraries.atslJunit)
+  testImplementation(TestLibraries.mockkCore)
+  testImplementation(TestLibraries.mockkAndroid)
 }
