@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.pagination
 
 import com.raxdenstudios.commons.ResultData
+import com.raxdenstudios.commons.ext.launch
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
@@ -54,8 +55,10 @@ class Pagination<T>(
     pageRequest: suspend (page: Page, pageSize: PageSize) -> ResultData<PageList<T>>,
     pageResponse: (pageResult: PageResult<T>) -> Unit
   ) {
-    processRequestStart(pageResponse)
-    coroutineScope.launch {
+    coroutineScope.launch(
+      onError = { error -> processRequestError(error, pageResponse) }
+    ) {
+      processRequestStart(pageResponse)
       when (val resultData = pageRequest.invoke(page, config.pageSize)) {
         is ResultData.Error -> processRequestError(resultData.throwable, pageResponse)
         is ResultData.Success -> processRequestSuccess(resultData.value, pageResponse)
