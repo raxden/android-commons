@@ -50,7 +50,18 @@ fun <T> ResultData<T>.onSuccess(function: (success: T) -> Unit): ResultData<T> =
   is ResultData.Success -> also { function(value) }
 }
 
+suspend fun <T> ResultData<T>.onCoSuccess(function: suspend (success: T) -> Unit): ResultData<T> = when (this) {
+  is ResultData.Error -> this
+  is ResultData.Success -> also { function(value) }
+}
+
 fun <T> ResultData<T>.onFailure(function: (failure: Throwable) -> Unit): ResultData<T> =
+  when (this) {
+    is ResultData.Error -> also { function(throwable) }
+    is ResultData.Success -> this
+  }
+
+suspend fun <T> ResultData<T>.onCoFailure(function: suspend (failure: Throwable) -> Unit): ResultData<T> =
   when (this) {
     is ResultData.Error -> also { function(throwable) }
     is ResultData.Success -> this
