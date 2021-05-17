@@ -4,78 +4,61 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class FragmentBottomNavigationDelegate<TFragment : Fragment>(
-  activity: FragmentActivity,
-  private val callback: Callback<TFragment>
+class FragmentBottomNavigationDelegate(
+  private val fragmentManager: FragmentManager,
+  private val fragmentContainerView: View,
+  private val bottomNavigationView: BottomNavigationView,
+  private val onCreateFragment: (itemId: Int) -> Fragment,
 ) {
 
-  interface Callback<TFragment> {
-    fun onCreateBottomNavigationView(): BottomNavigationView
-    fun onLoadFragmentContainer(): View
-    fun onCreateFragment(itemId: Int): TFragment
-    fun onFragmentLoaded(itemId: Int, fragment: TFragment)
-  }
+  private var containerFragmentMap: MutableMap<Int, Fragment?> = mutableMapOf()
 
-  private val fragmentManager: FragmentManager = activity.supportFragmentManager
-  private var containerFragmentMap: MutableMap<Int, TFragment?> = mutableMapOf()
-  private lateinit var bottomNavigationView: BottomNavigationView
-  private lateinit var containerView: View
-
-  var onAddFragmentTransaction: (
+  var onFragmentLoaded: (itemId: Int, fragment: Fragment) -> Unit = { _, _ -> }
+  var onFragmentTransaction: (
     transaction: FragmentTransaction,
-    fragmentToAdd: TFragment
-  ) -> Unit = { _, _ -> }
-
-  var onShowFragmentTransaction: (
-    transaction: FragmentTransaction,
-    fragmentToShow: TFragment
+    fragmentToAdd: Fragment
   ) -> Unit = { _, _ -> }
 
   var onItemSelected: (itemId: Int) -> Unit = {}
 
-  var itemSelected: Int
+  var selectedItemId: Int
     get() = bottomNavigationView.selectedItemId
     set(value) {
       bottomNavigationView.selectedItemId = value
     }
 
-  fun onSaveInstanceState(outState: Bundle) {
-    outState.putInt("selectedItemId", bottomNavigationView.selectedItemId)
+  fun saveState(outState: Bundle) {
+    outState.putInt("selectedItemId", selectedItemId)
     outState.putIntArray("itemIds", containerFragmentMap.keys.toIntArray())
   }
 
-  fun onCreate(savedInstanceState: Bundle?) {
-    initFragmentTargetContainer()
+  fun init(savedInstanceState: Bundle?) {
     initBottomNavigationView(savedInstanceState)
 
     if (savedInstanceState == null) initFragments()
     else restoreFragments(savedInstanceState)
   }
 
-  private fun initFragmentTargetContainer() {
-    containerView = callback.onLoadFragmentContainer()
-  }
-
   private fun initBottomNavigationView(savedInstanceState: Bundle?) {
-    bottomNavigationView = callback.onCreateBottomNavigationView()
     bottomNavigationView.setUp(savedInstanceState)
   }
 
   private fun initFragments() {
-    val fragmentId = itemSelected
-    callback.onCreateFragment(fragmentId).also { fragment -> createFragment(fragment, fragmentId) }
+    val fragmentId = selectedItemId
+    onCreateFragment(fragmentId).also { fragment -> createFragment(fragment, fragmentId) }
   }
 
-  private fun createFragment(fragment: TFragment, fragmentId: Int) {
-    fragmentManager.commit { replace(containerView.id, fragment, "fragment_$fragmentId") }
-    callback.onFragmentLoaded(fragmentId, fragment)
-    saveFragmentInMap(fragmentId, fragment)
+  private fun createFragment(fragment: Fragment, fragmentId: Int) {
+    fragmentManager.commit {
+      replace(fragmentContainerView.id, fragment, "fragment_$fragmentId")
+    }
+    onFragmentLoaded(fragmentId, fragment)
+    setFragmentInMap(fragmentId, fragment)
   }
 
   private fun restoreFragments(savedInstanceState: Bundle) {
@@ -85,9 +68,9 @@ class FragmentBottomNavigationDelegate<TFragment : Fragment>(
 
   @Suppress("UNCHECKED_CAST")
   private fun restoreFragment(fragmentId: Int) {
-    val fragment = fragmentManager.findFragmentByTag("fragment_$fragmentId") as? TFragment ?: return
-    callback.onFragmentLoaded(fragmentId, fragment)
-    saveFragmentInMap(fragmentId, fragment)
+    val fragment = fragmentManager.findFragmentByTag("fragment_$fragmentId") as? Fragment ?: return
+    onFragmentLoaded(fragmentId, fragment)
+    setFragmentInMap(fragmentId, fragment)
   }
 
   private fun BottomNavigationView.setUp(savedInstanceState: Bundle?) {
@@ -100,38 +83,48 @@ class FragmentBottomNavigationDelegate<TFragment : Fragment>(
   }
 
   private fun navigationMenuItemSelected(menuItem: MenuItem): Boolean {
-    if (itemSelected == menuItem.itemId) return true
-    val fragmentToHide = loadFragmentFromMap(itemSelected) ?: throw IllegalStateException("")
-    val fragmentToShow = loadFragmentFromMap(menuItem.itemId)?.also { fragment ->
-      showFragment(fragmentToHide, fragment)
-    } ?: callback.onCreateFragment(menuItem.itemId).also { fragment ->
-      addFragment(fragmentToHide, fragment, menuItem.itemId)
+    if (isTheSameMenuItem(menuItem)) return true
+    val fragmentToHide = getSelectedFragment()
+    val fragmentToShow = getFragmentFromMap(menuItem.itemId)?.also { fragmentToShow ->
+      hideAndShowFragment(fragmentToHide, fragmentToShow)
+    } ?: onCreateFragment(menuItem.itemId).also { fragmentToAdd ->
+      hideAndAddFragment(fragmentToHide, fragmentToAdd, menuItem.itemId)
     }
-    callback.onFragmentLoaded(menuItem.itemId, fragmentToShow)
-    saveFragmentInMap(menuItem.itemId, fragmentToShow)
+    onFragmentLoaded(menuItem.itemId, fragmentToShow)
+    setFragmentInMap(menuItem.itemId, fragmentToShow)
     onItemSelected(menuItem.itemId)
     return true
   }
 
-  private fun addFragment(fragmentToHide: TFragment, fragmentToAdd: TFragment, fragmentId: Int) {
+  private fun isTheSameMenuItem(menuItem: MenuItem) = selectedItemId == menuItem.itemId
+
+  private fun hideAndAddFragment(
+    fragmentToHide: Fragment,
+    fragmentToAdd: Fragment,
+    fragmentId: Int
+  ) {
     fragmentManager.commit {
-      onAddFragmentTransaction(this, fragmentToAdd)
       hide(fragmentToHide)
-      add(containerView.id, fragmentToAdd, "fragment_$fragmentId")
+      onFragmentTransaction(this, fragmentToAdd)
+      add(fragmentContainerView.id, fragmentToAdd, "fragment_$fragmentId")
     }
   }
 
-  private fun showFragment(fragmentToHide: TFragment, fragmentToShow: TFragment) {
+  private fun hideAndShowFragment(fragmentToHide: Fragment, fragmentToShow: Fragment) {
     fragmentManager.commit {
-      onShowFragmentTransaction(this, fragmentToShow)
       hide(fragmentToHide)
+      onFragmentTransaction(this, fragmentToShow)
       show(fragmentToShow)
     }
   }
 
-  private fun loadFragmentFromMap(fragmentId: Int) = containerFragmentMap[fragmentId]
+  private fun getSelectedFragment(): Fragment =
+    getFragmentFromMap(selectedItemId) ?: throw IllegalStateException("")
 
-  private fun saveFragmentInMap(fragmentId: Int, fragment: TFragment) {
+  private fun getFragmentFromMap(fragmentId: Int) =
+    containerFragmentMap[fragmentId]
+
+  private fun setFragmentInMap(fragmentId: Int, fragment: Fragment) {
     containerFragmentMap[fragmentId] = fragment
   }
 }
