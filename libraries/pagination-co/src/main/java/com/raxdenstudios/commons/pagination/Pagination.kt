@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.pagination
 
 import com.raxdenstudios.commons.ResultData
+import com.raxdenstudios.commons.ext.launch
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
@@ -22,7 +23,7 @@ class Pagination<T>(
 
   fun requestPage(
     pageIndex: PageIndex = PageIndex.first,
-    pageRequest: suspend (page: Page, pageSize: PageSize) -> ResultData<PageList<T>>,
+    pageRequest: suspend (page: Page, pageSize: PageSize) -> PageList<T>,
     pageResponse: (pageResult: PageResult<T>) -> Unit
   ) {
     if (shouldMakeRequest(pageIndex, pageResponse)) {
@@ -32,7 +33,7 @@ class Pagination<T>(
   }
 
   fun requestPreviousPage(
-    pageRequest: suspend (page: Page, pageSize: PageSize) -> ResultData<PageList<T>>,
+    pageRequest: suspend (page: Page, pageSize: PageSize) -> PageList<T>,
     pageResponse: (pageResult: PageResult<T>) -> Unit
   ) {
     if (currentPage == config.initialPage) return
@@ -51,15 +52,15 @@ class Pagination<T>(
 
   private fun makeRequest(
     page: Page,
-    pageRequest: suspend (page: Page, pageSize: PageSize) -> ResultData<PageList<T>>,
+    pageRequest: suspend (page: Page, pageSize: PageSize) -> PageList<T>,
     pageResponse: (pageResult: PageResult<T>) -> Unit
   ) {
-    processRequestStart(pageResponse)
-    coroutineScope.launch {
-      when (val resultData = pageRequest.invoke(page, config.pageSize)) {
-        is ResultData.Error -> processRequestError(resultData.throwable, pageResponse)
-        is ResultData.Success -> processRequestSuccess(resultData.value, pageResponse)
-      }
+    coroutineScope.launch(onError = { error -> processRequestError(error, pageResponse) }) {
+      processRequestStart(pageResponse)
+      processRequestSuccess(
+        pageList = pageRequest.invoke(page, config.pageSize),
+        pageResponse = pageResponse
+      )
     }
   }
 
