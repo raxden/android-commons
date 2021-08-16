@@ -3,6 +3,15 @@ package com.raxdenstudios.commons.ext
 import com.google.android.material.appbar.AppBarLayout
 import kotlin.math.abs
 
+
+fun AppBarLayout.addOnScrollStateListener(onScrollState: (AppBarStateChangeListener.State) -> Unit) {
+  addOnOffsetChangedListener(object: AppBarStateChangeListener() {
+    override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
+      onScrollState(state)
+    }
+  })
+}
+
 fun AppBarLayout.addOnScrollProgressListener(onScrollProgress: (Int) -> Unit) {
   addOnOffsetChangedListener(object: AppBarScrollProgressListener() {
     override fun onProgressChanged(appBarLayout: AppBarLayout, progress: Int) {
