@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.raxdenstudios.commons.property.ActivityArgumentDelegate
@@ -72,8 +73,8 @@ fun Activity.contentView(@LayoutRes resId: Int) = ActivityContentViewDelegate(re
 
 inline fun <reified T : Any> Activity.argument() = ActivityArgumentDelegate<T>()
 
-inline fun <reified T : ViewBinding> Activity.viewBinding() =
-  ActivityViewBindingDelegate(T::class.java)
+inline fun <reified T : ViewBinding> AppCompatActivity.viewBinding() =
+  ActivityViewBindingDelegate(T::class.java, this)
 
 fun <T : Fragment> Activity.fragmentById(
   @IdRes fragmentId: Int
