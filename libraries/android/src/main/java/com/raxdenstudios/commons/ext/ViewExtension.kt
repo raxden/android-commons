@@ -104,6 +104,10 @@ fun View.getDrawable(resId: Int) = ContextCompat.getDrawable(context, resId)
 fun ViewGroup.inflateView(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View =
   LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
+fun ViewGroup.inflateViewIfEditMode(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false) {
+  if (isInEditMode) inflateView(layoutRes, attachToRoot)
+}
+
 inline fun <reified T : ViewBinding> ViewGroup.viewBinding() = ViewBindingDelegate(T::class.java)
 
 fun View.startFadeInAnimation() {
