@@ -10,8 +10,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Build;
 
-import androidx.annotation.NonNull;
-
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.util.Preconditions;
@@ -56,7 +54,7 @@ public class RoundedCornersTransformation extends BitmapTransformation {
     }
 
     @Override
-    protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
         return roundedCorners(pool, toTransform, outWidth, outHeight);
     }
 
@@ -65,7 +63,7 @@ public class RoundedCornersTransformation extends BitmapTransformation {
 
     }
 
-    private Bitmap roundedCorners(@NonNull BitmapPool pool, @NonNull Bitmap inBitmap, int width, int height) {
+    private Bitmap roundedCorners(BitmapPool pool, Bitmap inBitmap, int width, int height) {
         Preconditions.checkArgument(width > 0, "width must be greater than 0.");
         Preconditions.checkArgument(height > 0, "height must be greater than 0.");
         Preconditions.checkArgument(mRadius > 0, "roundingRadius must be greater than 0.");
@@ -266,7 +264,7 @@ public class RoundedCornersTransformation extends BitmapTransformation {
         canvas.setBitmap(null);
     }
 
-    private Bitmap getAlphaSafeBitmap(@NonNull BitmapPool pool, @NonNull Bitmap maybeAlphaSafe) {
+    private Bitmap getAlphaSafeBitmap(BitmapPool pool, Bitmap maybeAlphaSafe) {
         if (Bitmap.Config.ARGB_8888.equals(maybeAlphaSafe.getConfig())) {
             return maybeAlphaSafe;
         }
@@ -319,7 +317,7 @@ public class RoundedCornersTransformation extends BitmapTransformation {
         }
 
         @Override
-        public boolean tryLock(long time, @NonNull TimeUnit unit) throws InterruptedException {
+        public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
             return true;
         }
 
@@ -328,11 +326,9 @@ public class RoundedCornersTransformation extends BitmapTransformation {
             // do nothing
         }
 
-        @NonNull
         @Override
         public Condition newCondition() {
             throw new UnsupportedOperationException("Should not be called");
         }
     }
-
 }
