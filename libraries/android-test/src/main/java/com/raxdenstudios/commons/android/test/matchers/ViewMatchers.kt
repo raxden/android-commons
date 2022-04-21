@@ -16,6 +16,7 @@ object ViewMatchers {
 
     override fun getConstraints() = object : BaseMatcher<View>() {
 
+      @Suppress("EmptyFunctionBlock")
       override fun describeTo(description: Description) {}
 
       override fun matches(item: Any) = isA(ViewGroup::class.java).matches(item)
@@ -30,6 +31,7 @@ object ViewMatchers {
   fun setChecked(checked: Boolean) = object : ViewAction {
     override fun getConstraints() = object : BaseMatcher<View>() {
 
+      @Suppress("EmptyFunctionBlock")
       override fun describeTo(description: Description) {}
 
       override fun matches(item: Any) = isA(Checkable::class.java).matches(item)

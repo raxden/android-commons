@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList")
+
 package com.raxdenstudios.commons
 
 import android.annotation.SuppressLint
@@ -19,7 +21,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.raxdenstudios.commons.ext.ScaleType
 
 object GlideUtil {
 
@@ -39,7 +40,7 @@ object GlideUtil {
         is Uri -> image
         is Drawable -> image
         is Bitmap -> image
-        else -> throw Exception("imageUser param only supports String, Uri, Drawable or Bitmap")
+        else -> throw IllegalStateException("imageUser param only supports String, Uri, Drawable or Bitmap")
       }
     ).run {
       transition(DrawableTransitionOptions.withCrossFade())
@@ -78,6 +79,7 @@ object GlideUtil {
     }
   }
 
+  @Suppress("SpreadOperator")
   private fun applyTransformations(
     requestBuilder: RequestBuilder<Drawable>,
     width: Int = 0,
@@ -93,7 +95,6 @@ object GlideUtil {
       ScaleType.CENTER_CROP -> multiTransformation.add(CenterCrop())
       ScaleType.FIT_CENTER -> multiTransformation.add(FitCenter())
       ScaleType.CIRCLE_CROP -> multiTransformation.add(CircleCrop())
-      else -> return
     }
     if (cornerRadius > 0) multiTransformation.add(
       RoundedCornersTransformation(

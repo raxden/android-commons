@@ -1,14 +1,14 @@
 package com.raxdenstudios.commons.ext
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private val onErrorStub: (e: Throwable) -> Unit = { _ -> }
 private val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-  Timber.e(throwable)
+  Log.e("CoroutineException", throwable.message, throwable)
 }
 
 fun CoroutineScope.safeLaunch(

@@ -1,7 +1,6 @@
 object Modules {
   const val libraryAndroid = ":libraries:android"
   const val libraryAndroidTest = ":libraries:android-test"
-  const val libraryBase = ":libraries:base"
   const val libraryCoroutines = ":libraries:coroutines"
   const val libraryCoroutinesTest = ":libraries:coroutines-test"
   const val libraryGlide = ":libraries:glide"

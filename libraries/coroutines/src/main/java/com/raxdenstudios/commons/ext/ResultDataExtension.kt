@@ -1,11 +1,10 @@
-package com.raxdenstudios.commons
+@file:Suppress("TooManyFunctions")
 
-sealed class ResultData<out T> {
+package com.raxdenstudios.commons.ext
 
-  data class Success<out T>(val value: T) : ResultData<T>()
-  data class Error(val throwable: Throwable) : ResultData<Nothing>()
-}
+import com.raxdenstudios.commons.ResultData
 
+@Suppress("TooGenericExceptionCaught")
 inline fun <T, R> T.runCatching(block: T.() -> R): ResultData<R> =
   try {
     ResultData.Success(block())

@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.raxdenstudios.commons.ext
 
 import android.app.Activity

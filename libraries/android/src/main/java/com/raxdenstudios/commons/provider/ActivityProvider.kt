@@ -19,13 +19,21 @@ class ActivityProvider(
         activeActivity = activity
       }
 
-      override fun onActivityStarted(activity: Activity) {}
+      override fun onActivityStarted(activity: Activity) {
+        // do nothing
+      }
 
-      override fun onActivityDestroyed(activity: Activity) {}
+      override fun onActivityDestroyed(activity: Activity) {
+        // do nothing
+      }
 
-      override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+      override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+        // do nothing
+      }
 
-      override fun onActivityStopped(activity: Activity) {}
+      override fun onActivityStopped(activity: Activity) {
+        // do nothing
+      }
 
       override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         activeActivity = activity

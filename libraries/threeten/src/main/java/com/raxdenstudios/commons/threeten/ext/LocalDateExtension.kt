@@ -7,6 +7,7 @@ import org.threeten.bp.format.DateTimeFormatter
 fun LocalDate.toMilliseconds(): Long =
   atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
+@Suppress("MagicNumber")
 fun LocalDate.toSeconds(): Long =
   atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000
 

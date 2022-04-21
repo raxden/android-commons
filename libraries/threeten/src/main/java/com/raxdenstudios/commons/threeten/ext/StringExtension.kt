@@ -11,11 +11,13 @@ fun String.toLocalDate(vararg patterns: String): LocalDate? {
   return null
 }
 
+@Suppress("TooGenericExceptionCaught")
 fun String.toLocalDate(vararg formatters: DateTimeFormatter): LocalDate? {
   formatters.forEach { dateTimeFormatter ->
     try {
       LocalDate.parse(this, dateTimeFormatter)?.also { localDate -> return localDate }
     } catch (e: Exception) {
+      // do nothing
     }
   }
   return null
