@@ -1,7 +1,7 @@
 package com.raxdenstudios.commons.ext
 
-import android.annotation.TargetApi
 import android.net.Uri
+import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
@@ -10,15 +10,14 @@ import android.text.style.URLSpan
 import android.view.View
 import android.widget.TextView
 import androidx.core.net.toUri
-import com.raxdenstudios.commons.util.SDK
 
 @Suppress("DEPRECATION")
-@TargetApi(23)
 fun TextView.setCompatTextAppearance(resId: Int) {
-  if (SDK.hasMarshmallow()) setTextAppearance(resId)
+  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(resId)
   else setTextAppearance(context, resId)
 }
 
+@Suppress("NestedBlockDepth")
 fun TextView.setHtml(html: String, listener: OnHyperlinkClickListener? = null) {
   if (TextUtils.isEmpty(html)) text = ""
   else {

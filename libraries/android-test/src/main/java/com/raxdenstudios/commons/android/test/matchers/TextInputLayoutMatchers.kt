@@ -8,7 +8,10 @@ import org.hamcrest.TypeSafeMatcher
 object TextInputLayoutMatchers {
 
   fun hasNoTextInputLayoutError() = object : TypeSafeMatcher<View>() {
-    override fun describeTo(description: Description) {}
+
+    @Suppress("EmptyFunctionBlock")
+    override fun describeTo(description: Description) {
+    }
 
     override fun matchesSafely(view: View): Boolean {
       return !hasTextInputLayoutErrorText(view, "")
@@ -16,7 +19,10 @@ object TextInputLayoutMatchers {
   }
 
   fun hasTextInputLayoutErrorText(expectedError: Int) = object : TypeSafeMatcher<View>() {
-    override fun describeTo(description: Description) {}
+
+    @Suppress("EmptyFunctionBlock")
+    override fun describeTo(description: Description) {
+    }
 
     override fun matchesSafely(view: View): Boolean {
       val expectedErrorText = view.resources.getString(expectedError)
@@ -25,7 +31,10 @@ object TextInputLayoutMatchers {
   }
 
   fun hasTextInputLayoutErrorText(expectedErrorText: String) = object : TypeSafeMatcher<View>() {
-    override fun describeTo(description: Description) {}
+
+    @Suppress("EmptyFunctionBlock")
+    override fun describeTo(description: Description) {
+    }
 
     override fun matchesSafely(view: View): Boolean {
       return hasTextInputLayoutErrorText(view, expectedErrorText)
@@ -34,6 +43,13 @@ object TextInputLayoutMatchers {
 
   private fun hasTextInputLayoutErrorText(view: View, expectedErrorText: String): Boolean {
     val textInputLayout = (view as? TextInputLayout) ?: return false
+    return hasTextInputLayoutErrorText(textInputLayout, expectedErrorText)
+  }
+
+  private fun hasTextInputLayoutErrorText(
+    textInputLayout: TextInputLayout,
+    expectedErrorText: String
+  ): Boolean {
     val error = textInputLayout.error ?: return false
     return error.toString() == expectedErrorText
   }

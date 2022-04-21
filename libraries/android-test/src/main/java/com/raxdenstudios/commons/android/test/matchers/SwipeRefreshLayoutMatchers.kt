@@ -8,6 +8,8 @@ import org.hamcrest.TypeSafeMatcher
 object SwipeRefreshLayoutMatchers {
 
   fun isSwipeRefreshLayoutRefreshing() = object : TypeSafeMatcher<View>() {
+
+    @Suppress("EmptyFunctionBlock")
     override fun describeTo(description: Description) {}
 
     override fun matchesSafely(view: View): Boolean {

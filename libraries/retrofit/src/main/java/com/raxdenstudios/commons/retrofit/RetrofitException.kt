@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
 
+@Suppress("ReturnCount")
 inline fun <reified T> RetrofitException.parseBodyError(): T? {
   val errorBody = errorBodyOrNull() ?: return null
   val retrofit = retrofitOrNull() ?: return null

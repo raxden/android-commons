@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.raxdenstudios.commons.pagination
 
 import com.raxdenstudios.commons.pagination.model.Page

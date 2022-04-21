@@ -4,6 +4,7 @@ import com.raxdenstudios.commons.retrofit.RetrofitException
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 
+@Suppress("ReturnCount")
 inline fun <reified T> RetrofitException.parseError(): T? {
   val errorBody = errorBodyOrNull() ?: return null
   val retrofit = retrofitOrNull() ?: return null

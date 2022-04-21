@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+@Suppress("TooManyFunctions")
 class FragmentBottomNavigationDelegate(
   private val fragmentManager: FragmentManager,
   private val fragmentContainerView: View,

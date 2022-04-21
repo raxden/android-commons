@@ -55,6 +55,7 @@ internal class RxCallAdapterWrapper<R>(
     }
   }
 
+  @Suppress("MagicNumber")
   private fun httpError(exception: HttpException): Throwable {
     val url = exception.response()?.raw()?.request()?.url().toString()
     return exception.response()?.let { response ->

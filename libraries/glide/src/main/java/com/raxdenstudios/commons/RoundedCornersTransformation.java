@@ -1,5 +1,7 @@
 package com.raxdenstudios.commons;
 
+import static com.raxdenstudios.commons.RoundedCornersTransformation.CornerType.*;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -39,7 +41,7 @@ public class RoundedCornersTransformation extends BitmapTransformation {
     private final int mDiameter;
 
     public RoundedCornersTransformation(int cornerRadius) {
-        this(CornerType.ALL, cornerRadius);
+        this(ALL, cornerRadius);
     }
 
     public RoundedCornersTransformation(CornerType cornerType, int cornerRadius) {

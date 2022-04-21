@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.raxdenstudios.commons.ext
 
 import android.annotation.SuppressLint
@@ -119,10 +121,10 @@ fun View.startFadeOutAnimation() {
 }
 
 // Use coroutines|rx boundary...
-fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit) {
+fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit, debounceTime: Long = 500) {
   var lastTimeClicked: Long = 0
   setOnClickListener {
-    if (SystemClock.elapsedRealtime() - lastTimeClicked >= 500) {
+    if (SystemClock.elapsedRealtime() - lastTimeClicked >= debounceTime) {
       lastTimeClicked = SystemClock.elapsedRealtime()
       onSafeClick(it)
     }
