@@ -10,9 +10,10 @@ buildscript {
 }
 
 plugins {
-  id("com.vanniktech.android.junit.jacoco").version("0.16.0")
-  id("io.codearte.nexus-staging").version("0.22.0")
-  id("com.raxdenstudios.android-releasing").version("0.41")
+  id("com.vanniktech.android.junit.jacoco") version "0.16.0"
+  id("io.codearte.nexus-staging") version "0.22.0"
+  id("com.raxdenstudios.android-releasing") version "0.41"
+  id("com.adarshr.test-logger") version "3.2.0" apply false
 }
 
 junitJacoco {
