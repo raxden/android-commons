@@ -4,6 +4,7 @@ import com.raxdenstudios.commons.ResultData
 import retrofit2.Response
 import java.io.IOException
 
+@Suppress("TooGenericExceptionCaught", "ReturnCount")
 fun <T : Any> Response<T>.toResultData(
   exceptionMessage: String
 ): ResultData<T> {
@@ -19,6 +20,7 @@ fun <T : Any> Response<T>.toResultData(
   return ResultData.Error(IOException(exceptionMessage))
 }
 
+@Suppress("TooGenericExceptionCaught", "ReturnCount")
 fun <T : Any, R : Any> Response<T>.toResultData(
   exceptionMessage: String,
   map: (T) -> R

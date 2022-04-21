@@ -7,7 +7,6 @@ pluginManagement {
 
 include(":libraries:android")
 include(":libraries:android-test")
-include(":libraries:base")
 include(":libraries:coroutines")
 include(":libraries:coroutines-test")
 include(":libraries:glide")

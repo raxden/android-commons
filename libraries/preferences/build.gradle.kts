@@ -36,8 +36,6 @@ android {
 }
 
 dependencies {
-  api(project(Modules.libraryBase))
-
   api(AndroidLibraries.kotlinPreferences)
   api(Libraries.gson)
 

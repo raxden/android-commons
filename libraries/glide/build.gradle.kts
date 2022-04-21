@@ -36,8 +36,6 @@ android {
 }
 
 dependencies {
-  api(project(Modules.libraryBase))
-
   api(Libraries.glide)
   api(Libraries.glideCompiler)
 }

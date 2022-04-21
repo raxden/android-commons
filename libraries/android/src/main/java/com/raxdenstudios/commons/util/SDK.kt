@@ -2,8 +2,10 @@ package com.raxdenstudios.commons.util
 
 import android.content.Context
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.os.Build
+import com.raxdenstudios.commons.ext.getPackageInfo
+import com.raxdenstudios.commons.getValueOrDefault
+import com.raxdenstudios.commons.runCatching
 
 object SDK {
 
@@ -40,42 +42,18 @@ object SDK {
     } else 0
   }
 
-  fun getPackageName(context: Context): String {
-    var packageName = ""
-    try {
-      val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-      packageName = pInfo.packageName
-    } catch (e: PackageManager.NameNotFoundException) {
-    }
+  fun getPackageName(context: Context): String =
+    runCatching { context.getPackageInfo().packageName }.getValueOrDefault("")
 
-    return packageName
-  }
-
-  fun getVersionName(context: Context): String {
-    var versionName = ""
-    try {
-      val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-      versionName = pInfo.versionName
-    } catch (e: Exception) {
-    }
-    return versionName
-  }
-
-  fun getVersionCode(context: Context): Long {
-    var versionCode = 0L
-    try {
-      val pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-      versionCode = getVersionCode(pInfo)
-    } catch (e: Exception) {
-    }
-    return versionCode
-  }
+  fun getVersionName(context: Context): String =
+    runCatching { context.getPackageInfo().versionName }.getValueOrDefault("")
 
   @Suppress("DEPRECATION")
-  private fun getVersionCode(pInfo: PackageInfo) = if (hasPie()) {
-    pInfo.longVersionCode
-  } else {
-    pInfo.versionCode.toLong()
+  fun getVersionCode(context: Context): Long = when {
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
+      runCatching { context.getPackageInfo().longVersionCode }.getValueOrDefault(0L)
+    else ->
+      runCatching { context.getPackageInfo().versionCode.toLong() }.getValueOrDefault(0L)
   }
 
   /**

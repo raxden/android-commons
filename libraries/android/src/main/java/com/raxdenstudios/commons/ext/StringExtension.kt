@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.raxdenstudios.commons.ext
 
 import android.text.Html
@@ -27,6 +29,7 @@ fun String.encodeToBase64(charset: Charset = Charsets.UTF_8, flags: Int = Base64
   try {
     result = toByteArray(charset)
   } catch (e: UnsupportedEncodingException) {
+    // do nothing
   }
   return Base64.encodeToString(result, flags)
 }
@@ -39,6 +42,7 @@ fun String.decodeFromBase64(
   try {
     decodedString = String(Base64.decode(this, flags), charset)
   } catch (e: UnsupportedEncodingException) {
+    // do nothing
   }
   return decodedString
 }
@@ -73,11 +77,14 @@ private fun digest(key: String, algorithm: String, charset: Charset = Charsets.U
     messageDigest.update(key.toByteArray(charset))
     digest = messageDigest.digest()
   } catch (e: NoSuchAlgorithmException) {
+    // do nothing
   } catch (e: UnsupportedEncodingException) {
+    // do nothing
   }
   return digest
 }
 
+@Suppress("MagicNumber")
 private fun bytesToHexString(bytes: ByteArray): String {
   // http://stackoverflow.com/questions/332079
   val sb = StringBuilder()

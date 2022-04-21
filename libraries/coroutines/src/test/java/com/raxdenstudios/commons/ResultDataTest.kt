@@ -1,5 +1,7 @@
 package com.raxdenstudios.commons
 
+import com.raxdenstudios.commons.ext.getValueOrNull
+import com.raxdenstudios.commons.ext.map
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

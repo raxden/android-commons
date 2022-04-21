@@ -3,10 +3,7 @@ package com.raxdenstudios.commons.ext
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.raxdenstudios.commons.GlideUtil
-
-enum class ScaleType {
-  CIRCLE_CROP, CENTER_CROP, FIT_CENTER
-}
+import com.raxdenstudios.commons.ScaleType
 
 fun ImageView.loadImage(
   source: String,

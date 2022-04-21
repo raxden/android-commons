@@ -39,8 +39,6 @@ android {
 }
 
 dependencies {
-  api(project(Modules.libraryBase))
-
   api(AndroidLibraries.kotlinCore)
   api(AndroidLibraries.kotlinActivity)
   api(AndroidLibraries.kotlinFragment)

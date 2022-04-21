@@ -1,11 +1,21 @@
 package com.raxdenstudios.commons.ext
 
 import android.content.Context
+import android.content.pm.PackageInfo
+import android.net.ConnectivityManager
 import android.os.Environment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.raxdenstudios.commons.util.Network
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
+fun Context.getPackageInfo(): PackageInfo = packageManager.getPackageInfo(packageName, 0)
+
+fun Context.getConnectivityManager(): ConnectivityManager =
+  getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+fun Context.isNetworkConnected(): Boolean = Network.isNetworkConnected(this)
 
 fun Context.createTemporalImageFile(): File {
   val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -51,6 +61,7 @@ fun Context.showSimpleDialog(
     .show()
 }
 
+@Suppress("LongParameterList")
 fun Context.showDialog(
   title: Int,
   message: Int,
@@ -69,6 +80,7 @@ fun Context.showDialog(
   )
 }
 
+@Suppress("LongParameterList")
 fun Context.showDialog(
   title: String,
   message: String,

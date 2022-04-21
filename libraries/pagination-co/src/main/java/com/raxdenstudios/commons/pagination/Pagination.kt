@@ -1,6 +1,7 @@
+@file:Suppress("TooManyFunctions")
+
 package com.raxdenstudios.commons.pagination
 
-import com.raxdenstudios.commons.ResultData
 import com.raxdenstudios.commons.ext.launch
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
@@ -8,7 +9,6 @@ import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class Pagination<T>(
   private val config: Config = Config.default,
