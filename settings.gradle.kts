@@ -1,3 +1,10 @@
+pluginManagement {
+  repositories {
+    mavenCentral()
+    gradlePluginPortal()
+  }
+}
+
 include(":libraries:android")
 include(":libraries:android-test")
 include(":libraries:base")
