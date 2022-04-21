@@ -1,4 +1,5 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
 buildscript {
   repositories {
@@ -16,6 +17,7 @@ plugins {
   id("io.codearte.nexus-staging") version "0.22.0"
   id("com.raxdenstudios.android-releasing") version "0.41"
   id("com.adarshr.test-logger") version "3.2.0"
+  id("io.gitlab.arturbosch.detekt") version "1.15.0"
 }
 
 junitJacoco {
@@ -43,10 +45,19 @@ allprojects {
 
 subprojects {
   apply(plugin = "com.adarshr.test-logger")
+  apply(plugin = "io.gitlab.arturbosch.detekt")
 
   testlogger {
     theme = ThemeType.MOCHA
     slowThreshold = 3000
+  }
+
+  configure<DetektExtension> {
+    // To create detekt.yml -> gradle detektGenerateConfig
+    toolVersion = "1.15.0"
+    config = files("${project.rootDir}/config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+    reports.html.enabled = true
   }
 }
 
