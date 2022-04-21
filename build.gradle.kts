@@ -1,3 +1,5 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
+
 buildscript {
   repositories {
     google()
@@ -13,7 +15,7 @@ plugins {
   id("com.vanniktech.android.junit.jacoco") version "0.16.0"
   id("io.codearte.nexus-staging") version "0.22.0"
   id("com.raxdenstudios.android-releasing") version "0.41"
-  id("com.adarshr.test-logger") version "3.2.0" apply false
+  id("com.adarshr.test-logger") version "3.2.0"
 }
 
 junitJacoco {
@@ -36,6 +38,15 @@ allprojects {
     google()
     jcenter()
     maven("https://jitpack.io")
+  }
+}
+
+subprojects {
+  apply(plugin = "com.adarshr.test-logger")
+
+  testlogger {
+    theme = ThemeType.MOCHA
+    slowThreshold = 3000
   }
 }
 
