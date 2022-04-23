@@ -3,7 +3,7 @@ object Versions {
   const val compileSdk = 29
   const val targetSdk = 29
 
-  const val androidPlugins = "0.41"
+  const val androidPlugins = "0.43"
   const val androidGradlePlugin = "7.1.3"
   const val jacocoPlugin = "0.16.0"
   const val nexusStagingPlugin = "0.22.0"
@@ -25,25 +25,18 @@ object Versions {
 
   const val rxAndroid = "2.1.1"
   const val rxKotlin = "2.3.0"
-  const val koin = "2.1.6"
-  const val room = "2.2.5"
-  const val firebase = "26.2.0"
   const val gson = "2.8.6"
   const val okHttp = "4.5.0"
   const val restMock = "0.4.3"
   const val retrofit = "2.9.0"
   const val retrofitNetworkResponseAdapter = "4.1.0"
-  const val leakcanary = "2.5"
 
   const val espresso = "3.3.0"
-  const val fragmentTest = "1.1.0"
   const val mockk = "1.9.2"
   const val atsl = "1.3.0"
   const val atslJunit = "1.1.2"
   const val archCoreTest = "2.0.0"
   const val robolectric = "4.3.1"
   const val threetenabp = "1.2.0"
-  const val timber = "4.7.1"
-  const val timberJunit = "1.0.1"
   const val glide = "4.9.0"
 }
