@@ -1,11 +1,8 @@
 package com.raxdenstudios.commons.util
 
 import android.content.Context
-import android.content.pm.PackageInfo
 import android.os.Build
 import com.raxdenstudios.commons.ext.getPackageInfo
-import com.raxdenstudios.commons.getValueOrDefault
-import com.raxdenstudios.commons.runCatching
 
 object SDK {
 
@@ -43,17 +40,17 @@ object SDK {
   }
 
   fun getPackageName(context: Context): String =
-    runCatching { context.getPackageInfo().packageName }.getValueOrDefault("")
+    runCatching { context.getPackageInfo().packageName }.getOrDefault("")
 
   fun getVersionName(context: Context): String =
-    runCatching { context.getPackageInfo().versionName }.getValueOrDefault("")
+    runCatching { context.getPackageInfo().versionName }.getOrDefault("")
 
   @Suppress("DEPRECATION")
   fun getVersionCode(context: Context): Long = when {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
-      runCatching { context.getPackageInfo().longVersionCode }.getValueOrDefault(0L)
+      runCatching { context.getPackageInfo().longVersionCode }.getOrDefault(0L)
     else ->
-      runCatching { context.getPackageInfo().versionCode.toLong() }.getValueOrDefault(0L)
+      runCatching { context.getPackageInfo().versionCode.toLong() }.getOrDefault(0L)
   }
 
   /**

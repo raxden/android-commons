@@ -1,16 +1,11 @@
 import com.raxdenstudios.publishing.model.Coordinates
-import com.adarshr.gradle.testlogger.theme.ThemeType
 
 plugins {
   id("com.raxdenstudios.android-versioning")
-  id("com.raxdenstudios.android-library")
+  id("com.android.library")
+  id("kotlin-android")
+  id("kotlin-kapt")
   id("com.raxdenstudios.publish-library")
-  id("com.adarshr.test-logger")
-}
-
-testlogger {
-  theme = ThemeType.MOCHA
-  slowThreshold = 3000
 }
 
 versioning {
@@ -28,30 +23,51 @@ publishLibrary {
 }
 
 android {
+
+  compileSdk = Versions.compileSdk
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
+
+  defaultConfig {
+    minSdk = Versions.minSdk
+    targetSdk = Versions.targetSdk
+
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFile("consumer-rules.pro")
+  }
+
   buildTypes {
     getByName("debug") {
+      isMinifyEnabled = false
       isTestCoverageEnabled = true
     }
   }
   buildFeatures {
     viewBinding = true
   }
+
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
 }
 
 dependencies {
-  api(AndroidLibraries.kotlinCore)
-  api(AndroidLibraries.kotlinActivity)
-  api(AndroidLibraries.kotlinFragment)
-  api(AndroidLibraries.kotlinPreferences)
-  api(AndroidLibraries.material)
-  api(AndroidLibraries.playCore)
-  api(AndroidLibraries.constraintLayout)
-  api(AndroidLibraries.swipeRefreshLayout)
-  api(AndroidLibraries.browser)
-  api(AndroidLibraries.lifecycleExtensions)
-  api(AndroidLibraries.lifecycleRuntime)
-  api(AndroidLibraries.lifecycleCommon)
-  api(AndroidLibraries.lifecycleViewModel)
+  implementation(AndroidLibraries.kotlinCore)
+  implementation(AndroidLibraries.kotlinActivity)
+  implementation(AndroidLibraries.kotlinFragment)
+  implementation(AndroidLibraries.kotlinPreferences)
+  implementation(AndroidLibraries.material)
+  implementation(AndroidLibraries.playCore)
+  implementation(AndroidLibraries.constraintLayout)
+  implementation(AndroidLibraries.swipeRefreshLayout)
+  implementation(AndroidLibraries.browser)
+  implementation(AndroidLibraries.lifecycleExtensions)
+  implementation(AndroidLibraries.lifecycleRuntime)
+  implementation(AndroidLibraries.lifecycleCommon)
+  implementation(AndroidLibraries.lifecycleViewModel)
 
   testImplementation(TestLibraries.atslJunit)
 }
