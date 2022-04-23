@@ -8,5 +8,6 @@ repositories {
 }
 
 dependencies {
-
+  implementation(gradleApi())
+  implementation(localGroovy())
 }
