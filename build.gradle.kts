@@ -7,13 +7,12 @@ buildscript {
     maven("https://plugins.gradle.org/m2/")
   }
   dependencies {
+    classpath("com.android.tools.build:gradle:${Versions.androidGradlePlugin}")
     classpath("com.raxdenstudios:android-plugins:${Versions.androidPlugins}")
   }
 }
 
 plugins {
-  id("com.android.application") version Versions.androidGradlePlugin apply false
-  id("com.android.library") version Versions.androidGradlePlugin apply false
   id("org.jetbrains.kotlin.android") version Versions.kotlin apply false
 
   id("com.vanniktech.android.junit.jacoco") version Versions.jacocoPlugin
