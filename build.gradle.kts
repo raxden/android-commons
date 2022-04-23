@@ -4,20 +4,23 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 buildscript {
   repositories {
     google()
-    jcenter()
     maven("https://plugins.gradle.org/m2/")
   }
   dependencies {
-    classpath("com.raxdenstudios:android-plugins:0.41")
+    classpath("com.raxdenstudios:android-plugins:${Versions.androidPlugins}")
   }
 }
 
 plugins {
-  id("com.vanniktech.android.junit.jacoco") version "0.16.0"
-  id("io.codearte.nexus-staging") version "0.22.0"
-  id("com.raxdenstudios.android-releasing") version "0.41"
-  id("com.adarshr.test-logger") version "3.2.0"
-  id("io.gitlab.arturbosch.detekt") version "1.15.0"
+  id("com.android.application") version Versions.androidGradlePlugin apply false
+  id("com.android.library") version Versions.androidGradlePlugin apply false
+  id("org.jetbrains.kotlin.android") version Versions.kotlin apply false
+
+  id("com.vanniktech.android.junit.jacoco") version Versions.jacocoPlugin
+  id("io.codearte.nexus-staging") version Versions.nexusStagingPlugin
+  id("com.raxdenstudios.android-releasing") version Versions.androidPlugins
+  id("com.adarshr.test-logger") version Versions.testLoggerPlugin
+  id("io.gitlab.arturbosch.detekt") version Versions.detektPlugin
 }
 
 junitJacoco {
@@ -35,14 +38,6 @@ nexusStaging {
   password = nexusPassword ?: System.getenv("OSSRH_PASSWORD") ?: ""
 }
 
-allprojects {
-  repositories {
-    google()
-    jcenter()
-    maven("https://jitpack.io")
-  }
-}
-
 subprojects {
   apply(plugin = "com.adarshr.test-logger")
   apply(plugin = "io.gitlab.arturbosch.detekt")
@@ -54,7 +49,7 @@ subprojects {
 
   configure<DetektExtension> {
     // To create detekt.yml -> gradle detektGenerateConfig
-    toolVersion = "1.15.0"
+    toolVersion = Versions.detektPlugin
     config = files("${project.rootDir}/config/detekt/detekt.yml")
     buildUponDefaultConfig = true
     reports.html.enabled = true

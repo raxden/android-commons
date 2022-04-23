@@ -1,16 +1,11 @@
 import com.raxdenstudios.publishing.model.Coordinates
-import com.adarshr.gradle.testlogger.theme.ThemeType
 
 plugins {
   id("com.raxdenstudios.android-versioning")
-  id("com.raxdenstudios.android-library")
+  id("com.android.library")
+  id("kotlin-android")
+  id("kotlin-kapt")
   id("com.raxdenstudios.publish-library")
-  id("com.adarshr.test-logger")
-}
-
-testlogger {
-  theme = ThemeType.MOCHA
-  slowThreshold = 3000
 }
 
 versioning {
@@ -27,11 +22,39 @@ publishLibrary {
   coordinates = Coordinates.default.copy(artifactId = "commons-retrofit-co")
 }
 
-dependencies {
-  api(project(Modules.libraryRetrofit))
-  api(project(Modules.libraryCoroutines))
+android {
 
-  api(Libraries.retrofitNetworkResponseAdapter)
+  compileSdk = Versions.compileSdk
+
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
+
+  defaultConfig {
+    minSdk = Versions.minSdk
+    targetSdk = Versions.targetSdk
+
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFile("consumer-rules.pro")
+  }
+
+  buildTypes {
+    getByName("debug") {
+      isMinifyEnabled = false
+    }
+  }
+
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+}
+
+dependencies {
+  implementation(project(Modules.libraryRetrofit))
+  implementation(project(Modules.libraryCoroutines))
+
+  implementation(Libraries.retrofitNetworkResponseAdapter)
 
   testImplementation(TestLibraries.atslJunit)
 }

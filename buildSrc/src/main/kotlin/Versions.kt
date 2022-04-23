@@ -3,6 +3,13 @@ object Versions {
   const val compileSdk = 29
   const val targetSdk = 29
 
+  const val androidPlugins = "0.41"
+  const val androidGradlePlugin = "7.1.3"
+  const val jacocoPlugin = "0.16.0"
+  const val nexusStagingPlugin = "0.22.0"
+  const val testLoggerPlugin = "3.2.0"
+  const val detektPlugin = "1.15.0"
+
   const val playCore = "1.9.0"
   const val material = "1.2.1"
   const val constraintLayout = "1.1.3"
@@ -13,7 +20,7 @@ object Versions {
   const val kotlinPreferences = "1.1.1"
   const val lifecycle = "2.2.0"
   const val browser = "1.3.0"
-  const val kotlin = "1.4.30"
+  const val kotlin = "1.6.20"
   const val coroutines = "1.4.3"
 
   const val rxAndroid = "2.1.1"
