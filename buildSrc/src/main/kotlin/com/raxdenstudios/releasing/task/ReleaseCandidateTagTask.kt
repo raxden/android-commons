@@ -8,6 +8,7 @@ open class ReleaseCandidateTagTask : AbstractReleaseCandidateTask() {
 
   @TaskAction
   fun execute() {
+    println("==== Release candidate task has started ====")
     openGitWithCredentials().run {
       checkoutBranch(releaseBranch)
       createTagRelease()

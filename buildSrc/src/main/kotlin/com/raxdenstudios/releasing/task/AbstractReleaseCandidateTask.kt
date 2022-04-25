@@ -3,6 +3,7 @@ package com.raxdenstudios.releasing.task
 import com.raxdenstudios.releasing.extension.ReleasingExtension
 import com.raxdenstudios.releasing.provider.CredentialsProvider
 import com.raxdenstudios.versioning.provider.FileVersionProvider
+import org.ajoberstar.grgit.Credentials
 import org.ajoberstar.grgit.Grgit
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Internal
@@ -38,7 +39,7 @@ abstract class AbstractReleaseCandidateTask : DefaultTask() {
 
   fun openGitWithCredentials(): Grgit = Grgit.open {
     currentDir = project.rootDir
-//    credentials = Credentials("raxden", "DGyW9IRcW6j1y1prGEMp")
+    credentials = Credentials(user, password)
   }
 
   fun increaseMinorVersion() {
