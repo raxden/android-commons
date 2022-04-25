@@ -12,13 +12,13 @@ buildscript {
 }
 
 plugins {
-  id("com.android.application") version Versions.androidGradlePlugin apply false
-  id("com.android.library") version Versions.androidGradlePlugin apply false
+//  id("com.android.application") version Versions.androidGradlePlugin apply false
+//  id("com.android.library") version Versions.androidGradlePlugin apply false
   id("org.jetbrains.kotlin.android") version Versions.kotlin apply false
 
   id("com.vanniktech.android.junit.jacoco") version Versions.jacocoPlugin
   id("io.codearte.nexus-staging") version Versions.nexusStagingPlugin
-  id("com.raxdenstudios.android-releasing") version Versions.androidPlugins
+  id("com.raxdenstudios.androidd-releasing")
   id("com.adarshr.test-logger") version Versions.testLoggerPlugin
   id("io.gitlab.arturbosch.detekt") version Versions.detektPlugin
 }
