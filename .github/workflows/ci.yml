@@ -41,8 +41,97 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Unit tests
-        run: ./gradlew testDebugUnitTest jacocoTestReportDebug --stacktrace
+      - name: Get specific changed files in android
+        id: changed-files-specific_library_android
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/android/**/*
+
+      - name: Get specific changed files in coroutines
+        id: changed-files-specific_library_coroutines
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/coroutines/**/*
+
+      - name: Get specific changed files in pagination-co
+        id: changed-files-specific_library_pagination_co
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/pagination-co/**/*
+
+      - name: Get specific changed files in pagination-rx
+        id: changed-files-specific_library_pagination_rx
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/pagination-rx/**/*
+
+      - name: Get specific changed files in preferences
+        id: changed-files-specific_library_preferences
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/preferences/**/*
+
+      - name: Get specific changed files in retrofit-co
+        id: changed-files-specific_library_retrofit_co
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/retrofit-co/**/*
+
+      - name: Get specific changed files in threeten
+        id: changed-files-specific_library_threeten
+        uses: tj-actions/changed-files@v18.7
+        with:
+          files: |
+            libraries/threeten/**/*
+
+      - name: Unit tests :android
+        if: steps.changed-files-specific_library_android.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:android:testDebugUnitTest --stacktrace
+
+      - name: Unit tests :coroutines
+        if: steps.changed-files-specific_library_coroutines.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:coroutines:testDebugUnitTest --stacktrace
+
+      - name: Unit tests :pagination-co
+        if: steps.changed-files-specific_library_pagination_co.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:pagination-co:testDebugUnitTest --stacktrace
+
+      - name: Unit tests :pagination-rx
+        if: steps.changed-files-specific_library_pagination_rx.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:pagination-rx:testDebugUnitTest --stacktrace
+
+      - name: Unit tests :preferences
+        if: steps.changed-files-specific_library_preferences.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:preferences:testDebugUnitTest --stacktrace
+
+      - name: Unit tests :retrofit-co
+        if: steps.changed-files-specific_library_retrofit_co.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:retrofit-co:testDebugUnitTest --stacktrace
+
+      - name: Unit tests :threeten
+        if: steps.changed-files-specific_library_threeten.outputs.any_changed == 'true'
+        run: ./gradlew :libraries:threeten:testDebugUnitTest --stacktrace
+
+  reports:
+    needs: test
+    name: generate reports
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Generate jacoco reports
+        run: ./gradlew jacocoTestReportDebug
+
+  upload:
+    needs: reports
+    name: upload
+    runs-on: ubuntu-latest
+    steps:
 
       - name: Upload to Codecov
         env:
