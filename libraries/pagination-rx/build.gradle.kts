@@ -54,6 +54,9 @@ dependencies {
   implementation(project(Modules.libraryPagination))
   implementation(project(Modules.libraryRx))
 
+  implementation(Libraries.rxAndroid)
+  implementation(Libraries.rxKotlin)
+
   testImplementation(project(Modules.libraryRxTest))
   testImplementation(TestLibraries.atslJunit)
   testImplementation(TestLibraries.mockkCore)
