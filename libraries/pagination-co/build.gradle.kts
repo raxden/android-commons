@@ -54,6 +54,10 @@ dependencies {
   implementation(project(Modules.libraryPagination))
   implementation(project(Modules.libraryCoroutines))
 
+  implementation(platform(KotlinLibraries.coroutinesBom))
+  implementation(KotlinLibraries.coroutinesAndroid)
+
+  testImplementation(TestLibraries.coroutinesTest)
   testImplementation(TestLibraries.atslJunit)
   testImplementation(TestLibraries.mockkCore)
   testImplementation(TestLibraries.mockkAndroid)

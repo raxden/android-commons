@@ -52,4 +52,11 @@ android {
 
 dependencies {
   implementation(project(Modules.libraryAndroid))
+
+  implementation(AndroidLibraries.kotlinCore)
+  implementation(AndroidLibraries.kotlinActivity)
+  implementation(AndroidLibraries.lifecycleExtensions)
+  implementation(AndroidLibraries.lifecycleRuntime)
+  implementation(AndroidLibraries.lifecycleCommon)
+  implementation(AndroidLibraries.lifecycleViewModel)
 }
