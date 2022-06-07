@@ -54,6 +54,7 @@ dependencies {
   implementation(project(Modules.libraryRetrofit))
   implementation(project(Modules.libraryCoroutines))
 
+  implementation(Libraries.retrofit)
   implementation(Libraries.retrofitNetworkResponseAdapter)
 
   testImplementation(TestLibraries.atslJunit)

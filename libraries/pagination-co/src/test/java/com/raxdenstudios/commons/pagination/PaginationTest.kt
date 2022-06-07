@@ -10,7 +10,6 @@ import io.mockk.coVerifyOrder
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import io.mockk.slot
-import junit.framework.Assert
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
