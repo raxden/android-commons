@@ -42,7 +42,6 @@ android {
   buildTypes {
     getByName("debug") {
       isMinifyEnabled = false
-      isTestCoverageEnabled = true
     }
   }
   buildFeatures {
