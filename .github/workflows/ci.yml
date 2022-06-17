@@ -59,6 +59,7 @@ jobs:
           echo "isMasterBranch=${IS_MASTER_BRANCH}" >> $GITHUB_ENV
           echo "isRelease=${IS_RELEASE}" >> $GITHUB_ENV
           echo "hasFilesChanged=${HAS_FILES_CHANGED}" >> $GITHUB_ENV
+          echo "hola=${github.event.create.ref}"
 
       - name: Detekt :${{ matrix.module }}
         if: env.hasFilesChanged == 'true'
