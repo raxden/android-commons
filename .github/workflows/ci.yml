@@ -95,7 +95,7 @@ jobs:
           path: libraries/${{ matrix.module }}/build/reports/
 
   upload:
-    name: Upload reports
+    name: Upload reports to Codecov
     if: github.event.pull_request.base.ref == 'master' || startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
 
@@ -111,7 +111,7 @@ jobs:
         uses: codecov/codecov-action@v1
 
   release:
-    name: Create Release
+    name: Create Github Release
     if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
 
