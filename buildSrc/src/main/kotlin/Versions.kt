@@ -6,7 +6,7 @@ object Versions {
   const val androidPlugins = "0.46"
   const val androidGradlePlugin = "7.1.3"
   const val jacocoPlugin = "0.16.0"
-  const val nexusStagingPlugin = "0.22.0"
+  const val nexusStagingPlugin = "0.30.0"
   const val testLoggerPlugin = "3.2.0"
   const val detektPlugin = "1.15.0"
 
