@@ -3,7 +3,7 @@ object Versions {
   const val compileSdk = 29
   const val targetSdk = 29
 
-  const val androidPlugins = "0.44"
+  const val androidPlugins = "0.45"
   const val androidGradlePlugin = "7.1.3"
   const val jacocoPlugin = "0.16.0"
   const val nexusStagingPlugin = "0.22.0"
