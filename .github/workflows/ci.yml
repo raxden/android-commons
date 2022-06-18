@@ -121,14 +121,18 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v5.2
+
       - name: Create Release ✅
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ steps.branch-name.outputs.current_branch }}
+          release_name: ${{ steps.branch-name.outputs.current_branch }}
           draft: false
           prerelease: false
 
