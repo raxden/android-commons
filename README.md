@@ -3,7 +3,7 @@ Android Commons
 
 <a href='https://github.com/raxden/android-commons/actions/workflows/deploy_library.yml'><img src='https://github.com/raxden/android-commons/workflows/Continuous%20Delivery/badge.svg'></a>
 [![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg?token=E55S5DHJ9B)](https://codecov.io/gh/raxden/android-commons)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-core)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
 
 Android Commons is a set of libraries that I have been creating and collecting throughout these years
 of development and that I use continuously in my new developments in order to avoid having to maintain
@@ -33,7 +33,7 @@ implementation "com.raxdenstudios:commons-unit-test:x.y.z"
 implementation "com.raxdenstudios:commons-android-test:x.y.z"
 ```
 
-Please replace `x`, `y` and `z` with the latest version numbers -> [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-core)
+Please replace `x`, `y` and `z` with the latest version numbers -> [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
 
 ## LICENSE
 
