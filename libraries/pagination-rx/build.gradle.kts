@@ -51,11 +51,8 @@ android {
 }
 
 dependencies {
-  implementation(project(Modules.libraryPagination))
-  implementation(project(Modules.libraryRx))
-
-  implementation(Libraries.rxAndroid)
-  implementation(Libraries.rxKotlin)
+  api(project(Modules.libraryPagination))
+  api(project(Modules.libraryRx))
 
   testImplementation(project(Modules.libraryRxTest))
   testImplementation(TestLibraries.atslJunit)
