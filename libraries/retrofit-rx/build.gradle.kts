@@ -51,9 +51,8 @@ android {
 }
 
 dependencies {
-  implementation(project(Modules.libraryRetrofit))
-  implementation(Libraries.retrofitRxAdapter)
-  implementation("androidx.annotation:annotation:1.3.0")
+  api(project(Modules.libraryRetrofit))
 
-  implementation(Libraries.rxAndroid)
+  api(Libraries.retrofitRxAdapter)
+  api(Libraries.rxAndroid)
 }

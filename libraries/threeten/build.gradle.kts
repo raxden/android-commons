@@ -51,7 +51,7 @@ android {
 }
 
 dependencies {
-  implementation(Libraries.threetenabp)
+  api(Libraries.threetenabp)
 
   testImplementation(TestLibraries.atslJunit)
 }

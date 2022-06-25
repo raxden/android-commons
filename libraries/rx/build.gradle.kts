@@ -51,6 +51,6 @@ android {
 }
 
 dependencies {
-  implementation(Libraries.rxAndroid)
-  implementation(Libraries.rxKotlin)
+  api(Libraries.rxAndroid)
+  api(Libraries.rxKotlin)
 }

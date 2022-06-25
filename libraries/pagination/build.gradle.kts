@@ -51,7 +51,7 @@ android {
 }
 
 dependencies {
-  implementation(AndroidLibraries.material)
+  api(AndroidLibraries.material)
 
   testImplementation(TestLibraries.atslJunit)
 }

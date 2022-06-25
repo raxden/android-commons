@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
-  implementation(TestLibraries.atslJunit)
+  api(TestLibraries.atslJunit)
 
-  implementation(platform(KotlinLibraries.coroutinesBom))
-  implementation(TestLibraries.coroutinesTest)
+  api(platform(KotlinLibraries.coroutinesBom))
+  api(TestLibraries.coroutinesTest)
 }
