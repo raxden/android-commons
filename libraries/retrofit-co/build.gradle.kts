@@ -51,11 +51,10 @@ android {
 }
 
 dependencies {
-  implementation(project(Modules.libraryRetrofit))
-  implementation(project(Modules.libraryCoroutines))
+  api(project(Modules.libraryRetrofit))
+  api(project(Modules.libraryCoroutines))
 
-  implementation(Libraries.retrofit)
-  implementation(Libraries.retrofitNetworkResponseAdapter)
+  api(Libraries.retrofitNetworkResponseAdapter)
 
   testImplementation(TestLibraries.atslJunit)
 }

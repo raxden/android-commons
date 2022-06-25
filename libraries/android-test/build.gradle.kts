@@ -51,14 +51,14 @@ android {
 }
 
 dependencies {
-  implementation(TestLibraries.archCoreTest)
-  implementation(TestLibraries.atslJunit)
-  implementation(TestLibraries.atslRules)
-  implementation(TestLibraries.atslRunner)
+  api(TestLibraries.archCoreTest)
+  api(TestLibraries.atslJunit)
+  api(TestLibraries.atslRules)
+  api(TestLibraries.atslRunner)
 
-  implementation(TestLibraries.restMock)
+  api(TestLibraries.restMock)
 
-  implementation(TestAndroidLibraries.espresso)
-  implementation(TestAndroidLibraries.espressoContrib)
-  implementation(TestAndroidLibraries.espressoIntents)
+  api(TestAndroidLibraries.espresso)
+  api(TestAndroidLibraries.espressoContrib)
+  api(TestAndroidLibraries.espressoIntents)
 }

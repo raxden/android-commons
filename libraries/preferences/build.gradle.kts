@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
-  implementation(AndroidLibraries.kotlinPreferences)
-  implementation(Libraries.gson)
+  api(AndroidLibraries.kotlinPreferences)
+  api(Libraries.gson)
 
   testImplementation(TestLibraries.atslJunit)
   testImplementation(TestLibraries.robolectric)

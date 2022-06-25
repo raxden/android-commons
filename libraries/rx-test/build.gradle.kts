@@ -51,8 +51,7 @@ android {
 }
 
 dependencies {
-  implementation(TestLibraries.atslJunit)
-
-  implementation(Libraries.rxAndroid)
-  implementation(Libraries.rxKotlin)
+  api(TestLibraries.atslJunit)
+  api(Libraries.rxAndroid)
+  api(Libraries.rxKotlin)
 }
