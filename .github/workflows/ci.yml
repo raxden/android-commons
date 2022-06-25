@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Information
+      - name: Information ℹ️
         run: |
           echo "The job was automatically triggered by a ${{ github.event_name }} event."
           echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -45,27 +45,28 @@ jobs:
         module: [android, coroutines, pagination-co, pagination-rx, preferences, retrofit-co, threeten]
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+      - name: Check out code ✔️
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-java@v3
+      - name: Set up JDK 1.11 & gradle cache ✔️
+        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: '11'
           cache: 'gradle'
 
-      - name: Get branch name
+      - name: Get branch name ✔️
         id: branch-name
         uses: tj-actions/branch-names@v5.2
 
-      - name: Get specific changed files in ${{ matrix.module }}
+      - name: Get specific changed files in ${{ matrix.module }} ✔️
         id: changed-files-specific_library
         uses: tj-actions/changed-files@v18.7
         with:
           files: |
             libraries/${{ matrix.module }}/**/*
 
-      - name: Preparing variables
+      - name: Preparing variables ✔️
         env:
           IS_MASTER_BRANCH: ${{ steps.branch-name.outputs.current_branch == 'master' }}
           IS_RELEASE: ${{ startsWith(steps.branch-name.outputs.current_branch, 'releases/') }}
@@ -75,19 +76,19 @@ jobs:
           echo "isRelease=${IS_RELEASE}" >> $GITHUB_ENV
           echo "hasFilesChanged=${HAS_FILES_CHANGED}" >> $GITHUB_ENV
 
-      - name: Detekt :${{ matrix.module }}
+      - name: Detekt :${{ matrix.module }} ✔️
         if: env.hasFilesChanged == 'true'
         run: ./gradlew :libraries:${{ matrix.module }}:detekt
 
-      - name: Unit tests :${{ matrix.module }}
+      - name: Unit tests :${{ matrix.module }} 🧪
         if: env.hasFilesChanged == 'true'
         run: ./gradlew :libraries:${{ matrix.module }}:testDebugUnitTest --stacktrace
 
-      - name: Jacoco Reports :${{ matrix.module }}
+      - name: Jacoco Reports :${{ matrix.module }} 📝
         if: env.hasFilesChanged == 'true' && ( env.isMasterBranch == 'true' || env.isRelease == 'true' )
         run: ./gradlew :libraries:${{ matrix.module }}:jacocoTestReportDebug
 
-      - name: Saving Reports :${{ matrix.module }}
+      - name: Saving Reports :${{ matrix.module }} 💾
         if: env.hasFilesChanged == 'true' && ( env.isMasterBranch == 'true' || env.isRelease == 'true' )
         uses: actions/upload-artifact@v3
         with:
@@ -95,23 +96,23 @@ jobs:
           path: libraries/${{ matrix.module }}/build/reports/
 
   upload:
-    name: Upload reports to Codecov
+    name: Upload reports to Codecov 🚀
     if: github.event.pull_request.base.ref == 'master' || startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
 
     needs: test
 
     steps:
-      - name: Loading Reports
+      - name: Loading Reports ✔️
         uses: actions/download-artifact@v3
 
-      - name: Uploading reports to Codecov
+      - name: Uploading reports to Codecov 🚀
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v1
 
   publish:
-    name: Publish Library
+    name: Publish Library to Sonatype 🚀
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     environment: release_environment
@@ -120,15 +121,16 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-java@v3
+      - name: Set up JDK 1.11
+        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: '11'
           cache: 'gradle'
 
-      - name: Deploy library
+      - name: Publish library 🚀
         env:
           OSSRH_ID: ${{ secrets.OSSRH_ID }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -136,4 +138,14 @@ jobs:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-        run: bash ./gradlew clean publishReleasePublicationToSonatypeRepository --max-workers 1 closeAndReleaseRepository
+        run: bash ./gradlew clean publishReleasePublicationToSonatypeRepository --info
+
+      - name: Close and Release library 🚀
+        env:
+          OSSRH_ID: ${{ secrets.OSSRH_ID }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        run: bash ./gradlew closeAndReleaseRepository
