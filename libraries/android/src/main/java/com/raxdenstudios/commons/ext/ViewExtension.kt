@@ -20,6 +20,10 @@ import androidx.annotation.StyleableRes
 import androidx.core.content.ContextCompat
 import androidx.viewbinding.ViewBinding
 import com.raxdenstudios.commons.property.ViewBindingDelegate
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 fun View.setPaddingTop(padding: Int) {
   setPaddingRelative(
@@ -129,6 +133,14 @@ fun View.setSafeOnClickListener(debounceTime: Long = 500, onSafeClick: (View) ->
       onSafeClick(it)
     }
   }
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
+fun View.clicks(): Flow<Unit> = callbackFlow {
+  setOnClickListener {
+    trySend(Unit).isSuccess
+  }
+  awaitClose { setOnClickListener(null) }
 }
 
 fun View.useStyledAttributes(
