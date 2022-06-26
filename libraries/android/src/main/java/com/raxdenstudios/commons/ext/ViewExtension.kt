@@ -121,7 +121,7 @@ fun View.startFadeOutAnimation() {
 }
 
 // Use coroutines|rx boundary...
-fun View.setSafeOnClickListener(onSafeClick: (View) -> Unit, debounceTime: Long = 500) {
+fun View.setSafeOnClickListener(debounceTime: Long = 500, onSafeClick: (View) -> Unit) {
   var lastTimeClicked: Long = 0
   setOnClickListener {
     if (SystemClock.elapsedRealtime() - lastTimeClicked >= debounceTime) {
