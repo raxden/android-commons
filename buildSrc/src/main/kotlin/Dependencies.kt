@@ -10,10 +10,7 @@ object AndroidLibraries {
   const val kotlinPreferences = "androidx.preference:preference-ktx:${Versions.kotlinPreferences}"
 
   // Lifecycle
-  const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycle}"
   const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
-  const val lifecycleCommon = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
-  const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
 }
 
 object KotlinLibraries {
