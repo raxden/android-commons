@@ -63,10 +63,7 @@ dependencies {
   api(AndroidLibraries.constraintLayout)
   api(AndroidLibraries.swipeRefreshLayout)
   api(AndroidLibraries.browser)
-  api(AndroidLibraries.lifecycleExtensions)
   api(AndroidLibraries.lifecycleRuntime)
-  api(AndroidLibraries.lifecycleCommon)
-  api(AndroidLibraries.lifecycleViewModel)
 
   testImplementation(TestLibraries.atslJunit)
 }
