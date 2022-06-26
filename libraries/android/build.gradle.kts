@@ -54,19 +54,19 @@ android {
 }
 
 dependencies {
-  implementation(AndroidLibraries.kotlinCore)
-  implementation(AndroidLibraries.kotlinActivity)
-  implementation(AndroidLibraries.kotlinFragment)
-  implementation(AndroidLibraries.kotlinPreferences)
-  implementation(AndroidLibraries.material)
-  implementation(AndroidLibraries.playCore)
-  implementation(AndroidLibraries.constraintLayout)
-  implementation(AndroidLibraries.swipeRefreshLayout)
-  implementation(AndroidLibraries.browser)
-  implementation(AndroidLibraries.lifecycleExtensions)
-  implementation(AndroidLibraries.lifecycleRuntime)
-  implementation(AndroidLibraries.lifecycleCommon)
-  implementation(AndroidLibraries.lifecycleViewModel)
+  api(AndroidLibraries.kotlinCore)
+  api(AndroidLibraries.kotlinActivity)
+  api(AndroidLibraries.kotlinFragment)
+  api(AndroidLibraries.kotlinPreferences)
+  api(AndroidLibraries.material)
+  api(AndroidLibraries.playCore)
+  api(AndroidLibraries.constraintLayout)
+  api(AndroidLibraries.swipeRefreshLayout)
+  api(AndroidLibraries.browser)
+  api(AndroidLibraries.lifecycleExtensions)
+  api(AndroidLibraries.lifecycleRuntime)
+  api(AndroidLibraries.lifecycleCommon)
+  api(AndroidLibraries.lifecycleViewModel)
 
   testImplementation(TestLibraries.atslJunit)
 }
