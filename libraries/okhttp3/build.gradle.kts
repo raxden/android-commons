@@ -27,15 +27,15 @@ android {
   compileSdk = Versions.compileSdk
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = Versions.sourceCompatibility
+    targetCompatibility = Versions.targetCompatibility
   }
 
   defaultConfig {
     minSdk = Versions.minSdk
     targetSdk = Versions.targetSdk
 
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner = Versions.testInstrumentationRunner
     consumerProguardFile("consumer-rules.pro")
   }
 
@@ -46,7 +46,7 @@ android {
   }
 
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = Versions.jvmTarget
   }
 }
 
