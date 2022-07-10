@@ -51,6 +51,8 @@ android {
 }
 
 dependencies {
+  implementation(AndroidLibraries.swipeRefreshLayout)
+
   api(TestLibraries.archCoreTest)
   api(TestLibraries.atslJunit)
   api(TestLibraries.atslRules)
