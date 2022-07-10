@@ -1,5 +1,6 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 buildscript {
   repositories {
@@ -20,15 +21,16 @@ plugins {
   id("com.raxdenstudios.android-releasing") version Versions.androidPlugins
   id("com.adarshr.test-logger") version Versions.testLoggerPlugin
   id("io.gitlab.arturbosch.detekt") version Versions.detektPlugin
-}
-
-junitJacoco {
-
+  id("com.github.ben-manes.versions") version Versions.benNamesPlugin
 }
 
 val nexusId: String? by project
 val nexusUsername: String? by project
 val nexusPassword: String? by project
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+  outputFormatter = "html"
+}
 
 nexusStaging {
   packageGroup = "com.raxdenstudios"

@@ -1,14 +1,15 @@
 object Versions {
   const val minSdk = 21
-  const val compileSdk = 30
-  const val targetSdk = 30
+  const val compileSdk = 31
+  const val targetSdk = 31
 
   const val androidPlugins = "0.46"
-  const val androidGradlePlugin = "7.2.0"
+  const val androidGradlePlugin = "7.2.1"
   const val jacocoPlugin = "0.16.0"
   const val nexusStagingPlugin = "0.30.0"
   const val testLoggerPlugin = "3.2.0"
   const val detektPlugin = "1.21.0-RC1"
+  const val benNamesPlugin = "0.42.0"
 
   const val playCore = "1.10.3"
   const val material = "1.6.1"
