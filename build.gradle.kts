@@ -28,8 +28,18 @@ val nexusId: String? by project
 val nexusUsername: String? by project
 val nexusPassword: String? by project
 
+fun isNonStable(version: String): Boolean {
+  val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+  val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+  val isStable = stableKeyword || regex.matches(version)
+  return isStable.not()
+}
+
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
   outputFormatter = "html"
+  rejectVersionIf {
+    isNonStable(candidate.version) && !isNonStable(currentVersion)
+  }
 }
 
 nexusStaging {
