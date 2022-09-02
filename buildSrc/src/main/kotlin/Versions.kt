@@ -28,17 +28,24 @@ object Versions {
   const val kotlinPreferences = "1.2.0"
   const val lifecycle = "2.5.0"
   const val browser = "1.4.0"
+  const val navigation = "2.3.5"
   const val kotlin = "1.7.10"
-  const val coroutines = "1.6.3"
+  const val firebase = "26.2.0"
 
+  const val coroutines = "1.6.3"
   const val rxAndroid = "2.1.1"
   const val rxKotlin = "2.4.0"
+
   const val gson = "2.9.0"
   const val okHttp = "4.10.0"
   const val restMock = "0.4.4"
   const val retrofit = "2.9.0"
   const val retrofitNetworkResponseAdapter = "5.0.0"
 
+  const val leakcanary = "2.5"
+  const val gander = "3.1.0"
+
+  const val fragmentTest = "1.1.0"
   const val espresso = "3.4.0"
   const val mockk = "1.12.4"
   const val atsl = "1.4.0"
@@ -47,4 +54,6 @@ object Versions {
   const val robolectric = "4.8.1"
   const val threetenabp = "1.4.0"
   const val glide = "4.13.2"
+  const val timber = "4.7.1"
+  const val timberJunit = "1.0.1"
 }
