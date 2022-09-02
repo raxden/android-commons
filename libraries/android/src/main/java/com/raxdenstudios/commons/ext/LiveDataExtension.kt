@@ -4,6 +4,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.raxdenstudios.commons.Event
 
@@ -32,19 +33,23 @@ inline fun <T : Any, L : LiveData<Event<T>>> LifecycleOwner.observeEvent(
   liveData: L,
   crossinline body: (T) -> Unit
 ) {
-  liveData.observe(this, { it?.getContentIfNotHandled()?.let(body) })
+  liveData.observe(this) { it?.getContentIfNotHandled()?.let(body) }
 }
 
 inline fun <T : Any, L : LiveData<Event<T>>> Fragment.observeEvent(
   liveData: L,
   crossinline body: (T) -> Unit
 ) {
-  liveData.observe(viewLifecycleOwner, { it?.getContentIfNotHandled()?.let(body) })
+  liveData.observe(viewLifecycleOwner) { it?.getContentIfNotHandled()?.let(body) }
 }
 
 inline fun <T : Any, L : LiveData<Event<T>>> View.observeEvent(
   liveData: L,
   crossinline body: (T) -> Unit
 ) {
-  liveData.observe(context as LifecycleOwner, { it?.getContentIfNotHandled()?.let(body) })
+  liveData.observe(context as LifecycleOwner) { it?.getContentIfNotHandled()?.let(body) }
+}
+
+fun <T> MutableLiveData<T>.update(function: (T) -> T) {
+  this.value = function(this.value!!)
 }
