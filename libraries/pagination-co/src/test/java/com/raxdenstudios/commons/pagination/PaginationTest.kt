@@ -31,8 +31,8 @@ internal class PaginationTest {
   private val pageResultSlot = slot<PageResult<String>>()
 
   private val testCoroutineScope = TestCoroutineScope()
-  private val pagination: Pagination<String> by lazy {
-    Pagination(
+  private val pagination: CoPagination<String> by lazy {
+    CoPagination(
       config = configuration,
       coroutineScope = testCoroutineScope
     )

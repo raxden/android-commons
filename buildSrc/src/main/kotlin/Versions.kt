@@ -32,7 +32,7 @@ object Versions {
   const val kotlin = "1.7.10"
   const val firebase = "26.2.0"
 
-  const val coroutines = "1.6.3"
+  const val coroutines = "1.6.4"
   const val rxAndroid = "2.1.1"
   const val rxKotlin = "2.4.0"
 

@@ -57,4 +57,6 @@ dependencies {
   api(Libraries.retrofitNetworkResponseAdapter)
 
   testImplementation(TestLibraries.atslJunit)
+  testImplementation(TestLibraries.mockkCore)
+  testImplementation(TestLibraries.mockkAndroid)
 }
