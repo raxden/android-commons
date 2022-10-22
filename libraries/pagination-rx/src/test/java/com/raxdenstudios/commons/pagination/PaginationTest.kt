@@ -26,8 +26,8 @@ internal class PaginationTest {
   private var pageResponse: (result: PageResult<String>) -> PageResult<String> =
     mockk(relaxed = true)
 
-  private val pagination: Pagination<String> by lazy {
-    Pagination(
+  private val pagination: RxPagination<String> by lazy {
+    RxPagination(
       config = configuration,
       compositeDisposable = compositeDisposable
     )
