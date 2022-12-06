@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MaxLineLength:PaginationTest.kt$PaginationTest$fun</ID>
+    <ID>MaxLineLength:PaginationTest.kt$PaginationTest$pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))</ID>
+  </CurrentIssues>
+</SmellBaseline>

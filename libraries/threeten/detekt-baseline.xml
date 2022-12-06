@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MaxLineLength:StringExtensionTest.kt$StringExtensionTest$fun</ID>
+    <ID>SwallowedException:StringExtension.kt$e: Exception</ID>
+  </CurrentIssues>
+</SmellBaseline>
