@@ -12,7 +12,7 @@ fun <T : Any> SavedStateHandle.getOrThrow(key: String) =
   run { get<T>(key) }
 
 fun <T : Any> SavedStateHandle.getOrThrow(key: String, message: String) =
-  get<T>(key) ?: throw IllegalStateException(message)
+  get<T>(key) ?: error(message)
 
 fun <T : Any> SavedStateHandle.getOrNull(key: String): T? =
   runCatching { get<T>(key) }.getOrNull()

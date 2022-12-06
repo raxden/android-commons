@@ -15,7 +15,7 @@ object Versions {
   const val jacocoPlugin = "0.16.0"
   const val nexusStagingPlugin = "0.30.0"
   const val testLoggerPlugin = "3.2.0"
-  const val detektPlugin = "1.21.0-RC2"
+  const val detektPlugin = "1.22.0"
   const val benNamesPlugin = "0.42.0"
 
   const val playCore = "1.10.3"
