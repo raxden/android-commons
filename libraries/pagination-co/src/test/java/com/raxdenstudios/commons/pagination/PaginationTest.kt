@@ -15,135 +15,136 @@ import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.lang.IllegalStateException
 
 @ExperimentalCoroutinesApi
 internal class PaginationTest {
 
-  private val configuration = Pagination.Config(
-    initialPage = aFirstPage,
-    pageSize = aPageSize,
-    prefetchDistance = aPrefetchDistance
-  )
-
-  private val pageRequest: (page: Page, pageSize: PageSize) -> PageList<String> = mockk()
-  private val pageResponse: (result: PageResult<String>) -> PageResult<String> = mockk(relaxed = true)
-  private val pageResultSlot = slot<PageResult<String>>()
-
-  private val testCoroutineScope = TestCoroutineScope()
-  private val pagination: CoPagination<String> by lazy {
-    CoPagination(
-      config = configuration,
-      coroutineScope = testCoroutineScope
+    private val configuration = Pagination.Config(
+        initialPage = aFirstPage,
+        pageSize = aPageSize,
+        prefetchDistance = aPrefetchDistance
     )
-  }
 
-  @Test
-  fun `Given a first page with results, When requestPage is called, Then a Loading and Content states are returned`() {
-    givenAPageWithResults(aFirstPage)
+    private val pageRequest: (page: Page, pageSize: PageSize) -> PageList<String> = mockk()
+    private val pageResponse: (result: PageResult<String>) -> PageResult<String> =
+        mockk(relaxed = true)
+    private val pageResultSlot = slot<PageResult<String>>()
 
-    requestPage(PageIndex.first)
-
-    coVerifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems))
+    private val testCoroutineScope = TestCoroutineScope()
+    private val pagination: CoPagination<String> by lazy {
+        CoPagination(
+            config = configuration,
+            coroutineScope = testCoroutineScope
+        )
     }
-    confirmVerified(pageResponse)
-  }
 
-  @Test
-  fun `Given a first page with incomplete results (less than 10), When requestPage is called several times, Then loading, content and noMoreResults states are returned`() {
-    givenAPageWithIncompleteResults(aFirstPage)
+    @Test
+    fun `Given a first page with results, When requestPage is called, Then a Loading and Content states are returned`() {
+        givenAPageWithResults(aFirstPage)
 
-    for (index in PageIndex.first.value..10) requestPage(PageIndex(index))
+        requestPage(PageIndex.first)
 
-    coVerifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aIncompletePageItems))
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
+        coVerifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems))
+        }
+        confirmVerified(pageResponse)
     }
-    confirmVerified(pageResponse)
-  }
 
-  @Test
-  fun `Given a first page, When requestPage is called several times, Then loading, content states are returned for every page`() {
-    givenAPageWithResults(aFirstPage)
-    givenAPageWithResults(Page(1))
-    givenAPageWithResults(Page(2))
-    givenAPageWithResults(Page(3))
-    givenAPageWithResults(Page(4))
-    givenAPageWithResults(Page(5))
+    @Test
+    fun `Given a first page with incomplete results (less than 10), When requestPage is called several times, Then loading, content and noMoreResults states are returned`() {
+        givenAPageWithIncompleteResults(aFirstPage)
 
-    for (index in PageIndex.first.value..48) requestPage(PageIndex(index))
+        for (index in PageIndex.first.value..10) requestPage(PageIndex(index))
 
-    coVerifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+        coVerifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aIncompletePageItems))
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+        }
+        confirmVerified(pageResponse)
     }
-    confirmVerified(pageResponse)
-  }
 
-  @Test
-  fun `Given an error that happens when a page is requested, When requestPage is called, Then loading, error states are returned`() = runBlockingTest {
-    givenAPageWithResults(aFirstPage)
-    givenAPageWithError(Page(1))
+    @Test
+    fun `Given a first page, When requestPage is called several times, Then loading, content states are returned for every page`() {
+        givenAPageWithResults(aFirstPage)
+        givenAPageWithResults(Page(1))
+        givenAPageWithResults(Page(2))
+        givenAPageWithResults(Page(3))
+        givenAPageWithResults(Page(4))
+        givenAPageWithResults(Page(5))
 
-    for (index in PageIndex.first.value..8) requestPage(PageIndex(index))
+        for (index in PageIndex.first.value..48) requestPage(PageIndex(index))
 
-    coVerifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(capture(pageResultSlot))
+        coVerifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+        }
+        confirmVerified(pageResponse)
     }
-    assertTrue(pageResultSlot.captured is PageResult.Error)
-    confirmVerified(pageResponse)
-  }
 
-  private fun requestPage(pageIndex: PageIndex) {
-    pagination.requestPage(
-      pageIndex = pageIndex,
-      pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
-      pageResponse = { pageResult -> pageResponse(pageResult) }
-    )
-  }
+    @Test
+    fun `Given an error that happens when a page is requested, When requestPage is called, Then loading, error states are returned`() =
+        runBlockingTest {
+            givenAPageWithResults(aFirstPage)
+            givenAPageWithError(Page(1))
 
-  private fun givenAPageWithError(page: Page) {
-    coEvery {
-      pageRequest.invoke(page, aPageSize)
-    } coAnswers { throw IllegalStateException("IllegalStateException") }
-  }
+            for (index in PageIndex.first.value..8) requestPage(PageIndex(index))
 
-  private fun givenAPageWithResults(page: Page) {
-    coEvery {
-      pageRequest.invoke(page, aPageSize)
-    } returns PageList(aPageItems, page)
-  }
+            coVerifyOrder {
+                pageResponse.invoke(PageResult.Loading)
+                pageResponse.invoke(PageResult.Content(aPageItems))
+                pageResponse.invoke(PageResult.Loading)
+                pageResponse.invoke(capture(pageResultSlot))
+            }
+            assertTrue(pageResultSlot.captured is PageResult.Error)
+            confirmVerified(pageResponse)
+        }
 
-  private fun givenAPageWithIncompleteResults(page: Page) {
-    coEvery {
-      pageRequest.invoke(page, aPageSize)
-    } returns PageList(aIncompletePageItems, page)
-  }
+    private fun requestPage(pageIndex: PageIndex) {
+        pagination.requestPage(
+            pageIndex = pageIndex,
+            pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
+            pageResponse = { pageResult -> pageResponse(pageResult) }
+        )
+    }
+
+    private fun givenAPageWithError(page: Page) {
+        coEvery {
+            pageRequest.invoke(page, aPageSize)
+        } coAnswers { error("IllegalStateException") }
+    }
+
+    private fun givenAPageWithResults(page: Page) {
+        coEvery {
+            pageRequest.invoke(page, aPageSize)
+        } returns PageList(aPageItems, page)
+    }
+
+    private fun givenAPageWithIncompleteResults(page: Page) {
+        coEvery {
+            pageRequest.invoke(page, aPageSize)
+        } returns PageList(aIncompletePageItems, page)
+    }
 }
 
 private const val aPrefetchDistance = 2
@@ -151,14 +152,14 @@ private val aFirstPage = Page(0)
 private val aPageSize = PageSize.defaultSize
 private val aIncompletePageItems = listOf("item_1", "item_2", "item_3", "item_4")
 private val aPageItems = listOf(
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item"
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item"
 )

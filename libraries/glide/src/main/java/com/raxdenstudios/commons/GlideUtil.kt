@@ -40,7 +40,7 @@ object GlideUtil {
         is Uri -> image
         is Drawable -> image
         is Bitmap -> image
-        else -> throw IllegalStateException("imageUser param only supports String, Uri, Drawable or Bitmap")
+        else -> error("imageUser param only supports String, Uri, Drawable or Bitmap")
       }
     ).run {
       transition(DrawableTransitionOptions.withCrossFade())
@@ -88,7 +88,6 @@ object GlideUtil {
     scaleType: ScaleType,
     cornerRadius: Int,
     cornerType: RoundedCornersTransformation.CornerType?,
-    blurRadius: Int = 0
   ) {
     val multiTransformation: MutableList<Transformation<Bitmap>> = mutableListOf()
     when (scaleType) {

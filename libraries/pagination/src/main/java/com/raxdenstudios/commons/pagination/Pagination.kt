@@ -6,6 +6,7 @@ import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
 
+@Suppress("TooManyFunctions")
 abstract class Pagination<T> {
 
     abstract val config: Config

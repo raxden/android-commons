@@ -120,7 +120,7 @@ class FragmentBottomNavigationDelegate(
   }
 
   private fun getSelectedFragment(): Fragment =
-    getFragmentFromMap(selectedItemId) ?: throw IllegalStateException("")
+    getFragmentFromMap(selectedItemId) ?: error("Fragment not found")
 
   private fun getFragmentFromMap(fragmentId: Int) =
     containerFragmentMap[fragmentId]
