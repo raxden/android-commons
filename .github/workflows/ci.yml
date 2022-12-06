@@ -113,7 +113,7 @@ jobs:
 
   upload-reports:
     needs: [ checkstyle, test-modules ]
-    name: Upload reports to Codecov 🚀
+    name: Upload reports to Codecov 📝
     if: success() && github.event_name == 'push'
     runs-on: ubuntu-latest
 
@@ -121,7 +121,7 @@ jobs:
       - name: Loading Reports ✔️
         uses: actions/download-artifact@v3
 
-      - name: Uploading reports to Codecov 🚀
+      - name: Uploading reports to Codecov 📝
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         uses: codecov/codecov-action@v1
