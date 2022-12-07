@@ -23,6 +23,7 @@ plugins {
     id("com.github.ben-manes.versions") version Versions.benNamesPlugin
 }
 
+
 val nexusId: String? by project
 val nexusUsername: String? by project
 val nexusPassword: String? by project
