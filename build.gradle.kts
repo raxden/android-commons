@@ -41,6 +41,10 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     }
 }
 
+releasing {
+    versionFilePath = "./version.properties"
+}
+
 nexusStaging {
     packageGroup = "com.raxdenstudios"
     stagingProfileId = nexusId ?: System.getenv("OSSRH_ID") ?: ""
