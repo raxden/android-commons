@@ -5,5 +5,5 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.raxdenstudios.commons.util.SDK
 
 fun Application.initCompatVector() {
-  if (SDK.hasLollipop()) AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+    if (SDK.hasLollipop()) AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 }

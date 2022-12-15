@@ -6,19 +6,19 @@ import org.junit.Test
 
 internal class DataMapperTest {
 
-  private val dataMapper = object : DataMapper<Int, String>() {
-    override fun transform(source: Int): String = source.toString()
-  }
+    private val dataMapper = object : DataMapper<Int, String>() {
+        override fun transform(source: Int): String = source.toString()
+    }
 
-  @Test
-  fun `Given a sort of integers, When transform is called, Then a sort of strings are returned`() {
-    val listOfIntegers = listOf(1, 2, 3)
+    @Test
+    fun `Given a sort of integers, When transform is called, Then a sort of strings are returned`() {
+        val listOfIntegers = listOf(1, 2, 3)
 
-    val result = dataMapper.transform(listOfIntegers)
+        val result = dataMapper.transform(listOfIntegers)
 
-    assertEquals(
-      listOf("1", "2", "3"),
-      result
-    )
-  }
+        assertEquals(
+            listOf("1", "2", "3"),
+            result
+        )
+    }
 }

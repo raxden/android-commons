@@ -48,7 +48,8 @@ abstract class Pagination<T> {
                 .forEach { list.addAll(it) }
         }.toList()
 
-    private fun thereAreLessElementsThanPageSize(pageList: PageList<T>) = pageList.totalItems < config.pageSize.value
+    private fun thereAreLessElementsThanPageSize(pageList: PageList<T>) =
+        pageList.totalItems < config.pageSize.value
 
     protected fun processRequestStart(pageResponse: (pageResult: PageResult<T>) -> Unit) {
         status = Status.Loading

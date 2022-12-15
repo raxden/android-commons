@@ -13,93 +13,93 @@ import java.util.*
 fun Context.getPackageInfo(): PackageInfo = packageManager.getPackageInfo(packageName, 0)
 
 fun Context.getConnectivityManager(): ConnectivityManager =
-  getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
 fun Context.isNetworkConnected(): Boolean = Network.isNetworkConnected(this)
 
 fun Context.createTemporalImageFile(): File {
-  val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-  val imageFileName = "JPEG_" + timeStamp + "_"
-  val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-  return File.createTempFile(
-    imageFileName, /* prefix */
-    ".jpg", /* suffix */
-    storageDir      /* directory */
-  )
+    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+    val imageFileName = "JPEG_" + timeStamp + "_"
+    val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    return File.createTempFile(
+        imageFileName, /* prefix */
+        ".jpg", /* suffix */
+        storageDir      /* directory */
+    )
 }
 
 fun Context.hasVirtualNavigationBar(): Boolean {
-  val id = resources.getIdentifier("config_showNavigationBar", "bool", "android")
-  return id > 0 && resources.getBoolean(id)
+    val id = resources.getIdentifier("config_showNavigationBar", "bool", "android")
+    return id > 0 && resources.getBoolean(id)
 }
 
 fun Context.getVirtualNavigationBarHeight(): Int {
-  val id = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-  return if (id > 0) {
-    resources.getDimensionPixelSize(id)
-  } else 0
+    val id = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (id > 0) {
+        resources.getDimensionPixelSize(id)
+    } else 0
 }
 
 fun Context.showSimpleDialog(
-  title: Int,
-  message: Int,
-  positiveButton: Int = android.R.string.ok
+    title: Int,
+    message: Int,
+    positiveButton: Int = android.R.string.ok
 ) {
-  showSimpleDialog(getString(title), getString(message), getString(positiveButton))
+    showSimpleDialog(getString(title), getString(message), getString(positiveButton))
 }
 
 fun Context.showSimpleDialog(
-  title: String,
-  message: String,
-  positiveButton: String = getString(android.R.string.ok)
+    title: String,
+    message: String,
+    positiveButton: String = getString(android.R.string.ok)
 ) {
-  MaterialAlertDialogBuilder(this)
-    .setTitle(title)
-    .setMessage(message)
-    .setPositiveButton(positiveButton) { dialog, _ -> dialog.dismiss() }
-    .create()
-    .show()
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(positiveButton) { dialog, _ -> dialog.dismiss() }
+        .create()
+        .show()
 }
 
 @Suppress("LongParameterList")
 fun Context.showDialog(
-  title: Int,
-  message: Int,
-  positiveButton: Int = android.R.string.ok,
-  onPositiveClickButton: () -> Unit = {},
-  negativeButton: Int = android.R.string.cancel,
-  onNegativeClickButton: () -> Unit = {}
+    title: Int,
+    message: Int,
+    positiveButton: Int = android.R.string.ok,
+    onPositiveClickButton: () -> Unit = {},
+    negativeButton: Int = android.R.string.cancel,
+    onNegativeClickButton: () -> Unit = {}
 ) {
-  showDialog(
-    getString(title),
-    getString(message),
-    getString(positiveButton),
-    onPositiveClickButton,
-    getString(negativeButton),
-    onNegativeClickButton
-  )
+    showDialog(
+        getString(title),
+        getString(message),
+        getString(positiveButton),
+        onPositiveClickButton,
+        getString(negativeButton),
+        onNegativeClickButton
+    )
 }
 
 @Suppress("LongParameterList")
 fun Context.showDialog(
-  title: String,
-  message: String,
-  positiveButton: String = getString(android.R.string.ok),
-  onPositiveClickButton: () -> Unit = {},
-  negativeButton: String = getString(android.R.string.cancel),
-  onNegativeClickButton: () -> Unit = {}
+    title: String,
+    message: String,
+    positiveButton: String = getString(android.R.string.ok),
+    onPositiveClickButton: () -> Unit = {},
+    negativeButton: String = getString(android.R.string.cancel),
+    onNegativeClickButton: () -> Unit = {}
 ) {
-  MaterialAlertDialogBuilder(this)
-    .setTitle(title)
-    .setMessage(message)
-    .setPositiveButton(positiveButton) { dialog, _ ->
-      onPositiveClickButton()
-      dialog.dismiss()
-    }
-    .setNegativeButton(negativeButton) { dialog, _ ->
-      onNegativeClickButton()
-      dialog.dismiss()
-    }
-    .create()
-    .show()
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(positiveButton) { dialog, _ ->
+            onPositiveClickButton()
+            dialog.dismiss()
+        }
+        .setNegativeButton(negativeButton) { dialog, _ ->
+            onNegativeClickButton()
+            dialog.dismiss()
+        }
+        .create()
+        .show()
 }

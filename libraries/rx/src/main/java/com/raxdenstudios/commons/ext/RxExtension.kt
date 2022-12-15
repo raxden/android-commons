@@ -17,67 +17,67 @@ private val onNextStub: (Any) -> Unit = {}
 private val onCompleteStub: () -> Unit = {}
 
 fun <T : Any> Single<T>.subscribeWith(
-  onStart: () -> Unit = onStartStub,
-  onError: (e: Throwable) -> Unit = onErrorStub,
-  onSuccess: (t: T) -> Unit = onSuccessStub
+    onStart: () -> Unit = onStartStub,
+    onError: (e: Throwable) -> Unit = onErrorStub,
+    onSuccess: (t: T) -> Unit = onSuccessStub
 ): Disposable = subscribeOn(Schedulers.io())
-  .observeOn(AndroidSchedulers.mainThread())
-  .doOnSubscribe { onStart() }
-  .subscribeBy(
-    onError = onError,
-    onSuccess = onSuccess
-  )
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { onStart() }
+    .subscribeBy(
+        onError = onError,
+        onSuccess = onSuccess
+    )
 
 fun <T : Any> Maybe<T>.subscribeWith(
-  onStart: () -> Unit = onStartStub,
-  onError: (e: Throwable) -> Unit = onErrorStub,
-  onSuccess: (t: T) -> Unit = onSuccessStub,
-  onComplete: () -> Unit = onCompleteStub
+    onStart: () -> Unit = onStartStub,
+    onError: (e: Throwable) -> Unit = onErrorStub,
+    onSuccess: (t: T) -> Unit = onSuccessStub,
+    onComplete: () -> Unit = onCompleteStub
 ): Disposable = subscribeOn(Schedulers.io())
-  .observeOn(AndroidSchedulers.mainThread())
-  .doOnSubscribe { onStart() }
-  .subscribeBy(
-    onError = onError,
-    onSuccess = onSuccess,
-    onComplete = onComplete
-  )
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { onStart() }
+    .subscribeBy(
+        onError = onError,
+        onSuccess = onSuccess,
+        onComplete = onComplete
+    )
 
 fun <T : Any> Flowable<T>.subscribeWith(
-  onStart: () -> Unit = onStartStub,
-  onError: (Throwable) -> Unit = onErrorStub,
-  onNext: (t: T) -> Unit = onNextStub,
-  onComplete: () -> Unit = onCompleteStub
+    onStart: () -> Unit = onStartStub,
+    onError: (Throwable) -> Unit = onErrorStub,
+    onNext: (t: T) -> Unit = onNextStub,
+    onComplete: () -> Unit = onCompleteStub
 ): Disposable = subscribeOn(Schedulers.io())
-  .observeOn(AndroidSchedulers.mainThread())
-  .doOnSubscribe { onStart() }
-  .subscribeBy(
-    onError = onError,
-    onNext = onNext,
-    onComplete = onComplete
-  )
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { onStart() }
+    .subscribeBy(
+        onError = onError,
+        onNext = onNext,
+        onComplete = onComplete
+    )
 
 fun <T : Any> Observable<T>.subscribeWith(
-  onStart: () -> Unit = onStartStub,
-  onError: (e: Throwable) -> Unit = onErrorStub,
-  onNext: (t: T) -> Unit = onNextStub,
-  onComplete: () -> Unit = onCompleteStub
+    onStart: () -> Unit = onStartStub,
+    onError: (e: Throwable) -> Unit = onErrorStub,
+    onNext: (t: T) -> Unit = onNextStub,
+    onComplete: () -> Unit = onCompleteStub
 ): Disposable = subscribeOn(Schedulers.io())
-  .observeOn(AndroidSchedulers.mainThread())
-  .doOnSubscribe { onStart() }
-  .subscribeBy(
-    onError = onError,
-    onNext = onNext,
-    onComplete = onComplete
-  )
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { onStart() }
+    .subscribeBy(
+        onError = onError,
+        onNext = onNext,
+        onComplete = onComplete
+    )
 
 fun Completable.subscribeWith(
-  onStart: () -> Unit = onStartStub,
-  onError: (e: Throwable) -> Unit = onErrorStub,
-  onComplete: () -> Unit = onCompleteStub
+    onStart: () -> Unit = onStartStub,
+    onError: (e: Throwable) -> Unit = onErrorStub,
+    onComplete: () -> Unit = onCompleteStub
 ): Disposable = subscribeOn(Schedulers.io())
-  .observeOn(AndroidSchedulers.mainThread())
-  .doOnSubscribe { onStart() }
-  .subscribeBy(
-    onError = onError,
-    onComplete = onComplete
-  )
+    .observeOn(AndroidSchedulers.mainThread())
+    .doOnSubscribe { onStart() }
+    .subscribeBy(
+        onError = onError,
+        onComplete = onComplete
+    )

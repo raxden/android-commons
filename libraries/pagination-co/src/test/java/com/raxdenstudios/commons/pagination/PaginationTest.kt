@@ -93,11 +93,23 @@ internal class PaginationTest {
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems))
             pageResponse.invoke(PageResult.Loading)
-            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(
+                PageResult.Content(
+                    aPageItems + aPageItems + aPageItems + aPageItems
+                )
+            )
             pageResponse.invoke(PageResult.Loading)
-            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(
+                PageResult.Content(
+                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems
+                )
+            )
             pageResponse.invoke(PageResult.Loading)
-            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(
+                PageResult.Content(
+                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems
+                )
+            )
         }
         confirmVerified(pageResponse)
     }

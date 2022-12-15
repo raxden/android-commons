@@ -5,11 +5,11 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 
 fun LocalDate.toMilliseconds(): Long =
-  atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
 @Suppress("MagicNumber")
 fun LocalDate.toSeconds(): Long =
-  atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000
+    atStartOfDay().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000
 
 fun LocalDate.isToday(): Boolean = this == LocalDate.now()
 

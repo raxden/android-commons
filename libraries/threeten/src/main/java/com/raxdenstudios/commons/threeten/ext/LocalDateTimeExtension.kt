@@ -6,11 +6,11 @@ import org.threeten.bp.format.DateTimeFormatter
 
 @Suppress("MagicNumber")
 fun LocalDateTime.toSeconds(): Long =
-  atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000
+    atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000
 
 fun LocalDateTime.toMilliseconds(): Long = atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
 fun LocalDateTime.simpleFormat() = format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 
 fun LocalDateTime.format(pattern: String = "dd MMM yyyy") =
-  format(DateTimeFormatter.ofPattern(pattern))
+    format(DateTimeFormatter.ofPattern(pattern))

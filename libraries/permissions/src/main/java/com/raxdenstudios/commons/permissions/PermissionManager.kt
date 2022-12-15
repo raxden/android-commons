@@ -13,77 +13,79 @@ import com.raxdenstudios.commons.permissions.model.Permission
 import com.raxdenstudios.commons.util.SDK
 
 class PermissionManager(
-  private val activity: FragmentActivity
+    private val activity: FragmentActivity
 ) : DefaultLifecycleObserver {
 
-  private val registry: ActivityResultRegistry = activity.activityResultRegistry
-  private lateinit var permissionResultLauncher: ActivityResultLauncher<String>
+    private val registry: ActivityResultRegistry = activity.activityResultRegistry
+    private lateinit var permissionResultLauncher: ActivityResultLauncher<String>
 
-  private var onPermissionGranted: () -> Unit = {}
-  private var onPermissionDenied: () -> Unit = {}
+    private var onPermissionGranted: () -> Unit = {}
+    private var onPermissionDenied: () -> Unit = {}
 
-  override fun onCreate(owner: LifecycleOwner) {
-    super.onCreate(owner)
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
 
-    registerPermissionsResultContract(owner)
-  }
-
-  private fun registerPermissionsResultContract(owner: LifecycleOwner) {
-    permissionResultLauncher = registry.register(
-      "requestPermissions",
-      owner,
-      ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-      if (isGranted) permissionGranted() else permissionDenied()
+        registerPermissionsResultContract(owner)
     }
-  }
 
-  fun requestPermission(
-    permission: Permission,
-    onPermissionGranted: () -> Unit = {},
-    onPermissionDenied: () -> Unit = {}
-  ) {
-    this.onPermissionGranted = onPermissionGranted
-    this.onPermissionDenied = onPermissionDenied
-
-    when {
-      hasPermission(permission) -> permissionGranted()
-      shouldShowRequestPermissionRationale(permission) -> showRequestPermissionRationale(permission)
-      else -> performRequestPermission(permission)
+    private fun registerPermissionsResultContract(owner: LifecycleOwner) {
+        permissionResultLauncher = registry.register(
+            "requestPermissions",
+            owner,
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) permissionGranted() else permissionDenied()
+        }
     }
-  }
 
-  private fun permissionGranted() {
-    onPermissionGranted()
-  }
+    fun requestPermission(
+        permission: Permission,
+        onPermissionGranted: () -> Unit = {},
+        onPermissionDenied: () -> Unit = {}
+    ) {
+        this.onPermissionGranted = onPermissionGranted
+        this.onPermissionDenied = onPermissionDenied
 
-  private fun permissionDenied() {
-    onPermissionDenied()
-  }
+        when {
+            hasPermission(permission) -> permissionGranted()
+            shouldShowRequestPermissionRationale(permission) -> showRequestPermissionRationale(
+                permission
+            )
+            else -> performRequestPermission(permission)
+        }
+    }
 
-  private fun performRequestPermission(permission: Permission) {
-    permissionResultLauncher.launch(permission.name)
-  }
+    private fun permissionGranted() {
+        onPermissionGranted()
+    }
 
-  private fun shouldShowRequestPermissionRationale(permission: Permission) =
-    if (SDK.hasMarshmallow()) activity.shouldShowRequestPermissionRationale(permission.name)
-    else false
+    private fun permissionDenied() {
+        onPermissionDenied()
+    }
 
-  private fun hasPermission(permission: Permission) =
-    checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+    private fun performRequestPermission(permission: Permission) {
+        permissionResultLauncher.launch(permission.name)
+    }
 
-  private fun checkSelfPermission(permission: Permission) =
-    ContextCompat.checkSelfPermission(activity, permission.name)
+    private fun shouldShowRequestPermissionRationale(permission: Permission) =
+        if (SDK.hasMarshmallow()) activity.shouldShowRequestPermissionRationale(permission.name)
+        else false
 
-  private fun showRequestPermissionRationale(permission: Permission) {
-    activity.showDialog(
-      permission.rationaleDialog.reason,
-      permission.rationaleDialog.reasonDescription,
-      positiveButton = permission.rationaleDialog.acceptLabel,
-      onPositiveClickButton = { performRequestPermission(permission) },
-      negativeButton = permission.rationaleDialog.deniedLabel,
-      onNegativeClickButton = { permissionDenied() }
-    )
-  }
+    private fun hasPermission(permission: Permission) =
+        checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+
+    private fun checkSelfPermission(permission: Permission) =
+        ContextCompat.checkSelfPermission(activity, permission.name)
+
+    private fun showRequestPermissionRationale(permission: Permission) {
+        activity.showDialog(
+            permission.rationaleDialog.reason,
+            permission.rationaleDialog.reasonDescription,
+            positiveButton = permission.rationaleDialog.acceptLabel,
+            onPositiveClickButton = { performRequestPermission(permission) },
+            negativeButton = permission.rationaleDialog.deniedLabel,
+            onNegativeClickButton = { permissionDenied() }
+        )
+    }
 }
 

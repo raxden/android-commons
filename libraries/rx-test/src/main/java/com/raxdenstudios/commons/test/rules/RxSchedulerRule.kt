@@ -8,18 +8,18 @@ import org.junit.runner.Description
 
 class RxSchedulerRule : TestWatcher() {
 
-  companion object {
-    private val SCHEDULER_INSTANCE = Schedulers.trampoline()
-  }
+    companion object {
+        private val SCHEDULER_INSTANCE = Schedulers.trampoline()
+    }
 
-  override fun starting(description: Description?) {
-    super.starting(description)
-    RxAndroidPlugins.reset()
-    RxAndroidPlugins.setInitMainThreadSchedulerHandler { SCHEDULER_INSTANCE }
+    override fun starting(description: Description?) {
+        super.starting(description)
+        RxAndroidPlugins.reset()
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { SCHEDULER_INSTANCE }
 
-    RxJavaPlugins.reset()
-    RxJavaPlugins.setIoSchedulerHandler { SCHEDULER_INSTANCE }
-    RxJavaPlugins.setNewThreadSchedulerHandler { SCHEDULER_INSTANCE }
-    RxJavaPlugins.setComputationSchedulerHandler { SCHEDULER_INSTANCE }
-  }
+        RxJavaPlugins.reset()
+        RxJavaPlugins.setIoSchedulerHandler { SCHEDULER_INSTANCE }
+        RxJavaPlugins.setNewThreadSchedulerHandler { SCHEDULER_INSTANCE }
+        RxJavaPlugins.setComputationSchedulerHandler { SCHEDULER_INSTANCE }
+    }
 }

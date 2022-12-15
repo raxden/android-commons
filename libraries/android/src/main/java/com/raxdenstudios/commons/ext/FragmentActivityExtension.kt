@@ -8,32 +8,32 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 
 inline fun <reified TFragment : Fragment> FragmentActivity.loadFragment(
-  containerView: View,
-  savedInstanceState: Bundle?,
-  create: () -> TFragment
+    containerView: View,
+    savedInstanceState: Bundle?,
+    create: () -> TFragment
 ): TFragment = savedInstanceState?.let {
-  supportFragmentManager.findFragmentById(containerView.id) as? TFragment
+    supportFragmentManager.findFragmentById(containerView.id) as? TFragment
 } ?: create().also { fragment ->
-  supportFragmentManager.commit {
-    replace(containerView.id, fragment, fragment.javaClass.simpleName)
-  }
+    supportFragmentManager.commit {
+        replace(containerView.id, fragment, fragment.javaClass.simpleName)
+    }
 }
 
 fun FragmentActivity.closeFragment(
-  fragment: Fragment
+    fragment: Fragment
 ) {
-  supportFragmentManager.commit { remove(fragment) }
+    supportFragmentManager.commit { remove(fragment) }
 }
 
 inline fun <reified TFragment : DialogFragment> FragmentActivity.loadDialogFragment(
-  tag: String,
-  isCancelable: Boolean = false,
-  create: () -> TFragment
+    tag: String,
+    isCancelable: Boolean = false,
+    create: () -> TFragment
 ): TFragment {
-  val dialogFragment =
-    supportFragmentManager.findFragmentByTag(tag) as? TFragment ?: create().also { fragment ->
-      supportFragmentManager.commit(true) { add(fragment, tag) }
-    }
-  dialogFragment.isCancelable = isCancelable
-  return dialogFragment
+    val dialogFragment =
+        supportFragmentManager.findFragmentByTag(tag) as? TFragment ?: create().also { fragment ->
+            supportFragmentManager.commit(true) { add(fragment, tag) }
+        }
+    dialogFragment.isCancelable = isCancelable
+    return dialogFragment
 }

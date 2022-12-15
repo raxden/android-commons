@@ -4,5 +4,5 @@ import com.raxdenstudios.commons.retrofit.RetrofitException
 
 interface ErrorHandler {
 
-  fun httpError(exception: RetrofitException): Throwable
+    fun httpError(exception: RetrofitException): Throwable
 }

@@ -7,14 +7,15 @@ import org.hamcrest.TypeSafeMatcher
 
 object SwipeRefreshLayoutMatchers {
 
-  fun isSwipeRefreshLayoutRefreshing() = object : TypeSafeMatcher<View>() {
+    fun isSwipeRefreshLayoutRefreshing() = object : TypeSafeMatcher<View>() {
 
-    @Suppress("EmptyFunctionBlock")
-    override fun describeTo(description: Description) {}
+        @Suppress("EmptyFunctionBlock")
+        override fun describeTo(description: Description) {
+        }
 
-    override fun matchesSafely(view: View): Boolean {
-      val swipeRefreshLayout = (view as? SwipeRefreshLayout) ?: return false
-      return swipeRefreshLayout.isRefreshing
+        override fun matchesSafely(view: View): Boolean {
+            val swipeRefreshLayout = (view as? SwipeRefreshLayout) ?: return false
+            return swipeRefreshLayout.isRefreshing
+        }
     }
-  }
 }

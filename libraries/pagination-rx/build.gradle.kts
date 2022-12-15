@@ -1,61 +1,61 @@
 import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
-  id("com.raxdenstudios.android-versioning")
-  id("com.android.library")
-  id("kotlin-android")
-  id("kotlin-kapt")
-  id("com.raxdenstudios.publish-library")
+    id("com.raxdenstudios.android-versioning")
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("com.raxdenstudios.publish-library")
 }
 
 versioning {
-  group = "com.raxdenstudios"
+    group = "com.raxdenstudios"
 }
 
 publishLibrary {
-  name = "Pagination"
-  description = "Pagination library"
-  url = "https://github.com/raxden/android-commons"
-  developerId = "raxden"
-  developerName = "Ángel Gómez"
-  developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-pagination-rx")
+    name = "Pagination"
+    description = "Pagination library"
+    url = "https://github.com/raxden/android-commons"
+    developerId = "raxden"
+    developerName = "Ángel Gómez"
+    developerEmail = "raxden.dev@gmail.com"
+    coordinates = Coordinates.default.copy(artifactId = "commons-pagination-rx")
 }
 
 android {
 
-  compileSdk = Versions.compileSdk
+    compileSdk = Versions.compileSdk
 
-  compileOptions {
-    sourceCompatibility = Versions.sourceCompatibility
-    targetCompatibility = Versions.targetCompatibility
-  }
-
-  defaultConfig {
-    minSdk = Versions.minSdk
-    targetSdk = Versions.targetSdk
-
-    testInstrumentationRunner = Versions.testInstrumentationRunner
-    consumerProguardFile("consumer-rules.pro")
-  }
-
-  buildTypes {
-    getByName("debug") {
-      isMinifyEnabled = false
+    compileOptions {
+        sourceCompatibility = Versions.sourceCompatibility
+        targetCompatibility = Versions.targetCompatibility
     }
-  }
 
-  kotlinOptions {
-    jvmTarget = Versions.jvmTarget
-  }
+    defaultConfig {
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+
+        testInstrumentationRunner = Versions.testInstrumentationRunner
+        consumerProguardFile("consumer-rules.pro")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = Versions.jvmTarget
+    }
 }
 
 dependencies {
-  api(project(Modules.libraryPagination))
-  api(project(Modules.libraryRx))
+    api(project(Modules.libraryPagination))
+    api(project(Modules.libraryRx))
 
-  testImplementation(project(Modules.libraryRxTest))
-  testImplementation(TestLibraries.atslJunit)
-  testImplementation(TestLibraries.mockkCore)
-  testImplementation(TestLibraries.mockkAndroid)
+    testImplementation(project(Modules.libraryRxTest))
+    testImplementation(TestLibraries.atslJunit)
+    testImplementation(TestLibraries.mockkCore)
+    testImplementation(TestLibraries.mockkAndroid)
 }

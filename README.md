@@ -5,13 +5,15 @@ Android Commons
 [![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg?token=E55S5DHJ9B)](https://codecov.io/gh/raxden/android-commons)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
 
-Android Commons is a set of libraries that I have been creating and collecting throughout these years
-of development and that I use continuously in my new developments in order to avoid having to maintain
+Android Commons is a set of libraries that I have been creating and collecting throughout these
+years
+of development and that I use continuously in my new developments in order to avoid having to
+maintain
 the code in different sources.
 
 With the purpose of avoiding having to depend on only one library, I decided to split the library in
-different modules since the user that needs only use some utils or extensions from Retrofit library 
-don't need to download nothing related with the coroutines and vice-versa. That approach permits us 
+different modules since the user that needs only use some utils or extensions from Retrofit library
+don't need to download nothing related with the coroutines and vice-versa. That approach permits us
 to reduce the size of the application that we are developing.
 
 ## Getting started
@@ -33,7 +35,8 @@ implementation "com.raxdenstudios:commons-unit-test:x.y.z"
 implementation "com.raxdenstudios:commons-android-test:x.y.z"
 ```
 
-Please replace `x`, `y` and `z` with the latest version numbers -> [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
+Please replace `x`, `y` and `z` with the latest version numbers
+-> [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
 
 ## LICENSE
 
