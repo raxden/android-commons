@@ -6,9 +6,9 @@ name: Continuous Integration
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
   # Triggers the workflow on pull request events but only for the master branch
-#  create:
-#    branches:
-#      - 'release/**'
+  #  create:
+  #    branches:
+  #      - 'release/**'
   push:
     branches:
       - master
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        module: [android, coroutines, pagination-co, pagination-rx, preferences, retrofit-co, threeten]
+        module: [ android, coroutines, pagination-co, pagination-rx, preferences, retrofit-co, threeten ]
 
     steps:
       - name: Check out code ✔️

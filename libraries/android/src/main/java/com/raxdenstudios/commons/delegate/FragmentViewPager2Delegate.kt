@@ -30,92 +30,92 @@ import com.raxdenstudios.commons.ext.registerOnPageChangeCallback
  * More info -> https://developer.android.com/training/animation/vp2-migration
  */
 class FragmentViewPager2Delegate<TFragment : Fragment>(
-  fragmentManager: FragmentManager,
-  lifecycle: Lifecycle,
-  private val callback: Callback<TFragment>
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    private val callback: Callback<TFragment>
 ) {
 
-  constructor(
-    activity: FragmentActivity,
-    callback: Callback<TFragment>
-  ) : this(activity.supportFragmentManager, activity.lifecycle, callback)
+    constructor(
+        activity: FragmentActivity,
+        callback: Callback<TFragment>
+    ) : this(activity.supportFragmentManager, activity.lifecycle, callback)
 
-  constructor(
-    fragment: Fragment,
-    callback: Callback<TFragment>
-  ) : this(fragment.childFragmentManager, fragment.lifecycle, callback)
+    constructor(
+        fragment: Fragment,
+        callback: Callback<TFragment>
+    ) : this(fragment.childFragmentManager, fragment.lifecycle, callback)
 
-  interface Callback<TFragment> {
-    val fragmentCount: Int
+    interface Callback<TFragment> {
+        val fragmentCount: Int
 
-    fun onCreateViewPager(): ViewPager2
-    fun onCreateFragment(position: Int): TFragment
-  }
-
-  interface TabLayoutCallback<TFragment> : Callback<TFragment> {
-    fun onCreateTabLayout(): TabLayout
-    fun onFragmentPageTitle(position: Int): String
-  }
-
-  private val viewPager2: ViewPager2 = callback.onCreateViewPager()
-
-  var onPageScroll: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit =
-    { _, _, _ -> }
-  var onPageScrolled: (position: Int) -> Unit = {}
-  var onPageSelected: (position: Int) -> Unit = {}
-  var onLastPageReached: () -> Unit = {}
-  var onPageScrollStateChanged: (state: Int) -> Unit = {}
-
-  val numPages: Int
-    get() = viewPager2.adapter?.itemCount ?: 0
-
-  var currentPage: Int
-    get() = viewPager2.currentItem
-    set(value) {
-      viewPager2.currentItem = value
+        fun onCreateViewPager(): ViewPager2
+        fun onCreateFragment(position: Int): TFragment
     }
 
-  val isFirstPage: Boolean
-    get() = viewPager2.isFirstPage()
-
-  val isLastPage: Boolean
-    get() = viewPager2.isLastPage()
-
-  init {
-    viewPager2.offscreenPageLimit = 2
-    viewPager2.adapter = FragmentStateAdapterDelegate(fragmentManager, lifecycle)
-    viewPager2.registerOnPageChangeCallback(
-      onPageScrolled = ::pageScrolled,
-      onPageSelected = ::pageSelected,
-      onPageScrollStateChanged = { state -> onPageScrollStateChanged(state) }
-    )
-
-    if (callback is TabLayoutCallback) {
-      val tabLayout = callback.onCreateTabLayout()
-      TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-        tab.text = callback.onFragmentPageTitle(position)
-      }.attach()
+    interface TabLayoutCallback<TFragment> : Callback<TFragment> {
+        fun onCreateTabLayout(): TabLayout
+        fun onFragmentPageTitle(position: Int): String
     }
-  }
 
-  private fun pageSelected(position: Int) {
-    onPageSelected(position)
-    if (isLastPage) onLastPageReached()
-  }
+    private val viewPager2: ViewPager2 = callback.onCreateViewPager()
 
-  private fun pageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-    onPageScroll(position, positionOffset, positionOffsetPixels)
-    if (positionOffset != 0.0f || positionOffsetPixels != 0) return
-    onPageScrolled(position)
-  }
+    var onPageScroll: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit =
+        { _, _, _ -> }
+    var onPageScrolled: (position: Int) -> Unit = {}
+    var onPageSelected: (position: Int) -> Unit = {}
+    var onLastPageReached: () -> Unit = {}
+    var onPageScrollStateChanged: (state: Int) -> Unit = {}
 
-  private inner class FragmentStateAdapterDelegate constructor(
-    fragmentManager: FragmentManager,
-    lifecycle: Lifecycle
-  ) : FragmentStateAdapter(fragmentManager, lifecycle) {
+    val numPages: Int
+        get() = viewPager2.adapter?.itemCount ?: 0
 
-    override fun getItemCount() = callback.fragmentCount
+    var currentPage: Int
+        get() = viewPager2.currentItem
+        set(value) {
+            viewPager2.currentItem = value
+        }
 
-    override fun createFragment(position: Int) = callback.onCreateFragment(position)
-  }
+    val isFirstPage: Boolean
+        get() = viewPager2.isFirstPage()
+
+    val isLastPage: Boolean
+        get() = viewPager2.isLastPage()
+
+    init {
+        viewPager2.offscreenPageLimit = 2
+        viewPager2.adapter = FragmentStateAdapterDelegate(fragmentManager, lifecycle)
+        viewPager2.registerOnPageChangeCallback(
+            onPageScrolled = ::pageScrolled,
+            onPageSelected = ::pageSelected,
+            onPageScrollStateChanged = { state -> onPageScrollStateChanged(state) }
+        )
+
+        if (callback is TabLayoutCallback) {
+            val tabLayout = callback.onCreateTabLayout()
+            TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+                tab.text = callback.onFragmentPageTitle(position)
+            }.attach()
+        }
+    }
+
+    private fun pageSelected(position: Int) {
+        onPageSelected(position)
+        if (isLastPage) onLastPageReached()
+    }
+
+    private fun pageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        onPageScroll(position, positionOffset, positionOffsetPixels)
+        if (positionOffset != 0.0f || positionOffsetPixels != 0) return
+        onPageScrolled(position)
+    }
+
+    private inner class FragmentStateAdapterDelegate constructor(
+        fragmentManager: FragmentManager,
+        lifecycle: Lifecycle
+    ) : FragmentStateAdapter(fragmentManager, lifecycle) {
+
+        override fun getItemCount() = callback.fragmentCount
+
+        override fun createFragment(position: Int) = callback.onCreateFragment(position)
+    }
 }

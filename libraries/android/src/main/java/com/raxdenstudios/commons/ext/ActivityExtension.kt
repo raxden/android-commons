@@ -18,57 +18,57 @@ import com.raxdenstudios.commons.property.FragmentActivityByIdDelegate
 import com.raxdenstudios.commons.util.SDK
 
 fun Activity.setVirtualNavigationBarSafeArea(view: View) {
-  view.setPaddingRelative(
-    view.paddingStart,
-    view.paddingTop,
-    view.paddingEnd,
-    view.paddingBottom + SDK.getVirtualNavigationBarHeight(this)
-  )
+    view.setPaddingRelative(
+        view.paddingStart,
+        view.paddingTop,
+        view.paddingEnd,
+        view.paddingBottom + SDK.getVirtualNavigationBarHeight(this)
+    )
 }
 
 fun Activity.setStatusBarSafeArea(view: View) {
-  view.setPaddingRelative(
-    view.paddingStart,
-    view.paddingTop + SDK.getStatusBarHeight(this),
-    view.paddingEnd,
-    view.paddingBottom
-  )
+    view.setPaddingRelative(
+        view.paddingStart,
+        view.paddingTop + SDK.getStatusBarHeight(this),
+        view.paddingEnd,
+        view.paddingBottom
+    )
 }
 
 fun Activity.setFullScreen() {
-  window.decorView.apply {
-    systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-  }
+    window.decorView.apply {
+        systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+    }
 }
 
 fun <T : Parcelable> Activity.loadParcelable(
-  key: String,
-  defaultValue: T? = null,
-  operation: (value: T) -> Unit
+    key: String,
+    defaultValue: T? = null,
+    operation: (value: T) -> Unit
 ) {
-  val value = intent?.extras?.getParcelable(key) ?: defaultValue
-  if (value != null) operation(value)
+    val value = intent?.extras?.getParcelable(key) ?: defaultValue
+    if (value != null) operation(value)
 }
 
 fun Activity.setResultOK() {
-  setResult(Activity.RESULT_OK)
+    setResult(Activity.RESULT_OK)
 }
 
 fun Activity.setResultOKAndFinish() {
-  setResultOK()
-  finish()
+    setResultOK()
+    finish()
 }
 
 inline fun <reified T : Parcelable> Activity.setResultOKWithData(value: T) {
-  setResult(
-    Activity.RESULT_OK,
-    Intent().apply { putExtra(T::class.java.simpleName, value) }
-  )
+    setResult(
+        Activity.RESULT_OK,
+        Intent().apply { putExtra(T::class.java.simpleName, value) }
+    )
 }
 
 inline fun <reified T : Parcelable> Activity.setResultOKWithDataAndFinish(value: T) {
-  setResultOKWithData(value)
-  finish()
+    setResultOKWithData(value)
+    finish()
 }
 
 fun Activity.contentView(@LayoutRes resId: Int) = ActivityContentViewDelegate(resId)
@@ -76,8 +76,8 @@ fun Activity.contentView(@LayoutRes resId: Int) = ActivityContentViewDelegate(re
 inline fun <reified T : Any> Activity.argument() = ActivityArgumentDelegate<T>()
 
 inline fun <reified T : ViewBinding> AppCompatActivity.viewBinding() =
-  ActivityViewBindingDelegate(T::class.java, this)
+    ActivityViewBindingDelegate(T::class.java, this)
 
 fun <T : Fragment> Activity.fragmentById(
-  @IdRes fragmentId: Int
+    @IdRes fragmentId: Int
 ) = FragmentActivityByIdDelegate<T>(fragmentId)

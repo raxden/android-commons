@@ -61,13 +61,14 @@ internal class NetworkResponseExtensionKtTest {
     }
 }
 
-private fun givenANetworkServerErrorResponse(code: Int) = NetworkResponse.ServerError<String, String>(
-    body = "",
-    response = mockk(relaxed = true) {
-        every { code() } returns code
-        every { headers() } returns Headers.Builder().build()
-    },
-)
+private fun givenANetworkServerErrorResponse(code: Int) =
+    NetworkResponse.ServerError<String, String>(
+        body = "",
+        response = mockk(relaxed = true) {
+            every { code() } returns code
+            every { headers() } returns Headers.Builder().build()
+        },
+    )
 
 private fun givenANetworkErrorResponse() = NetworkResponse.NetworkError<String, String>(
     error = IOException(""),

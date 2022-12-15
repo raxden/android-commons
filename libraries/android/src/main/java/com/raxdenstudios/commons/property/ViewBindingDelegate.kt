@@ -7,24 +7,24 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 class ViewBindingDelegate<T : ViewBinding>(
-  bindingClass: Class<T>
+    bindingClass: Class<T>
 ) : ReadOnlyProperty<ViewGroup, T> {
 
-  private val inflateMethod = bindingClass.getMethod(
-    "inflate",
-    LayoutInflater::class.java,
-    ViewGroup::class.java,
-    Boolean::class.java
-  )
-  private var binding: T? = null
+    private val inflateMethod = bindingClass.getMethod(
+        "inflate",
+        LayoutInflater::class.java,
+        ViewGroup::class.java,
+        Boolean::class.java
+    )
+    private var binding: T? = null
 
-  override fun getValue(
-    thisRef: ViewGroup,
-    property: KProperty<*>
-  ): T = binding ?: createBinding(thisRef).also { binding = it }
+    override fun getValue(
+        thisRef: ViewGroup,
+        property: KProperty<*>
+    ): T = binding ?: createBinding(thisRef).also { binding = it }
 
-  @Suppress("UNCHECKED_CAST")
-  private fun createBinding(thisRef: ViewGroup): T {
-    return inflateMethod.invoke(null, LayoutInflater.from(thisRef.context), thisRef, true) as T
-  }
+    @Suppress("UNCHECKED_CAST")
+    private fun createBinding(thisRef: ViewGroup): T {
+        return inflateMethod.invoke(null, LayoutInflater.from(thisRef.context), thisRef, true) as T
+    }
 }

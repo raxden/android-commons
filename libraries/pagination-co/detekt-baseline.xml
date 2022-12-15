@@ -1,9 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
-  <ManuallySuppressedIssues/>
-  <CurrentIssues>
-    <ID>MaxLineLength:PaginationTest.kt$PaginationTest$fun</ID>
-    <ID>MaxLineLength:PaginationTest.kt$PaginationTest$pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))</ID>
-    <ID>TopLevelPropertyNaming:PaginationTest.kt$private const val aPrefetchDistance = 2</ID>
-  </CurrentIssues>
+    <ManuallySuppressedIssues />
+    <CurrentIssues>
+        <ID>MaxLineLength:PaginationTest.kt$PaginationTest$fun</ID>
+        <ID>
+            MaxLineLength:PaginationTest.kt$PaginationTest$pageResponse.invoke(PageResult.Content(aPageItems
+            + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+        </ID>
+        <ID>TopLevelPropertyNaming:PaginationTest.kt$private const val aPrefetchDistance = 2</ID>
+    </CurrentIssues>
 </SmellBaseline>

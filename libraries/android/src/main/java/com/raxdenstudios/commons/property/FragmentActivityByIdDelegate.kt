@@ -8,17 +8,17 @@ import kotlin.reflect.KProperty
 
 @Suppress("UNCHECKED_CAST")
 class FragmentActivityByIdDelegate<T : Fragment>(
-  @IdRes private val fragmentId: Int
+    @IdRes private val fragmentId: Int
 ) : ReadOnlyProperty<FragmentActivity, T> {
 
-  private var fragment: T? = null
+    private var fragment: T? = null
 
-  override fun getValue(
-    thisRef: FragmentActivity,
-    property: KProperty<*>
-  ): T = fragment ?: findFragmentById(thisRef).also { fragment = it }
+    override fun getValue(
+        thisRef: FragmentActivity,
+        property: KProperty<*>
+    ): T = fragment ?: findFragmentById(thisRef).also { fragment = it }
 
-  private fun findFragmentById(
-    thisRef: FragmentActivity
-  ): T = thisRef.supportFragmentManager.findFragmentById(fragmentId) as T
+    private fun findFragmentById(
+        thisRef: FragmentActivity
+    ): T = thisRef.supportFragmentManager.findFragmentById(fragmentId) as T
 }

@@ -10,44 +10,44 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 class FragmentViewBindingDelegate<T : ViewBinding>(
-  bindingClass: Class<T>,
-  private val fragment: Fragment
+    bindingClass: Class<T>,
+    private val fragment: Fragment
 ) : ReadOnlyProperty<Fragment, T>, DefaultLifecycleObserver {
 
-  private val bindMethod = bindingClass.getMethod("bind", View::class.java)
-  private var binding: T? = null
+    private val bindMethod = bindingClass.getMethod("bind", View::class.java)
+    private var binding: T? = null
 
-  init {
-    fragment.lifecycle.addObserver(this)
-  }
-
-  override fun onCreate(owner: LifecycleOwner) {
-    super.onCreate(owner)
-
-    fragment.viewLifecycleOwnerLiveData.observe(fragment) { viewLifecycleOwner ->
-      viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
-        override fun onDestroy(owner: LifecycleOwner) {
-          binding = null
-        }
-      })
+    init {
+        fragment.lifecycle.addObserver(this)
     }
-  }
 
-  override fun getValue(
-    thisRef: Fragment,
-    property: KProperty<*>
-  ): T = binding ?: createBinding(thisRef).also { binding = it }
+    override fun onCreate(owner: LifecycleOwner) {
+        super.onCreate(owner)
 
-  @Suppress("UNCHECKED_CAST")
-  private fun createBinding(thisRef: Fragment): T {
-    throwErrorIfLifecycleIsNotInitialized(thisRef)
-    return bindMethod.invoke(null, thisRef.requireView()) as T
-  }
+        fragment.viewLifecycleOwnerLiveData.observe(fragment) { viewLifecycleOwner ->
+            viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+                override fun onDestroy(owner: LifecycleOwner) {
+                    binding = null
+                }
+            })
+        }
+    }
 
-  private fun throwErrorIfLifecycleIsNotInitialized(thisRef: Fragment) {
-    val lifecycle = thisRef.viewLifecycleOwner.lifecycle
-    if (!lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED))
-      error("Cannot access view bindings. View lifecycle is ${lifecycle.currentState}")
-  }
+    override fun getValue(
+        thisRef: Fragment,
+        property: KProperty<*>
+    ): T = binding ?: createBinding(thisRef).also { binding = it }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun createBinding(thisRef: Fragment): T {
+        throwErrorIfLifecycleIsNotInitialized(thisRef)
+        return bindMethod.invoke(null, thisRef.requireView()) as T
+    }
+
+    private fun throwErrorIfLifecycleIsNotInitialized(thisRef: Fragment) {
+        val lifecycle = thisRef.viewLifecycleOwner.lifecycle
+        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED))
+            error("Cannot access view bindings. View lifecycle is ${lifecycle.currentState}")
+    }
 }
 

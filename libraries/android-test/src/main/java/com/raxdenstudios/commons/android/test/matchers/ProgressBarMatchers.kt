@@ -7,14 +7,15 @@ import org.hamcrest.TypeSafeMatcher
 
 object ProgressBarMatchers {
 
-  fun hasProgress(progress: Int, max: Int) = object : TypeSafeMatcher<View>() {
+    fun hasProgress(progress: Int, max: Int) = object : TypeSafeMatcher<View>() {
 
-    @Suppress("EmptyFunctionBlock")
-    override fun describeTo(description: Description) {}
+        @Suppress("EmptyFunctionBlock")
+        override fun describeTo(description: Description) {
+        }
 
-    override fun matchesSafely(view: View): Boolean {
-      val progressBar = (view as? ProgressBar) ?: return false
-      return progressBar.progress == progress && progressBar.max == max
+        override fun matchesSafely(view: View): Boolean {
+            val progressBar = (view as? ProgressBar) ?: return false
+            return progressBar.progress == progress && progressBar.max == max
+        }
     }
-  }
 }

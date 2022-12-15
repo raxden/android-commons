@@ -17,117 +17,129 @@ import org.junit.Test
 
 internal class PaginationTest {
 
-  @get:Rule
-  val rxSchedulerRule = RxSchedulerRule()
+    @get:Rule
+    val rxSchedulerRule = RxSchedulerRule()
 
-  private val configuration = Pagination.Config.default
-  private val compositeDisposable: CompositeDisposable = mockk(relaxed = true)
-  private var pageRequest: (page: Page, pageSize: PageSize) -> Single<PageList<String>> = mockk()
-  private var pageResponse: (result: PageResult<String>) -> PageResult<String> =
-    mockk(relaxed = true)
+    private val configuration = Pagination.Config.default
+    private val compositeDisposable: CompositeDisposable = mockk(relaxed = true)
+    private var pageRequest: (page: Page, pageSize: PageSize) -> Single<PageList<String>> = mockk()
+    private var pageResponse: (result: PageResult<String>) -> PageResult<String> =
+        mockk(relaxed = true)
 
-  private val pagination: RxPagination<String> by lazy {
-    RxPagination(
-      config = configuration,
-      compositeDisposable = compositeDisposable
-    )
-  }
-
-  @Test
-  fun `When requestPage is called, Then a Loading and Content states are returned`() {
-    givenAPageWithResults(Page(0))
-
-    requestPage(PageIndex.first)
-
-    verifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems))
+    private val pagination: RxPagination<String> by lazy {
+        RxPagination(
+            config = configuration,
+            compositeDisposable = compositeDisposable
+        )
     }
-    confirmVerified(pageResponse)
-  }
 
-  @Test
-  fun `Given a first page with incomplete results (less than 10), When requestPage is called several times, Then loading, content and noMoreResults states are returned`() {
-    givenAPageWithIncompleteResults(Page(0))
+    @Test
+    fun `When requestPage is called, Then a Loading and Content states are returned`() {
+        givenAPageWithResults(Page(0))
 
-    for (index in PageIndex.first.value..10) requestPage(PageIndex(index))
+        requestPage(PageIndex.first)
 
-    verifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aIncompletePageItems))
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
-      pageResponse.invoke(PageResult.NoMoreResults)
+        verifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems))
+        }
+        confirmVerified(pageResponse)
     }
-    confirmVerified(pageResponse)
-  }
 
-  @Test
-  fun `Given a first page, When requestPage is called several times, Then loading, content states are returned for every page`() {
-    givenAPageWithResults(Page(0))
-    givenAPageWithResults(Page(1))
-    givenAPageWithResults(Page(2))
-    givenAPageWithResults(Page(3))
-    givenAPageWithResults(Page(4))
-    givenAPageWithResults(Page(5))
+    @Test
+    fun `Given a first page with incomplete results (less than 10), When requestPage is called several times, Then loading, content and noMoreResults states are returned`() {
+        givenAPageWithIncompleteResults(Page(0))
 
-    for (index in PageIndex.first.value..48) requestPage(PageIndex(index))
+        for (index in PageIndex.first.value..10) requestPage(PageIndex(index))
 
-    verifyOrder {
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
-      pageResponse.invoke(PageResult.Loading)
-      pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems))
+        verifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aIncompletePageItems))
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+            pageResponse.invoke(PageResult.NoMoreResults)
+        }
+        confirmVerified(pageResponse)
     }
-    confirmVerified(pageResponse)
-  }
 
-  private fun requestPage(pageIndex: PageIndex) {
-    pagination.requestPage(
-      pageIndex = pageIndex,
-      pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
-      pageResponse = { pageResult -> pageResponse(pageResult) }
-    )
-  }
+    @Test
+    fun `Given a first page, When requestPage is called several times, Then loading, content states are returned for every page`() {
+        givenAPageWithResults(Page(0))
+        givenAPageWithResults(Page(1))
+        givenAPageWithResults(Page(2))
+        givenAPageWithResults(Page(3))
+        givenAPageWithResults(Page(4))
+        givenAPageWithResults(Page(5))
 
-  private fun givenAPageWithResults(page: Page) {
-    every { pageRequest.invoke(page, PageSize.defaultSize) } returns Single.just(
-      PageList(aPageItems, page)
-    )
-  }
+        for (index in PageIndex.first.value..48) requestPage(PageIndex(index))
 
-  private fun givenAPageWithIncompleteResults(page: Page) {
-    every { pageRequest.invoke(page, PageSize.defaultSize) } returns Single.just(
-      PageList(aIncompletePageItems, page)
-    )
-  }
+        verifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems + aPageItems + aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(
+                PageResult.Content(
+                    aPageItems + aPageItems + aPageItems + aPageItems
+                )
+            )
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(
+                PageResult.Content(
+                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems
+                )
+            )
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(
+                PageResult.Content(
+                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems
+                )
+            )
+        }
+        confirmVerified(pageResponse)
+    }
+
+    private fun requestPage(pageIndex: PageIndex) {
+        pagination.requestPage(
+            pageIndex = pageIndex,
+            pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
+            pageResponse = { pageResult -> pageResponse(pageResult) }
+        )
+    }
+
+    private fun givenAPageWithResults(page: Page) {
+        every { pageRequest.invoke(page, PageSize.defaultSize) } returns Single.just(
+            PageList(aPageItems, page)
+        )
+    }
+
+    private fun givenAPageWithIncompleteResults(page: Page) {
+        every { pageRequest.invoke(page, PageSize.defaultSize) } returns Single.just(
+            PageList(aIncompletePageItems, page)
+        )
+    }
 }
 
 private val aIncompletePageItems = listOf("item_1", "item_2", "item_3", "item_4")
 private val aPageItems = listOf(
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item",
-  "item"
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item",
+    "item"
 )

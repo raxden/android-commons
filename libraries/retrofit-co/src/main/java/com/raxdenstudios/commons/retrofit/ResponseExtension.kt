@@ -6,33 +6,33 @@ import java.io.IOException
 
 @Suppress("TooGenericExceptionCaught", "ReturnCount")
 fun <T : Any> Response<T>.toResultData(
-  exceptionMessage: String
+    exceptionMessage: String
 ): ResultData<T> {
-  if (isSuccessful) {
-    try {
-      val body = body()
-      if (body != null)
-        return ResultData.Success(body)
-    } catch (e: Exception) {
-      return ResultData.Error(IOException(exceptionMessage))
+    if (isSuccessful) {
+        try {
+            val body = body()
+            if (body != null)
+                return ResultData.Success(body)
+        } catch (e: Exception) {
+            return ResultData.Error(IOException(exceptionMessage))
+        }
     }
-  }
-  return ResultData.Error(IOException(exceptionMessage))
+    return ResultData.Error(IOException(exceptionMessage))
 }
 
 @Suppress("TooGenericExceptionCaught", "ReturnCount")
 fun <T : Any, R : Any> Response<T>.toResultData(
-  exceptionMessage: String,
-  map: (T) -> R
+    exceptionMessage: String,
+    map: (T) -> R
 ): ResultData<R> {
-  if (isSuccessful) {
-    try {
-      val body = body()
-      if (body != null)
-        return ResultData.Success(map(body))
-    } catch (e: Exception) {
-      return ResultData.Error(IOException(exceptionMessage, e))
+    if (isSuccessful) {
+        try {
+            val body = body()
+            if (body != null)
+                return ResultData.Success(map(body))
+        } catch (e: Exception) {
+            return ResultData.Error(IOException(exceptionMessage, e))
+        }
     }
-  }
-  return ResultData.Error(IOException(exceptionMessage))
+    return ResultData.Error(IOException(exceptionMessage))
 }

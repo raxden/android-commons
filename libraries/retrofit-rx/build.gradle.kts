@@ -1,58 +1,59 @@
 import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
-  id("com.raxdenstudios.android-versioning")
-  id("com.android.library")
-  id("kotlin-android")
-  id("kotlin-kapt")
-  id("com.raxdenstudios.publish-library")
+    id("com.raxdenstudios.android-versioning")
+    id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("com.raxdenstudios.publish-library")
 }
 
 versioning {
-  group = "com.raxdenstudios"
+    group = "com.raxdenstudios"
 }
 
 publishLibrary {
-  name = "Retrofit Commons"
-  description = "Retrofit commons is a library with a set of useful classes to help to developer to work with retrofit."
-  url = "https://github.com/raxden/android-commons"
-  developerId = "raxden"
-  developerName = "Ángel Gómez"
-  developerEmail = "raxden.dev@gmail.com"
-  coordinates = Coordinates.default.copy(artifactId = "commons-retrofit-rx")
+    name = "Retrofit Commons"
+    description =
+        "Retrofit commons is a library with a set of useful classes to help to developer to work with retrofit."
+    url = "https://github.com/raxden/android-commons"
+    developerId = "raxden"
+    developerName = "Ángel Gómez"
+    developerEmail = "raxden.dev@gmail.com"
+    coordinates = Coordinates.default.copy(artifactId = "commons-retrofit-rx")
 }
 
 android {
 
-  compileSdk = Versions.compileSdk
+    compileSdk = Versions.compileSdk
 
-  compileOptions {
-    sourceCompatibility = Versions.sourceCompatibility
-    targetCompatibility = Versions.targetCompatibility
-  }
-
-  defaultConfig {
-    minSdk = Versions.minSdk
-    targetSdk = Versions.targetSdk
-
-    testInstrumentationRunner = Versions.testInstrumentationRunner
-    consumerProguardFile("consumer-rules.pro")
-  }
-
-  buildTypes {
-    getByName("debug") {
-      isMinifyEnabled = false
+    compileOptions {
+        sourceCompatibility = Versions.sourceCompatibility
+        targetCompatibility = Versions.targetCompatibility
     }
-  }
 
-  kotlinOptions {
-    jvmTarget = Versions.jvmTarget
-  }
+    defaultConfig {
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+
+        testInstrumentationRunner = Versions.testInstrumentationRunner
+        consumerProguardFile("consumer-rules.pro")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = Versions.jvmTarget
+    }
 }
 
 dependencies {
-  api(project(Modules.libraryRetrofit))
+    api(project(Modules.libraryRetrofit))
 
-  api(Libraries.retrofitRxAdapter)
-  api(Libraries.rxAndroid)
+    api(Libraries.retrofitRxAdapter)
+    api(Libraries.rxAndroid)
 }
