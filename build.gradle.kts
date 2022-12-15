@@ -42,6 +42,8 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
 }
 
 releasing {
+    // ./gradlew releaseCandidate --no-configuration-cache
+    // ./gradlew releaseCandidateTag --no-configuration-cache
     versionFilePath = "./version.properties"
 }
 
