@@ -1,13 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Continuous Integration
+name: Pull Requests
 
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  push:
+  pull_request:
     branches:
-      - master
+      - '*'
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
@@ -73,33 +73,15 @@ jobs:
       - name: Setup machine ✔️
         uses: ./.github/actions/common_setup
 
+      - name: Get specific changed files in ${{ matrix.module }} ✔️
+        id: changed-files-specific_library
+        uses: tj-actions/changed-files@v32
+        with:
+          files: |
+            libraries/${{ matrix.module }}/**/*
+
       - name: Unit tests :${{ matrix.module }} 🧪
+        if: steps.changed-files-specific_library_module.outputs.any_changed == 'true'
         uses: gradle/gradle-build-action@v2
         with:
           arguments: :libraries:${{ matrix.module }}:testDebugUnitTest --stacktrace --scan
-
-      - name: Jacoco Reports :${{ matrix.module }} 📝
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :libraries:${{ matrix.module }}:jacocoTestReportDebug --stacktrace --scan
-
-      - name: Saving Reports :${{ matrix.module }} 💾
-        uses: actions/upload-artifact@v3
-        with:
-          name: jacoco-reports-${{ matrix.module }}
-          path: libraries/${{ matrix.module }}/build/reports/
-
-  upload-reports:
-    needs: [ checkstyle, test-modules ]
-    name: Upload reports to Codecov 📝
-    if: success() && github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Loading Reports ✔️
-        uses: actions/download-artifact@v3
-
-      - name: Uploading reports to Codecov 📝
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
