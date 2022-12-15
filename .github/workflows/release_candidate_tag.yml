@@ -98,7 +98,7 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean publishReleasePublicationToSonatypeRepository --info --scan
+          arguments: clean publishReleasePublicationToSonatypeRepository --no-configuration-cache --info --scan
 
       - name: Close and Release library 🚀
         env:
@@ -110,4 +110,4 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: closeAndReleaseRepository --scan
+          arguments: closeAndReleaseRepository --no-configuration-cache --scan
