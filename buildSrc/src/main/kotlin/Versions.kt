@@ -10,7 +10,7 @@ object Versions {
     val targetCompatibility = JavaVersion.VERSION_1_8
     const val jvmTarget = "1.8"
 
-    const val androidPlugins = "0.48"
+    const val androidPlugins = "0.47"
     const val androidGradlePlugin = "7.2.1"
     const val jacocoPlugin = "0.16.0"
     const val nexusStagingPlugin = "0.30.0"
