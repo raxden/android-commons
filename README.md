@@ -22,17 +22,23 @@ to reduce the size of the application that we are developing.
 
 ```groovy
 implementation "com.raxdenstudios:commons-android:x.y.z"
+implementation "com.raxdenstudios:commons-android-test:x.y.z"
 implementation "com.raxdenstudios:commons-coroutines:x.y.z"
-implementation "com.raxdenstudios:commons-threeten:x.y.z"
+implementation "com.raxdenstudios:commons-coroutines-test:x.y.z"
 implementation "com.raxdenstudios:commons-glide:x.y.z"
+implementation "com.raxdenstudios:commons-threeten:x.y.z"
+implementation "com.raxdenstudios:commons-okhttp3:x.y.z"
 implementation "com.raxdenstudios:commons-pagination:x.y.z"
+implementation "com.raxdenstudios:commons-pagination-co:x.y.z"
 implementation "com.raxdenstudios:commons-pagination-rx:x.y.z"
+implementation "com.raxdenstudios:commons-permissions:x.y.z"
 implementation "com.raxdenstudios:commons-preferences:x.y.z"
 implementation "com.raxdenstudios:commons-retrofit:x.y.z"
+implementation "com.raxdenstudios:commons-retrofit-co:x.y.z"
 implementation "com.raxdenstudios:commons-retrofit-rx:x.y.z"
 implementation "com.raxdenstudios:commons-rx:x.y.z"
-implementation "com.raxdenstudios:commons-unit-test:x.y.z"
-implementation "com.raxdenstudios:commons-android-test:x.y.z"
+implementation "com.raxdenstudios:commons-rx-test:x.y.z"
+implementation "com.raxdenstudios:commons-threeten:x.y.z"
 ```
 
 Please replace `x`, `y` and `z` with the latest version numbers
