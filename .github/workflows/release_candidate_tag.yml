@@ -98,16 +98,4 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean publishReleasePublicationToSonatypeRepository --no-configuration-cache --info --scan
-
-      - name: Close and Release library 🚀
-        env:
-          OSSRH_ID: ${{ secrets.OSSRH_ID }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: closeAndReleaseRepository --no-configuration-cache --scan
+          arguments: clean publishReleasePublicationToSonatypeRepository closeAndReleaseRepository --no-configuration-cache --info --scan
