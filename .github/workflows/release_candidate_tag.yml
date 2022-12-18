@@ -98,4 +98,4 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: clean publishReleasePublicationToSonatypeRepository closeAndReleaseRepository --no-configuration-cache --info --scan
+          arguments: clean publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan

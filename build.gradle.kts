@@ -16,7 +16,7 @@ plugins {
     id("org.jetbrains.kotlin.android") version Versions.kotlin apply false
 
     id("com.vanniktech.android.junit.jacoco") version Versions.jacocoPlugin
-    id("io.codearte.nexus-staging") version Versions.nexusStagingPlugin
+    id("io.github.gradle-nexus.publish-plugin") version Versions.nexusStagingPlugin
     id("com.raxdenstudios.android-releasing") version Versions.androidPlugins
     id("com.adarshr.test-logger") version Versions.testLoggerPlugin
     id("io.gitlab.arturbosch.detekt") version Versions.detektPlugin
@@ -48,11 +48,16 @@ releasing {
     versionFilePath = "./version.properties"
 }
 
-nexusStaging {
-    packageGroup = "com.raxdenstudios"
-    stagingProfileId = nexusId ?: System.getenv("OSSRH_ID") ?: ""
-    username = nexusUsername ?: System.getenv("OSSRH_USERNAME") ?: ""
-    password = nexusPassword ?: System.getenv("OSSRH_PASSWORD") ?: ""
+nexusPublishing {
+    repositories {
+        sonatype {
+            packageGroup.set("com.raxdenstudios")
+            // stagingProfileId can reduce execution time by even 10 seconds
+            stagingProfileId.set(nexusId ?: System.getenv("OSSRH_ID") ?: "")
+            username.set(nexusUsername ?: System.getenv("OSSRH_USERNAME") ?: "")
+            password.set(nexusPassword ?: System.getenv("OSSRH_PASSWORD") ?: "")
+        }
+    }
 }
 
 detekt {
