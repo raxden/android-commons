@@ -77,7 +77,7 @@ jobs:
   publish:
     needs: [ checkstyle, test-modules ]
     name: Publish Library to Sonatype 🚀
-    if: success() && startsWith(github.ref, 'refs/tags/')
+    if: success()
     runs-on: ubuntu-latest
     environment: release_environment
 
