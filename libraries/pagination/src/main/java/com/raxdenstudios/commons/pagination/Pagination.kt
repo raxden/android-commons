@@ -116,6 +116,7 @@ abstract class Pagination<T> {
     ) {
 
         companion object {
+
             val default = Config(
                 initialPage = Page(0),
                 pageSize = PageSize.defaultSize,

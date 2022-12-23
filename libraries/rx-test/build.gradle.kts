@@ -53,6 +53,6 @@ android {
 
 dependencies {
     api(TestLibraries.atslJunit)
-    api(Libraries.rxAndroid)
-    api(Libraries.rxKotlin)
+    api(RXLibraries.rxAndroid)
+    api(RXLibraries.rxKotlin)
 }

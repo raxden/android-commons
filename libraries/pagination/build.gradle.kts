@@ -51,7 +51,10 @@ android {
 }
 
 dependencies {
-    api(AndroidLibraries.material)
+    implementation(AndroidLibraries.material)
+
+    implementation(platform(ComposeLibraries.bom))
+    implementation(ComposeLibraries.material)
 
     testImplementation(TestLibraries.atslJunit)
 }

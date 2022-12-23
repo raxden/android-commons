@@ -55,7 +55,7 @@ dependencies {
     api(project(Modules.libraryRetrofit))
     api(project(Modules.libraryCoroutines))
 
-    api(Libraries.retrofitNetworkResponseAdapter)
+    api(RetrofitLibraries.retrofitNetworkResponseAdapter)
 
     testImplementation(TestLibraries.atslJunit)
     testImplementation(TestLibraries.mockkCore)

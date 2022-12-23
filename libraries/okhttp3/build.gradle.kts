@@ -51,9 +51,9 @@ android {
 }
 
 dependencies {
-    api(platform(Libraries.okHttpBom))
-    api(Libraries.okHttp)
-    api(Libraries.okHttpLoggingInterceptor)
+    api(platform(OKHttpLibraries.okHttpBom))
+    api(OKHttpLibraries.okHttp)
+    api(OKHttpLibraries.okHttpLoggingInterceptor)
 
     testImplementation(TestLibraries.atslJunit)
 }

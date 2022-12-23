@@ -36,6 +36,9 @@ object Versions {
     const val rxAndroid = "2.1.1"
     const val rxKotlin = "2.4.0"
 
+    const val composeBom = "2022.12.00"
+    const val compose = "1.3.1"
+
     const val gson = "2.9.0"
     const val okHttp = "4.10.0"
     const val restMock = "0.4.4"
