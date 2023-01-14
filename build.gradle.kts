@@ -1,46 +1,19 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
-buildscript {
-    repositories {
-        google()
-        maven("https://plugins.gradle.org/m2/")
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.androidGradlePlugin}")
-        classpath("com.raxdenstudios:android-plugins:${Versions.androidPlugins}")
-    }
-}
 
 plugins {
-    id("org.jetbrains.kotlin.android") version Versions.kotlin apply false
-
-    id("com.vanniktech.android.junit.jacoco") version Versions.jacocoPlugin
-    id("io.github.gradle-nexus.publish-plugin") version Versions.nexusStagingPlugin
-    id("com.raxdenstudios.android-releasing") version Versions.androidPlugins
-    id("com.adarshr.test-logger") version Versions.testLoggerPlugin
-    id("io.gitlab.arturbosch.detekt") version Versions.detektPlugin
-    id("com.github.ben-manes.versions") version Versions.benNamesPlugin
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.junit.jacoco)
+    alias(libs.plugins.nexus.publish)
+    alias(libs.plugins.android.releasing)
+    alias(libs.plugins.test.logger)
+    alias(libs.plugins.detekt)
 }
-
 
 val nexusId: String? by project
 val nexusUsername: String? by project
 val nexusPassword: String? by project
-
-fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
-    val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-    val isStable = stableKeyword || regex.matches(version)
-    return isStable.not()
-}
-
-tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
-    outputFormatter = "html"
-    rejectVersionIf {
-        isNonStable(candidate.version) && !isNonStable(currentVersion)
-    }
-}
 
 releasing {
     // ./gradlew releaseCandidate --no-configuration-cache
@@ -62,12 +35,11 @@ nexusPublishing {
 
 detekt {
     // version found will be used. Override to stay on the same version.
-    toolVersion = Versions.detektPlugin
     config = files("/config/detekt/detekt.yml")
     // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects.
     parallel = true
     // Specify the base path for file paths in the formatted reports.
-    basePath = "${rootProject.projectDir}"
+    basePath = rootProject.projectDir.toString()
 }
 
 subprojects {
@@ -82,7 +54,7 @@ subprojects {
     dependencies {
         // This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
         // https://detekt.dev/docs/rules/formatting/
-        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detektPlugin}")
+        detektPlugins(rootProject.libs.plugins.detekt.formatting.get().toString())
     }
 }
 

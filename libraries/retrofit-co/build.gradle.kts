@@ -52,12 +52,14 @@ android {
 }
 
 dependencies {
-    api(project(Modules.libraryRetrofit))
-    api(project(Modules.libraryCoroutines))
+    implementation(project(Modules.libraryRetrofit))
+    implementation(project(Modules.libraryCoroutines))
 
-    api(RetrofitLibraries.retrofitNetworkResponseAdapter)
+    implementation(libs.bundles.retrofit)
+    implementation(platform(libs.coroutines.bom))
+    implementation(libs.coroutines.android)
+    api(libs.network.response.adapter)
 
-    testImplementation(TestLibraries.atslJunit)
-    testImplementation(TestLibraries.mockkCore)
-    testImplementation(TestLibraries.mockkAndroid)
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
 }

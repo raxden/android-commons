@@ -51,12 +51,14 @@ android {
 }
 
 dependencies {
-    api(project(Modules.libraryPagination))
-    api(project(Modules.libraryCoroutines))
+    implementation(project(Modules.libraryPagination))
+    implementation(project(Modules.libraryCoroutines))
 
-    testImplementation(TestLibraries.coroutinesTest)
-    testImplementation(TestLibraries.atslJunit)
-    testImplementation(TestLibraries.mockkCore)
-    testImplementation(TestLibraries.mockkAndroid)
-    testImplementation(project(Modules.libraryCoroutinesTest))
+    implementation(platform(libs.coroutines.bom))
+    implementation(libs.coroutines.android)
+
+    testImplementation(platform(libs.coroutines.bom))
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
 }

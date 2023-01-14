@@ -52,7 +52,7 @@ android {
 }
 
 dependencies {
-    api(Libraries.threetenabp)
+    implementation(libs.threetenabp)
 
-    testImplementation(TestLibraries.atslJunit)
+    testImplementation(libs.junit.ktx)
 }

@@ -54,5 +54,5 @@ android {
 dependencies {
     implementation(project(Modules.libraryAndroid))
 
-    api(AndroidLibraries.material)
+    implementation(libs.android.material)
 }

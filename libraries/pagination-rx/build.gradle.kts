@@ -51,11 +51,12 @@ android {
 }
 
 dependencies {
-    api(project(Modules.libraryPagination))
-    api(project(Modules.libraryRx))
+    implementation(project(Modules.libraryPagination))
+    implementation(project(Modules.libraryRx))
+
+    implementation(libs.bundles.rx)
 
     testImplementation(project(Modules.libraryRxTest))
-    testImplementation(TestLibraries.atslJunit)
-    testImplementation(TestLibraries.mockkCore)
-    testImplementation(TestLibraries.mockkAndroid)
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
 }

@@ -51,16 +51,8 @@ android {
 }
 
 dependencies {
-    implementation(AndroidLibraries.swipeRefreshLayout)
-
-    api(TestLibraries.archCoreTest)
-    api(TestLibraries.atslJunit)
-    api(TestLibraries.atslRules)
-    api(TestLibraries.atslRunner)
-
-    api(TestLibraries.restMock)
-
-    api(TestAndroidLibraries.espresso)
-    api(TestAndroidLibraries.espressoContrib)
-    api(TestAndroidLibraries.espressoIntents)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.junit.ktx)
+    implementation(libs.rest.mock)
+    implementation(libs.bundles.espresso)
 }

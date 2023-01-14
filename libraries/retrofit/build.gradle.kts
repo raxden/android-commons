@@ -52,9 +52,7 @@ android {
 }
 
 dependencies {
-    api(RetrofitLibraries.retrofit)
-    api(RetrofitLibraries.retrofitGsonConverter)
-    api(Libraries.gson)
+    implementation(libs.bundles.retrofit)
 
-    testImplementation(TestLibraries.atslJunit)
+    testImplementation(libs.junit.ktx)
 }

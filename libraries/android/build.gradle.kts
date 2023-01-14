@@ -54,16 +54,9 @@ android {
 }
 
 dependencies {
-    api(AndroidLibraries.kotlinCore)
-    api(AndroidLibraries.kotlinActivity)
-    api(AndroidLibraries.kotlinFragment)
-    api(AndroidLibraries.kotlinPreferences)
-    api(AndroidLibraries.material)
-    api(AndroidLibraries.playCore)
-    api(AndroidLibraries.constraintLayout)
-    api(AndroidLibraries.swipeRefreshLayout)
-    api(AndroidLibraries.browser)
-    api(AndroidLifecycleLibraries.lifecycleRuntime)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.android.material)
 
-    testImplementation(TestLibraries.atslJunit)
+    testImplementation(libs.junit.ktx)
 }

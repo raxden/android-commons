@@ -52,8 +52,8 @@ android {
 }
 
 dependencies {
-    api(project(Modules.libraryRetrofit))
+    implementation(project(Modules.libraryRetrofit))
 
-    api(RetrofitLibraries.retrofitRxAdapter)
-    api(RXLibraries.rxAndroid)
+    implementation(libs.bundles.rx)
+    implementation(libs.bundles.retrofit.rx)
 }

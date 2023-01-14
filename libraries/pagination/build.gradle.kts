@@ -51,10 +51,10 @@ android {
 }
 
 dependencies {
-    implementation(AndroidLibraries.material)
+    implementation(libs.android.material)
 
-    implementation(platform(ComposeLibraries.bom))
-    implementation(ComposeLibraries.material)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.material)
 
-    testImplementation(TestLibraries.atslJunit)
+    testImplementation(libs.junit.ktx)
 }

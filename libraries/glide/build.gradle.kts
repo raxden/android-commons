@@ -51,6 +51,6 @@ android {
 }
 
 dependencies {
-    api(GlideLibraries.glide)
-    api(GlideLibraries.glideCompiler)
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
 }
