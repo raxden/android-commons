@@ -1,11 +1,11 @@
 import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
-    id("com.raxdenstudios.android-versioning")
-    id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("com.raxdenstudios.publish-library")
+    alias(libs.plugins.android.versioning)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.android.publishing)
 }
 
 versioning {

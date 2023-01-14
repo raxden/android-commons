@@ -1,11 +1,15 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 
+@Suppress("DSL_SCOPE_VIOLATION") // -> workaround to avoid errors https://github.com/gradle/gradle/issues/22797
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.junit.jacoco)
     alias(libs.plugins.nexus.publish)
+    alias(libs.plugins.android.publishing) apply false
+    alias(libs.plugins.android.versioning) apply false
     alias(libs.plugins.android.releasing)
     alias(libs.plugins.test.logger)
     alias(libs.plugins.detekt)
@@ -53,7 +57,7 @@ subprojects {
 
     dependencies {
         // This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
-        // https://detekt.dev/docs/rules/formatting/
+        // https://detekt.dev/docs/rules/formatting/dawd
         detektPlugins(rootProject.libs.plugins.detekt.formatting.get().toString())
     }
 }
