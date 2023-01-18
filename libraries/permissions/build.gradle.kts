@@ -14,8 +14,7 @@ versioning {
 
 publishLibrary {
     name = "Permissions Commons"
-    description =
-        "Permissions commons is a library with a set of useful classes to help to developer to work with permissions."
+    description = "Permissions commons is a library with a set of useful classes to help to developer to work with permissions."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"

@@ -14,8 +14,7 @@ versioning {
 
 publishLibrary {
     name = "Retrofit Commons"
-    description =
-        "Retrofit commons is a library with a set of useful classes to help to developer to work with retrofit."
+    description = "Retrofit commons is a library with a set of useful classes to help to developer to work with retrofit."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"

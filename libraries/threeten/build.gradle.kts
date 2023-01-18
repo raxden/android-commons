@@ -14,8 +14,7 @@ versioning {
 
 publishLibrary {
     name = "Threeten Commons"
-    description =
-        "Threeten commons is a library with a set of useful classes to help to developer to work with threeten."
+    description = "Threeten commons is a library with a set of useful classes to help to developer to work with threeten."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"

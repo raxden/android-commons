@@ -14,8 +14,7 @@ versioning {
 
 publishLibrary {
     name = "Rx Test Commons"
-    description =
-        "Rx Test commons is a library with a set of useful classes to help to developer to work with Rx."
+    description = "Rx Test commons is a library with a set of useful classes to help to developer to work with Rx."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"

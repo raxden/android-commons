@@ -14,8 +14,7 @@ versioning {
 
 publishLibrary {
     name = "Preferences Commons"
-    description =
-        "Preferences commons is a library with a set of useful classes to help to developer to work with preferences."
+    description = "Preferences commons is a library with a set of useful classes to help to developer to work with preferences."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
