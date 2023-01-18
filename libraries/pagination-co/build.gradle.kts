@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.libraryPagination))
-    implementation(project(Modules.libraryCoroutines))
+    api(project(Modules.libraryPagination))
+    api(project(Modules.libraryCoroutines))
 
     implementation(platform(libs.coroutines.bom))
     implementation(libs.coroutines.android)

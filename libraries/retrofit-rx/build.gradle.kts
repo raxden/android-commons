@@ -52,7 +52,7 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.libraryRetrofit))
+    api(project(Modules.libraryRetrofit))
 
     implementation(libs.bundles.rx)
     implementation(libs.bundles.retrofit.rx)

@@ -52,8 +52,8 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.libraryRetrofit))
-    implementation(project(Modules.libraryCoroutines))
+    api(project(Modules.libraryRetrofit))
+    api(project(Modules.libraryCoroutines))
 
     implementation(libs.bundles.retrofit)
     implementation(platform(libs.coroutines.bom))

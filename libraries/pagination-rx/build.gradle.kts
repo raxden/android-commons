@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
-    implementation(project(Modules.libraryPagination))
-    implementation(project(Modules.libraryRx))
+    api(project(Modules.libraryPagination))
+    api(project(Modules.libraryRx))
 
     implementation(libs.bundles.rx)
 
