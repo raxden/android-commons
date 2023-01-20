@@ -2,7 +2,6 @@ package com.raxdenstudios.commons.ext
 
 import android.content.SharedPreferences
 import com.raxdenstudios.commons.property.SharedPreferencesDelegate
-import java.util.*
 import kotlin.reflect.KProperty
 
 fun SharedPreferences.boolean(

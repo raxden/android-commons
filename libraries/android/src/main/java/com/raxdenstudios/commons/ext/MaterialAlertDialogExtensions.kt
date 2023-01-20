@@ -1,44 +1,8 @@
 package com.raxdenstudios.commons.ext
 
 import android.content.Context
-import android.content.pm.PackageInfo
-import android.net.ConnectivityManager
-import android.os.Environment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.raxdenstudios.commons.util.Network
-import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
-
-fun Context.getPackageInfo(): PackageInfo = packageManager.getPackageInfo(packageName, 0)
-
-fun Context.getConnectivityManager(): ConnectivityManager =
-    getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-fun Context.isNetworkConnected(): Boolean = Network.isNetworkConnected(this)
-
-fun Context.createTemporalImageFile(): File {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    val imageFileName = "JPEG_" + timeStamp + "_"
-    val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-    return File.createTempFile(
-        imageFileName, /* prefix */
-        ".jpg", /* suffix */
-        storageDir      /* directory */
-    )
-}
-
-fun Context.hasVirtualNavigationBar(): Boolean {
-    val id = resources.getIdentifier("config_showNavigationBar", "bool", "android")
-    return id > 0 && resources.getBoolean(id)
-}
-
-fun Context.getVirtualNavigationBarHeight(): Int {
-    val id = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    return if (id > 0) {
-        resources.getDimensionPixelSize(id)
-    } else 0
-}
 
 fun Context.showSimpleDialog(
     title: Int,

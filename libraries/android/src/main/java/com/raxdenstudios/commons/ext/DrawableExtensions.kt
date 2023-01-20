@@ -8,6 +8,5 @@ fun Drawable.setColorFilter(
     color: Int,
     blendModeCompat: BlendModeCompat = BlendModeCompat.SRC_ATOP
 ) {
-    colorFilter =
-        BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, blendModeCompat)
+    colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, blendModeCompat)
 }

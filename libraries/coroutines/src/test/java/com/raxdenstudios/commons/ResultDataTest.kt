@@ -31,7 +31,7 @@ internal class ResultDataTest {
 
         val result = resultData.map { 1 }
 
-        assertEquals(ResultData.Success(1), result)
+        assertEquals(com.raxdenstudios.commons.ResultData.Success(1), result)
     }
 
     @Test
@@ -40,15 +40,15 @@ internal class ResultDataTest {
 
         val result = resultData.map { 1 }
 
-        result as ResultData.Error
+        result as com.raxdenstudios.commons.ResultData.Error
 
         assert(result.throwable is IllegalStateException)
         assertEquals("illegalStateException", result.throwable.message)
     }
 
-    private fun givenAErrorResultData(): ResultData<String> =
-        ResultData.Error(IllegalStateException("illegalStateException"))
+    private fun givenAErrorResultData(): com.raxdenstudios.commons.ResultData<String> =
+        com.raxdenstudios.commons.ResultData.Error(IllegalStateException("illegalStateException"))
 
-    private fun givenASuccessResultData(): ResultData<String> =
-        ResultData.Success("success")
+    private fun givenASuccessResultData(): com.raxdenstudios.commons.ResultData<String> =
+        com.raxdenstudios.commons.ResultData.Success("success")
 }

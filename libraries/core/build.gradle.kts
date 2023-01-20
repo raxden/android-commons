@@ -19,7 +19,7 @@ publishLibrary {
     developerId = "raxden"
     developerName = "Ángel Gómez"
     developerEmail = "raxden.dev@gmail.com"
-    coordinates = Coordinates.default.copy(artifactId = "commons-android")
+    coordinates = Coordinates.default.copy(artifactId = "commons-core")
 }
 
 android {
@@ -54,10 +54,5 @@ android {
 }
 
 dependencies {
-    api(project(Modules.libraryCore))
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.android.material)
-
     testImplementation(libs.junit.ktx)
 }

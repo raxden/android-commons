@@ -15,6 +15,7 @@ dependencyResolutionManagement {
     }
 }
 
+include(":libraries:core")
 include(":libraries:android")
 include(":libraries:android-test")
 include(":libraries:coroutines")

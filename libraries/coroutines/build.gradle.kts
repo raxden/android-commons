@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    api(project(Modules.libraryCore))
     implementation(platform(libs.coroutines.bom))
     implementation(libs.coroutines.android)
 

@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons.util
+package com.raxdenstudios.commons
 
 import com.raxdenstudios.commons.DataMapper
 import org.junit.Assert.assertEquals
@@ -6,7 +6,7 @@ import org.junit.Test
 
 internal class DataMapperTest {
 
-    private val dataMapper = object : DataMapper<Int, String>() {
+    private val dataMapper = object : com.raxdenstudios.commons.DataMapper<Int, String>() {
         override fun transform(source: Int): String = source.toString()
     }
 

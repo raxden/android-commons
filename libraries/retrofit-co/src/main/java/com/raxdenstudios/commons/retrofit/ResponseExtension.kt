@@ -7,32 +7,32 @@ import java.io.IOException
 @Suppress("TooGenericExceptionCaught", "ReturnCount")
 fun <T : Any> Response<T>.toResultData(
     exceptionMessage: String
-): ResultData<T> {
+): com.raxdenstudios.commons.ResultData<T> {
     if (isSuccessful) {
         try {
             val body = body()
             if (body != null)
-                return ResultData.Success(body)
+                return com.raxdenstudios.commons.ResultData.Success(body)
         } catch (e: Exception) {
-            return ResultData.Error(IOException(exceptionMessage))
+            return com.raxdenstudios.commons.ResultData.Error(IOException(exceptionMessage))
         }
     }
-    return ResultData.Error(IOException(exceptionMessage))
+    return com.raxdenstudios.commons.ResultData.Error(IOException(exceptionMessage))
 }
 
 @Suppress("TooGenericExceptionCaught", "ReturnCount")
 fun <T : Any, R : Any> Response<T>.toResultData(
     exceptionMessage: String,
     map: (T) -> R
-): ResultData<R> {
+): com.raxdenstudios.commons.ResultData<R> {
     if (isSuccessful) {
         try {
             val body = body()
             if (body != null)
-                return ResultData.Success(map(body))
+                return com.raxdenstudios.commons.ResultData.Success(map(body))
         } catch (e: Exception) {
-            return ResultData.Error(IOException(exceptionMessage, e))
+            return com.raxdenstudios.commons.ResultData.Error(IOException(exceptionMessage, e))
         }
     }
-    return ResultData.Error(IOException(exceptionMessage))
+    return com.raxdenstudios.commons.ResultData.Error(IOException(exceptionMessage))
 }

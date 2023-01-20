@@ -7,7 +7,6 @@ import io.mockk.mockk
 import okhttp3.Headers
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import retrofit2.Response
 import java.io.IOException
 
 internal class NetworkResponseExtensionKtTest {
@@ -19,7 +18,7 @@ internal class NetworkResponseExtensionKtTest {
         val result = networkResponse.toResultData("message") { }
 
         assertEquals(
-            ResultData.Error(NetworkException.Client(400, "message")),
+            com.raxdenstudios.commons.ResultData.Error(NetworkException.Client(400, "message")),
             result
         )
     }
@@ -31,7 +30,7 @@ internal class NetworkResponseExtensionKtTest {
         val result = networkResponse.toResultData("message") { }
 
         assertEquals(
-            ResultData.Error(NetworkException.Server(500, "message")),
+            com.raxdenstudios.commons.ResultData.Error(NetworkException.Server(500, "message")),
             result
         )
     }
@@ -42,7 +41,7 @@ internal class NetworkResponseExtensionKtTest {
 
         val result = networkResponse.toResultData("message") { }
 
-        result as ResultData.Error
+        result as com.raxdenstudios.commons.ResultData.Error
 
         assert(result.throwable is NetworkException.Network)
         assert(result.throwable.cause is IOException)
@@ -54,7 +53,7 @@ internal class NetworkResponseExtensionKtTest {
 
         val result = networkResponse.toResultData("message") { }
 
-        result as ResultData.Error
+        result as com.raxdenstudios.commons.ResultData.Error
 
         assert(result.throwable is NetworkException.Unknown)
         assert(result.throwable.cause is Throwable)

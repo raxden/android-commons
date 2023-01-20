@@ -1,23 +1,23 @@
 package com.raxdenstudios.commons
 
-import androidx.fragment.app.FragmentActivity
+import androidx.activity.ComponentActivity
 import java.lang.ref.WeakReference
 
 class ActivityHolder {
 
-    private var activityReference: WeakReference<FragmentActivity>? = null
-    var activity: FragmentActivity?
+    private var activityReference: WeakReference<ComponentActivity>? = null
+    var activity: ComponentActivity?
         get() = activityReference?.get()
         private set(value) {
             activityReference = if (value == null) null
             else WeakReference(value)
         }
 
-    fun attach(activity: FragmentActivity) {
+    fun attach(activity: ComponentActivity) {
         this.activity = activity
     }
 
-    fun detach(activity: FragmentActivity) {
+    fun detach(activity: ComponentActivity) {
         if (this.activity == activity) this.activity = null
     }
 }
