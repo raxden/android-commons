@@ -6,3 +6,4 @@ coverage:
         target: 95%
         # Allow the coverage to drop by X%, and posting a success status
         threshold: 1%
+
