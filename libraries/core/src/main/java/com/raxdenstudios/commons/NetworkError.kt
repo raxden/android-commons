@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons.retrofit
+package com.raxdenstudios.commons
 
 sealed interface NetworkError<T> {
 

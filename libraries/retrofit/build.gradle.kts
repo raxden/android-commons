@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    api(project(Modules.libraryCore))
     implementation(libs.bundles.retrofit)
 
     testImplementation(libs.junit.ktx)
