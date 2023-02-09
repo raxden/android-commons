@@ -18,7 +18,7 @@ internal class NetworkResponseExtensionKtTest {
         val result = networkResponse.toResultData("message") { }
 
         assertEquals(
-            com.raxdenstudios.commons.ResultData.Error(NetworkException.Client(400, "message")),
+            ResultData.Failure(NetworkError.Client(400, "message")),
             result
         )
     }
@@ -30,7 +30,7 @@ internal class NetworkResponseExtensionKtTest {
         val result = networkResponse.toResultData("message") { }
 
         assertEquals(
-            com.raxdenstudios.commons.ResultData.Error(NetworkException.Server(500, "message")),
+            ResultData.Failure(NetworkError.Server(500, "message")),
             result
         )
     }
@@ -41,10 +41,9 @@ internal class NetworkResponseExtensionKtTest {
 
         val result = networkResponse.toResultData("message") { }
 
-        result as com.raxdenstudios.commons.ResultData.Error
+        result as ResultData.Failure
 
-        assert(result.throwable is NetworkException.Network)
-        assert(result.throwable.cause is IOException)
+        assert(result.value is NetworkError.Network)
     }
 
     @Test
@@ -53,10 +52,9 @@ internal class NetworkResponseExtensionKtTest {
 
         val result = networkResponse.toResultData("message") { }
 
-        result as com.raxdenstudios.commons.ResultData.Error
+        result as ResultData.Failure
 
-        assert(result.throwable is NetworkException.Unknown)
-        assert(result.throwable.cause is Throwable)
+        assert(result.value is NetworkError.Unknown)
     }
 }
 
