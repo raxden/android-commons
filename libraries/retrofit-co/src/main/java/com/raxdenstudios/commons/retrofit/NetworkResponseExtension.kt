@@ -4,18 +4,38 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.raxdenstudios.commons.ResultData
 
 @Suppress("MagicNumber")
-inline fun <T : Any, U : Any, reified R : Any> NetworkResponse<T, U>.toResultData(
+inline fun <T : Any, U : Any, reified R : Any, reified E : Any> NetworkResponse<T, U>.toResultData(
     errorMessage: String,
-    transform: (value: T) -> R = { value -> value as R }
+    transformSuccess: (value: T) -> R = { value -> value as R },
+    transformFailure: (value: U) -> E = { value -> value as E },
 ): ResultData<R, NetworkError> = when (this) {
-    is NetworkResponse.Success -> ResultData.Success(transform(body))
+    is NetworkResponse.Success -> ResultData.Success(transformSuccess(body))
     is NetworkResponse.ServerError -> {
-        when (val code = code ?: -1) {
-            in (400..499) -> ResultData.Failure(NetworkError.Client(code, errorMessage))
-            in (500..599) -> ResultData.Failure(NetworkError.Server(code, errorMessage))
-            else -> ResultData.Failure(NetworkError.Unknown(errorMessage))
+        val error = when (val code = code ?: -1) {
+            in (400..499) -> NetworkError.Client(
+                code = code,
+                message = errorMessage,
+                body = body?.let { transformFailure(it) }
+            )
+            in (500..599) -> NetworkError.Server(
+                code = code,
+                message = errorMessage,
+                body = body?.let { transformFailure(it) }
+            )
+            else -> NetworkError.Unknown(
+                code = code,
+                message = errorMessage,
+                body = body?.let { transformFailure(it) }
+            )
         }
+        ResultData.Failure(error)
     }
     is NetworkResponse.NetworkError -> ResultData.Failure(NetworkError.Network(errorMessage))
-    is NetworkResponse.UnknownError -> ResultData.Failure(NetworkError.Unknown(errorMessage))
+    is NetworkResponse.UnknownError -> ResultData.Failure(
+        NetworkError.Unknown(
+            code = code,
+            message = errorMessage,
+            body = body?.let { transformFailure(it) }
+        )
+    )
 }

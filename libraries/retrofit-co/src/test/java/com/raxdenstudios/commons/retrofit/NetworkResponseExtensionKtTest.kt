@@ -2,9 +2,9 @@ package com.raxdenstudios.commons.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.raxdenstudios.commons.ResultData
+import com.raxdenstudios.commons.ext.onFailure
 import io.mockk.every
 import io.mockk.mockk
-import okhttp3.Headers
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.IOException
@@ -13,65 +13,78 @@ internal class NetworkResponseExtensionKtTest {
 
     @Test
     fun `Given a client error with code 4xx, When toResult is called, Then a ResultData_Error with NetworkException_Client is returned`() {
-        val networkResponse = givenANetworkServerErrorResponse(400)
+        val networkResponse: NetworkResponse.ServerError<String, String> = mockk {
+            every { body } returns ""
+            every { code } returns 400
+        }
 
-        val result = networkResponse.toResultData("message") { }
+        val result: ResultData<String, NetworkError> = networkResponse.toResultData(
+            errorMessage = "message",
+            transformFailure = { "" }
+        )
 
         assertEquals(
-            ResultData.Failure(NetworkError.Client(400, "message")),
+            ResultData.Failure(
+                NetworkError.Client(code = 400, body = "", message = "message")
+            ),
             result
         )
     }
 
     @Test
     fun `Given a server error with code 5xx, When toResult is called, Then a ResultData_Error with NetworkException_Server is returned`() {
-        val networkResponse = givenANetworkServerErrorResponse(500)
+        val networkResponse: NetworkResponse.ServerError<String, String> = mockk {
+            every { body } returns ""
+            every { code } returns 500
+        }
 
-        val result = networkResponse.toResultData("message") { }
+        val result: ResultData<String, NetworkError> = networkResponse.toResultData(
+            errorMessage = "message",
+            transformFailure = { "" }
+        )
 
         assertEquals(
-            ResultData.Failure(NetworkError.Server(500, "message")),
+            ResultData.Failure(
+                NetworkError.Server(code = 500, body = "", message = "message")
+            ),
             result
         )
     }
 
     @Test
     fun `Given a network error, When toResult is called, Then a ResultData_Error with NetworkException_Network is returned`() {
-        val networkResponse = givenANetworkErrorResponse()
+        val networkResponse: NetworkResponse.NetworkError<String, String> = mockk {
+            every { body } returns ""
+            every { error } returns IOException("")
+        }
 
-        val result = networkResponse.toResultData("message") { }
+        val result: ResultData<String, NetworkError> = networkResponse.toResultData("message") { }
 
-        result as ResultData.Failure
-
-        assert(result.value is NetworkError.Network)
+        result.onFailure { error ->
+            assertEquals(
+                NetworkError.Network("message"),
+                error
+            )
+        }
     }
 
     @Test
     fun `Given a unknown error, When toResult is called, Then a ResultData_Error with NetworkException_Unknown is returned`() {
-        val networkResponse = givenAUnknownErrorResponse()
+        val networkResponse: NetworkResponse.UnknownError<String, String> = mockk {
+            every { code } returns -1
+            every { body } returns ""
+        }
 
-        val result = networkResponse.toResultData("message") { }
+        val result: ResultData<String, NetworkError> = networkResponse.toResultData(
+            errorMessage = "message",
+            transformFailure = { "" }
+        )
 
-        result as ResultData.Failure
-
-        assert(result.value is NetworkError.Unknown)
+        result.onFailure { error ->
+            assertEquals(
+                NetworkError.Unknown(code = -1, body = "", message = "message"),
+                error
+            )
+        }
     }
 }
-
-private fun givenANetworkServerErrorResponse(code: Int) =
-    NetworkResponse.ServerError<String, String>(
-        body = "",
-        response = mockk(relaxed = true) {
-            every { code() } returns code
-            every { headers() } returns Headers.Builder().build()
-        },
-    )
-
-private fun givenANetworkErrorResponse() = NetworkResponse.NetworkError<String, String>(
-    error = IOException(""),
-)
-
-private fun givenAUnknownErrorResponse() = NetworkResponse.UnknownError<String, String>(
-    error = Throwable(""),
-    response = mockk(relaxed = true)
-)
