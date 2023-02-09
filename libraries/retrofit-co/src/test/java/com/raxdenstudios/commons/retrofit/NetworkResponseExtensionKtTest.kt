@@ -18,9 +18,8 @@ internal class NetworkResponseExtensionKtTest {
             every { code } returns 400
         }
 
-        val result: ResultData<String, NetworkError> = networkResponse.toResultData(
+        val result: ResultData<String, NetworkError<String>> = networkResponse.toResultData(
             errorMessage = "message",
-            transformFailure = { "" }
         )
 
         assertEquals(
@@ -38,9 +37,8 @@ internal class NetworkResponseExtensionKtTest {
             every { code } returns 500
         }
 
-        val result: ResultData<String, NetworkError> = networkResponse.toResultData(
+        val result: ResultData<String, NetworkError<String>> = networkResponse.toResultData(
             errorMessage = "message",
-            transformFailure = { "" }
         )
 
         assertEquals(
@@ -58,11 +56,13 @@ internal class NetworkResponseExtensionKtTest {
             every { error } returns IOException("")
         }
 
-        val result: ResultData<String, NetworkError> = networkResponse.toResultData("message") { }
+        val result: ResultData<String, NetworkError<String>> = networkResponse.toResultData(
+            errorMessage = "message"
+        )
 
         result.onFailure { error ->
             assertEquals(
-                NetworkError.Network("message"),
+                NetworkError.Network(body = null, message = "message"),
                 error
             )
         }
@@ -75,9 +75,8 @@ internal class NetworkResponseExtensionKtTest {
             every { body } returns ""
         }
 
-        val result: ResultData<String, NetworkError> = networkResponse.toResultData(
+        val result: ResultData<String, NetworkError<String>> = networkResponse.toResultData(
             errorMessage = "message",
-            transformFailure = { "" }
         )
 
         result.onFailure { error ->

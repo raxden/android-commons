@@ -1,28 +1,30 @@
 package com.raxdenstudios.commons.retrofit
 
-sealed interface NetworkError {
+sealed interface NetworkError<T> {
 
     val message: String
+    val body: T?
 
     data class Client<T>(
         val code: Int,
-        val body: T? = null,
+        override val body: T? = null,
         override val message: String,
-    ) : NetworkError
+    ) : NetworkError<T>
 
     data class Server<T>(
         val code: Int,
-        val body: T? = null,
+        override val body: T? = null,
         override val message: String,
-    ) : NetworkError
+    ) : NetworkError<T>
 
-    data class Network(
+    data class Network<T>(
+        override val body: T? = null,
         override val message: String,
-    ) : NetworkError
+    ) : NetworkError<T>
 
     data class Unknown<T>(
         val code: Int? = null,
-        val body: T? = null,
+        override val body: T? = null,
         override val message: String,
-    ) : NetworkError
+    ) : NetworkError<T>
 }
