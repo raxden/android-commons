@@ -23,6 +23,7 @@ jobs:
   info:
     name: Preliminary Information
     runs-on: ubuntu-latest
+    environment: release_environment
 
     steps:
       - name: Basic Information build-${{ github.event.pull_request.number || github.ref }}
@@ -34,6 +35,13 @@ jobs:
           echo "github.ref = ${{ github.ref }}"
           echo "github.sha = ${{ github.sha }}"
           echo "  "
+          
+          echo "OSSRH_ID: ${{ secrets.OSSRH_ID }}"
+          echo "OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}"
+          echo "OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}"
+          echo "SIGNING_KEY: ${{ secrets.SIGNING_KEY }}"
+          echo "SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}"
+          echo "SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}"
 
       - name: Pull request information
         if: github.event_name == 'pull_request'
