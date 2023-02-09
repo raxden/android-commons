@@ -1,6 +1,8 @@
 package com.raxdenstudios.commons.ext
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.PackageInfo
 import android.os.Environment
 import java.io.File
@@ -19,4 +21,10 @@ fun Context.createTemporalImageFile(): File {
         ".jpg", /* suffix */
         storageDir      /* directory */
     )
+}
+
+fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }

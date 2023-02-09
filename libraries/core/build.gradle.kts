@@ -55,4 +55,5 @@ android {
 
 dependencies {
     testImplementation(libs.junit.ktx)
+    testImplementation(libs.truth)
 }

@@ -34,6 +34,7 @@ rx-kotlin = "2.4.0"
 threetenabp = "1.4.0"
 rest-mock = "0.4.4"
 espresso = "3.4.0"
+truth = "1.1.3"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
@@ -72,6 +73,7 @@ espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref =
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
 espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espresso" }
 rest-mock = { module = "com.github.andrzejchm.RESTMock:android", version.ref = "rest-mock" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
 
 [bundles]
 mockk = ["mockk", "mockk-android"]
@@ -80,7 +82,6 @@ retrofit = ["retrofit", "retrofit-gson"]
 retrofit-rx = ["retrofit", "retrofit-gson", "retrofit-rxjava2"]
 rx = ["rx-android", "rx-kotlin"]
 espresso = ["espresso-core", "espresso-contrib", "espresso-intents"]
-
 
 [plugins]
 android-gradle-plugin = { id = "com.android.tools.build:gradle", version.ref = "gradle-plugin" }
