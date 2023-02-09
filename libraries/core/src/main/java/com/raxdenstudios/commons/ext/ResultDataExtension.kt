@@ -54,7 +54,9 @@ suspend fun <T, R, E> ResultData<T, E>.coFlatMap(function: suspend (value: T) ->
         is ResultData.Success -> function(value)
     }
 
-suspend fun <T, R, E> ResultData<T, E>.coFlatMapFailure(function: suspend (value: E) -> ResultData<T, R>): ResultData<T, R> =
+suspend fun <T, R, E> ResultData<T, E>.coFlatMapFailure(
+    function: suspend (value: E) -> ResultData<T, R>
+): ResultData<T, R> =
     when (this) {
         is ResultData.Failure -> function(value)
         is ResultData.Success -> ResultData.Success(value)
