@@ -106,9 +106,8 @@ jobs:
           git add .
           git commit -m "Bump version $VERSION"
           git push --force
-#          git tag $VERSION
-#          git push --tags
-#          echo "::set-output name=version::$(echo $VERSION)"
+          git tag $VERSION
+          git push --tags
 
       - name: Publish ${{ matrix.module }} library in Sonatype
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
