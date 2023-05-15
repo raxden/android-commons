@@ -5,7 +5,7 @@ runs:
   using: "composite"
   steps:
     - name: Unit tests
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.4.2
       with:
         arguments: testDebugUnitTest --stacktrace --scan
 

@@ -57,7 +57,7 @@ jobs:
         uses: ./.github/actions/common_setup
 
       - name: Check code via Detekt
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: detekt --stacktrace --scan
 
