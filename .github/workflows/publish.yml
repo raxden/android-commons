@@ -94,7 +94,7 @@ jobs:
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: increaseMinorVersion --info
+          arguments: :libraries:${{ matrix.module }}:increaseMinorVersion --info
 
       - name: Bump version
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
