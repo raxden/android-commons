@@ -94,7 +94,7 @@ jobs:
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: increaseMinorVersion --no-configuration-cache --info
+          arguments: increaseMinorVersion --info
 
       - name: Bump version
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
@@ -106,9 +106,9 @@ jobs:
           git add .
           git commit -m "Bump version $VERSION"
           git push --force
-          git tag $VERSION
-          git push --tags --force
-          echo "::set-output name=version::$(echo $VERSION)"
+#          git tag $VERSION
+#          git push --tags
+#          echo "::set-output name=version::$(echo $VERSION)"
 
       - name: Publish ${{ matrix.module }} library in Sonatype
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
@@ -121,7 +121,7 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: :libraries/${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+          arguments: :libraries:${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
 
 #      - name: Publish GitHub Release
 #        uses: ncipollo/release-action@v1
