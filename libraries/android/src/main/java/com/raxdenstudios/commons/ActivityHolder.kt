@@ -6,7 +6,6 @@ import java.lang.ref.WeakReference
 class ActivityHolder {
 
     private var activityReference: WeakReference<ComponentActivity>? = null
-
     var activity: ComponentActivity?
         get() = activityReference?.get()
         private set(value) {
