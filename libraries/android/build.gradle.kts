@@ -46,6 +46,8 @@ android {
             enableAndroidTestCoverage = true
         }
     }
+
+
     buildFeatures {
         viewBinding = true
     }
