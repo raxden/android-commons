@@ -5,11 +5,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.android.publishing)
+    alias(libs.plugins.android.publish.library)
 }
 
 versioning {
-    group = "com.raxdenstudios"
+    filePath = "./libraries/glide/version.properties"
 }
 
 publishLibrary {
@@ -42,6 +42,8 @@ android {
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
 
