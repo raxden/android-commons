@@ -5,9 +5,6 @@ name: Continuous Integration
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - '*'
@@ -27,7 +24,7 @@ env:
 jobs:
 
   info:
-    name: Workflow Information
+    name: Workflow Information 📝
     runs-on: ubuntu-latest
 
     steps:

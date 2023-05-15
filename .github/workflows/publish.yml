@@ -44,7 +44,7 @@ jobs:
           echo "  "
 
   publish:
-    name: Publish Library to Sonatype 🚀
+    name: Publish to Sonatype 🚀
     runs-on: ubuntu-latest
     environment: release_environment
     strategy:
@@ -73,6 +73,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # https://github.com/tj-actions/changed-files#usage
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -82,7 +84,7 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: |
-            libraries/${{ matrix.module }}/**/*
+            libraries/${{ matrix.module }}/**
 
       - name: List all changed files
         if: steps.changed-files-specific.outputs.any_changed == 'true'
@@ -122,3 +124,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: :libraries/${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+
+#      - name: Publish GitHub Release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: "!(buildSrc)/**/build/libs/**"
+#          tag: ${{ steps.bump-version.outputs.version }}
