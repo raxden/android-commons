@@ -2,11 +2,10 @@
 
 package com.raxdenstudios.commons.ext
 
-import android.text.Html
 import android.text.Spanned
 import android.util.Base64
 import android.util.Patterns
-import com.raxdenstudios.commons.util.SDK
+import androidx.core.text.HtmlCompat
 import java.math.BigInteger
 import java.nio.charset.Charset
 import java.security.MessageDigest
@@ -17,10 +16,8 @@ fun String.isPhone() = Patterns.PHONE.matcher(this).matches()
 
 fun String.isEmail() = Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-@Suppress("DEPRECATION")
 fun String.toHtml(): Spanned =
-    if (SDK.hasNougat()) Html.fromHtml(this, Html.FROM_HTML_MODE_COMPACT)
-    else Html.fromHtml(this)
+    HtmlCompat.fromHtml(this, HtmlCompat.FROM_HTML_MODE_COMPACT)
 
 fun String.encodeToBase64(
     charset: Charset = Charsets.UTF_8,

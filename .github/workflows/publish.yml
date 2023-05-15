@@ -44,7 +44,7 @@ jobs:
           echo "  "
 
   publish:
-    name: Publish Library to Sonatype 🚀
+    name: Publish to Sonatype
     runs-on: ubuntu-latest
     environment: release_environment
     strategy:
@@ -77,7 +77,7 @@ jobs:
       - name: Setup machine
         uses: ./.github/actions/common_setup
 
-      - name: Get specific changed files ✔️
+      - name: Get specific changed files in ${{ matrix.module }}
         id: changed-files-specific_library
         uses: tj-actions/changed-files@v35
         with:
@@ -85,19 +85,19 @@ jobs:
             libraries/${{ matrix.module }}/**/*
 
       - name: List all changed files
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         run: |
           echo "One or more files in the libraries/${{ matrix.module }} folder has changed."
-          echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+          echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
 
       - name: Increase minor version
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         uses: gradle/gradle-build-action@v2
         with:
           arguments: increaseMinorVersion --no-configuration-cache --info
 
       - name: Bump version
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         id: bump-version
         run: |
           VERSION=$(./gradlew -q getVersion | tail -n 1)
@@ -105,13 +105,13 @@ jobs:
           git config user.email "raxden.dev@gmail.com"
           git add .
           git commit -m "Bump version $VERSION"
-          git push
+          git push --force
           git tag $VERSION
-          git push --tags
+          git push --tags --force
           echo "::set-output name=version::$(echo $VERSION)"
 
       - name: Publish ${{ matrix.module }} library in Sonatype
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         env:
           OSSRH_ID: ${{ secrets.OSSRH_ID }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -122,3 +122,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: :libraries/${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+
+#      - name: Publish GitHub Release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: "!(buildSrc)/**/build/libs/**"
+#          tag: ${{ steps.bump-version.outputs.version }}
