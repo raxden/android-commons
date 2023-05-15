@@ -5,16 +5,16 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.android.publishing)
+    alias(libs.plugins.android.publish.library)
 }
 
 versioning {
-    group = "com.raxdenstudios"
+    filePath = "./libraries/core/version.properties"
 }
 
 publishLibrary {
     name = "Android"
-    description = "Android library"
+    description = "Android Core"
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
@@ -42,6 +42,8 @@ android {
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
     buildFeatures {
@@ -54,6 +56,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit.ktx)
     testImplementation(libs.truth)
 }

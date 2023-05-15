@@ -6,7 +6,7 @@ object Versions {
     const val targetSdk = 31
 
     const val testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    val sourceCompatibility = JavaVersion.VERSION_1_8
-    val targetCompatibility = JavaVersion.VERSION_1_8
-    const val jvmTarget = "1.8"
+    val sourceCompatibility = JavaVersion.VERSION_11
+    val targetCompatibility = JavaVersion.VERSION_11
+    const val jvmTarget = "11"
 }

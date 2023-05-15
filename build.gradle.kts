@@ -1,16 +1,14 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 
-@Suppress("DSL_SCOPE_VIOLATION") // -> workaround to avoid errors https://github.com/gradle/gradle/issues/22797
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.versioning) apply false
+    alias(libs.plugins.android.publish.library) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
-    alias(libs.plugins.junit.jacoco)
+    alias(libs.plugins.rootcoverage)
     alias(libs.plugins.nexus.publish)
-    alias(libs.plugins.android.publishing) apply false
-    alias(libs.plugins.android.versioning) apply false
-    alias(libs.plugins.android.releasing)
     alias(libs.plugins.test.logger)
     alias(libs.plugins.detekt)
 }
@@ -19,22 +17,58 @@ val nexusId: String? by project
 val nexusUsername: String? by project
 val nexusPassword: String? by project
 
-releasing {
-    // ./gradlew releaseCandidate --no-configuration-cache
-    // ./gradlew releaseCandidateTag --no-configuration-cache
-    versionFilePath = "./version.properties"
-}
-
 nexusPublishing {
-    repositories {
+    this.repositories {
         sonatype {
             packageGroup.set("com.raxdenstudios")
+            repositoryDescription.set("Raxden Studios Maven2 Repository")
+
             // stagingProfileId can reduce execution time by even 10 seconds
             stagingProfileId.set(nexusId ?: System.getenv("OSSRH_ID") ?: "")
             username.set(nexusUsername ?: System.getenv("OSSRH_USERNAME") ?: "")
             password.set(nexusPassword ?: System.getenv("OSSRH_PASSWORD") ?: "")
         }
     }
+}
+
+rootCoverage {
+    // The default build variant for every module
+    buildVariant = "debug"
+
+    // Class & package exclude patterns
+    excludes = listOf(
+        "**/di/*",
+        "**/BuildConfig*",
+        "**/databinding/*",
+        "**/*_*.class",
+        "**/*_Impl*.class",
+        "**/App.class",
+        "**/*Activity.*",
+        "**/*Fragment.*",
+        "**/*Adapter.*",
+        "**/*.compose.*",
+    )
+
+    // Since 1.1 generateHtml is by default true
+    generateCsv = false
+    generateHtml = true
+    generateXml = true
+
+    // Since 1.2: Same as executeTests except that this only affects the instrumented Android tests
+    executeAndroidTests = false
+
+    // Since 1.2: Same as executeTests except that this only affects the unit tests
+    executeUnitTests = false
+
+    // Since 1.2: When true include results from instrumented Android tests into the coverage report
+    includeAndroidTestResults = true
+
+    // Since 1.2: When true include results from unit tests into the coverage report
+    includeUnitTestResults = true
+
+    // Since 1.4: Sets jacoco.includeNoLocationClasses, so you don't have to. Helpful when using Robolectric
+    // which usually requires this attribute to be true
+    includeNoLocationClasses = false
 }
 
 detekt {
@@ -49,6 +83,10 @@ detekt {
 subprojects {
     apply(plugin = "com.adarshr.test-logger")
     apply(plugin = "io.gitlab.arturbosch.detekt")
+    // https://docs.gradle.org/current/userguide/project_report_plugin.html#sec:project_reports_tasks
+    apply(plugin = "project-report")
+
+    group = "com.raxdenstudios"
 
     testlogger {
         theme = ThemeType.MOCHA

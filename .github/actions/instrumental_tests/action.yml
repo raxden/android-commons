@@ -1,0 +1,70 @@
+name: 'Launch Instrumental tests'
+description: "Launch Instrumental tests and upload outputs to GitHub"
+inputs:
+  arch:
+    description: 'Architecture'
+    required: true
+  target:
+    description: 'Target'
+    required: true
+  channel:
+    description: 'Channel'
+    required: true
+  api-level:
+    description: 'API level'
+    required: true
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Gradle cache
+      uses: gradle/gradle-build-action@v2.4.2
+
+    - name: AVD cache
+      uses: actions/cache@v3
+      id: avd-cache
+      with:
+        path: |
+          ~/.android/avd/*
+          ~/.android/adb*
+        key: avd-${{ inputs.api-level }}-${{ inputs.target }}
+
+    - name: create AVD and generate snapshot for caching
+      if: steps.avd-cache.outputs.cache-hit != 'true'
+      uses: reactivecircus/android-emulator-runner@v2  # https://github.com/ReactiveCircus/android-emulator-runner
+      with:
+        arch: ${{ inputs.arch }}
+        target: ${{ inputs.target }}
+        api-level: ${{ inputs.api-level }}
+        disable-animations: false
+        force-avd-creation: false
+        ram-size: 4096M
+        emulator-boot-timeout: 12000
+        emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        script: echo "Generated AVD snapshot for caching."
+
+    - name: Run instrumental tests
+      uses: reactivecircus/android-emulator-runner@v2 # https://github.com/ReactiveCircus/android-emulator-runner
+      with:
+        arch: ${{ inputs.arch }}
+        target: ${{ inputs.target }}
+        api-level: ${{ inputs.api-level }}
+        disable-animations: true
+        force-avd-creation: false
+        ram-size: 4096M
+        emulator-boot-timeout: 12000
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+        script: |
+          touch emulator.log                    # create log file
+          chmod 777 emulator.log                # allow writing to log file
+          adb logcat >> emulator.log &          # pipe all logcat messages into log file as a background process
+          ./gradlew connectedDebugAndroidTest --stacktrace --scan
+
+    - name: Upload Outputs
+      uses: actions/upload-artifact@v3
+      with:
+        name: outputs-android-tests
+        path: |
+          emulator.log
+          ./**/build/outputs/code_coverage/
+        retention-days: 3
