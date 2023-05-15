@@ -1,5 +1,6 @@
 package com.raxdenstudios.commons.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import com.raxdenstudios.commons.ext.getPackageInfo
@@ -8,19 +9,20 @@ object SDK {
 
     val isEmulator: Boolean
         get() = (Build.FINGERPRINT.startsWith("generic")
-            || Build.FINGERPRINT.startsWith("unknown")
-            || Build.MODEL.contains("google_sdk")
-            || Build.MODEL.contains("Emulator")
-            || Build.MODEL.contains("Android SDK built for x86")
-            || Build.MANUFACTURER.contains("Genymotion")
-            || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-            || "google_sdk" == Build.PRODUCT)
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+                || "google_sdk" == Build.PRODUCT)
 
     fun hasVirtualNavigationBar(context: Context): Boolean {
         val id = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
         return (id > 0 && context.resources.getBoolean(id)) || isEmulator
     }
 
+    @SuppressLint("InternalInsetResource")
     fun getVirtualNavigationBarHeight(context: Context): Int {
         if (!hasVirtualNavigationBar(context)) return 0
         val resourceId =
@@ -33,6 +35,7 @@ object SDK {
     /**
      * Only works when is called in onCreate
      */
+    @SuppressLint("InternalInsetResource")
     fun getStatusBarHeight(context: Context): Int {
         val resourceId: Int =
             context.resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -47,19 +50,10 @@ object SDK {
     fun getVersionName(context: Context): String =
         runCatching { context.getPackageInfo().versionName }.getOrDefault("")
 
-    @Suppress("DEPRECATION")
     fun getVersionCode(context: Context): Long = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
-            runCatching { context.getPackageInfo().longVersionCode }.getOrDefault(0L)
-        else ->
-            runCatching { context.getPackageInfo().versionCode.toLong() }.getOrDefault(0L)
+        hasPie() -> runCatching { context.getPackageInfo().longVersionCode }.getOrDefault(0L)
+        else -> runCatching { context.getPackageInfo().versionCode.toLong() }.getOrDefault(0L)
     }
-
-    /**
-     * Checks if the device has Lolllipop or higher version.
-     * @return `true` if device is a tablet.
-     */
-    fun hasLollipop(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
     /**
      * Checks if the device has Marshmallow or higher version.
