@@ -1,0 +1,40 @@
+name: 'Generate reports'
+description: "Generate jacoco reports and upload to codecov"
+inputs:
+  token:
+    description: 'Codecov token'
+    required: true
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Load unit tests outputs
+      uses: actions/download-artifact@v3
+      with:
+        name: outputs-unit-tests
+#        if-no-files-found: warn
+
+#  https://github.com/actions/upload-artifact/issues/255
+#    - name: Load instrumental tests outputs
+#      uses: actions/download-artifact@v3
+#      with:
+#        name: outputs-android-tests
+#        if-no-files-found: warn
+
+    - name: Jacoco Reports
+      uses: gradle/gradle-build-action@v2
+      with:
+        cache-disabled: true
+        arguments: coverageReport --no-configuration-cache --stacktrace --scan
+
+    - name: Upload Reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: reports-jacoco
+        path: ./**/build/reports/jacoco.xml
+        retention-days: 3
+
+    - name: Uploading reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ inputs.token }}
