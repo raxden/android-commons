@@ -18,7 +18,7 @@ runs:
   using: "composite"
   steps:
     - name: Gradle cache
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.4.2
 
     - name: AVD cache
       uses: actions/cache@v3

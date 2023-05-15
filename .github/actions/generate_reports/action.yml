@@ -22,10 +22,10 @@ runs:
 #        if-no-files-found: warn
 
     - name: Jacoco Reports
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/gradle-build-action@v2.4.2
       with:
         cache-disabled: true
-        arguments: coverageReport --stacktrace --scan
+        arguments: coverageReport --no-configuration-cache --stacktrace --scan
 
     - name: Upload Reports
       uses: actions/upload-artifact@v3
