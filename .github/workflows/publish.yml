@@ -84,7 +84,7 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: |
-            libraries/${{ matrix.module }}/**
+            libraries/${{ matrix.module }}
 
       - name: List all changed files
         if: steps.changed-files-specific.outputs.any_changed == 'true'
