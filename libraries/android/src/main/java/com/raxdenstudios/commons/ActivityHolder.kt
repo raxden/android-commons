@@ -21,5 +21,4 @@ class ActivityHolder {
     fun detach(activity: ComponentActivity) {
         if (this.activity == activity) this.activity = null
     }
-
 }
