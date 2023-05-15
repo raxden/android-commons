@@ -100,7 +100,7 @@ jobs:
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         id: bump-version
         run: |
-          VERSION=$(./gradlew -q getVersion | tail -n 1)
+          VERSION=$(./gradlew -q :libraries:${{ matrix.module }}:getVersion | tail -n 1)
           git config user.name \"RaxdenRobot\"
           git config user.email "raxden.dev@gmail.com"
           git add .
