@@ -105,9 +105,9 @@ jobs:
           git config user.email "raxden.dev@gmail.com"
           git add .
           git commit -m "Bump version $VERSION"
-          git push
+          git push --force
           git tag $VERSION
-          git push --tags
+          git push --tags --force
           echo "::set-output name=version::$(echo $VERSION)"
 
       - name: Publish ${{ matrix.module }} library in Sonatype
