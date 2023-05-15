@@ -27,7 +27,7 @@ env:
 jobs:
 
   info:
-    name: Workflow Information 📝
+    name: Workflow Information
     runs-on: ubuntu-latest
 
     steps:
@@ -49,7 +49,7 @@ jobs:
           echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
 
   checkstyle:
-    name: Check code (detekt) ✔️
+    name: Check code (detekt)
     runs-on: ubuntu-latest
 
     steps:
@@ -67,7 +67,7 @@ jobs:
   test:
     needs: [ checkstyle ]
     if: success()
-    name: Run Unit Tests 🧪
+    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -83,7 +83,7 @@ jobs:
   reports:
     needs: [ test ]
     if: success()
-    name: Generate reports 📝
+    name: Generate reports
     runs-on: ubuntu-latest
 
     steps:
@@ -101,7 +101,7 @@ jobs:
   publish:
     needs: [ test, reports ]
     if: success() && github.ref == 'refs/heads/master'
-    name: Publish to Sonatype 🚀
+    name: Publish to Sonatype
     runs-on: ubuntu-latest
     environment: release_environment
     strategy:
@@ -136,7 +136,7 @@ jobs:
       - name: Setup machine
         uses: ./.github/actions/common_setup
 
-      - name: Get specific changed files ✔️
+      - name: Get specific changed files
         id: changed-files-specific_library
         uses: tj-actions/changed-files@v35
         with:
