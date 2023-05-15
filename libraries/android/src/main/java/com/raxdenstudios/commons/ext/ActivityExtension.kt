@@ -59,6 +59,16 @@ fun Activity.setResultOKAndFinish() {
     finish()
 }
 
+fun Activity.setResultOKAndFinish2() {
+    setResultOK()
+    finish()
+}
+
+fun Activity.setResultOKAndFinish3() {
+    setResultOK()
+    finish()
+}
+
 inline fun <reified T : Parcelable> Activity.setResultOKWithData(value: T) {
     setResult(
         Activity.RESULT_OK,

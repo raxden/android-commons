@@ -1,39 +1,40 @@
 [versions]
-androidx-core-ktx = "1.8.0"
-androidx-activity-ktx = "1.5.0"
-androidx-fragment-ktx = "1.5.0"
+androidx-core-ktx = "1.10.1"
+androidx-activity-ktx = "1.7.1"
+androidx-fragment-ktx = "1.5.7"
 androidx-preference-ktx = "1.2.0"
 androidx-constraintlayout = "2.1.4"
 androidx-swiperefreshlayout = "1.1.0"
-androidx-browser = "1.4.0"
-androidx-lifecycle = "2.5.0"
-android-material = "1.6.1"
+androidx-browser = "1.5.0"
+androidx-lifecycle = "2.6.1"
+android-material = "1.9.0"
 android-play-core = "1.10.3"
 kotlin = "1.7.10"
-junit-jacoco = "0.16.0"
-nexus-publish = "1.1.0"
-android-releasing = "0.49"
-android-versioning = "0.49"
-publish-library = "0.49"
+rootcoverage = "1.6.0"
+nexus-publish = "1.3.0"
+android-versioning = "0.56.2"
+#android-versioning = "1.0.0-SNAPSHOT"
+android-publish-library = "0.56.2"
+#android-publish-library = "1.0.0-SNAPSHOT"
 test-logger = "3.2.0"
 detekt = "1.22.0"
-gradle-plugin = "7.2.1"
-junit-ktx = "1.1.3"
+gradle-plugin = "7.4.2"
+junit-ktx = "1.1.5"
 coroutines-android = "1.6.4"
 coroutines-bom = "1.6.4"
 glide = "4.13.2"
 okhttp3 = "4.10.0"
-compose = "2022.12.00"
-mockk = "1.12.4"
-gson = "2.9.0"
+compose = "2023.05.01"
+mockk = "1.13.5"
+gson = "2.10.1"
 roboletric = "4.8.1"
 retrofit = "2.9.0"
 network-response-adapter = "5.0.0"
 rx-android = "2.1.1"
 rx-kotlin = "2.4.0"
-threetenabp = "1.4.0"
+threetenabp = "1.4.6"
 rest-mock = "0.4.4"
-espresso = "3.4.0"
+espresso = "3.5.1"
 truth = "1.1.3"
 
 [libraries]
@@ -90,11 +91,10 @@ android-application = { id = "com.android.application", version.ref = "gradle-pl
 android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-junit-jacoco = { id = "com.vanniktech.android.junit.jacoco", version.ref = "junit-jacoco" }
+rootcoverage = { id = "nl.neotech.plugin.rootcoverage", version.ref = "rootcoverage" }
 nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus-publish" }
-android-publishing = { id = "com.raxdenstudios.publish-library", version.ref = "publish-library" }
+android-publish-library = { id = "com.raxdenstudios.android-publish-library", version.ref = "android-publish-library" }
 android-versioning = { id = "com.raxdenstudios.android-versioning", version.ref = "android-versioning" }
-android-releasing = { id = "com.raxdenstudios.android-releasing", version.ref = "android-releasing" }
 test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 detekt-formatting = { id = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
