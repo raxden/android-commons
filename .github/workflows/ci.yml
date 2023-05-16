@@ -23,35 +23,21 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  info:
-    name: Workflow Information
+  publish:
+    name: Publish to Sonatype
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Basic Information
-        run: |
-          echo "The job was automatically triggered by a ${{ github.event_name }} event with ${{ github.event.action }} action."
-          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-          echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-          echo "  "
-          echo "github.ref = ${{ github.ref }}"
-          echo "github.sha = ${{ github.sha }}"
-          echo "  "
-
-      - name: Pull request information
-        if: github.event_name == 'pull_request'
-        run: |
-          echo "Pull request detected"
-          echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
-          echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
-
-  checkstyle:
-    name: Check code (detekt)
-    runs-on: ubuntu-latest
+    environment: release_environment
+    strategy:
+      matrix:
+        module: [
+          android,
+        ]
 
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -61,46 +47,133 @@ jobs:
         with:
           arguments: detekt --stacktrace --scan
 
-  test:
-    needs: [ checkstyle ]
-    if: success()
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
       - name: Setup machine
         uses: ./.github/actions/common_setup
 
-      - name: Unit tests
-        uses: ./.github/actions/unit_tests
+      #      - name: Get specific changed files in ${{ matrix.module }}
+      #        id: changed-files-specific_library
+      #        uses: tj-actions/changed-files@v35
+      #        with:
+      #          files: |
+      #            libraries/${{ matrix.module }}/**/*
 
-  reports:
-    needs: [ test ]
-    if: success()
-    name: Generate reports
-    runs-on: ubuntu-latest
+      #      - name: List all changed files
+      #        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      #        run: |
+      #          echo "One or more files in the libraries/${{ matrix.module }} folder has changed."
+      #          echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
 
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Setup machine
-        uses: ./.github/actions/common_setup
-
-      - name: Generate jacoco reports and upload to codecov
-        uses: ./.github/actions/generate_reports
+      - name: Increase minor version
+        #        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+        uses: gradle/gradle-build-action@v2.4.2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          arguments: :libraries:${{ matrix.module }}:increaseMinorVersion --info
 
-  status:
-    needs: [ test, reports ]
-    if: success() && github.event_name == 'pull_request'
-    name: Status
-    runs-on: ubuntu-latest
+      - name: Bump version
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+        id: bump-version
+        run: |
+          VERSION=$(./gradlew -q :libraries:${{ matrix.module }}:getVersion | tail -n 1)
+          git config user.name \"RaxdenRobot\"
+          git config user.email "raxden.dev@gmail.com"
+          git add .
+          git commit -m "Bump version $VERSION"
+          git push --force
+          git tag $VERSION
+          git push --tags
 
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v3
+#      - name: Publish ${{ matrix.module }} library in Sonatype
+#        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+#        env:
+#          OSSRH_ID: ${{ secrets.OSSRH_ID }}
+#          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+#          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+#          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+#          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+#          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+#        uses: gradle/gradle-build-action@v2.4.2
+#        with:
+#          arguments: :libraries:${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+
+
+#  info:
+#    name: Workflow Information
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Basic Information
+#        run: |
+#          echo "The job was automatically triggered by a ${{ github.event_name }} event with ${{ github.event.action }} action."
+#          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+#          echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+#          echo "  "
+#          echo "github.ref = ${{ github.ref }}"
+#          echo "github.sha = ${{ github.sha }}"
+#          echo "  "
+#
+#      - name: Pull request information
+#        if: github.event_name == 'pull_request'
+#        run: |
+#          echo "Pull request detected"
+#          echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
+#          echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
+#
+#  checkstyle:
+#    name: Check code (detekt)
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v3
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Check code via Detekt
+#        uses: gradle/gradle-build-action@v2.4.2
+#        with:
+#          arguments: detekt --stacktrace --scan
+#
+#  test:
+#    needs: [ checkstyle ]
+#    if: success()
+#    name: Run Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v3
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Unit tests
+#        uses: ./.github/actions/unit_tests
+#
+#  reports:
+#    needs: [ test ]
+#    if: success()
+#    name: Generate reports
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v3
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Generate jacoco reports and upload to codecov
+#        uses: ./.github/actions/generate_reports
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#
+#  status:
+#    needs: [ test, reports ]
+#    if: success() && github.event_name == 'pull_request'
+#    name: Status
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v3
