@@ -102,10 +102,16 @@ jobs:
           arguments: :libraries:${{ matrix.module }}:increasePatchVersion --info
 
       - name: Increase minor version
-        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.head_ref, 'feature')
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.head_ref, 'minor')
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: :libraries:${{ matrix.module }}:increaseMinorVersion --info
+
+      - name: Increase major version
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.head_ref, 'major')
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: :libraries:${{ matrix.module }}:increaseMajorVersion --info
 
       - name: Bump version
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
