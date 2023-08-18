@@ -11,4 +11,12 @@ internal class StringExtensionTest {
 
         assertEquals("5df9f63916ebf8528697b629022993e8", result)
     }
+
+    @Test
+    fun `null orDefault should return default value`() {
+        val nullValue: String? = null
+
+        assertEquals(String.EMPTY, nullValue.orDefault())
+        assertEquals("empty", nullValue.orDefault("empty"))
+    }
 }

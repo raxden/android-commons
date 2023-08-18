@@ -10,6 +10,11 @@ import java.math.BigInteger
 import java.nio.charset.Charset
 import java.security.MessageDigest
 
+fun String?.orDefault(default: String = String.EMPTY) = this ?: default
+
+val String.Companion.EMPTY: String
+    get() = ""
+
 fun String.isUrl() = Patterns.WEB_URL.matcher(this).matches()
 
 fun String.isPhone() = Patterns.PHONE.matcher(this).matches()
