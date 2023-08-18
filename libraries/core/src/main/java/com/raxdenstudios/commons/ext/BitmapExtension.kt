@@ -5,33 +5,38 @@ import android.graphics.Matrix
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 
-fun Bitmap.toBase64(maxSize: Int, quality: Int): String {
+fun Bitmap.toBase64(
+    maxSize: Int,
+    quality: Int,
+    flags: Int = Base64.DEFAULT,
+): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
-    resize(this, maxSize).compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
-    return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT)
+    resize(maxSize).compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+    return Base64.encodeToString(byteArrayOutputStream.toByteArray(), flags)
 }
 
 fun Bitmap.rotate(rotation: Int): Bitmap {
-    if (rotation != 0) {
-        val matrix = Matrix()
-        matrix.postRotate(rotation.toFloat())
-        return Bitmap.createBitmap(this, 0, 0, this.width, this.height, matrix, true)
-    }
-    return this
+    if (rotation == 0) return this
+
+    val matrix = Matrix()
+    matrix.postRotate(rotation.toFloat())
+    return Bitmap.createBitmap(this, 0, 0, this.width, this.height, matrix, true)
 }
 
-fun Bitmap.resize(bitmap: Bitmap, maxSize: Int): Bitmap {
-    var width = bitmap.width.toFloat()
-    var height = bitmap.height.toFloat()
+fun Bitmap.resize(size: Int): Bitmap {
+    var width = width.toFloat()
+    var height = height.toFloat()
     val aspectRatio: Float
-    if (bitmap.width > bitmap.height) {
+
+    if (width > height) {
         aspectRatio = width / height
-        if (bitmap.width > maxSize) width = maxSize.toFloat()
+        if (width > size) width = size.toFloat()
         height = width / aspectRatio
     } else {
         aspectRatio = height / width
-        if (bitmap.height > maxSize) height = maxSize.toFloat()
+        if (height > size) height = size.toFloat()
         width = height / aspectRatio
     }
-    return Bitmap.createScaledBitmap(bitmap, width.toInt(), height.toInt(), true)
+
+    return Bitmap.createScaledBitmap(this, width.toInt(), height.toInt(), true)
 }
