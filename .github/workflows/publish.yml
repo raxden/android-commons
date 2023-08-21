@@ -42,6 +42,7 @@ jobs:
           echo "github.head_ref = ${{ github.head_ref }}"
           echo "github.sha = ${{ github.sha }}"
           echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
+          echo "github.event.pull_request.title = ${{ github.event.pull_request.title }}"
           echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
           echo "  "
 
@@ -96,19 +97,19 @@ jobs:
           echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
 
       - name: Increase patch version
-        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.head_ref, 'patch')
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.event.pull_request.title, 'patch')
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: :libraries:${{ matrix.module }}:increasePatchVersion --info
 
       - name: Increase minor version
-        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.head_ref, 'minor')
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.event.pull_request.title, 'minor')
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: :libraries:${{ matrix.module }}:increaseMinorVersion --info
 
       - name: Increase major version
-        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.head_ref, 'major')
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.event.pull_request.title, 'major')
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: :libraries:${{ matrix.module }}:increaseMajorVersion --info
