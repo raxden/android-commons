@@ -63,4 +63,5 @@ dependencies {
     implementation(libs.android.material)
 
     testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
 }
