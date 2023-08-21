@@ -59,4 +59,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit.ktx)
     testImplementation(libs.truth)
+    testImplementation(libs.bundles.mockk)
 }
