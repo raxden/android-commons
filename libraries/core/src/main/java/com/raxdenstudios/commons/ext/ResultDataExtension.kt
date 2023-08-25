@@ -78,10 +78,11 @@ fun <T, E> ResultData<T, E>.fold(onSuccess: (T) -> Unit, onFailure: (E) -> Unit)
         is ResultData.Success -> onSuccess(value)
     }
 
-fun <T, E> ResultData<T, E>.onSuccess(function: (success: T) -> Unit): ResultData<T, E> = when (this) {
-    is ResultData.Failure -> this
-    is ResultData.Success -> also { function(value) }
-}
+fun <T, E> ResultData<T, E>.onSuccess(function: (success: T) -> Unit): ResultData<T, E> =
+    when (this) {
+        is ResultData.Failure -> this
+        is ResultData.Success -> also { function(value) }
+    }
 
 suspend fun <T, E> ResultData<T, E>.onCoSuccess(function: suspend (success: T) -> Unit): ResultData<T, E> =
     when (this) {
