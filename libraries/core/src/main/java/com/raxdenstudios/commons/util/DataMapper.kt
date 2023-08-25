@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons
+package com.raxdenstudios.commons.util
 
 abstract class DataMapper<E, T> {
 

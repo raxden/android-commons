@@ -56,7 +56,8 @@ android {
 }
 
 dependencies {
-//    implementation(libs.androidx.core.ktx)
+    testImplementation(platform(libs.coroutines.bom))
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.junit.ktx)
     testImplementation(libs.truth)
     testImplementation(libs.bundles.mockk)

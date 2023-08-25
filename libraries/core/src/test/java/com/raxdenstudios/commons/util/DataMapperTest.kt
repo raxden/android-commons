@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons
+package com.raxdenstudios.commons.util
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
