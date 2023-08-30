@@ -6,7 +6,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-private val onErrorStub: (e: Throwable) -> Unit = { _ -> }
 private val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
     Log.e("CoroutineException", throwable.message, throwable)
 }
@@ -14,15 +13,20 @@ private val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable -
 fun CoroutineScope.safeLaunch(
     exceptionHandler: CoroutineExceptionHandler = defaultExceptionHandler,
     block: suspend CoroutineScope.() -> Unit,
-): Job = this.launch(exceptionHandler) {
+): Job = this.launch(
+    exceptionHandler
+) {
     block.invoke(this)
 }
 
 fun CoroutineScope.launch(
-    onError: (throwable: Throwable) -> Unit = onErrorStub,
+    onError: (throwable: Throwable) -> Unit = { _ -> },
     block: suspend CoroutineScope.() -> Unit,
 ): Job = this.launch(
-    CoroutineExceptionHandler { _, throwable -> onError(throwable) }
+    CoroutineExceptionHandler { _, throwable ->
+        Log.e("CoroutineException", throwable.message, throwable)
+        onError(throwable)
+    }
 ) {
     block.invoke(this)
 }
