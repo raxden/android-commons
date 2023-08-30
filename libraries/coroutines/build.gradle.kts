@@ -57,5 +57,9 @@ dependencies {
     implementation(platform(libs.coroutines.bom))
     implementation(libs.coroutines.android)
 
+    testImplementation(platform(libs.coroutines.bom))
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.junit.ktx)
+    testImplementation(libs.truth)
+    testImplementation(libs.bundles.mockk)
 }

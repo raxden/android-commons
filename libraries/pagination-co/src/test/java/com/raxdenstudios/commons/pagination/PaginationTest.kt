@@ -1,5 +1,6 @@
 package com.raxdenstudios.commons.pagination
 
+import android.util.Log
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
@@ -8,12 +9,16 @@ import com.raxdenstudios.commons.pagination.model.PageSize
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.runBlockingTest
+import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
@@ -36,6 +41,17 @@ internal class PaginationTest {
             config = configuration,
             coroutineScope = testCoroutineScope
         )
+    }
+
+    @Before
+    fun setUp() {
+        mockkStatic(Log::class)
+        every { Log.e(any(), any(), any()) } returns 0
+    }
+
+    @After
+    fun after() {
+        unmockkStatic(Log::class)
     }
 
     @Test
@@ -115,22 +131,21 @@ internal class PaginationTest {
     }
 
     @Test
-    fun `Given an error that happens when a page is requested, When requestPage is called, Then loading, error states are returned`() =
-        runBlockingTest {
-            givenAPageWithResults(aFirstPage)
-            givenAPageWithError(Page(1))
+    fun `Given an error that happens when a page is requested, When requestPage is called, Then loading, error states are returned`() {
+        givenAPageWithResults(aFirstPage)
+        givenAPageWithError(Page(1))
 
-            for (index in PageIndex.first.value..8) requestPage(PageIndex(index))
+        for (index in PageIndex.first.value..8) requestPage(PageIndex(index))
 
-            coVerifyOrder {
-                pageResponse.invoke(PageResult.Loading)
-                pageResponse.invoke(PageResult.Content(aPageItems))
-                pageResponse.invoke(PageResult.Loading)
-                pageResponse.invoke(capture(pageResultSlot))
-            }
-            assertTrue(pageResultSlot.captured is PageResult.Error)
-            confirmVerified(pageResponse)
+        coVerifyOrder {
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(PageResult.Content(aPageItems))
+            pageResponse.invoke(PageResult.Loading)
+            pageResponse.invoke(capture(pageResultSlot))
         }
+        assertTrue(pageResultSlot.captured is PageResult.Error)
+        confirmVerified(pageResponse)
+    }
 
     private fun requestPage(pageIndex: PageIndex) {
         pagination.requestPage(
