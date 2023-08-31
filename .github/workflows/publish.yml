@@ -36,17 +36,69 @@ jobs:
           echo "The job was automatically triggered by a ${{ github.event_name }} event with ${{ github.event.action }} action."
           echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
           echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-          echo "The group concurrency is ${{ github.event.pull_request.number || github.ref }}."
+          echo "The group concurrency is build-${{ github.event.pull_request.number || github.ref }}."
           echo "  "
           echo "github.ref = ${{ github.ref }}"
           echo "github.head_ref = ${{ github.head_ref }}"
           echo "github.sha = ${{ github.sha }}"
+          echo "  "
           echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
           echo "github.event.pull_request.title = ${{ github.event.pull_request.title }}"
           echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
           echo "  "
 
+  checkstyle:
+    name: Check code (detekt)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Check code via Detekt
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: detekt --stacktrace --scan
+
+  test:
+    needs: [ checkstyle ]
+    if: success()
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Unit tests
+        uses: ./.github/actions/unit_tests
+
+  reports:
+    needs: [ test ]
+    if: success()
+    name: Generate reports
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Generate jacoco reports and upload to codecov
+        uses: ./.github/actions/generate_reports
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   publish:
+    needs: [ checkstyle, tests, reports ]
     name: Publish to Sonatype
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
