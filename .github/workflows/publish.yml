@@ -104,7 +104,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   publish:
-    needs: [ checkstyle, tests, reports ]
+    needs: [ checkstyle, test, reports ]
     name: Publish to Sonatype
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
