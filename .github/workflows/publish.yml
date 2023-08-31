@@ -26,9 +26,9 @@ env:
 jobs:
 
   info:
+    if: github.event.pull_request.merged == true
     name: Preliminary Information
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged == true }}
 
     steps:
       - name: Basic Information
@@ -48,6 +48,7 @@ jobs:
           echo "  "
 
   checkstyle:
+    if: success() && github.event.pull_request.merged == true
     name: Check code (detekt)
     runs-on: ubuntu-latest
 
@@ -67,7 +68,7 @@ jobs:
 
   test:
     needs: [ checkstyle ]
-    if: success()
+    if: success() && github.event.pull_request.merged == true
     name: Run Unit Tests
     runs-on: ubuntu-latest
 
@@ -85,7 +86,7 @@ jobs:
 
   reports:
     needs: [ test ]
-    if: success()
+    if: success() && github.event.pull_request.merged == true
     name: Generate reports
     runs-on: ubuntu-latest
 
@@ -105,9 +106,9 @@ jobs:
 
   publish:
     needs: [ checkstyle, test, reports ]
+    if: success() && github.event.pull_request.merged == true
     name: Publish to Sonatype
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged == true }}
     environment: release_environment
     strategy:
       matrix:
