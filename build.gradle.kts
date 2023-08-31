@@ -68,7 +68,7 @@ rootCoverage {
 
     // Since 1.4: Sets jacoco.includeNoLocationClasses, so you don't have to. Helpful when using Robolectric
     // which usually requires this attribute to be true
-    includeNoLocationClasses = false
+    includeNoLocationClasses = true
 }
 
 detekt {
