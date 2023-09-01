@@ -126,7 +126,6 @@ jobs:
           permissions,
           preferences,
           retrofit,
-          retrofit-co,
           retrofit-rx,
           rx,
           rx-test,

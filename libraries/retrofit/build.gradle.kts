@@ -55,6 +55,9 @@ android {
 dependencies {
     api(project(Modules.libraryCore))
     implementation(libs.bundles.retrofit)
+    implementation(libs.network.response.adapter)
 
     testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
+    testImplementation(libs.truth)
 }
