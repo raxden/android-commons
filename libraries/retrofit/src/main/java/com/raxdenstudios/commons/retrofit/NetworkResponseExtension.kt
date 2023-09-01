@@ -5,41 +5,39 @@ import com.raxdenstudios.commons.NetworkError
 import com.raxdenstudios.commons.ResultData
 
 @Suppress("MagicNumber")
-inline fun <T : Any, U : Any, reified R : Any> NetworkResponse<T, U>.toResultData(
+inline fun <S : Any, E : Any, reified R : Any> NetworkResponse<S, E>.toResultData(
     errorMessage: String,
-    transformSuccess: (value: T) -> R = { value -> value as R },
-): ResultData<R, NetworkError<U>> = when (this) {
-    is NetworkResponse.Success -> ResultData.Success(transformSuccess(body))
+    onSuccess: (value: S) -> R = { value -> value as R },
+): ResultData<R, NetworkError<E>> = when (this) {
+    is NetworkResponse.Success -> ResultData.Success(onSuccess(body))
     is NetworkResponse.ServerError -> {
-        val error = when (val code = code ?: -1) {
+        val networkError = when (val code = code ?: -1) {
             in (400..499) -> NetworkError.Client(
                 code = code,
                 message = errorMessage,
                 body = body
             )
+
             in (500..599) -> NetworkError.Server(
                 code = code,
                 message = errorMessage,
                 body = body
             )
+
             else -> NetworkError.Unknown(
                 code = code,
                 message = errorMessage,
                 body = body
             )
         }
-        ResultData.Failure(error)
+        ResultData.Failure(networkError)
     }
+
     is NetworkResponse.NetworkError -> ResultData.Failure(
-        NetworkError.Network(
-            message = errorMessage,
-        )
+        NetworkError.Network(message = errorMessage)
     )
+
     is NetworkResponse.UnknownError -> ResultData.Failure(
-        NetworkError.Unknown(
-            code = code,
-            message = errorMessage,
-            body = body
-        )
+        NetworkError.Unknown(code, body, errorMessage)
     )
 }

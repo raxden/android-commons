@@ -12,7 +12,6 @@ object Modules {
     const val libraryPermissions = ":libraries:permissions"
     const val libraryPreferences = ":libraries:preferences"
     const val libraryRetrofit = ":libraries:retrofit"
-    const val libraryRetrofitCo = ":libraries:retrofit-co"
     const val libraryRetrofitRx = ":libraries:retrofit-rx"
     const val libraryRx = ":libraries:rx"
     const val libraryRxTest = ":libraries:rx-test"
