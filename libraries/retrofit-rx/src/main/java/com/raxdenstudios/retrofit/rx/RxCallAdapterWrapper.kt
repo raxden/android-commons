@@ -6,8 +6,8 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import retrofit2.Call
 import io.reactivex.functions.Function
+import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.HttpException
 import retrofit2.Response
@@ -17,14 +17,14 @@ import java.lang.reflect.Type
 
 internal class RxCallAdapterWrapper<R>(
     private val retrofit: Retrofit,
-    private val wrapped: CallAdapter<R, *>?,
+    private val wrapped: CallAdapter<R, *>,
     private val errorHandler: ErrorHandler
 ) : CallAdapter<R, Any> {
 
-    override fun responseType(): Type? = wrapped?.responseType()
+    override fun responseType(): Type = wrapped.responseType()
 
-    override fun adapt(call: Call<R>): Any? =
-        when (val result = wrapped?.adapt(call)) {
+    override fun adapt(call: Call<R>): Any =
+        when (val result = wrapped.adapt(call)) {
             is Single<*> -> result.onErrorResumeNext(
                 Function { throwable -> Single.error(asRetrofitException(throwable)) }
             )
@@ -57,7 +57,7 @@ internal class RxCallAdapterWrapper<R>(
 
     @Suppress("MagicNumber")
     private fun httpError(exception: HttpException): Throwable {
-        val url = exception.response()?.raw()?.request()?.url().toString()
+        val url = exception.response()?.raw()?.request?.url.toString()
         return exception.response()?.let { response ->
             when (response.code()) {
                 401 -> RetrofitException.Non200Http.Unauthenticated(url, response, retrofit)
