@@ -1,6 +1,10 @@
 name: 'Generate reports'
 description: "Generate jacoco reports and upload to codecov"
 inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.event.pull_request.number }}
   token:
     description: 'Codecov token'
     required: true
@@ -11,7 +15,7 @@ runs:
     - name: Load unit tests outputs
       uses: actions/download-artifact@v3
       with:
-        name: outputs-unit-tests
+        name: outputs-unit-tests-${{ inputs.id }}
 #        if-no-files-found: warn
 
 #  https://github.com/actions/upload-artifact/issues/255
@@ -30,7 +34,7 @@ runs:
     - name: Upload Reports
       uses: actions/upload-artifact@v3
       with:
-        name: reports-jacoco
+        name: reports-jacoco-${{ inputs.id }}
         path: ./**/build/reports/jacoco.xml
         retention-days: 3
 
