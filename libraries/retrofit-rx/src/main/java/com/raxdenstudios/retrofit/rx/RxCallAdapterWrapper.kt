@@ -1,6 +1,5 @@
 package com.raxdenstudios.retrofit.rx
 
-import com.raxdenstudios.commons.retrofit.RetrofitException
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe

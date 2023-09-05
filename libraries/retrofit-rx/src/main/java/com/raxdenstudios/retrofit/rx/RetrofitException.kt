@@ -1,29 +1,8 @@
-package com.raxdenstudios.commons.retrofit
+package com.raxdenstudios.retrofit.rx
 
-import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
-
-@Suppress("ReturnCount")
-inline fun <reified T> RetrofitException.parseBodyError(): T? {
-    val errorBody = errorBodyOrNull() ?: return null
-    val retrofit = retrofitOrNull() ?: return null
-    val converter = retrofit.responseBodyConverter<T>(T::class.java, arrayOfNulls(0))
-    return converter.convert(errorBody)
-}
-
-fun RetrofitException.errorBodyOrNull(): ResponseBody? = when (this) {
-    is RetrofitException.Non200Http -> response.errorBody()
-    is RetrofitException.Network -> null
-    is RetrofitException.Unexpected -> null
-}
-
-fun RetrofitException.retrofitOrNull(): Retrofit? = when (this) {
-    is RetrofitException.Non200Http -> retrofit
-    is RetrofitException.Network -> null
-    is RetrofitException.Unexpected -> null
-}
 
 sealed class RetrofitException(
     error: Throwable?,

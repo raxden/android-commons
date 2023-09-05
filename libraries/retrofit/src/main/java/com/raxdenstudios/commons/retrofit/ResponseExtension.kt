@@ -7,7 +7,7 @@ import retrofit2.Response
 @Suppress("MagicNumber", "SwallowedException", "TooGenericExceptionCaught")
 inline fun <S : Any, reified R : Any> Response<S>.toResultData(
     errorMessage: String,
-    onSuccess: (value: S) -> R = { value -> value as R },
+    transformBody: (value: S) -> R = { value -> value as R },
 ): ResultData<R, NetworkError<S>> = if (!isSuccessful) {
     ResultData.Failure(
         NetworkError.Unknown(
@@ -24,7 +24,7 @@ inline fun <S : Any, reified R : Any> Response<S>.toResultData(
         body = body()
         when (code) {
             in (200..399) ->
-                ResultData.Success(onSuccess(body!!))
+                ResultData.Success(transformBody(body!!))
 
             in (400..499) ->
                 ResultData.Failure(
