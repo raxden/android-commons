@@ -15,7 +15,7 @@ import io.reactivex.disposables.CompositeDisposable
 import org.junit.Rule
 import org.junit.Test
 
-internal class PaginationTest {
+internal class RxPaginationTest {
 
     @get:Rule
     val rxSchedulerRule = RxSchedulerRule()
