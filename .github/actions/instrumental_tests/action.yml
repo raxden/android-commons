@@ -1,6 +1,10 @@
 name: 'Launch Instrumental tests'
 description: "Launch Instrumental tests and upload outputs to GitHub"
 inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.event.pull_request.number }}
   arch:
     description: 'Architecture'
     required: true
@@ -63,7 +67,7 @@ runs:
     - name: Upload Outputs
       uses: actions/upload-artifact@v3
       with:
-        name: outputs-android-tests
+        name: outputs-android-tests-${{ inputs.id }}
         path: |
           emulator.log
           ./**/build/outputs/code_coverage/

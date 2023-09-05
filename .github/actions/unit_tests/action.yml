@@ -1,5 +1,10 @@
 name: 'Launch Unit tests'
 description: "Launch Unit tests and upload outputs to GitHub"
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.event.pull_request.number }}
 outputs: { }
 runs:
   using: "composite"
@@ -12,6 +17,6 @@ runs:
     - name: Upload Outputs
       uses: actions/upload-artifact@v3
       with:
-        name: outputs-unit-tests
+        name: outputs-unit-tests-${{ inputs.id }}
         path: ./**/build/outputs/unit_test_code_coverage/
         retention-days: 3
