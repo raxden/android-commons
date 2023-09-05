@@ -1,6 +1,5 @@
 package com.raxdenstudios.retrofit.rx
 
-import com.raxdenstudios.commons.retrofit.RetrofitException
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 
