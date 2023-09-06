@@ -7,19 +7,12 @@ import retrofit2.Response
 @Suppress("MagicNumber", "SwallowedException", "TooGenericExceptionCaught")
 fun <S : Any> Response<S>.toResultData(
     errorMessage: String,
-): ResultData<S, NetworkError<S>> = if (!isSuccessful) {
-    ResultData.Failure(
-        NetworkError.Unknown(
-            code = -1,
-            body = null,
-            message = errorMessage
-        )
-    )
-} else {
+): ResultData<S, NetworkError<S>> {
+
     val code = code()
     var body: S? = null
 
-    try {
+    return try {
         body = body()
         when (code) {
             in (200..399) ->
@@ -52,7 +45,7 @@ fun <S : Any> Response<S>.toResultData(
                     )
                 )
         }
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         ResultData.Failure(
             NetworkError.Unknown(
                 code = code,
