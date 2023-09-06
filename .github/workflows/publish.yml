@@ -19,6 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  # Increment this to invalidate the cache.
+  CACHE_VERSION: 1
   # Enable debug for the `gradle-build-action` cache operations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
@@ -27,25 +29,17 @@ jobs:
 
   info:
     if: github.event.pull_request.merged == true
-    name: Preliminary Information
+    name: Workflow Information
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CI_GIT_TOKEN }}
+
       - name: Basic Information
-        run: |
-          echo "The job was automatically triggered by a ${{ github.event_name }} event with ${{ github.event.action }} action."
-          echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-          echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-          echo "The group concurrency is build-${{ github.event.pull_request.number || github.ref }}."
-          echo "  "
-          echo "github.ref = ${{ github.ref }}"
-          echo "github.head_ref = ${{ github.head_ref }}"
-          echo "github.sha = ${{ github.sha }}"
-          echo "  "
-          echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
-          echo "github.event.pull_request.title = ${{ github.event.pull_request.title }}"
-          echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
-          echo "  "
+        uses: ./.github/actions/info
 
   checkstyle:
     if: success() && github.event.pull_request.merged == true

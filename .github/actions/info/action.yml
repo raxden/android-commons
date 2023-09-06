@@ -1,0 +1,27 @@
+name: 'Workflow Information'
+description: "Show information about the workflow"
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Basic Information
+      run: |
+        echo "The job was automatically triggered by a ${{ github.event_name }} event with ${{ github.event.action }} action."
+        echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+        echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+        echo "The group concurrency is build-${{ github.event.pull_request.number || github.ref }}."
+        echo "  "
+        echo "github.ref = ${{ github.ref }}"
+        echo "github.head_ref = ${{ github.head_ref }}"
+        echo "github.sha = ${{ github.sha }}"
+        echo "  "
+      shell: bash
+
+    - name: Pull request information
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "Pull request detected"
+        echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
+        echo "github.event.pull_request.title = ${{ github.event.pull_request.title }}"
+        echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
+      shell: bash
