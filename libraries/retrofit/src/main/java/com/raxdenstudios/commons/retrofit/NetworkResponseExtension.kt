@@ -17,26 +17,8 @@ fun <S : Any, E : Any> NetworkResponse<S, E>.toResultData(
 private fun <S : Any, E : Any> NetworkResponse.ServerError<S, E>.toResultData(
     message: String
 ): ResultData<S, NetworkError<E>> {
-    val networkError = when (val code = code ?: -1) {
-        in (400..499) -> NetworkError.Client(
-            code = code,
-            message = message,
-            body = body
-        )
-
-        in (500..599) -> NetworkError.Server(
-            code = code,
-            message = message,
-            body = body
-        )
-
-        else -> NetworkError.Unknown(
-            code = code,
-            message = message,
-            body = body
-        )
-    }
-    return ResultData.Failure(networkError)
+    val code = code ?: -1
+    return code.toResultData(null, body, message)
 }
 
 private fun <S : Any, E : Any> NetworkResponse.NetworkError<S, E>.toResultData(
