@@ -8,9 +8,6 @@ inputs:
   token:
     description: 'Codecov token'
     required: true
-  branch:
-    description: 'Specify the branch name'
-    required: true
   cache-disabled:
     description: 'Cache'
     required: false
@@ -54,5 +51,4 @@ runs:
     - name: Uploading reports to Codecov
       uses: codecov/codecov-action@v3
       with:
-        override_branch: ${{ inputs.branch }}
         token: ${{ inputs.token }}
