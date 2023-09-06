@@ -1,4 +1,4 @@
-package com.raxdenstudios.retrofit.rx
+package com.raxdenstudios.commons.retrofit
 
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
@@ -10,20 +10,20 @@ class RxErrorHandlingCallAdapterFactory private constructor(
     private val errorHandler: ErrorHandler
 ) : CallAdapter.Factory() {
 
-    companion object {
-        fun create(errorHandler: ErrorHandler) = RxErrorHandlingCallAdapterFactory(
-            errorHandler = errorHandler
-        )
-    }
-
     override fun get(
         returnType: Type,
         annotations: Array<out Annotation>,
         retrofit: Retrofit
-    ): CallAdapter<*, *> =
-        RxCallAdapterWrapper(
-            retrofit,
-            callAdapter.get(returnType, annotations, retrofit)!!,
-            errorHandler
+    ): CallAdapter<*, *> = RxCallAdapterWrapper(
+        retrofit,
+        callAdapter.get(returnType, annotations, retrofit)!!,
+        errorHandler
+    )
+
+    companion object {
+
+        fun create(errorHandler: ErrorHandler) = RxErrorHandlingCallAdapterFactory(
+            errorHandler = errorHandler
         )
+    }
 }

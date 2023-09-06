@@ -11,6 +11,14 @@ inputs:
   branch:
     description: 'Specify the branch name'
     required: true
+  cache-disabled:
+    description: 'Cache'
+    required: false
+    default: "false"
+  outputs-retention-days:
+    description: 'Remove artifacts after the specified number of days'
+    required: false
+    default: "1"
 outputs: { }
 runs:
   using: "composite"
@@ -31,15 +39,17 @@ runs:
     - name: Jacoco Reports
       uses: gradle/gradle-build-action@v2.4.2
       with:
-        cache-disabled: true
         arguments: coverageReport --no-configuration-cache --stacktrace --scan
+        cache-disabled: ${{ inputs.cache-disabled == 'true' }}
 
     - name: Upload Reports
       uses: actions/upload-artifact@v3
       with:
         name: reports-jacoco-${{ inputs.id }}
-        path: ./**/build/reports/jacoco.xml
-        retention-days: 3
+        path: |
+          ./**/build/reports/jacoco.xml
+          ./**/build/reports/jacoco/
+        retention-days: ${{ inputs.retention-days }}
 
     - name: Uploading reports to Codecov
       uses: codecov/codecov-action@v3
