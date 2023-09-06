@@ -20,14 +20,6 @@ internal class NetworkResponseExtensionKtTest {
     }
 
     @Test
-    fun `toResultData should be return a success result transformed data`() {
-        val result: ResultData<String, NetworkError<String>> =
-            mockNetworkResponse200.toResultData(errorMessage = "message") { "newValue" }
-
-        assertThat(result).isEqualTo(ResultData.Success("newValue"))
-    }
-
-    @Test
     fun `Given a client error with code 4xx, When toResult is called, Then a failure`() {
         val result: ResultData<String, NetworkError<String>> =
             mockNetworkResponse400.toResultData(errorMessage = "message")

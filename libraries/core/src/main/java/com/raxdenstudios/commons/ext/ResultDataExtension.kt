@@ -5,7 +5,7 @@ package com.raxdenstudios.commons.ext
 import com.raxdenstudios.commons.ResultData
 
 @Suppress("TooGenericExceptionCaught")
-inline fun <T, R> T.runCatching(block: T.() -> R): ResultData<R, Throwable> =
+fun <T, R> T.runCatching(block: T.() -> R): ResultData<R, Throwable> =
     try {
         ResultData.Success(block())
     } catch (e: Throwable) {

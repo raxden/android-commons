@@ -1,4 +1,4 @@
-package com.raxdenstudios.retrofit.rx
+package com.raxdenstudios.commons.retrofit
 
 import retrofit2.Response
 import retrofit2.Retrofit

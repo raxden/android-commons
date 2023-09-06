@@ -1,4 +1,4 @@
-package com.raxdenstudios.retrofit.rx
+package com.raxdenstudios.commons.retrofit
 
 import okhttp3.ResponseBody
 import retrofit2.Retrofit

@@ -5,10 +5,9 @@ import com.raxdenstudios.commons.ResultData
 import retrofit2.Response
 
 @Suppress("MagicNumber", "SwallowedException", "TooGenericExceptionCaught")
-inline fun <S : Any, reified R : Any> Response<S>.toResultData(
+fun <S : Any> Response<S>.toResultData(
     errorMessage: String,
-    transformBody: (value: S) -> R = { value -> value as R },
-): ResultData<R, NetworkError<S>> = if (!isSuccessful) {
+): ResultData<S, NetworkError<S>> = if (!isSuccessful) {
     ResultData.Failure(
         NetworkError.Unknown(
             code = -1,
@@ -24,7 +23,7 @@ inline fun <S : Any, reified R : Any> Response<S>.toResultData(
         body = body()
         when (code) {
             in (200..399) ->
-                ResultData.Success(transformBody(body!!))
+                ResultData.Success(body!!)
 
             in (400..499) ->
                 ResultData.Failure(

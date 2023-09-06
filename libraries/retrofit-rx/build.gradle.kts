@@ -57,4 +57,8 @@ dependencies {
 
     implementation(libs.bundles.rx)
     implementation(libs.bundles.retrofit.rx)
+
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
+    testImplementation(libs.truth)
 }
