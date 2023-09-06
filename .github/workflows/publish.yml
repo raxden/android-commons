@@ -152,7 +152,7 @@ jobs:
           git config user.name \"RaxdenRobot\"
           git config user.email "raxden.dev@gmail.com"
           git add .
-          git commit -m "Bump version $VERSION"
+          git commit -m "Bump version $VERSION [skip ci]"
           git push --force
 #          git tag $VERSION
 #          git push --tags
