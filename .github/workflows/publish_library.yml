@@ -5,9 +5,7 @@ name: Publish library
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - master
 
@@ -28,7 +26,6 @@ env:
 jobs:
 
   info:
-    if: github.event.pull_request.merged == true
     name: Workflow Information
     runs-on: ubuntu-latest
 
@@ -42,7 +39,6 @@ jobs:
         uses: ./.github/actions/info
 
   checkstyle:
-    if: success() && github.event.pull_request.merged == true
     name: Check code (detekt)
     runs-on: ubuntu-latest
 
@@ -60,7 +56,6 @@ jobs:
 
   test:
     needs: [ checkstyle ]
-    if: success() && github.event.pull_request.merged == true
     name: Run Unit Tests
     runs-on: ubuntu-latest
 
@@ -76,9 +71,27 @@ jobs:
       - name: Unit tests
         uses: ./.github/actions/unit_tests
 
+  reports:
+    needs: [ test ]
+    name: Generate reports
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CI_GIT_TOKEN }}
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Generate jacoco reports and upload to codecov
+        uses: ./.github/actions/generate_reports
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   publish:
-    needs: [ checkstyle, test ]
-    if: success() && github.event.pull_request.merged == true
+    needs: [ checkstyle, test, reports ]
     name: Publish to Sonatype
     runs-on: ubuntu-latest
     environment: release_environment
@@ -144,19 +157,6 @@ jobs:
         with:
           arguments: :libraries:${{ matrix.module }}:increaseMajorVersion --info
 
-      - name: Bump version
-        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
-        id: bump-version
-        run: |
-          VERSION=$(./gradlew -q :libraries:${{ matrix.module }}:getVersion | tail -n 1)
-          git config user.name \"RaxdenRobot\"
-          git config user.email "raxden.dev@gmail.com"
-          git add .
-          git commit -m "Bump version $VERSION [skip ci]"
-          git push --force
-#          git tag $VERSION
-#          git push --tags
-
       - name: Publish ${{ matrix.module }} library in Sonatype
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'
         env:
@@ -169,6 +169,19 @@ jobs:
         uses: gradle/gradle-build-action@v2.4.2
         with:
           arguments: :libraries:${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+
+      - name: Bump version
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+        id: bump-version
+        run: |
+          VERSION=$(./gradlew -q :libraries:${{ matrix.module }}:getVersion | tail -n 1)
+          git config user.name \"RaxdenRobot\"
+          git config user.email "raxden.dev@gmail.com"
+          git add .
+          git commit -m "Bump version $VERSION [skip ci]"
+          git push --force
+#          git tag $VERSION
+#          git push --tags
 
 #      - name: Publish GitHub Release
 #        uses: ncipollo/release-action@v1
