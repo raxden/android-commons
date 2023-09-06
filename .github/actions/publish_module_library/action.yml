@@ -42,6 +42,7 @@ runs:
       run: |
         echo "One or more files in the libraries/${{ inputs.module }} folder has changed."
         echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
+        echo "${{ inputs.module }} library module has been detected with changes" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
     - name: Increase patch version
@@ -81,17 +82,18 @@ runs:
       run: |
         VERSION=$(./gradlew -q :libraries:${{ inputs.module }}:getVersion | tail -n 1)
         echo "Current version: $VERSION"
-        echo "::set-output name=version::$VERSION"
+        echo "CURRENT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - name: Bump version to ${{ steps.get-version.outputs.version }} from ${{ inputs.module }}
+    - name: Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} from ${{ inputs.module }}
       if: steps.changed-files-specific_library.outputs.any_changed == 'true'
       run: |
         git config user.name \"RaxdenRobot\"
         git config user.email "raxden.dev@gmail.com"
         git add .
-        git commit -m "Bump version to ${{ steps.get-version.outputs.version }} [skip ci]"
+        git commit -m "Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} [skip ci]"
         git push --force
+        echo "${{ inputs.module }} library module has been updated to version ${{ steps.get-version.outputs.CURRENT_VERSION }}" >> $GITHUB_STEP_SUMMARY
       shell: bash
 #          git tag $VERSION
 #          git push --tags
