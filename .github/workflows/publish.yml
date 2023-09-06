@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Publish library to sonatype
+name: Publish library to Sonatype
 
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -41,7 +41,66 @@ jobs:
       - name: Basic Information
         uses: ./.github/actions/info
 
+  checkstyle:
+    if: success() && github.event.pull_request.merged == true
+    name: Check code (detekt)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CI_GIT_TOKEN }}
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Check code via Detekt
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: detekt --stacktrace --scan
+
+  test:
+    needs: [ checkstyle ]
+    if: success() && github.event.pull_request.merged == true
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CI_GIT_TOKEN }}
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Unit tests
+        uses: ./.github/actions/unit_tests
+
+  reports:
+    needs: [ test ]
+    if: success() && github.event.pull_request.merged == true
+    name: Generate reports
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CI_GIT_TOKEN }}
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Generate jacoco reports and upload to codecov
+        uses: ./.github/actions/generate_reports
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          branch: master
+
   publish:
+    needs: [ checkstyle, test, reports ]
     if: success() && github.event.pull_request.merged == true
     name: Publish to Sonatype
     runs-on: ubuntu-latest
@@ -118,8 +177,8 @@ jobs:
           git add .
           git commit -m "Bump version $VERSION"
           git push --force
-          git tag $VERSION
-          git push --tags
+#          git tag $VERSION
+#          git push --tags
 
       - name: Publish ${{ matrix.module }} library in Sonatype
         if: steps.changed-files-specific_library.outputs.any_changed == 'true'

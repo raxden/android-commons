@@ -87,6 +87,7 @@ jobs:
         uses: ./.github/actions/generate_reports
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          branch: ${{ github.event.pull_request.head.ref }}
 
   status:
     needs: [ test, reports ]

@@ -22,6 +22,7 @@ runs:
       run: |
         echo "Pull request detected"
         echo "github.event.pull_request.base.ref = ${{ github.event.pull_request.base.ref }}"
+        echo "github.event.pull_request.head.ref = ${{ github.event.pull_request.head.ref }}"
         echo "github.event.pull_request.title = ${{ github.event.pull_request.title }}"
         echo "github.event.pull_request.labels = ${{ toJson(github.event.pull_request.labels.*.name) }}"
       shell: bash
