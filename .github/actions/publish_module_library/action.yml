@@ -1,0 +1,85 @@
+name: 'Publish module library'
+description: "Publish module library to sonatype"
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.event.pull_request.number }}
+  module:
+    description: 'Module library name'
+    required: true
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Get specific changed files in ${{ inputs.module }}
+      id: changed-files-specific_library
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+          libraries/${{ inputs.module }}/**/*
+
+    - name: List all changed files
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      run: |
+        echo "One or more files in the libraries/${{ inputs.module }} folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
+      shell: bash
+
+    - name: Increase patch version
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.event.pull_request.title, 'patch')
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :libraries:${{ inputs.module }}:increasePatchVersion --info
+
+    - name: Increase minor version
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.event.pull_request.title, 'minor')
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :libraries:${{ inputs.module }}:increaseMinorVersion --info
+
+    - name: Increase major version
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true' && startsWith(github.event.pull_request.title, 'major')
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :libraries:${{ inputs.module }}:increaseMajorVersion --info
+
+    - name: Publish ${{ inputs.module }} library in Sonatype
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      env:
+        OSSRH_ID: ${{ secrets.OSSRH_ID }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :libraries:${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+
+    - name: Get current version from ${{ inputs.module }}
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      id: get-version
+      run: |
+        VERSION=$(./gradlew -q :libraries:${{ inputs.module }}:getVersion | tail -n 1)
+        echo "Current version: $VERSION"
+        echo "::set-output name=version::$VERSION"
+      shell: bash
+
+    - name: Bump version to ${{ steps.get-version.outputs.version }} from ${{ inputs.module }}
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      run: |
+        git config user.name \"RaxdenRobot\"
+        git config user.email "raxden.dev@gmail.com"
+        git add .
+        git commit -m "Bump version to ${{ steps.get-version.outputs.version }} [skip ci]"
+        git push --force
+      shell: bash
+#          git tag $VERSION
+#          git push --tags
+
+#      - name: Publish GitHub Release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          artifacts: "!(buildSrc)/**/build/libs/**"
+#          tag: ${{ steps.bump-version.outputs.version }}
