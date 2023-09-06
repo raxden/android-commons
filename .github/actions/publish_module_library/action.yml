@@ -4,9 +4,27 @@ inputs:
   id:
     description: 'Value used to identify the workflow run'
     required: false
-    default: ${{ github.event.pull_request.number }}
+    default: ${{ github.run_number }}
   module:
     description: 'Module library name'
+    required: true
+  sonatype-id:
+    description: 'OSS Repository Hosting - Id'
+    required: true
+  sonatype-username:
+    description: 'OSS Repository Hosting - Username'
+    required: true
+  sonatype-password:
+    description: 'OSS Repository Hosting - Password'
+    required: true
+  signing-key:
+    description: 'Signing key'
+    required: true
+  signing-id:
+    description: 'Signing id'
+    required: true
+  signing-password:
+    description: 'Signing password'
     required: true
 outputs: { }
 runs:
@@ -47,12 +65,12 @@ runs:
     - name: Publish ${{ inputs.module }} library in Sonatype
       if: steps.changed-files-specific_library.outputs.any_changed == 'true'
       env:
-        OSSRH_ID: ${{ secrets.OSSRH_ID }}
-        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
-        SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
-        SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        OSSRH_ID: ${{ inputs.sonatype-id }}
+        OSSRH_PASSWORD: ${{ inputs.sonatype-password }}
+        OSSRH_USERNAME: ${{ inputs.sonatype-username }}
+        SIGNING_KEY: ${{ inputs.signing-key }}
+        SIGNING_KEY_ID: ${{ inputs.signing-id }}
+        SIGNING_PASSWORD: ${{ inputs.signing-password }}
       uses: gradle/gradle-build-action@v2.4.2
       with:
         arguments: :libraries:${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan

@@ -11,6 +11,7 @@ runs:
         echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
         echo "The group concurrency is build-${{ github.event.pull_request.number || github.ref }}."
         echo "  "
+        echo "github.run_number = ${{ github.run_number }}
         echo "github.ref = ${{ github.ref }}"
         echo "github.head_ref = ${{ github.head_ref }}"
         echo "github.sha = ${{ github.sha }}"

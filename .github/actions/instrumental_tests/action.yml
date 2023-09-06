@@ -4,7 +4,7 @@ inputs:
   id:
     description: 'Value used to identify the workflow run'
     required: false
-    default: ${{ github.event.pull_request.number }}
+    default: ${{ github.run_number }}
   arch:
     description: 'Architecture'
     required: true
