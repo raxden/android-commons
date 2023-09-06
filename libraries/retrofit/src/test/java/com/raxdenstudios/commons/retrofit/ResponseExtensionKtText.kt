@@ -62,27 +62,22 @@ internal class ResponseExtensionKtText {
     companion object {
 
         private val mockResponse200 = mockk<Response<String>> {
-            every { isSuccessful } returns true
             every { body() } returns "originalValue"
             every { code() } answers { 200 }
         }
         private val mockResponseWithException = mockk<Response<String>> {
-            every { isSuccessful } returns true
             every { body() } answers { throw IOException("") }
             every { code() } answers { 200 }
         }
         private val mockNetwork400 = mockk<Response<String>> {
-            every { isSuccessful } returns true
             every { body() } returns ""
             every { code() } answers { 400 }
         }
         private val mockNetwork500 = mockk<Response<String>> {
-            every { isSuccessful } returns true
             every { body() } returns ""
             every { code() } answers { 500 }
         }
         private val mockNetworkWithoutCode = mockk<Response<String>> {
-            every { isSuccessful } returns true
             every { body() } returns ""
             every { code() } answers { -1 }
         }
