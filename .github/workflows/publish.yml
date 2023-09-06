@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Publish library
+name: Publish library to sonatype
 
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -120,6 +120,19 @@ jobs:
           git push --force
           git tag $VERSION
           git push --tags
+
+      - name: Publish ${{ matrix.module }} library in Sonatype
+        if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+        env:
+          OSSRH_ID: ${{ secrets.OSSRH_ID }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: :libraries:${{ matrix.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
 
 #      - name: Publish GitHub Release
 #        uses: ncipollo/release-action@v1
