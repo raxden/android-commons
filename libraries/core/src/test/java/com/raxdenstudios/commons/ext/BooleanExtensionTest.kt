@@ -12,6 +12,6 @@ internal class BooleanExtensionTest {
 
         assertFalse(nullValue.orDefault())
         assertFalse(nullValue.orDefault(false))
-        assertTrue(nullValue.orDefault(true))
+        assertTrue(true.orDefault(false))
     }
 }

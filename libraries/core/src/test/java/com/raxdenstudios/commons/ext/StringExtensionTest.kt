@@ -11,6 +11,7 @@ internal class StringExtensionTest {
 
         assertEquals(String.EMPTY, nullValue.orDefault())
         assertEquals("empty", nullValue.orDefault("empty"))
+        assertEquals("empty", "empty".orDefault("empty2"))
     }
 
     @Test
@@ -32,6 +33,13 @@ internal class StringExtensionTest {
         val emptyValue: String = String.EMPTY
 
         assertEquals("default", emptyValue.ifEmptyOrNullThen("default"))
+    }
+
+    @Test
+    fun `ifEmptyOrNullThen should return value, When value is not empty`() {
+        val notEmptyValue = "notEmptyValue"
+
+        assertEquals(notEmptyValue, notEmptyValue.ifEmptyOrNullThen("default"))
     }
 
     @Test

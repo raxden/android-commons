@@ -116,7 +116,8 @@ jobs:
           retrofit-rx,
           rx,
           rx-test,
-          threeten
+          threeten,
+          threeten-test
         ]
 
     steps:

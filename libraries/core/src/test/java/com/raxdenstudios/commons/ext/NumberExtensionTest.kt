@@ -11,6 +11,7 @@ internal class NumberExtensionTest {
 
         assertEquals(Byte.ZERO, nullValue.orDefault())
         assertEquals(1.toByte(), nullValue.orDefault(1.toByte()))
+        assertEquals(1.toByte(), 1.toByte().orDefault(2.toByte()))
     }
 
     @Test
@@ -19,6 +20,7 @@ internal class NumberExtensionTest {
 
         assertEquals(Double.ZERO, Double.ZERO, nullValue.orDefault())
         assertEquals(1.0, 1.0, nullValue.orDefault(1.0))
+        assertEquals(1.0, 1.0, 1.0.orDefault(2.0))
     }
 
     @Test
@@ -27,6 +29,7 @@ internal class NumberExtensionTest {
 
         assertEquals(Float.ZERO, nullValue.orDefault())
         assertEquals(1.0f, nullValue.orDefault(1.0f))
+        assertEquals(1.0f, 1.0f.orDefault(2.0f))
     }
 
     @Test
@@ -35,6 +38,7 @@ internal class NumberExtensionTest {
 
         assertEquals(Int.ZERO, nullValue.orDefault())
         assertEquals(1, nullValue.orDefault(1))
+        assertEquals(1, 1.orDefault(2))
     }
 
     @Test
@@ -43,6 +47,7 @@ internal class NumberExtensionTest {
 
         assertEquals(Long.ZERO, nullValue.orDefault())
         assertEquals(1, nullValue.orDefault(1))
+        assertEquals(1, 1.orDefault(2))
     }
 
     @Test
@@ -51,5 +56,6 @@ internal class NumberExtensionTest {
 
         assertEquals(Short.ZERO, nullValue.orDefault())
         assertEquals(1.toShort(), nullValue.orDefault(1.toShort()))
+        assertEquals(1.toShort(), 1.toShort().orDefault(2.toShort()))
     }
 }
