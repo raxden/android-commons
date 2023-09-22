@@ -13,13 +13,13 @@ versioning {
 }
 
 publishLibrary {
-    name = "Threeten Commons"
-    description = "Threeten commons is a library with a set of useful classes to help to developer to work with threeten."
+    name = "Threeten test Commons"
+    description = "Threeten test commons is a library with a set of useful classes to help to developer to work with threeten."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
     developerEmail = "raxden.dev@gmail.com"
-    coordinates = Coordinates.default.copy(artifactId = "commons-threeten")
+    coordinates = Coordinates.default.copy(artifactId = "commons-threeten-test")
 }
 
 android {
@@ -54,9 +54,5 @@ android {
 
 dependencies {
     api(libs.threetenabp)
-
-    testImplementation(project(":libraries:threeten-test"))
-    testImplementation(libs.junit.ktx)
-    testImplementation(libs.bundles.mockk)
-    testImplementation(libs.truth)
+    implementation(libs.junit.ktx)
 }
