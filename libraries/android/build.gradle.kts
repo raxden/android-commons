@@ -20,6 +20,13 @@ publishLibrary {
     coordinates = Coordinates.default.copy(artifactId = "commons-android")
 }
 
+android {
+
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
 dependencies {
     api(project(":libraries:core"))
 

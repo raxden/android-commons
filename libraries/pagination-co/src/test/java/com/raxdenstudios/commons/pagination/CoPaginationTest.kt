@@ -6,6 +6,7 @@ import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
+import com.raxdenstudios.commons.test.rules.MainDispatcherRule
 import io.mockk.coEvery
 import io.mockk.coVerifyOrder
 import io.mockk.confirmVerified
@@ -14,30 +15,26 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineExceptionHandler
-import kotlinx.coroutines.test.createTestCoroutineScope
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import kotlin.coroutines.EmptyCoroutineContext
 
 @ExperimentalCoroutinesApi
 internal class CoPaginationTest {
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     private val pageRequest: (Page, PageSize) -> PageList<String> = mockk()
     private val pageResponse: (PageResult<String>) -> PageResult<String> = mockk(relaxed = true)
-    private val testCoroutineScope = createTestCoroutineScope(
-        TestCoroutineDispatcher() +
-                TestCoroutineExceptionHandler() +
-                EmptyCoroutineContext
-    )
     private val pagination: CoPagination<String> by lazy {
         CoPagination(
             config = paginationConfig,
-            coroutineScope = testCoroutineScope
+            coroutineScope = CoroutineScope(mainDispatcherRule.testDispatcher)
         )
     }
 
