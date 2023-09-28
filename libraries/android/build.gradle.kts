@@ -2,7 +2,9 @@ import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
     alias(libs.plugins.android.versioning)
-    id("com.raxdenstudios.android-library")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.android.publish.library)
 }
 
@@ -20,12 +22,46 @@ publishLibrary {
     coordinates = Coordinates.default.copy(artifactId = "commons-android")
 }
 
-dependencies {
-    api(project(":libraries:core"))
+android {
 
-    implementation(libs.bundles.material)
+    compileSdk = Versions.compileSdk
+
+    compileOptions {
+        sourceCompatibility = Versions.sourceCompatibility
+        targetCompatibility = Versions.targetCompatibility
+    }
+
+    defaultConfig {
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+
+        testInstrumentationRunner = Versions.testInstrumentationRunner
+        consumerProguardFile("consumer-rules.pro")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    kotlinOptions {
+        jvmTarget = Versions.jvmTarget
+    }
+}
+
+dependencies {
+    api(project(Modules.libraryCore))
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.android.material)
 
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
 }

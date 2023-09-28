@@ -1,5 +1,4 @@
 pluginManagement {
-    includeBuild("build-logic")
     /**
      * The pluginManagement {repositories {...}} block configures the
      * repositories Gradle uses to search or download the Gradle plugins and
@@ -18,9 +17,6 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") { from(files("build-logic/gradle/libraries.versions.toml")) }
-    }
     /**
      * The dependencyResolutionManagement { repositories {...}}
      * block is where you configure the repositories and dependencies used by
@@ -40,7 +36,6 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
-
 }
 
 plugins {
