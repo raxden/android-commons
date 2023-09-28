@@ -2,7 +2,9 @@ import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
     alias(libs.plugins.android.versioning)
-    id("com.raxdenstudios.android-library")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.android.publish.library)
 }
 
@@ -12,8 +14,7 @@ versioning {
 
 publishLibrary {
     name = "Retrofit Commons"
-    description = "Retrofit commons is a library with a set of useful classes to help to developer " +
-            "to work with retrofit."
+    description = "Retrofit commons is a library with a set of useful classes to help to developer to work with retrofit."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
@@ -21,11 +22,42 @@ publishLibrary {
     coordinates = Coordinates.default.copy(artifactId = "commons-retrofit")
 }
 
-dependencies {
-    api(project(":libraries:core"))
+android {
 
+    compileSdk = Versions.compileSdk
+
+    compileOptions {
+        sourceCompatibility = Versions.sourceCompatibility
+        targetCompatibility = Versions.targetCompatibility
+    }
+
+    defaultConfig {
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+
+        testInstrumentationRunner = Versions.testInstrumentationRunner
+        consumerProguardFile("consumer-rules.pro")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = Versions.jvmTarget
+    }
+}
+
+dependencies {
+    api(project(Modules.libraryCore))
     implementation(libs.bundles.retrofit)
     implementation(libs.network.response.adapter)
 
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
+    testImplementation(libs.truth)
 }

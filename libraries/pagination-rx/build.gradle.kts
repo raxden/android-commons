@@ -2,7 +2,9 @@ import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
     alias(libs.plugins.android.versioning)
-    id("com.raxdenstudios.android-library")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.android.publish.library)
 }
 
@@ -20,12 +22,43 @@ publishLibrary {
     coordinates = Coordinates.default.copy(artifactId = "commons-pagination-rx")
 }
 
+android {
+
+    compileSdk = Versions.compileSdk
+
+    compileOptions {
+        sourceCompatibility = Versions.sourceCompatibility
+        targetCompatibility = Versions.targetCompatibility
+    }
+
+    defaultConfig {
+        minSdk = Versions.minSdk
+        targetSdk = Versions.targetSdk
+
+        testInstrumentationRunner = Versions.testInstrumentationRunner
+        consumerProguardFile("consumer-rules.pro")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isMinifyEnabled = false
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = Versions.jvmTarget
+    }
+}
+
 dependencies {
-    api(project(":libraries:pagination"))
-    api(project(":libraries:rx"))
+    api(project(Modules.libraryPagination))
+    api(project(Modules.libraryRx))
 
     implementation(libs.bundles.rx)
 
-    testImplementation(project(":libraries:rx-test"))
-    testImplementation(libs.bundles.test)
+    testImplementation(project(Modules.libraryRxTest))
+    testImplementation(libs.junit.ktx)
+    testImplementation(libs.bundles.mockk)
 }
