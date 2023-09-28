@@ -33,6 +33,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
         with:
+          submodules: 'true'
           token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Basic Information
@@ -46,6 +47,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
         with:
+          submodules: 'true'
           token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
@@ -63,6 +65,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
         with:
+          submodules: 'true'
           token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
