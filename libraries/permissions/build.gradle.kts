@@ -2,9 +2,7 @@ import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
     alias(libs.plugins.android.versioning)
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    id("com.raxdenstudios.android-library")
     alias(libs.plugins.android.publish.library)
 }
 
@@ -14,7 +12,8 @@ versioning {
 
 publishLibrary {
     name = "Permissions Commons"
-    description = "Permissions commons is a library with a set of useful classes to help to developer to work with permissions."
+    description = "Permissions commons is a library with a set of useful classes to help to " +
+            "developer to work with permissions."
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
@@ -22,38 +21,9 @@ publishLibrary {
     coordinates = Coordinates.default.copy(artifactId = "commons-permissions")
 }
 
-android {
-
-    compileSdk = Versions.compileSdk
-
-    compileOptions {
-        sourceCompatibility = Versions.sourceCompatibility
-        targetCompatibility = Versions.targetCompatibility
-    }
-
-    defaultConfig {
-        minSdk = Versions.minSdk
-        targetSdk = Versions.targetSdk
-
-        testInstrumentationRunner = Versions.testInstrumentationRunner
-        consumerProguardFile("consumer-rules.pro")
-    }
-
-    buildTypes {
-        getByName("debug") {
-            isMinifyEnabled = false
-            enableUnitTestCoverage = true
-            enableAndroidTestCoverage = true
-        }
-    }
-
-    kotlinOptions {
-        jvmTarget = Versions.jvmTarget
-    }
-}
 
 dependencies {
-    implementation(project(Modules.libraryAndroid))
+    implementation(project(":libraries:android"))
 
-    implementation(libs.android.material)
+    implementation(libs.bundles.material)
 }
