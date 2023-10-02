@@ -1,7 +1,7 @@
 package com.raxdenstudios.commons.retrofit
 
 import com.raxdenstudios.commons.NetworkError
-import com.raxdenstudios.commons.ResultData
+import com.raxdenstudios.commons.core.ResultData
 import retrofit2.Response
 
 @Suppress("SwallowedException", "TooGenericExceptionCaught")

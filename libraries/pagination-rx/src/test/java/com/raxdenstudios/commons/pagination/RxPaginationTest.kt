@@ -5,7 +5,7 @@ import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
-import com.raxdenstudios.commons.test.rules.RxSchedulerRule
+import com.raxdenstudios.commons.rx.test.rules.RxSchedulerRule
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
