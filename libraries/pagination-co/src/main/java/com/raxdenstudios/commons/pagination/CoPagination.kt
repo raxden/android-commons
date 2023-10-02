@@ -2,7 +2,7 @@
 
 package com.raxdenstudios.commons.pagination
 
-import com.raxdenstudios.commons.ext.launch
+import com.raxdenstudios.commons.coroutines.ext.launch
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList

@@ -8,9 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.raxdenstudios.commons.ext.showDialog
+import com.raxdenstudios.commons.android.ext.showDialog
 import com.raxdenstudios.commons.permissions.model.Permission
-import com.raxdenstudios.commons.util.SDK
+import com.raxdenstudios.commons.android.util.SDK
 
 class PermissionManager(
     private val activity: FragmentActivity
@@ -88,4 +88,3 @@ class PermissionManager(
         )
     }
 }
-
