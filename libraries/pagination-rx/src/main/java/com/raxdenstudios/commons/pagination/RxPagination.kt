@@ -2,12 +2,12 @@
 
 package com.raxdenstudios.commons.pagination
 
-import com.raxdenstudios.commons.rx.ext.subscribeWith
 import com.raxdenstudios.commons.pagination.model.Page
 import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
+import com.raxdenstudios.commons.rx.ext.subscribeWith
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo

@@ -2,8 +2,6 @@ package com.raxdenstudios.commons.coroutines.ext
 
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
-import com.raxdenstudios.commons.coroutines.ext.launch
-import com.raxdenstudios.commons.coroutines.ext.safeLaunch
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.spyk

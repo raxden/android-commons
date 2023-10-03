@@ -9,8 +9,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.raxdenstudios.commons.android.ext.showDialog
-import com.raxdenstudios.commons.permissions.model.Permission
 import com.raxdenstudios.commons.android.util.SDK
+import com.raxdenstudios.commons.permissions.model.Permission
 
 class PermissionManager(
     private val activity: FragmentActivity

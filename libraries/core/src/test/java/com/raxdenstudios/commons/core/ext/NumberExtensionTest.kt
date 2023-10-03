@@ -1,7 +1,5 @@
 package com.raxdenstudios.commons.core.ext
 
-import com.raxdenstudios.commons.core.ext.ZERO
-import com.raxdenstudios.commons.core.ext.orDefault
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

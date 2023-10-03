@@ -1,7 +1,5 @@
 package com.raxdenstudios.commons.core.ext
 
-import com.raxdenstudios.commons.core.ext.removeItem
-import com.raxdenstudios.commons.core.ext.replaceItem
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

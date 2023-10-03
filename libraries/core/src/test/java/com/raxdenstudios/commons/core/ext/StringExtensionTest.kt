@@ -1,12 +1,5 @@
 package com.raxdenstudios.commons.core.ext
 
-import com.raxdenstudios.commons.core.ext.EMPTY
-import com.raxdenstudios.commons.core.ext.ifEmptyOrNullThen
-import com.raxdenstudios.commons.core.ext.ifEmptyThen
-import com.raxdenstudios.commons.core.ext.orDefault
-import com.raxdenstudios.commons.core.ext.toMD5
-import com.raxdenstudios.commons.core.ext.toSHA256
-import com.raxdenstudios.commons.core.ext.toSHA512
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

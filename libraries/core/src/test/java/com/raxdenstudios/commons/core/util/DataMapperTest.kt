@@ -1,6 +1,5 @@
 package com.raxdenstudios.commons.core.util
 
-import com.raxdenstudios.commons.core.util.DataMapper
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

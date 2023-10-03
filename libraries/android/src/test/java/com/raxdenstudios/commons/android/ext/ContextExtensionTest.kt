@@ -5,11 +5,6 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.net.ConnectivityManager
 import android.os.Environment
-import com.raxdenstudios.commons.android.ext.createTemporalImageFile
-import com.raxdenstudios.commons.android.ext.findActivity
-import com.raxdenstudios.commons.android.ext.getConnectivityManager
-import com.raxdenstudios.commons.android.ext.getPackageInfo
-import com.raxdenstudios.commons.android.ext.isNetworkConnected
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

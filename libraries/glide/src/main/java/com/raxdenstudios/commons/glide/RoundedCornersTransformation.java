@@ -1,6 +1,6 @@
 package com.raxdenstudios.commons.glide;
 
-import static com.raxdenstudios.commons.glide.RoundedCornersTransformation.CornerType.*;
+import static com.raxdenstudios.commons.glide.RoundedCornersTransformation.CornerType.ALL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
