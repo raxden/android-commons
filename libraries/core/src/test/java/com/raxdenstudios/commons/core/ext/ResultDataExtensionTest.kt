@@ -41,6 +41,22 @@ internal class ResultDataExtensionTest {
     }
 
     @Test
+    fun `success coRunCatching`() = runTest {
+        val result = coRunCatching { 1 }
+
+        assertTrue(result.isSuccess)
+        assertThat(result).isEqualTo(ResultData.Success(1))
+    }
+
+    @Test
+    fun `failure coRunCatching`() = runTest {
+        val result = coRunCatching { error("error") }
+
+        assertTrue(result.isFailure)
+        assertThat(result).isInstanceOf(ResultData.Failure::class.java)
+    }
+
+    @Test
     fun `use map when result is success`() {
         val result = ResultData.Success("originalValue")
             .map { "otherValue" }

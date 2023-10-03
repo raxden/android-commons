@@ -5,9 +5,17 @@ package com.raxdenstudios.commons.core.ext
 import com.raxdenstudios.commons.core.ResultData
 
 @Suppress("TooGenericExceptionCaught")
-fun <T, R> T.runCatching(block: T.() -> R): ResultData<R, Throwable> =
+fun <T, R> T.runCatching(function: T.() -> R): ResultData<R, Throwable> =
     try {
-        ResultData.Success(block())
+        ResultData.Success(function())
+    } catch (e: Throwable) {
+        ResultData.Failure(e)
+    }
+
+@Suppress("TooGenericExceptionCaught")
+suspend fun <T, R> T.coRunCatching(function: suspend T.() -> R): ResultData<R, Throwable> =
+    try {
+        ResultData.Success(function())
     } catch (e: Throwable) {
         ResultData.Failure(e)
     }
