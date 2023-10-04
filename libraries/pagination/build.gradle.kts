@@ -22,7 +22,7 @@ publishLibrary {
 
 dependencies {
     implementation(libs.bundles.material)
-    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
 
     testImplementation(libs.bundles.test)
 }
