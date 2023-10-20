@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-private val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
     Log.e("CoroutineException", throwable.message, throwable)
 }
 
