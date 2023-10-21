@@ -59,7 +59,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use map when result is success`() {
         val result = ResultData.Success("originalValue")
-            .map { "otherValue" }
+            .then { "otherValue" }
 
         assertTrue(result.isSuccess)
         assertThat(result).isEqualTo(ResultData.Success("otherValue"))
@@ -68,7 +68,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use map when result is failure`() {
         val result = ResultData.Failure("originalValue")
-            .map { "otherValue" }
+            .then { "otherValue" }
 
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(ResultData.Failure("originalValue"))
@@ -77,7 +77,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use coMap when result is success`() = runTest {
         val result = ResultData.Success("originalValue")
-            .coMap { "otherValue" }
+            .coThen { "otherValue" }
 
         assertTrue(result.isSuccess)
         assertThat(result).isEqualTo(ResultData.Success("otherValue"))
@@ -86,7 +86,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use coMap when result is failure`() = runTest {
         val result = ResultData.Failure("originalValue")
-            .coMap { "otherValue" }
+            .coThen { "otherValue" }
 
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(ResultData.Failure("originalValue"))
@@ -95,7 +95,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use mapFailure when result is success`() {
         val result = ResultData.Success("originalValue")
-            .mapFailure { "otherValue" }
+            .thenFailure { "otherValue" }
 
         assertTrue(result.isSuccess)
         assertThat(result).isEqualTo(ResultData.Success("originalValue"))
@@ -104,7 +104,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use mapFailure when result is failure`() {
         val result = ResultData.Failure("originalValue")
-            .mapFailure { "otherValue" }
+            .thenFailure { "otherValue" }
 
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(ResultData.Failure("otherValue"))
@@ -113,7 +113,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use coMapFailure when result is success`() = runTest {
         val result = ResultData.Success("originalValue")
-            .coMapFailure { "otherValue" }
+            .coThenFailure { "otherValue" }
 
         assertTrue(result.isSuccess)
         assertThat(result).isEqualTo(ResultData.Success("originalValue"))
@@ -122,7 +122,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use coMapFailure when result is failure`() = runTest {
         val result = ResultData.Failure("originalValue")
-            .coMapFailure { "otherValue" }
+            .coThenFailure { "otherValue" }
 
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(ResultData.Failure("otherValue"))
@@ -239,7 +239,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use fold when result is success`() {
         val result = ResultData.Success("originalValue")
-            .map { "otherValue" }
+            .then { "otherValue" }
 
         result.fold(
             onSuccess = { data ->
@@ -252,7 +252,7 @@ internal class ResultDataExtensionTest {
     @Test
     fun `use fold when failure`() {
         val result = ResultData.Failure("originalValue")
-            .map { "otherValue" }
+            .then { "otherValue" }
 
         result.fold(
             onSuccess = { },
