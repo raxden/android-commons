@@ -21,8 +21,10 @@ publishLibrary {
 }
 
 dependencies {
+    implementation(project(":libraries:core"))
     implementation(libs.bundles.coroutines)
 
+    implementation(project(":libraries:coroutines-test"))
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.test.coroutines)
 }

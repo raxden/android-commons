@@ -20,25 +20,25 @@ suspend fun <T, R> T.coRunCatching(function: suspend T.() -> R): ResultData<R, T
         ResultData.Failure(e)
     }
 
-fun <T, R, E> ResultData<T, E>.map(function: (value: T) -> R): ResultData<R, E> =
+fun <T, R, E> ResultData<T, E>.then(function: (value: T) -> R): ResultData<R, E> =
     when (this) {
         is ResultData.Failure -> ResultData.Failure(value)
         is ResultData.Success -> ResultData.Success(function(value))
     }
 
-fun <T, R, E> ResultData<T, E>.mapFailure(function: (value: E) -> R): ResultData<T, R> =
+fun <T, R, E> ResultData<T, E>.thenFailure(function: (value: E) -> R): ResultData<T, R> =
     when (this) {
         is ResultData.Failure -> ResultData.Failure(function(value))
         is ResultData.Success -> ResultData.Success(value)
     }
 
-suspend fun <T, R, E> ResultData<T, E>.coMap(function: suspend (value: T) -> R): ResultData<R, E> =
+suspend fun <T, R, E> ResultData<T, E>.coThen(function: suspend (value: T) -> R): ResultData<R, E> =
     when (this) {
         is ResultData.Failure -> ResultData.Failure(value)
         is ResultData.Success -> ResultData.Success(function(value))
     }
 
-suspend fun <T, R, E> ResultData<T, E>.coMapFailure(function: suspend (value: E) -> R): ResultData<T, R> =
+suspend fun <T, R, E> ResultData<T, E>.coThenFailure(function: suspend (value: E) -> R): ResultData<T, R> =
     when (this) {
         is ResultData.Failure -> ResultData.Failure(function(value))
         is ResultData.Success -> ResultData.Success(value)
