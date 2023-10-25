@@ -2,7 +2,7 @@ package com.raxdenstudios.commons.retrofit
 
 import com.google.common.truth.Truth.assertThat
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.raxdenstudios.commons.NetworkError
+import com.raxdenstudios.commons.core.NetworkError
 import com.raxdenstudios.commons.core.ResultData
 import io.mockk.every
 import io.mockk.mockk
