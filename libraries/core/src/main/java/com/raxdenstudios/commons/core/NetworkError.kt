@@ -1,4 +1,4 @@
-package com.raxdenstudios.commons
+package com.raxdenstudios.commons.core
 
 sealed interface NetworkError<T> {
 

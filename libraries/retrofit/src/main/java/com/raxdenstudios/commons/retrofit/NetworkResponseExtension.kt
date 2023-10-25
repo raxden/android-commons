@@ -1,7 +1,7 @@
 package com.raxdenstudios.commons.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.raxdenstudios.commons.NetworkError
+import com.raxdenstudios.commons.core.NetworkError
 import com.raxdenstudios.commons.core.ResultData
 
 fun <S : Any, E : Any> NetworkResponse<S, E>.toResultData(
