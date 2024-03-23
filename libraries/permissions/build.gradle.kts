@@ -23,7 +23,7 @@ publishLibrary {
 
 
 dependencies {
-    implementation(project(":libraries:android"))
+    implementation(projects.libraries.android)
 
     implementation(libs.bundles.material)
 }

@@ -22,7 +22,7 @@ publishLibrary {
 }
 
 dependencies {
-    api(project(":libraries:core"))
+    api(projects.libraries.core)
 
     implementation(libs.bundles.retrofit)
     implementation(libs.network.response.adapter)

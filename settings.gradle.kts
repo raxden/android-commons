@@ -59,6 +59,7 @@ gradleEnterprise {
 
 include(":libraries:core")
 include(":libraries:android")
+include(":libraries:android-binding")
 include(":libraries:android-test")
 include(":libraries:coroutines")
 include(":libraries:coroutines-test")
@@ -75,3 +76,5 @@ include(":libraries:rx")
 include(":libraries:rx-test")
 include(":libraries:threeten")
 include(":libraries:threeten-test")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

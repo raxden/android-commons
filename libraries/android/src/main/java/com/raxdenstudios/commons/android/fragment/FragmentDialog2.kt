@@ -10,7 +10,9 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.raxdenstudios.commons.android.ext.setTransparentBackground
 
-abstract class FragmentDialog2(@LayoutRes private val layoutId: Int) : DialogFragment() {
+abstract class FragmentDialog2(
+    @LayoutRes private val layoutId: Int
+) : DialogFragment() {
 
     private var onDismissListener: MutableList<DialogInterface.OnDismissListener> = mutableListOf()
 

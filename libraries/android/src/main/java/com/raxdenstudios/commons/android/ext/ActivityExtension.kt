@@ -8,12 +8,9 @@ import android.os.Parcelable
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
 import com.raxdenstudios.commons.android.property.ActivityArgumentDelegate
 import com.raxdenstudios.commons.android.property.ActivityContentViewDelegate
-import com.raxdenstudios.commons.android.property.ActivityViewBindingDelegate
 import com.raxdenstudios.commons.android.property.FragmentActivityByIdDelegate
 import com.raxdenstudios.commons.android.util.SDK
 
@@ -84,9 +81,6 @@ inline fun <reified T : Parcelable> Activity.setResultOKWithDataAndFinish(value:
 fun Activity.contentView(@LayoutRes resId: Int) = ActivityContentViewDelegate(resId)
 
 inline fun <reified T : Any> Activity.argument() = ActivityArgumentDelegate<T>()
-
-inline fun <reified T : ViewBinding> AppCompatActivity.viewBinding() =
-    ActivityViewBindingDelegate(T::class.java, this)
 
 fun <T : Fragment> Activity.fragmentById(
     @IdRes fragmentId: Int
