@@ -18,8 +18,6 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
 import androidx.core.content.ContextCompat
-import androidx.viewbinding.ViewBinding
-import com.raxdenstudios.commons.android.property.ViewBindingDelegate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -113,8 +111,6 @@ fun ViewGroup.inflateView(@LayoutRes layoutRes: Int, attachToRoot: Boolean = fal
 fun ViewGroup.inflateViewIfEditMode(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false) {
     if (isInEditMode) inflateView(layoutRes, attachToRoot)
 }
-
-inline fun <reified T : ViewBinding> ViewGroup.viewBinding() = ViewBindingDelegate(T::class.java)
 
 fun View.startFadeInAnimation() {
     startAnimation(AnimationUtils.loadAnimation(context, android.R.anim.fade_in))

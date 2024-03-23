@@ -22,7 +22,7 @@ publishLibrary {
 }
 
 dependencies {
-    api(project(":libraries:retrofit"))
+    api(projects.libraries.retrofit)
 
     implementation(libs.bundles.rx)
     implementation(libs.bundles.retrofit.rx)

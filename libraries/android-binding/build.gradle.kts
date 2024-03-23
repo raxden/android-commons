@@ -7,25 +7,33 @@ plugins {
 }
 
 versioning {
-    filePath = "./libraries/coroutines/version.properties"
+    filePath = "./libraries/android-binding/version.properties"
 }
 
 publishLibrary {
-    name = "Coroutines"
-    description = "Coroutines library"
+    name = "Android"
+    description = "Android library"
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
     developerEmail = "raxden.dev@gmail.com"
-    coordinates = Coordinates.default.copy(artifactId = "commons-coroutines")
+    coordinates = Coordinates.default.copy(artifactId = "commons-android-binding")
+}
+
+android {
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     api(projects.libraries.core)
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.bundles.coroutines)
+    api(projects.libraries.android)
 
-    implementation(projects.libraries.coroutinesTest)
+    implementation(libs.bundles.material)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
+
     testImplementation(libs.bundles.test)
-    testImplementation(libs.bundles.test.coroutines)
 }

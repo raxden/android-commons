@@ -21,8 +21,8 @@ publishLibrary {
 }
 
 dependencies {
-    api(project(":libraries:pagination"))
-    api(project(":libraries:rx"))
+    api(projects.libraries.pagination)
+    api(projects.libraries.rx)
 
     implementation(libs.bundles.rx)
 

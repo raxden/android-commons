@@ -7,10 +7,8 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.viewbinding.ViewBinding
 import com.raxdenstudios.commons.android.property.FragmentArgumentDelegate
 import com.raxdenstudios.commons.android.property.FragmentByIdDelegate
-import com.raxdenstudios.commons.android.property.FragmentViewBindingDelegate
 
 fun Fragment.inflateView(
     layoutId: Int,
@@ -47,9 +45,6 @@ inline fun <reified TFragment : DialogFragment> Fragment.loadDialogFragment(
     dialogFragment.isCancelable = isCancelable
     return dialogFragment
 }
-
-inline fun <reified T : ViewBinding> Fragment.viewBinding() =
-    FragmentViewBindingDelegate(T::class.java, this)
 
 fun <T : Any> Fragment.argument() = FragmentArgumentDelegate<T>()
 
