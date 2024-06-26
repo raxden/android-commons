@@ -21,12 +21,12 @@ publishLibrary {
 }
 
 dependencies {
-    api(project(":libraries:pagination"))
-    api(project(":libraries:coroutines"))
+    api(projects.libraries.pagination)
+    api(projects.libraries.coroutines)
 
     implementation(libs.bundles.coroutines)
 
-    testImplementation(project(":libraries:coroutines-test"))
+    testImplementation(projects.libraries.coroutinesTest)
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.test.coroutines)
 }

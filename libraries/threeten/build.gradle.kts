@@ -24,6 +24,6 @@ publishLibrary {
 dependencies {
     implementation(libs.threetenabp)
 
-    testImplementation(project(":libraries:threeten-test"))
+    testImplementation(projects.libraries.threetenTest)
     testImplementation(libs.bundles.test)
 }
