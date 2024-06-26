@@ -26,6 +26,6 @@ dependencies {
 
     implementation(libs.bundles.rx)
 
-    testImplementation(project(":libraries:rx-test"))
+    testImplementation(projects.libraries.rxTest)
     testImplementation(libs.bundles.test)
 }
