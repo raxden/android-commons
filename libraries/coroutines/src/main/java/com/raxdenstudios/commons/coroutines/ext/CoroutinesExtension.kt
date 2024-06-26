@@ -13,20 +13,18 @@ val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
 fun CoroutineScope.safeLaunch(
     exceptionHandler: CoroutineExceptionHandler = defaultExceptionHandler,
     block: suspend CoroutineScope.() -> Unit,
-): Job = this.launch(
-    exceptionHandler
-) {
-    block.invoke(this)
-}
+): Job = launch(
+    context = exceptionHandler,
+    block = { block.invoke(this) }
+)
 
 fun CoroutineScope.launch(
     onError: (throwable: Throwable) -> Unit = { _ -> },
     block: suspend CoroutineScope.() -> Unit,
-): Job = this.launch(
-    CoroutineExceptionHandler { _, throwable ->
+): Job = launch(
+    context = CoroutineExceptionHandler { _, throwable ->
         Log.e("CoroutineException", throwable.message, throwable)
         onError(throwable)
-    }
-) {
-    block.invoke(this)
-}
+    },
+    block = { block.invoke(this) }
+)

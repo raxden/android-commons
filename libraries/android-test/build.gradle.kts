@@ -2,7 +2,7 @@ import com.raxdenstudios.publishing.model.Coordinates
 
 plugins {
     alias(libs.plugins.android.versioning)
-    id("com.raxdenstudios.android-library")
+    id("android-library-conventions")
     alias(libs.plugins.android.publish.library)
 }
 
