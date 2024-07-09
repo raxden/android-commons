@@ -1,9 +1,14 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
     id("android-library-conventions")
     alias(libs.plugins.android.publish.library)
+}
+
+android {
+    namespace = "com.raxdenstudios.commons.retrofit"
 }
 
 versioning {
@@ -24,7 +29,7 @@ publishLibrary {
 dependencies {
     api(projects.libraries.core)
 
-    implementation(libs.bundles.retrofit)
+    implementationBundle(libs.bundles.retrofit2.asProvider())
     implementation(libs.network.response.adapter)
 
     testImplementation(libs.bundles.test)

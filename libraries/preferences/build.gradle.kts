@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.android.publish.library)
 }
 
+android {
+    namespace = "com.raxdenstudios.commons.preferences"
+}
+
 versioning {
     filePath = "./libraries/preferences/version.properties"
 }

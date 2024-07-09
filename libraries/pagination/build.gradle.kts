@@ -1,9 +1,14 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
     id("android-library-conventions")
     alias(libs.plugins.android.publish.library)
+}
+
+android {
+    namespace = "com.raxdenstudios.commons.pagination"
 }
 
 versioning {
@@ -21,8 +26,8 @@ publishLibrary {
 }
 
 dependencies {
-    implementation(libs.bundles.material)
-    implementation(libs.bundles.androidx.compose)
+    implementationBundle(libs.bundles.android.material)
+    implementationBundle(libs.bundles.androidx.compose)
 
     testImplementation(libs.bundles.test)
 }
