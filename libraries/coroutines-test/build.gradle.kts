@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.android.publish.library)
 }
 
+android {
+    namespace = "com.raxdenstudios.commons.coroutines.test"
+}
+
 versioning {
     filePath = "./libraries/coroutines-test/version.properties"
 }

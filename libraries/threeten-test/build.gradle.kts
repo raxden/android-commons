@@ -1,9 +1,14 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
     id("android-library-conventions")
     alias(libs.plugins.android.publish.library)
+}
+
+android {
+    namespace = "com.raxdenstudios.commons.threeten.test"
 }
 
 versioning {
@@ -23,5 +28,5 @@ publishLibrary {
 
 dependencies {
     implementation(libs.threetenabp)
-    implementation(libs.bundles.test)
+    implementationBundle(libs.bundles.test.asProvider())
 }

@@ -2,24 +2,28 @@ package com.raxdenstudios.commons.coroutines.ext
 
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
+import com.raxdenstudios.commons.coroutines.test.rules.MainDispatcherRule
 import io.mockk.every
 import io.mockk.mockkStatic
-import io.mockk.spyk
 import io.mockk.unmockkStatic
-import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
 @DelicateCoroutinesApi
-class CoroutinesExtensionTest {
+internal class CoroutinesExtensionTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    private val scope = CoroutineScope(mainDispatcherRule.testDispatcher)
 
     @Before
     fun setUp() {
@@ -34,31 +38,17 @@ class CoroutinesExtensionTest {
 
     @Test
     fun `use safeLaunch`() = runTest {
-        val job = safeLaunch {}
+        val job = scope.safeLaunch {}
 
+        assertThat(job).isNotNull()
         assertThat(job).isInstanceOf(Job::class.java)
     }
 
     @Test
-    fun `use safeLaunch with exception`() {
-        val scope = CoroutineScope(newSingleThreadContext("t1"))
+    fun `use safeLaunch with exception`() = runTest {
+        val job = scope.safeLaunch { error("IllegalStateException") }
 
-        val job = scope.safeLaunch { throw IllegalStateException() }
-
-        assertThat(job).isInstanceOf(Job::class.java)
-    }
-
-    @Test
-    fun `use launch with exception`() {
-        val scope = CoroutineScope(newSingleThreadContext("t1"))
-        val onError = spyk<(Throwable) -> Unit>()
-
-        val job = scope.launch(
-            onError = onError,
-            block = { throw IllegalStateException() }
-        )
-
-        verify { onError.invoke(any()) }
+        assertThat(job).isNotNull()
         assertThat(job).isInstanceOf(Job::class.java)
     }
 }

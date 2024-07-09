@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.android.publish.library)
 }
 
+android {
+    namespace = "com.raxdenstudios.commons.android.test"
+}
+
 versioning {
     filePath = "./libraries/android-test/version.properties"
 }

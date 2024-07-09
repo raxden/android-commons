@@ -1,9 +1,14 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
     id("android-library-conventions")
     alias(libs.plugins.android.publish.library)
+}
+
+android {
+    namespace = "com.raxdenstudios.commons.okhttp3"
 }
 
 versioning {
@@ -21,7 +26,7 @@ publishLibrary {
 }
 
 dependencies {
-    implementation(libs.bundles.okhttp3)
+    implementationBundle(libs.bundles.okhttp3)
 
     testImplementation(libs.bundles.test)
 }

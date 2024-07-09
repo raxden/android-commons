@@ -1,9 +1,14 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
     id("android-library-conventions")
     alias(libs.plugins.android.publish.library)
+}
+
+android {
+    namespace = "com.raxdenstudios.commons.rx"
 }
 
 versioning {
@@ -21,5 +26,5 @@ publishLibrary {
 }
 
 dependencies {
-    implementation(libs.bundles.rx)
+    implementationBundle(libs.bundles.rx)
 }
