@@ -105,6 +105,7 @@ jobs:
       matrix:
         module: [
           android,
+          android-binding,
           android-test,
           core,
           coroutines,
