@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.raxdenstudios.commons.pagination.coroutines"
+    namespace = "com.raxdenstudios.commons.pagination.co"
 }
 
 versioning {
