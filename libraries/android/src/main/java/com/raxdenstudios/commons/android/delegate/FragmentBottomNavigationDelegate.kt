@@ -67,10 +67,8 @@ class FragmentBottomNavigationDelegate(
         fragmentIds?.forEach { fragmentId -> restoreFragment(fragmentId) }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun restoreFragment(fragmentId: Int) {
-        val fragment =
-            fragmentManager.findFragmentByTag("fragment_$fragmentId") as? Fragment ?: return
+        val fragment = fragmentManager.findFragmentByTag("fragment_$fragmentId") ?: return
         onFragmentLoaded(fragmentId, fragment)
         setFragmentInMap(fragmentId, fragment)
     }
