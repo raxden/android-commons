@@ -29,8 +29,8 @@ publishLibrary {
 dependencies {
     api(projects.libraries.retrofit)
 
-    implementationBundle(libs.bundles.retrofit2.asProvider())
-    implementationBundle(libs.bundles.retrofit2.rx)
+    implementationBundle(libs.bundles.retrofit2)
+    implementationBundle(libs.bundles.retrofit2Rx)
 
     testImplementation(libs.bundles.test)
 }
