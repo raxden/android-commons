@@ -208,8 +208,8 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 network-response-adapter = { module = "com.github.haroldadmin:NetworkResponseAdapter", version.ref = "network-response-adapter" }
 
 okhttp3-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp3" }
-okhttp3 = { module = "com.squareup.okhttp3:okhttp" }
-okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
+okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
+okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
 okhttp-mockwebserver = { module = "com.squareup.okhttp:mockwebserver", version.ref = "okhttp-mockwebserver" }
 
 restmock = { module = "com.github.andrzejchm.RESTMock:android", version.ref = "rest-mock" }
@@ -311,7 +311,7 @@ firebase = [
 ]
 okhttp3 = [
     "commons-okhttp3",
-    "okhttp3-bom",
+#    "okhttp3-bom",
     "okhttp3",
     "okhttp3-logging-interceptor",
 ]
@@ -320,20 +320,20 @@ retrofit2 = [
     "retrofit-core",
     "retrofit-gson",
     "commons-okhttp3",
-    "okhttp3-bom",
+#    "okhttp3-bom",
     "okhttp3",
     "okhttp3-logging-interceptor",
     "network-response-adapter",
     "gson",
 ]
-retrofit2-rx = [
+retrofit2Rx = [
     "commons-retrofit",
     "commons-retrofit-rx",
     "retrofit-core",
     "retrofit-gson",
     "retrofit-rxjava2",
     "commons-okhttp3",
-    "okhttp3-bom",
+#    "okhttp3-bom",
     "okhttp3",
     "okhttp3-logging-interceptor",
     "network-response-adapter",
