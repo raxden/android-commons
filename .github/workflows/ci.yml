@@ -56,6 +56,27 @@ jobs:
       - name: Check code via Detekt
         uses: ./.github/actions/check_code
 
+  assemble:
+    needs: [ checkstyle ]
+    if: success()
+    name: Assemble Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          token: ${{ secrets.CI_GIT_TOKEN }}
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Build
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: assembleRelease --no-configuration-cache --stacktrace --scan
+
   test:
     needs: [ checkstyle ]
     if: success()
@@ -76,7 +97,7 @@ jobs:
         uses: ./.github/actions/unit_tests
 
   reports:
-    needs: [ test ]
+    needs: [ assemble, test ]
     if: success()
     name: Generate reports
     runs-on: ubuntu-latest
@@ -97,7 +118,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   status:
-    needs: [ test, reports ]
+    needs: [ assemble, test, reports ]
     if: success() && github.event_name == 'pull_request'
     name: Status
     runs-on: ubuntu-latest
