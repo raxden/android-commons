@@ -6,7 +6,6 @@ targetSdk = "34"
 compileSdk = "34"
 sourceCompatibility = "17"
 targetCompatibility = "17"
-composeCompiler = "1.5.15"
 
 androidx-core-ktx = "1.13.1"
 androidx-activity-ktx = "1.9.2"
@@ -84,6 +83,7 @@ okhttp-mockwebserver = "2.7.5"
 play-services = "4.4.2"
 rest-mock = "0.4.4"
 retrofit2 = "2.9.0"
+roboletric = "4.8.1"
 room = "2.6.1"
 rootcoverage = "1.8.0"
 rx-android = "2.1.1"
@@ -216,6 +216,8 @@ retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "ret
 retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit2" }
 retrofit-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "retrofit2" }
 
+robolectric = { module = "org.robolectric:robolectric", version.ref = "roboletric" }
+
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -236,8 +238,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 # Dependencies of the included build-logic
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradle-plugin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+kotlin-compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
 [bundles]
 
@@ -418,6 +419,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 detekt-formatting = { id = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
