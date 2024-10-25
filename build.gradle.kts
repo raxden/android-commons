@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.nexus.publish)
     alias(libs.plugins.test.logger)
     alias(libs.plugins.detekt)
+    id("android-project-conventions")
 }
 
 val nexusId: String? by project
