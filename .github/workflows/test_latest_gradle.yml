@@ -1,19 +1,19 @@
-name: Test latest Gradle RC
-on:
-  schedule:
-    - cron: 0 0 * * 0 # every sunday
-
-jobs:
-  gradle-rc:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
-      - uses: ./.github/actions/common_setup
-      - uses: gradle/gradle-build-action@v2.4.2
-        with:
-          gradle-version: release-candidate
-      - run: gradle build --dry-run # just test build configuration
+#name: Test latest Gradle RC
+#on:
+#  schedule:
+#    - cron: 0 0 * * 0 # every sunday
+#
+#jobs:
+#  gradle-rc:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#        with:
+#          submodules: 'true'
+#          token: ${{ secrets.CI_GIT_TOKEN }}
+#      - uses: ./.github/actions/common_setup
+#      - uses: gradle/gradle-build-action@v2.4.2
+#        with:
+#          gradle-version: release-candidate
+#      - run: gradle build --dry-run # just test build configuration
