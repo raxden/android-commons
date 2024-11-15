@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Publish libraries
+name: Continuous Integration (Publish)
 
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -34,9 +34,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Basic Information
         uses: ./.github/actions/info
@@ -48,15 +45,30 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
 
       - name: Check code via Detekt
         uses: ./.github/actions/check_code
+
+  assemble:
+    needs: [ checkstyle ]
+    if: success()
+    name: Assemble Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Build
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: assembleRelease --no-configuration-cache --stacktrace --scan
 
   test:
     needs: [ checkstyle ]
@@ -66,9 +78,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -78,15 +87,13 @@ jobs:
 
   reports:
     needs: [ test ]
+    if: success()
     name: Generate reports
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -128,15 +135,12 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
 
       - name: Publish module library
-        uses: ./.github/actions/publish_module_library
+        uses: ./.github/actions/publish_module
         with:
           module: ${{ matrix.module }}
           sonatype-id: ${{ secrets.OSSRH_ID }}
@@ -145,3 +149,43 @@ jobs:
           signing-key: ${{ secrets.SIGNING_KEY }}
           signing-id: ${{ secrets.SIGNING_KEY_ID }}
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
+
+  bump-version:
+    needs: [ publish]
+    name: Bump version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [
+          android,
+          android-binding,
+          android-test,
+          core,
+          coroutines,
+          coroutines-test,
+          glide,
+          okhttp3,
+          pagination,
+          pagination-co,
+          pagination-rx,
+          permissions,
+          preferences,
+          retrofit,
+          retrofit-rx,
+          rx,
+          rx-test,
+          threeten,
+          threeten-test
+        ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Bump module version
+        uses: ./.github/actions/bump_version
+        with:
+          module: ${{ matrix.module }}

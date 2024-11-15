@@ -1,0 +1,59 @@
+name: 'Publish module to sonatype'
+description: "Publish module to sonatype"
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
+  module:
+    description: 'Module library name'
+    required: true
+  sonatype-id:
+    description: 'OSS Repository Hosting - Id'
+    required: true
+  sonatype-username:
+    description: 'OSS Repository Hosting - Username'
+    required: true
+  sonatype-password:
+    description: 'OSS Repository Hosting - Password'
+    required: true
+  signing-key:
+    description: 'Signing key'
+    required: true
+  signing-id:
+    description: 'Signing id'
+    required: true
+  signing-password:
+    description: 'Signing password'
+    required: true
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Get specific changed files in ${{ inputs.module }}
+      id: changed-files-specific_library
+      uses: tj-actions/changed-files@v35
+      with:
+        files: |
+          libraries/${{ inputs.module }}/**/*
+
+    - name: List all changed files
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      run: |
+        echo "One or more files in the libraries/${{ inputs.module }} folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
+        echo "${{ inputs.module }} library module has been detected with changes" >> $GITHUB_STEP_SUMMARY
+      shell: bash
+
+    - name: Publish ${{ inputs.module }} library in Sonatype
+      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      env:
+        OSSRH_ID: ${{ inputs.sonatype-id }}
+        OSSRH_PASSWORD: ${{ inputs.sonatype-password }}
+        OSSRH_USERNAME: ${{ inputs.sonatype-username }}
+        SIGNING_KEY: ${{ inputs.signing-key }}
+        SIGNING_KEY_ID: ${{ inputs.signing-id }}
+        SIGNING_PASSWORD: ${{ inputs.signing-password }}
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :libraries:${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan

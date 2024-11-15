@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Continuous Integration
+name: Continuous Integration (PR)
 
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -8,9 +8,6 @@ on:
   pull_request:
     branches:
       - '*'
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
@@ -32,9 +29,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Basic Information
         uses: ./.github/actions/info
@@ -46,9 +40,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -65,9 +56,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -86,9 +74,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -97,7 +82,7 @@ jobs:
         uses: ./.github/actions/unit_tests
 
   reports:
-    needs: [ assemble, test ]
+    needs: [ test ]
     if: success()
     name: Generate reports
     runs-on: ubuntu-latest
@@ -105,9 +90,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Setup machine
         uses: ./.github/actions/common_setup
@@ -118,14 +100,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   status:
-    needs: [ assemble, test, reports ]
-    if: success() && github.event_name == 'pull_request'
+    needs: [ assemble, test ]
+    if: success()
     name: Status
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-        with:
-          submodules: 'true'
-          token: ${{ secrets.CI_GIT_TOKEN }}

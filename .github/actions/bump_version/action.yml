@@ -1,0 +1,49 @@
+name: 'Bump version'
+description: "Bump version version"
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
+  module:
+    description: 'Module name'
+    required: true
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Increase patch version
+      if: startsWith(github.event.pull_request.title, 'patch')
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :${{ inputs.module }}:increasePatchVersion --info
+
+    - name: Increase minor version
+      if: startsWith(github.event.pull_request.title, 'minor')
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :${{ inputs.module }}:increaseMinorVersion --info
+
+    - name: Increase major version
+      if: startsWith(github.event.pull_request.title, 'major')
+      uses: gradle/gradle-build-action@v2.4.2
+      with:
+        arguments: :${{ inputs.module }}:increaseMajorVersion --info
+
+    - name: Get current version from ${{ inputs.module }}
+      id: get-version
+      run: |
+        VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
+        echo "Current version: $VERSION"
+        echo "CURRENT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} from ${{ inputs.module }}
+      run: |
+        git config user.name \"RaxdenRobot\"
+        git config user.email "raxden.dev@gmail.com"
+        git add .
+        git commit -m "Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} [skip ci]"
+        git push --force
+        echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.CURRENT_VERSION }}" >> $GITHUB_STEP_SUMMARY
+      shell: bash
