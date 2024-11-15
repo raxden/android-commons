@@ -6,7 +6,7 @@ inputs:
     required: false
     default: ${{ github.run_number }}
   module:
-    description: 'Module library name'
+    description: 'Module name'
     required: true
   sonatype-id:
     description: 'OSS Repository Hosting - Id'
@@ -31,22 +31,22 @@ runs:
   using: "composite"
   steps:
     - name: Get specific changed files in ${{ inputs.module }}
-      id: changed-files-specific_library
+      id: changed-files-specific
       uses: tj-actions/changed-files@v35
       with:
         files: |
-          libraries/${{ inputs.module }}/**/*
+          ${{ inputs.module | replace(':', '/') }}/**/*
 
     - name: List all changed files
-      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+      if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
-        echo "One or more files in the libraries/${{ inputs.module }} folder has changed."
-        echo "List all the files that have changed: ${{ steps.changed-files-specific_library.outputs.all_changed_files }}"
-        echo "${{ inputs.module }} library module has been detected with changes" >> $GITHUB_STEP_SUMMARY
+        echo "One or more files in the ${{ inputs.module | replace(':', '/') }} folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+        echo "${{ inputs.module }} module has been detected with changes" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
-    - name: Publish ${{ inputs.module }} library in Sonatype
-      if: steps.changed-files-specific_library.outputs.any_changed == 'true'
+    - name: Publish ${{ inputs.module }} module in Sonatype
+      if: steps.changed-files-specific.outputs.any_changed == 'true'
       env:
         OSSRH_ID: ${{ inputs.sonatype-id }}
         OSSRH_PASSWORD: ${{ inputs.sonatype-password }}
@@ -54,6 +54,6 @@ runs:
         SIGNING_KEY: ${{ inputs.signing-key }}
         SIGNING_KEY_ID: ${{ inputs.signing-id }}
         SIGNING_PASSWORD: ${{ inputs.signing-password }}
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: gradle/actions/setup-gradle@v3
       with:
-        arguments: :libraries:${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+        arguments: :${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan

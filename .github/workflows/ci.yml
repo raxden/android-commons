@@ -18,6 +18,8 @@ env:
   CACHE_VERSION: 1
   # Enable debug for the `gradle-build-action` cache operations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+  # Retention days used for output files
+  RETENTION_DAYS: 1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -47,10 +49,10 @@ jobs:
       - name: Check code via Detekt
         uses: ./.github/actions/check_code
 
-  assemble:
+  build:
     needs: [ checkstyle ]
     if: success()
-    name: Assemble Release
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -61,7 +63,7 @@ jobs:
         uses: ./.github/actions/common_setup
 
       - name: Build
-        uses: gradle/gradle-build-action@v2.4.2
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: assembleRelease --no-configuration-cache --stacktrace --scan
 
@@ -86,6 +88,7 @@ jobs:
     if: success()
     name: Generate reports
     runs-on: ubuntu-latest
+    environment: release_environment
 
     steps:
       - name: Check out code
@@ -100,7 +103,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   status:
-    needs: [ assemble, test ]
+    needs: [ build, reports ]
     if: success()
     name: Status
     runs-on: ubuntu-latest

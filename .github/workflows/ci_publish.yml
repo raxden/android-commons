@@ -23,6 +23,8 @@ env:
   CACHE_VERSION: 1
   # Enable debug for the `gradle-build-action` cache operations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+  # Retention days used for output files
+  RETENTION_DAYS: 1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -52,10 +54,10 @@ jobs:
       - name: Check code via Detekt
         uses: ./.github/actions/check_code
 
-  assemble:
+  build:
     needs: [ checkstyle ]
     if: success()
-    name: Assemble Release
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -66,7 +68,7 @@ jobs:
         uses: ./.github/actions/common_setup
 
       - name: Build
-        uses: gradle/gradle-build-action@v2.4.2
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: assembleRelease --no-configuration-cache --stacktrace --scan
 
@@ -90,6 +92,7 @@ jobs:
     if: success()
     name: Generate reports
     runs-on: ubuntu-latest
+    environment: release_environment
 
     steps:
       - name: Check out code
@@ -103,33 +106,75 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  bump-version:
+    needs: [ build, test ]
+    if: success()
+    name: Bump version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [
+          "libraries:android",
+          "libraries:android-binding",
+          "libraries:android-test",
+          "libraries:core",
+          "libraries:coroutines",
+          "libraries:coroutines-test",
+          "libraries:glide",
+          "libraries:okhttp3",
+          "libraries:pagination",
+          "libraries:pagination-co",
+          "libraries:pagination-rx",
+          "libraries:permissions",
+          "libraries:preferences",
+          "libraries:retrofit",
+          "libraries:retrofit-rx",
+          "libraries:rx",
+          "libraries:rx-test",
+          "libraries:threeten",
+          "libraries:threeten-test",
+        ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/common_setup
+
+      - name: Bump module version
+        uses: ./.github/actions/bump_version
+        with:
+          module: ${{ matrix.module }}
+
   publish:
-    needs: [ checkstyle, test, reports ]
+    needs: [ bump-version ]
+    if: success()
     name: Publish to Sonatype
     runs-on: ubuntu-latest
     environment: release_environment
     strategy:
       matrix:
         module: [
-          android,
-          android-binding,
-          android-test,
-          core,
-          coroutines,
-          coroutines-test,
-          glide,
-          okhttp3,
-          pagination,
-          pagination-co,
-          pagination-rx,
-          permissions,
-          preferences,
-          retrofit,
-          retrofit-rx,
-          rx,
-          rx-test,
-          threeten,
-          threeten-test
+          "libraries:android",
+          "libraries:android-binding",
+          "libraries:android-test",
+          "libraries:core",
+          "libraries:coroutines",
+          "libraries:coroutines-test",
+          "libraries:glide",
+          "libraries:okhttp3",
+          "libraries:pagination",
+          "libraries:pagination-co",
+          "libraries:pagination-rx",
+          "libraries:permissions",
+          "libraries:preferences",
+          "libraries:retrofit",
+          "libraries:retrofit-rx",
+          "libraries:rx",
+          "libraries:rx-test",
+          "libraries:threeten",
+          "libraries:threeten-test",
         ]
 
     steps:
@@ -150,42 +195,3 @@ jobs:
           signing-id: ${{ secrets.SIGNING_KEY_ID }}
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
-  bump-version:
-    needs: [ publish]
-    name: Bump version
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        module: [
-          android,
-          android-binding,
-          android-test,
-          core,
-          coroutines,
-          coroutines-test,
-          glide,
-          okhttp3,
-          pagination,
-          pagination-co,
-          pagination-rx,
-          permissions,
-          preferences,
-          retrofit,
-          retrofit-rx,
-          rx,
-          rx-test,
-          threeten,
-          threeten-test
-        ]
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/common_setup
-
-      - name: Bump module version
-        uses: ./.github/actions/bump_version
-        with:
-          module: ${{ matrix.module }}
