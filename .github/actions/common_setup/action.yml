@@ -5,12 +5,16 @@ inputs:
     description: "Java version"
     required: true
     default: '17'
+  distribution:
+    description: "Distribution"
+    required: true
+    default: 'temurin'
 outputs: { }
 runs:
   using: "composite"
   steps:
-    - name: Set up JDK ${{ inputs.java-version }} and Gradle cache
-      uses: actions/setup-java@v3
+    - name: Set up JDK ${{ inputs.distribution }} - ${{ inputs.java-version }} and Gradle cache
+      uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
+        distribution: ${{ inputs.distribution }}
         java-version: ${{ inputs.java-version }}

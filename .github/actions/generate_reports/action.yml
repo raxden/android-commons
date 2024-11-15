@@ -12,7 +12,7 @@ inputs:
     description: 'Cache'
     required: false
     default: "false"
-  outputs-retention-days:
+  retention-days:
     description: 'Remove artifacts after the specified number of days'
     required: false
     default: "1"
@@ -21,26 +21,26 @@ runs:
   using: "composite"
   steps:
     - name: Load unit tests outputs
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: outputs-unit-tests-${{ inputs.id }}
 #        if-no-files-found: warn
 
 #  https://github.com/actions/upload-artifact/issues/255
 #    - name: Load instrumental tests outputs
-#      uses: actions/download-artifact@v3
+#      uses: actions/download-artifact@v4
 #      with:
 #        name: outputs-android-tests
 #        if-no-files-found: warn
 
     - name: Jacoco Reports
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: coverageReport --no-configuration-cache --stacktrace --scan
         cache-disabled: ${{ inputs.cache-disabled == 'true' }}
 
     - name: Upload Reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: reports-jacoco-${{ inputs.id }}
         path: |
@@ -49,6 +49,6 @@ runs:
         retention-days: ${{ inputs.retention-days }}
 
     - name: Uploading reports to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         token: ${{ inputs.token }}

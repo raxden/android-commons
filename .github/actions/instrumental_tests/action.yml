@@ -17,12 +17,16 @@ inputs:
   api-level:
     description: 'API level'
     required: true
+  retention-days:
+    description: 'Remove artifacts after the specified number of days'
+    required: false
+    default: "1"
 outputs: { }
 runs:
   using: "composite"
   steps:
     - name: Gradle cache
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: gradle/actions/setup-gradle@v3
 
     - name: AVD cache
       uses: actions/cache@v3
@@ -65,10 +69,10 @@ runs:
           ./gradlew connectedDebugAndroidTest --stacktrace --scan
 
     - name: Upload Outputs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: outputs-android-tests-${{ inputs.id }}
         path: |
           emulator.log
           ./**/build/outputs/code_coverage/
-        retention-days: 3
+        retention-days: ${{ inputs.retention-days }}

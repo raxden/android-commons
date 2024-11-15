@@ -1,5 +1,5 @@
-name: 'Bump version'
-description: "Bump version version"
+name: 'Bump module version'
+description: "Bump module version"
 inputs:
   id:
     description: 'Value used to identify the workflow run'
@@ -14,19 +14,19 @@ runs:
   steps:
     - name: Increase patch version
       if: startsWith(github.event.pull_request.title, 'patch')
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: :${{ inputs.module }}:increasePatchVersion --info
 
     - name: Increase minor version
       if: startsWith(github.event.pull_request.title, 'minor')
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: :${{ inputs.module }}:increaseMinorVersion --info
 
     - name: Increase major version
       if: startsWith(github.event.pull_request.title, 'major')
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: :${{ inputs.module }}:increaseMajorVersion --info
 
