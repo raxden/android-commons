@@ -14,9 +14,8 @@ runs:
   using: "composite"
   steps:
     - name: Check code via Detekt
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: detekt --stacktrace --scan
+      run: ./gradlew detekt --stacktrace --scan
+      shell: bash
 
     - name: Upload Outputs
       uses: actions/upload-artifact@v4

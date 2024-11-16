@@ -5,10 +5,6 @@ inputs:
     description: 'Value used to identify the workflow run'
     required: false
     default: ${{ github.run_number }}
-  cache-disabled:
-    description: 'Cache'
-    required: false
-    default: "false"
   retention-days:
     description: 'Remove artifacts after the specified number of days'
     required: false
@@ -18,10 +14,8 @@ runs:
   using: "composite"
   steps:
     - name: Unit tests
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: testDebugUnitTest --no-configuration-cache --stacktrace --scan
-        cache-disabled: ${{ inputs.cache-disabled == 'true' }}
+      run: ./gradlew testDebugUnitTest --stacktrace --scan
+      shell: bash
 
     - name: Upload Outputs
       uses: actions/upload-artifact@v4

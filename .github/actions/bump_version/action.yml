@@ -1,5 +1,6 @@
 name: 'Bump module version'
 description: "Bump module version"
+
 inputs:
   id:
     description: 'Value used to identify the workflow run'
@@ -8,42 +9,94 @@ inputs:
   module:
     description: 'Module name'
     required: true
-outputs: { }
+  force:
+    description: 'Force the bump version'
+    required: false
+    default: "false"
+
+outputs:
+  result:
+    description: "Module bumped"
+    value: ${{ steps.bumped-version.outputs.value }}
+
 runs:
   using: "composite"
   steps:
-    - name: Increase patch version
-      if: startsWith(github.event.pull_request.title, 'patch')
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: :${{ inputs.module }}:increasePatchVersion --info
-
-    - name: Increase minor version
-      if: startsWith(github.event.pull_request.title, 'minor')
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: :${{ inputs.module }}:increaseMinorVersion --info
-
-    - name: Increase major version
-      if: startsWith(github.event.pull_request.title, 'major')
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: :${{ inputs.module }}:increaseMajorVersion --info
-
-    - name: Get current version from ${{ inputs.module }}
-      id: get-version
+    - name: Get module path
+      id: get-module-path
       run: |
-        VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
-        echo "Current version: $VERSION"
-        echo "CURRENT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+        MODULE=${{ inputs.module }}
+        PATH="${MODULE//://}"
+        echo "value=$PATH" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - name: Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} from ${{ inputs.module }}
+    - name: Get specific changed files in ${{ inputs.module }}
+      id: changed-files-specific
+      uses: tj-actions/changed-files@v45
+      with:
+        files: |
+          ${{ steps.get-module-path.outputs.value }}/**/*
+
+    - name: List all changed files
+      if: steps.changed-files-specific.outputs.any_changed == 'true' || inputs.force == 'true'
       run: |
-        git config user.name \"RaxdenRobot\"
+        echo "One or more files in the ${{ steps.get-module-path.outputs.path }} folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+        echo "${{ steps.get-module-path.outputs.path }} has been detected with changes" >> $GITHUB_STEP_SUMMARY
+      shell: bash
+
+    - name: Has module changes
+      id: has-module-changes
+      run: |
+        HAS_CHANGES=${{ steps.changed-files-specific.outputs.any_changed == 'true' || inputs.force == 'true' }}
+        echo "value=$HAS_CHANGES" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Get PR info
+      id: pull-request
+      run: |
+        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') }}
+        echo "is_patch=$IS_PATCH" >> "$GITHUB_OUTPUT"
+        IS_MINOR=${{ startsWith(github.event.pull_request.title, 'minor') || startsWith(github.event.pull_request.title, 'Minor') }}
+        echo "is_minor=$IS_MINOR" >> "$GITHUB_OUTPUT"
+        IS_MAJOR=${{ startsWith(github.event.pull_request.title, 'major') || startsWith(github.event.pull_request.title, 'Major') }}
+        echo "is_major=$IS_MAJOR" >> "$GITHUB_OUTPUT"
+      shell: bash
+      
+    - name: Increase patch version
+      if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_patch == 'true'
+      run: ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
+      shell: bash
+
+    - name: Increase minor version
+      if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_minor == 'true'
+      run: ./gradlew :${{ inputs.module }}:increaseMinorVersion --no-configuration-cache
+      shell: bash
+
+    - name: Increase major version
+      if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_major == 'true'
+      run: ./gradlew :${{ inputs.module }}:increaseMajorVersion --no-configuration-cache
+      shell: bash
+
+    - name: Get current version
+      if: steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
+      id: get-version
+      run: |
+        echo "Get current version from ${{ inputs.module }}"
+        VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
+        echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Bump version
+      if: steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
+      id: bumped-version
+      run: |
+        echo "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }}"
+        git config user.name \"Raxden Robot\"
         git config user.email "raxden.dev@gmail.com"
         git add .
-        git commit -m "Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} [skip ci]"
-        git push --force
-        echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.CURRENT_VERSION }}" >> $GITHUB_STEP_SUMMARY
+        git commit -m "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} [skip ci]"
+        git push -u --force origin HEAD
+        echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.value }}" >> $GITHUB_STEP_SUMMARY
+        echo "value=true" >> $GITHUB_OUTPUT
       shell: bash

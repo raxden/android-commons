@@ -8,10 +8,6 @@ inputs:
   token:
     description: 'Codecov token'
     required: true
-  cache-disabled:
-    description: 'Cache'
-    required: false
-    default: "false"
   retention-days:
     description: 'Remove artifacts after the specified number of days'
     required: false
@@ -34,10 +30,8 @@ runs:
 #        if-no-files-found: warn
 
     - name: Jacoco Reports
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        arguments: coverageReport --no-configuration-cache --stacktrace --scan
-        cache-disabled: ${{ inputs.cache-disabled == 'true' }}
+      run: ./gradlew coverageReport --stacktrace --scan
+      shell: bash
 
     - name: Upload Reports
       uses: actions/upload-artifact@v4
