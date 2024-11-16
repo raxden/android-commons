@@ -18,6 +18,7 @@ runs:
       shell: bash
 
     - name: Upload Outputs
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: outputs-unit-tests-${{ inputs.id }}

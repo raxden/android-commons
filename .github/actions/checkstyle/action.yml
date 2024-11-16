@@ -18,6 +18,7 @@ runs:
       shell: bash
 
     - name: Upload Outputs
+      if: failure()
       uses: actions/upload-artifact@v4
       with:
         name: outputs-detekt-${{ inputs.id }}

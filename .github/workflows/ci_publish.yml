@@ -96,11 +96,32 @@ jobs:
         with:
           retention-days: ${{ env.RETENTION_DAYS }}
 
-  bump-version:
-    needs: [ build, test ]
+  reports:
+    needs: [ test ]
     if: success()
-    name: Bump version
+    name: Generate reports
     runs-on: ubuntu-latest
+    environment: release_environment
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/setup
+
+      - name: Generate jacoco reports and upload to codecov
+        uses: ./.github/actions/generate_reports
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  publish:
+    needs: [ build, reports ]
+    if: success()
+    name: Publish to Sonatype
+    runs-on: ubuntu-latest
+    environment: release_environmentQ
     strategy:
       matrix:
         module: [
@@ -133,48 +154,13 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Bump module version
+        id: bump-module-version
         uses: ./.github/actions/bump_version
         with:
           module: ${{ matrix.module }}
 
-  publish:
-    needs: [ bump-version ]
-    if: success()
-    name: Publish to Sonatype
-    runs-on: ubuntu-latest
-    environment: release_environment
-    strategy:
-      matrix:
-        module: [
-          "libraries:android",
-          "libraries:android-binding",
-          "libraries:android-test",
-          "libraries:core",
-          "libraries:coroutines",
-          "libraries:coroutines-test",
-          "libraries:glide",
-          "libraries:okhttp3",
-          "libraries:pagination",
-          "libraries:pagination-co",
-          "libraries:pagination-rx",
-          "libraries:permissions",
-          "libraries:preferences",
-          "libraries:retrofit",
-          "libraries:retrofit-rx",
-          "libraries:rx",
-          "libraries:rx-test",
-          "libraries:threeten",
-          "libraries:threeten-test",
-        ]
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
       - name: Publish module library
+        if: steps.bump-module-version.outputs.result == 'true'
         uses: ./.github/actions/publish_module
         with:
           module: ${{ matrix.module }}
@@ -186,7 +172,7 @@ jobs:
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
   status:
-    needs: [ bump-version ]
+    needs: [ publish ]
     if: success()
     name: Status
     runs-on: ubuntu-latest

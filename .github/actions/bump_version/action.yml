@@ -90,13 +90,15 @@ runs:
     - name: Bump version
       if: steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
       id: bumped-version
+      env:
+        BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       run: |
-        echo "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }}"
+        echo "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} in ${BRANCH_NAME}"
         git config user.name \"Raxden Robot\"
         git config user.email "raxden.dev@gmail.com"
         git add .
         git commit -m "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} [skip ci]"
-        git push -u --force origin HEAD
+        git push --force
         echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.value }}" >> $GITHUB_STEP_SUMMARY
         echo "value=true" >> $GITHUB_OUTPUT
       shell: bash

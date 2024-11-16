@@ -39,8 +39,6 @@ jobs:
         uses: ./.github/actions/info
 
   test:
-    needs: [ checkstyle ]
-    if: success()
     name: Run Unit Tests
     runs-on: ubuntu-latest
 
