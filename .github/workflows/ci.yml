@@ -23,16 +23,20 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
-  bump-version:
-    name: Bump version
+  info:
+    name: Workflow Information
     runs-on: ubuntu-latest
-    environment: release_environment
-    strategy:
-      matrix:
-        module: [
-          "libraries:android",
-        ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Basic Information
+        uses: ./.github/actions/info
+
+  checkstyle:
+    name: Check code (detekt)
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
@@ -41,112 +45,77 @@ jobs:
       - name: Setup machine
         uses: ./.github/actions/setup
 
-      - name: Bump module version
-        id: bump-module
-        uses: ./.github/actions/bump_version
+      - name: Check code via Detekt
+        uses: ./.github/actions/checkstyle
         with:
-          module: ${{ matrix.module }}
-          force: "true"
+          retention-days: ${{ env.RETENTION_DAYS }}
 
-      - name: Publish module library
-        if: steps.bump-module.outputs.value == 'true'
-        run: |
-          echo "PUBLICANDO ${{ matrix.module }}"
-        shell: bash
+  build:
+    needs: [ checkstyle ]
+    if: success()
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        buildType: [ "Debug", "Release" ]
 
-#  info:
-#    name: Workflow Information
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Basic Information
-#        uses: ./.github/actions/info
-#
-#  checkstyle:
-#    name: Check code (detekt)
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup machine
-#        uses: ./.github/actions/setup
-#
-#      - name: Check code via Detekt
-#        uses: ./.github/actions/checkstyle
-#        with:
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#  build:
-#    needs: [ checkstyle ]
-#    if: success()
-#    name: Build
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        buildType: [ "Debug", "Release" ]
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup machine
-#        uses: ./.github/actions/setup
-#
-#      - name: Assemble ${{ matrix.buildType }}
-#        uses: ./.github/actions/assemble
-#        with:
-#          build-type: ${{ matrix.buildType }}
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#  test:
-#    needs: [ checkstyle ]
-#    if: success()
-#    name: Run Unit Tests
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup machine
-#        uses: ./.github/actions/setup
-#
-#      - name: Unit tests
-#        uses: ./.github/actions/unit_tests
-#        with:
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#  reports:
-#    needs: [ test ]
-#    if: success()
-#    name: Generate reports
-#    runs-on: ubuntu-latest
-#    environment: release_environment
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
-#
-#      - name: Setup machine
-#        uses: ./.github/actions/setup
-#
-#      - name: Generate jacoco reports and upload to codecov
-#        uses: ./.github/actions/generate_reports
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#  status:
-#    needs: [ build, reports ]
-#    if: success()
-#    name: Status
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Check out code
-#        uses: actions/checkout@v4
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/setup
+
+      - name: Assemble ${{ matrix.buildType }}
+        uses: ./.github/actions/assemble
+        with:
+          build-type: ${{ matrix.buildType }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  test:
+    needs: [ checkstyle ]
+    if: success()
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/setup
+
+      - name: Unit tests
+        uses: ./.github/actions/unit_tests
+        with:
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  reports:
+    needs: [ test ]
+    if: success()
+    name: Generate reports
+    runs-on: ubuntu-latest
+    environment: release_environment
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/setup
+
+      - name: Generate jacoco reports and upload to codecov
+        uses: ./.github/actions/generate_reports
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  status:
+    needs: [ build, reports ]
+    if: success()
+    name: Status
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4

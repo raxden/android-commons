@@ -8,6 +8,10 @@ inputs:
     description: 'Base64 encoded string of the file'
     required: false
     default: ""
+  upload-files:
+    description: 'Upload apk files'
+    required: false
+    default: "true"
   retention-days:
     description: 'Remove artifacts after the specified number of days'
     required: false
@@ -23,7 +27,7 @@ runs:
       with:
         fileName: 'signing.tar.gz'
         fileDir: './config'
-        encodedString: ${{ inputs.signingFiles }}
+        encodedString: ${{ inputs.signing-files }}
 
     - name: Extract secret files
       if: ${{ inputs.build-type == 'Release' && inputs.signing-files != '' }}
@@ -36,9 +40,10 @@ runs:
       shell: bash
 
     - name: Upload Outputs
+      if: ${{ inputs.upload-files == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         path: |
           app/build/outputs/apk/
           app/build/generated/res/google-services/
-        retention-days: ${{ inputs.retentionDays }}
+        retention-days: ${{ inputs.retention-days }}
