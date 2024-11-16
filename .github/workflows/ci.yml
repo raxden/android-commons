@@ -24,36 +24,33 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  info:
-    name: Workflow Information
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Basic Information
-        uses: ./.github/actions/info
-
-  checkstyle:
-    name: Check code (detekt)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/common_setup
-
-      - name: Check code via Detekt
-        uses: ./.github/actions/check_code
-
-  build:
-    needs: [ checkstyle ]
+  bump-version:
     if: success()
-    name: Build
+    name: Bump version
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [
+          "libraries:android",
+          "libraries:android-binding",
+          "libraries:android-test",
+          "libraries:core",
+          "libraries:coroutines",
+          "libraries:coroutines-test",
+          "libraries:glide",
+          "libraries:okhttp3",
+          "libraries:pagination",
+          "libraries:pagination-co",
+          "libraries:pagination-rx",
+          "libraries:permissions",
+          "libraries:preferences",
+          "libraries:retrofit",
+          "libraries:retrofit-rx",
+          "libraries:rx",
+          "libraries:rx-test",
+          "libraries:threeten",
+          "libraries:threeten-test",
+        ]
 
     steps:
       - name: Check out code
@@ -62,52 +59,95 @@ jobs:
       - name: Setup machine
         uses: ./.github/actions/common_setup
 
-      - name: Build
-        uses: gradle/actions/setup-gradle@v3
+      - name: Bump module version
+        uses: ./.github/actions/bump_version
         with:
-          arguments: assembleRelease --no-configuration-cache --stacktrace --scan
+          module: ${{ matrix.module }}
 
-  test:
-    needs: [ checkstyle ]
-    if: success()
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/common_setup
-
-      - name: Unit tests
-        uses: ./.github/actions/unit_tests
-
-  reports:
-    needs: [ test ]
-    if: success()
-    name: Generate reports
-    runs-on: ubuntu-latest
-    environment: release_environment
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/common_setup
-
-      - name: Generate jacoco reports and upload to codecov
-        uses: ./.github/actions/generate_reports
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-  status:
-    needs: [ build, reports ]
-    if: success()
-    name: Status
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+#  info:
+#    name: Workflow Information
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Basic Information
+#        uses: ./.github/actions/info
+#
+#  checkstyle:
+#    name: Check code (detekt)
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Check code via Detekt
+#        uses: ./.github/actions/check_code
+#
+#  build:
+#    needs: [ checkstyle ]
+#    if: success()
+#    name: Build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Build
+#        uses: gradle/actions/setup-gradle@v3
+#        with:
+#          arguments: assembleRelease --no-configuration-cache --stacktrace --scan
+#
+#  test:
+#    needs: [ checkstyle ]
+#    if: success()
+#    name: Run Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Unit tests
+#        uses: ./.github/actions/unit_tests
+#
+#  reports:
+#    needs: [ test ]
+#    if: success()
+#    name: Generate reports
+#    runs-on: ubuntu-latest
+#    environment: release_environment
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/common_setup
+#
+#      - name: Generate jacoco reports and upload to codecov
+#        uses: ./.github/actions/generate_reports
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#
+#  status:
+#    needs: [ build, reports ]
+#    if: success()
+#    name: Status
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4

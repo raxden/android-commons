@@ -195,3 +195,12 @@ jobs:
           signing-id: ${{ secrets.SIGNING_KEY_ID }}
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
+  status:
+    needs: [ bump-version ]
+    if: success()
+    name: Status
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4

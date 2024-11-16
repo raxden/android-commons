@@ -40,10 +40,12 @@ runs:
 
     - name: Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} from ${{ inputs.module }}
       run: |
-        git config user.name \"RaxdenRobot\"
-        git config user.email "raxden.dev@gmail.com"
-        git add .
-        git commit -m "Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} [skip ci]"
-        git push --force
+        # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+        git --version
+        git config user.name \"GitHub Actions Bot\"
+        git config user.email "<>"
+#        git add .
+#        git commit -m "Bump version to ${{ steps.get-version.outputs.CURRENT_VERSION }} [skip ci]"
+#        git push --force
         echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.CURRENT_VERSION }}" >> $GITHUB_STEP_SUMMARY
       shell: bash
