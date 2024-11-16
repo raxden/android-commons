@@ -96,28 +96,8 @@ jobs:
         with:
           retention-days: ${{ env.RETENTION_DAYS }}
 
-  reports:
-    needs: [ test ]
-    if: success()
-    name: Generate reports
-    runs-on: ubuntu-latest
-    environment: release_environment
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Generate jacoco reports and upload to codecov
-        uses: ./.github/actions/generate_reports
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
   publish:
-    needs: [ build, reports ]
+    needs: [ build, test ]
     if: success()
     name: Publish to Sonatype
     runs-on: ubuntu-latest
