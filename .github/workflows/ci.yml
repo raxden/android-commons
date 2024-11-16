@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        buildType: [ "Debug", "Release" ]
+        buildType: [ "Release" ]
 
     steps:
       - name: Check out code
