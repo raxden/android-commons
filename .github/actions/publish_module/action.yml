@@ -38,5 +38,5 @@ runs:
         SIGNING_KEY: ${{ inputs.signing-key }}
         SIGNING_KEY_ID: ${{ inputs.signing-id }}
         SIGNING_PASSWORD: ${{ inputs.signing-password }}
-      run: ./gradlew :${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --info --scan
+      run: ./gradlew :${{ inputs.module }}:publishToSonatype closeAndReleaseStagingRepository --no-configuration-cache --scan
       shell: bash

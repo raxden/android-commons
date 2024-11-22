@@ -101,7 +101,7 @@ jobs:
     if: success()
     name: Publish to Sonatype
     runs-on: ubuntu-latest
-    environment: release_environmentQ
+    environment: release_environment
     strategy:
       matrix:
         module: [
