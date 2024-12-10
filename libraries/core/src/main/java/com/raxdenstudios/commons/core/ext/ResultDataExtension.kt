@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package com.raxdenstudios.commons.core.ext
 
 import com.raxdenstudios.commons.core.ResultData
@@ -7,15 +5,6 @@ import com.raxdenstudios.commons.core.ResultData
 @Suppress("TooGenericExceptionCaught")
 fun <T, R> T.runCatching(
     function: T.() -> R
-): ResultData<R, Throwable> = try {
-    ResultData.Success(function())
-} catch (e: Throwable) {
-    ResultData.Failure(e)
-}
-
-@Suppress("TooGenericExceptionCaught")
-suspend fun <T, R> T.coRunCatching(
-    function: suspend T.() -> R
 ): ResultData<R, Throwable> = try {
     ResultData.Success(function())
 } catch (e: Throwable) {
@@ -36,20 +25,6 @@ fun <T, R, E> ResultData<T, E>.thenFailure(
     is ResultData.Success -> ResultData.Success(value)
 }
 
-suspend fun <T, R, E> ResultData<T, E>.coThen(
-    function: suspend (value: T) -> R
-): ResultData<R, E> = when (this) {
-    is ResultData.Failure -> ResultData.Failure(value)
-    is ResultData.Success -> ResultData.Success(function(value))
-}
-
-suspend fun <T, R, E> ResultData<T, E>.coThenFailure(
-    function: suspend (value: E) -> R
-): ResultData<T, R> = when (this) {
-    is ResultData.Failure -> ResultData.Failure(function(value))
-    is ResultData.Success -> ResultData.Success(value)
-}
-
 fun <T, R, E> ResultData<T, E>.flatMap(
     function: (value: T) -> ResultData<R, E>
 ): ResultData<R, E> = when (this) {
@@ -59,20 +34,6 @@ fun <T, R, E> ResultData<T, E>.flatMap(
 
 fun <T, R, E> ResultData<T, E>.flatMapFailure(
     function: (value: E) -> ResultData<T, R>
-): ResultData<T, R> = when (this) {
-    is ResultData.Failure -> function(value)
-    is ResultData.Success -> ResultData.Success(value)
-}
-
-suspend fun <T, R, E> ResultData<T, E>.coFlatMap(
-    function: suspend (value: T) -> ResultData<R, E>
-): ResultData<R, E> = when (this) {
-    is ResultData.Failure -> ResultData.Failure(value)
-    is ResultData.Success -> function(value)
-}
-
-suspend fun <T, R, E> ResultData<T, E>.coFlatMapFailure(
-    function: suspend (value: E) -> ResultData<T, R>
 ): ResultData<T, R> = when (this) {
     is ResultData.Failure -> function(value)
     is ResultData.Success -> ResultData.Success(value)
@@ -103,22 +64,8 @@ fun <T, E> ResultData<T, E>.onSuccess(
     is ResultData.Success -> also { function(value) }
 }
 
-suspend fun <T, E> ResultData<T, E>.onCoSuccess(
-    function: suspend (success: T) -> Unit
-): ResultData<T, E> = when (this) {
-    is ResultData.Failure -> this
-    is ResultData.Success -> also { function(value) }
-}
-
 fun <T, E> ResultData<T, E>.onFailure(
     function: (failure: E) -> Unit
-): ResultData<T, E> = when (this) {
-    is ResultData.Failure -> also { function(value) }
-    is ResultData.Success -> this
-}
-
-suspend fun <T, E> ResultData<T, E>.onCoFailure(
-    function: suspend (failure: E) -> Unit
 ): ResultData<T, E> = when (this) {
     is ResultData.Failure -> also { function(value) }
     is ResultData.Success -> this

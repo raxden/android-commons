@@ -26,5 +26,4 @@ publishLibrary {
 
 dependencies {
     testImplementation(libs.bundles.test)
-    testImplementation(libs.bundles.test.coroutines)
 }
