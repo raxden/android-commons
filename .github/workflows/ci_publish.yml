@@ -111,7 +111,6 @@ jobs:
           "libraries:core",
           "libraries:coroutines",
           "libraries:coroutines-test",
-          "libraries:glide",
           "libraries:okhttp3",
           "libraries:pagination",
           "libraries:pagination-co",
