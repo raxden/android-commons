@@ -1,5 +1,4 @@
 import com.raxdenstudios.publishing.model.Coordinates
-import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
@@ -30,9 +29,7 @@ dependencies {
     api(projects.libraries.core)
     api(projects.libraries.android)
 
-    implementationBundle(libs.bundles.android.material)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.android.material)
 
     testImplementation(libs.bundles.test)
 }
