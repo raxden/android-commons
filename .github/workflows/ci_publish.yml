@@ -107,6 +107,7 @@ jobs:
         module: [
           "libraries:android",
           "libraries:android-binding",
+          "libraries:android-compose",
           "libraries:android-test",
           "libraries:core",
           "libraries:coroutines",
