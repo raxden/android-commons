@@ -28,6 +28,4 @@ dependencies {
     implementation(libs.android.material)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material)
-
-    testImplementation(libs.bundles.test)
 }
