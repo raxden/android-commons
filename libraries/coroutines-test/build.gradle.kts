@@ -25,6 +25,7 @@ publishLibrary {
 }
 
 dependencies {
-    implementation(libs.bundles.test)
-    implementation(libs.bundles.test.coroutines)
+    api(libs.androidx.test.core)
+    api(libs.coroutines.test)
+    api(libs.turbine)
 }

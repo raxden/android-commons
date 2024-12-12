@@ -30,6 +30,6 @@ dependencies {
     api(libs.coroutines.android)
 
     testImplementation(projects.libraries.coroutinesTest)
-    testImplementation(libs.bundles.test)
-    testImplementation(libs.bundles.test.coroutines)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk.android)
 }

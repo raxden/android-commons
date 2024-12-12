@@ -29,6 +29,7 @@ dependencies {
     api(libs.androidx.preference.ktx)
     api(libs.gson)
 
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.junit.ktx)
     testImplementation(libs.robolectric)
 }

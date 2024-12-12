@@ -4,13 +4,11 @@ import com.google.common.truth.Truth.assertThat
 import com.raxdenstudios.commons.core.ResultData
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-@ExperimentalCoroutinesApi
 internal class ResultDataExtensionTest {
 
     @Before

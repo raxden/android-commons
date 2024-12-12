@@ -25,5 +25,7 @@ publishLibrary {
 }
 
 dependencies {
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk.android)
 }

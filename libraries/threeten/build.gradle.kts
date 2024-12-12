@@ -29,5 +29,5 @@ dependencies {
     api(libs.threetenabp)
 
     testImplementation(projects.libraries.threetenTest)
-    testImplementation(libs.bundles.test)
+    testImplementation(libs.truth)
 }
