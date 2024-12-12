@@ -7,28 +7,27 @@ plugins {
 }
 
 android {
-    namespace = "com.raxdenstudios.commons.android.binding"
-    buildFeatures.viewBinding = true
+    namespace = "com.raxdenstudios.commons.android.compose"
 }
 
 versioning {
-    filePath = "./libraries/android-binding/version.properties"
+    filePath = "./libraries/android-compose/version.properties"
 }
 
 publishLibrary {
-    name = "Android"
-    description = "Android library"
+    name = "Android Compose"
+    description = "Android compose library"
     url = "https://github.com/raxden/android-commons"
     developerId = "raxden"
     developerName = "Ángel Gómez"
     developerEmail = "raxden.dev@gmail.com"
-    coordinates = Coordinates.default.copy(artifactId = "commons-android-binding")
+    coordinates = Coordinates.default.copy(artifactId = "commons-android-compose")
 }
 
 dependencies {
     api(projects.libraries.android)
 
     implementation(libs.android.material)
-
-    testImplementation(libs.bundles.test)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material)
 }
