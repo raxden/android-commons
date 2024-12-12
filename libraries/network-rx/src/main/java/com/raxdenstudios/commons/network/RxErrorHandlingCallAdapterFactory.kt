@@ -1,0 +1,29 @@
+package com.raxdenstudios.commons.network
+
+import retrofit2.CallAdapter
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import java.lang.reflect.Type
+
+class RxErrorHandlingCallAdapterFactory private constructor(
+    private val callAdapter: RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create(),
+    private val errorHandler: ErrorHandler
+) : CallAdapter.Factory() {
+
+    override fun get(
+        returnType: Type,
+        annotations: Array<out Annotation>,
+        retrofit: Retrofit
+    ): CallAdapter<*, *> = RxCallAdapterWrapper(
+        retrofit,
+        callAdapter.get(returnType, annotations, retrofit)!!,
+        errorHandler
+    )
+
+    companion object {
+
+        fun create(errorHandler: ErrorHandler) = RxErrorHandlingCallAdapterFactory(
+            errorHandler = errorHandler
+        )
+    }
+}
