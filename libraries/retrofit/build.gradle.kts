@@ -28,9 +28,8 @@ publishLibrary {
 dependencies {
     api(projects.libraries.core)
 
-    implementation(libs.bundles.retrofit2)
-    implementation(libs.network.response.adapter)
-    implementation(libs.network.response.adapter)
+    api(libs.retrofit.core)
+    api(libs.network.response.adapter)
 
     testImplementation(libs.bundles.test)
 }
