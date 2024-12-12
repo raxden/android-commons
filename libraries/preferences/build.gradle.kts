@@ -26,8 +26,8 @@ publishLibrary {
 }
 
 dependencies {
-    implementation(libs.androidx.preference.ktx)
-    implementation(libs.gson)
+    api(libs.androidx.preference.ktx)
+    api(libs.gson)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.robolectric)

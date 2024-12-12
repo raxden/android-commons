@@ -27,7 +27,7 @@ publishLibrary {
 dependencies {
     api(projects.libraries.core)
 
-    implementation(libs.coroutines.android)
+    api(libs.coroutines.android)
 
     testImplementation(projects.libraries.coroutinesTest)
     testImplementation(libs.bundles.test)
