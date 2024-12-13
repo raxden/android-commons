@@ -142,7 +142,6 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           module: ${{ matrix.module }}
-#          github-token: ${{ secrets.CI_GIT_TOKEN }}
           force-bump: ${{ github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' }}
 
       - name: Publish module library
