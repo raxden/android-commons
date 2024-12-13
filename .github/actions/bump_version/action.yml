@@ -20,7 +20,7 @@ inputs:
 outputs:
   result:
     description: "Module bumped"
-    value: ${{ steps.bumped-version.outputs.value }}
+    value: ${{ steps.version-bumped.outputs.value }}
 
 runs:
   using: "composite"
@@ -58,7 +58,7 @@ runs:
     - name: Get PR info
       id: pull-request
       run: |
-        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') }}
+        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') || inputs.force == 'true' }}
         echo "is_patch=$IS_PATCH" >> "$GITHUB_OUTPUT"
         IS_MINOR=${{ startsWith(github.event.pull_request.title, 'minor') || startsWith(github.event.pull_request.title, 'Minor') }}
         echo "is_minor=$IS_MINOR" >> "$GITHUB_OUTPUT"
@@ -87,7 +87,7 @@ runs:
       run: |
         echo "Get current version from ${{ inputs.module }}"
         VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
-        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "value=$VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Bump version
@@ -126,7 +126,8 @@ runs:
 
     - name: Module version bumped
       if: steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
+      id: version-bumped
       run: |
         echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.value }}" >> $GITHUB_STEP_SUMMARY
-        echo "bumped=true" >> $GITHUB_OUTPUT
+        echo "value=true" >> $GITHUB_OUTPUT
       shell: bash
