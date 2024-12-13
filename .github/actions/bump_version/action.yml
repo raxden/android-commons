@@ -65,7 +65,7 @@ runs:
         IS_MAJOR=${{ startsWith(github.event.pull_request.title, 'major') || startsWith(github.event.pull_request.title, 'Major') }}
         echo "is_major=$IS_MAJOR" >> "$GITHUB_OUTPUT"
       shell: bash
-      
+
     - name: Increase patch version
       if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_patch == 'true'
       run: ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
@@ -99,11 +99,26 @@ runs:
         echo "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }}"
         git config user.name \"Raxden Robot\"
         git config user.email "raxden.dev@gmail.com"
-        git commit -a -m "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} [skip ci]"
+        git add .
+        git commit -m "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} [skip ci]"
+        git pull
       shell: bash
 
     - name: Push changes
       if: steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ inputs.github-token }}
+        force: true
+
+    - name: Re-pull on failure
+      if: failure() && steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
+      run: |
+        git pull
+      shell: bash
+
+    - name: Re-push changes
+      if: failure() && steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ inputs.github-token }}
