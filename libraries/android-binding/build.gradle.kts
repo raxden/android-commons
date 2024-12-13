@@ -12,7 +12,7 @@ android {
 }
 
 versioning {
-    filePath = "./libraries/android-binding/version.properties"
+    filePath = "./libraries/$name/version.properties"
 }
 
 publishLibrary {
@@ -27,8 +27,6 @@ publishLibrary {
 
 dependencies {
     api(projects.libraries.android)
-
-    implementation(libs.android.material)
 
     testImplementation(libs.bundles.test)
 }

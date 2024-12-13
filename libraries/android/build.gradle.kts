@@ -11,7 +11,7 @@ android {
 }
 
 versioning {
-    filePath = "./libraries/android/version.properties"
+    filePath = "./libraries/$name/version.properties"
 }
 
 publishLibrary {
@@ -27,7 +27,7 @@ publishLibrary {
 dependencies {
     api(projects.libraries.core)
 
-    implementation(libs.android.material)
+    api(libs.android.material)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.swiperefreshlayout)
 

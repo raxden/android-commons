@@ -11,7 +11,7 @@ android {
 }
 
 versioning {
-    filePath = "./libraries/android-compose/version.properties"
+    filePath = "./libraries/$name/version.properties"
 }
 
 publishLibrary {
@@ -27,7 +27,6 @@ publishLibrary {
 dependencies {
     api(projects.libraries.android)
 
-    implementation(libs.android.material)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material)
+    api(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.material)
 }
