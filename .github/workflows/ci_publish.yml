@@ -142,8 +142,8 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           module: ${{ matrix.module }}
-          github-token: ${{ secrets.CI_GIT_TOKEN }}
-          force-bump: ${{ github.event.inputs.module == matrix.module }}
+#          github-token: ${{ secrets.CI_GIT_TOKEN }}
+          force-bump: ${{ github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' }}
 
       - name: Publish module library
         if: steps.bump-module-version.outputs.result == 'true'
@@ -156,6 +156,24 @@ jobs:
           signing-key: ${{ secrets.SIGNING_KEY }}
           signing-id: ${{ secrets.SIGNING_KEY_ID }}
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
+
+      - name: Commit changes
+        if: success() && steps.bump-module-version.outputs.result == 'true'
+        run: |
+          echo "Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }}"
+          git config user.name \"Raxden Robot\"
+          git config user.email "raxden.dev@gmail.com"
+          git add .
+          git commit -m "Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]"
+          git pull
+        shell: bash
+
+      - name: Push changes
+        if: success() && steps.bump-module-version.outputs.result == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.CI_GIT_TOKEN }}
+          force: true
 
   status:
     needs: [ publish ]

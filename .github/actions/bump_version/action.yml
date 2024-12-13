@@ -9,9 +9,9 @@ inputs:
   module:
     description: 'Module name'
     required: true
-  github-token:
-    description: 'Github token'
-    required: true
+#  github-token:
+#    description: 'Github token'
+#    required: true
   force-bump:
     description: 'Force the bump version'
     required: false
@@ -21,6 +21,9 @@ outputs:
   result:
     description: "Module bumped"
     value: ${{ steps.version-bumped.outputs.value }}
+  version:
+    description: "Module version bumped"
+    value: ${{ steps.get-version.outputs.value }}
 
 runs:
   using: "composite"
@@ -97,38 +100,38 @@ runs:
         echo "value=$VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - name: Bump version
-      if: steps.bump-version.outputs.value == 'true'
-      env:
-        BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      run: |
-        echo "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }}"
-        git config user.name \"Raxden Robot\"
-        git config user.email "raxden.dev@gmail.com"
-        git add .
-        git commit -m "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} [skip ci]"
-        git pull
-      shell: bash
-
-    - name: Push changes
-      if: steps.bump-version.outputs.value == 'true'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ inputs.github-token }}
-        force: true
-
-    - name: Re-pull on failure
-      if: failure() && steps.bump-version.outputs.value == 'true'
-      run: |
-        git pull
-      shell: bash
-
-    - name: Re-push changes
-      if: failure() && steps.bump-version.outputs.value == 'true'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ inputs.github-token }}
-        force: true
+#    - name: Bump version
+#      if: steps.bump-version.outputs.value == 'true'
+#      env:
+#        BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+#      run: |
+#        echo "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }}"
+#        git config user.name \"Raxden Robot\"
+#        git config user.email "raxden.dev@gmail.com"
+#        git add .
+#        git commit -m "Bump ${{ inputs.module }} version to ${{ steps.get-version.outputs.value }} [skip ci]"
+#        git pull
+#      shell: bash
+#
+#    - name: Push changes
+#      if: steps.bump-version.outputs.value == 'true'
+#      uses: ad-m/github-push-action@master
+#      with:
+#        github_token: ${{ inputs.github-token }}
+#        force: true
+#
+#    - name: Re-pull on failure
+#      if: failure() && steps.bump-version.outputs.value == 'true'
+#      run: |
+#        git pull
+#      shell: bash
+#
+#    - name: Re-push changes
+#      if: failure() && steps.bump-version.outputs.value == 'true'
+#      uses: ad-m/github-push-action@master
+#      with:
+#        github_token: ${{ inputs.github-token }}
+#        force: true
 
     - name: Module version bumped
       if: steps.bump-version.outputs.value == 'true'
