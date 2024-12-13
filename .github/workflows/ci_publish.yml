@@ -137,6 +137,7 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           module: ${{ matrix.module }}
+          github-token: ${{ secrets.CI_GIT_TOKEN }}
 
       - name: Publish module library
         if: steps.bump-module-version.outputs.result == 'true'
