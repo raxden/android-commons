@@ -13,6 +13,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module name'
+        required: true
+        default: 'all'
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
@@ -138,6 +143,7 @@ jobs:
         with:
           module: ${{ matrix.module }}
           github-token: ${{ secrets.CI_GIT_TOKEN }}
+          force: ${{ github.event.inputs.module == matrix.module }}
 
       - name: Publish module library
         if: steps.bump-module-version.outputs.result == 'true'
