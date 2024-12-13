@@ -21,6 +21,7 @@ on:
       max-parallel:
         description: 'Parallel threads'
         required: true
+        type: number
         default: 3
 
 concurrency:
@@ -112,8 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release_environment
     strategy:
-#      max-parallel: ${{ github.event.inputs.max-parallel }}
-      max-parallel: 2
+      max-parallel: ${{ github.event.inputs.max-parallel }}
       matrix:
         module: [
           "libraries:android",
