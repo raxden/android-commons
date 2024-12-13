@@ -146,7 +146,7 @@ jobs:
           force: ${{ github.event.inputs.module == matrix.module }}
 
       - name: Publish module library
-        if: steps.bump-module-version.outputs.result == 'true'
+        if: steps.bump-module-version.outputs.bumped == 'true'
         uses: ./.github/actions/publish_module
         with:
           module: ${{ matrix.module }}

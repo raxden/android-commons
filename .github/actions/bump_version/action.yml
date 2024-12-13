@@ -87,7 +87,7 @@ runs:
       run: |
         echo "Get current version from ${{ inputs.module }}"
         VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
-        echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Bump version
@@ -128,5 +128,5 @@ runs:
       if: steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' )
       run: |
         echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.value }}" >> $GITHUB_STEP_SUMMARY
-        echo "value=true" >> $GITHUB_OUTPUT
+        echo "bumped=true" >> $GITHUB_OUTPUT
       shell: bash
