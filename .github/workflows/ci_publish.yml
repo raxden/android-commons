@@ -143,10 +143,10 @@ jobs:
         with:
           module: ${{ matrix.module }}
           github-token: ${{ secrets.CI_GIT_TOKEN }}
-          force: ${{ github.event.inputs.module == matrix.module }}
+          force-bump: ${{ github.event.inputs.module == matrix.module }}
 
       - name: Publish module library
-        if: steps.bump-module-version.outputs.bumped == 'true'
+        if: steps.bump-module-version.outputs.result == 'true'
         uses: ./.github/actions/publish_module
         with:
           module: ${{ matrix.module }}

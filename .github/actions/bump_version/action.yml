@@ -12,7 +12,7 @@ inputs:
   github-token:
     description: 'Github token'
     required: true
-  force:
+  force-bump:
     description: 'Force the bump version'
     required: false
     default: "false"
@@ -41,7 +41,7 @@ runs:
           ${{ steps.get-module-path.outputs.value }}/**/*
 
     - name: List all changed files
-      if: steps.changed-files-specific.outputs.any_changed == 'true' || inputs.force == 'true'
+      if: steps.changed-files-specific.outputs.any_changed == 'true'
       run: |
         echo "One or more files in the ${{ steps.get-module-path.outputs.path }} folder has changed."
         echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
@@ -51,14 +51,14 @@ runs:
     - name: Has module changes
       id: has-module-changes
       run: |
-        HAS_CHANGES=${{ steps.changed-files-specific.outputs.any_changed == 'true' || inputs.force == 'true' }}
+        HAS_CHANGES=${{ steps.changed-files-specific.outputs.any_changed == 'true' || inputs.force-bump == 'true' }}
         echo "value=$HAS_CHANGES" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Get PR info
       id: pull-request
       run: |
-        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') || inputs.force == 'true' }}
+        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') || inputs.force-bump == 'true' }}
         echo "is_patch=$IS_PATCH" >> "$GITHUB_OUTPUT"
         IS_MINOR=${{ startsWith(github.event.pull_request.title, 'minor') || startsWith(github.event.pull_request.title, 'Minor') }}
         echo "is_minor=$IS_MINOR" >> "$GITHUB_OUTPUT"
