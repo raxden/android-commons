@@ -44,6 +44,6 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         path: |
-          app/build/outputs/apk/
+          app/build/outputs/
           app/build/generated/res/google-services/
         retention-days: ${{ inputs.retention-days }}
