@@ -11,7 +11,7 @@ android {
 }
 
 versioning {
-    filePath = "./libraries/network-rx/version.properties"
+    filePath = "./libraries/$name/version.properties"
 }
 
 publishLibrary {
