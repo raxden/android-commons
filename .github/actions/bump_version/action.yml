@@ -85,7 +85,7 @@ runs:
       id: bump-version
       run: |
         BUMP_VERSION=${{ steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' ) }}
-        echo "value=BUMP_VERSION" >> "$GITHUB_OUTPUT"
+        echo "value=$BUMP_VERSION" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Get current version
