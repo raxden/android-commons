@@ -112,7 +112,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: release_environment
     strategy:
-      max-parallel: ${{ github.event.inputs.max-parallel }}
+#      max-parallel: ${{ github.event.inputs.max-parallel }}
+      max-parallel: 2
       matrix:
         module: [
           "libraries:android",
