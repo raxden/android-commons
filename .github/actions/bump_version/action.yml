@@ -34,22 +34,26 @@ runs:
 
     - name: Increase patch version
       if: (steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-patch == 'true') || inputs.force-bump == 'true'
-      run: ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
+      run: |
+        ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
       shell: bash
 
     - name: Increase minor version
       if: steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-minor == 'true'
-      run: ./gradlew :${{ inputs.module }}:increaseMinorVersion --no-configuration-cache
+      run: |
+        ./gradlew :${{ inputs.module }}:increaseMinorVersion --no-configuration-cache
       shell: bash
 
     - name: Increase major version
       if: steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-major == 'true'
-      run: ./gradlew :${{ inputs.module }}:increaseMajorVersion --no-configuration-cache
+      run: |
+        ./gradlew :${{ inputs.module }}:increaseMajorVersion --no-configuration-cache
       shell: bash
 
     - name: Get version
-      if: ( steps.get-module-info.outputs.has-changes == 'true' || inputs.force-bump == 'true' ) && 
-          ( steps.get-pr-info.outputs.is-patch == 'true' || steps.get-pr-info.outputs.is-minor == 'true' || steps.get-pr-info.outputs.is-major == 'true' )
+      if: inputs.force-bump == 'true' ||
+          ( steps.get-module-info.outputs.has-changes == 'true' && 
+          ( steps.get-pr-info.outputs.is-patch == 'true' || steps.get-pr-info.outputs.is-minor == 'true' || steps.get-pr-info.outputs.is-major == 'true' ) )
       id: get-version
       run: |
         echo "Get current version from ${{ inputs.module }}"
