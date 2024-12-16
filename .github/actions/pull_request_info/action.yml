@@ -1,0 +1,33 @@
+name: 'Pull request info'
+description: "Pull request info"
+
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
+
+outputs:
+  is-patch:
+    description: "The pull request is a patch request"
+    value: ${{ steps.pull-request.outputs.is_patch }}
+  is-minor:
+    description: "The pull request is a minor request"
+    value: ${{ steps.pull-request.outputs.is_minor }}
+  is-major:
+    description: "The pull request is a major request"
+    value: ${{ steps.pull-request.outputs.is_major }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get PR info
+      id: pull-request
+      run: |
+        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') || inputs.force-bump == 'true' }}
+        echo "is_patch=$IS_PATCH" >> "$GITHUB_OUTPUT"
+        IS_MINOR=${{ startsWith(github.event.pull_request.title, 'minor') || startsWith(github.event.pull_request.title, 'Minor') }}
+        echo "is_minor=$IS_MINOR" >> "$GITHUB_OUTPUT"
+        IS_MAJOR=${{ startsWith(github.event.pull_request.title, 'major') || startsWith(github.event.pull_request.title, 'Major') }}
+        echo "is_major=$IS_MAJOR" >> "$GITHUB_OUTPUT"
+      shell: bash

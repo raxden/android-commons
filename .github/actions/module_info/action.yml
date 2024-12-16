@@ -1,0 +1,52 @@
+name: 'Get module info'
+description: "Get module info"
+
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
+  module:
+    description: 'Module name'
+    required: true
+
+outputs:
+  path:
+    description: "Module path"
+    value: ${{ steps.get-module-path.outputs.value }}
+  has-changes:
+    description: "Has module changes"
+    value: ${{ steps.has-changes.outputs.value }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get module path
+      id: get-module-path
+      run: |
+        MODULE=${{ inputs.module }}
+        PATH="${MODULE//://}"
+        echo "value=$PATH" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Get specific changed files in ${{ inputs.module }}
+      id: changed-files-specific
+      uses: tj-actions/changed-files@v45
+      with:
+        files: |
+          ${{ steps.get-module-path.outputs.value }}/**/*
+
+    - name: List all changed module files
+      if: steps.changed-files-specific.outputs.any_changed == 'true'
+      run: |
+        echo "One or more files in the ${{ steps.get-module-path.outputs.path }} folder has changed."
+        echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
+        echo "${{ steps.get-module-path.outputs.path }} has been detected with changes" >> $GITHUB_STEP_SUMMARY
+      shell: bash
+
+    - name: Has module changes
+      id: has-changes
+      run: |
+        HAS_CHANGES=${{ steps.changed-files-specific.outputs.any_changed == 'true' }}
+        echo "value=$HAS_CHANGES" >> "$GITHUB_OUTPUT"
+      shell: bash

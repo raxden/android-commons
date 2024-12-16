@@ -15,92 +15,45 @@ inputs:
     default: "false"
 
 outputs:
-  result:
-    description: "Module bumped"
-    value: ${{ steps.version-bumped.outputs.value }}
   version:
-    description: "Module version bumped"
+    description: "Module bumped version"
     value: ${{ steps.get-version.outputs.value }}
 
 runs:
   using: "composite"
   steps:
-    - name: Get module path
-      id: get-module-path
-      run: |
-        MODULE=${{ inputs.module }}
-        PATH="${MODULE//://}"
-        echo "value=$PATH" >> "$GITHUB_OUTPUT"
-      shell: bash
-
-    - name: Get specific changed files in ${{ inputs.module }}
-      id: changed-files-specific
-      uses: tj-actions/changed-files@v45
+    - name: Get module info
+      id: get-module-info
+      uses: ./.github/actions/module_info
       with:
-        files: |
-          ${{ steps.get-module-path.outputs.value }}/**/*
+        module: ${{ inputs.module }}
 
-    - name: List all changed files
-      if: steps.changed-files-specific.outputs.any_changed == 'true'
-      run: |
-        echo "One or more files in the ${{ steps.get-module-path.outputs.path }} folder has changed."
-        echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
-        echo "${{ steps.get-module-path.outputs.path }} has been detected with changes" >> $GITHUB_STEP_SUMMARY
-      shell: bash
-
-    - name: Has module changes
-      id: has-module-changes
-      run: |
-        HAS_CHANGES=${{ steps.changed-files-specific.outputs.any_changed == 'true' || inputs.force-bump == 'true' }}
-        echo "value=$HAS_CHANGES" >> "$GITHUB_OUTPUT"
-      shell: bash
-
-    - name: Get PR info
-      id: pull-request
-      run: |
-        IS_PATCH=${{ startsWith(github.event.pull_request.title, 'patch') || startsWith(github.event.pull_request.title, 'Patch') || inputs.force-bump == 'true' }}
-        echo "is_patch=$IS_PATCH" >> "$GITHUB_OUTPUT"
-        IS_MINOR=${{ startsWith(github.event.pull_request.title, 'minor') || startsWith(github.event.pull_request.title, 'Minor') }}
-        echo "is_minor=$IS_MINOR" >> "$GITHUB_OUTPUT"
-        IS_MAJOR=${{ startsWith(github.event.pull_request.title, 'major') || startsWith(github.event.pull_request.title, 'Major') }}
-        echo "is_major=$IS_MAJOR" >> "$GITHUB_OUTPUT"
-      shell: bash
+    - name: Get pull request info
+      id: get-pr-info
+      uses: ./.github/actions/pull_request_info
 
     - name: Increase patch version
-      if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_patch == 'true'
+      if: (steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-patch == 'true') || inputs.force-bump == 'true'
       run: ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
       shell: bash
 
     - name: Increase minor version
-      if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_minor == 'true'
+      if: steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-minor == 'true'
       run: ./gradlew :${{ inputs.module }}:increaseMinorVersion --no-configuration-cache
       shell: bash
 
     - name: Increase major version
-      if: steps.has-module-changes.outputs.value == 'true' && steps.pull-request.outputs.is_major == 'true'
+      if: steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-major == 'true'
       run: ./gradlew :${{ inputs.module }}:increaseMajorVersion --no-configuration-cache
       shell: bash
 
-    - name: Check Bump version
-      id: bump-version
-      run: |
-        BUMP_VERSION=${{ steps.has-module-changes.outputs.value == 'true' && ( steps.pull-request.outputs.is_patch == 'true' || steps.pull-request.outputs.is_minor == 'true' || steps.pull-request.outputs.is_major == 'true' ) }}
-        echo "value=$BUMP_VERSION" >> "$GITHUB_OUTPUT"
-      shell: bash
-
-    - name: Get current version
-      if: steps.bump-version.outputs.value == 'true'
+    - name: Get version
+      if: ( steps.get-module-info.outputs.has-changes == 'true' || inputs.force-bump == 'true' ) && 
+          ( steps.get-pr-info.outputs.is-patch == 'true' || steps.get-pr-info.outputs.is-minor == 'true' || steps.get-pr-info.outputs.is-major == 'true' )
       id: get-version
       run: |
         echo "Get current version from ${{ inputs.module }}"
         VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
+        echo "${{ inputs.module }} module has been updated to version $VERSION" >> $GITHUB_STEP_SUMMARY
         echo "value=$VERSION" >> "$GITHUB_OUTPUT"
-      shell: bash
-
-    - name: Module version bumped
-      if: steps.bump-version.outputs.value == 'true'
-      id: version-bumped
-      run: |
-        echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.value }}" >> $GITHUB_STEP_SUMMARY
-        echo "value=true" >> $GITHUB_OUTPUT
       shell: bash

@@ -22,7 +22,7 @@ on:
         description: 'Parallel threads'
         required: true
         type: number
-        default: 3
+        default: 1
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
@@ -108,12 +108,10 @@ jobs:
 
   publish:
     needs: [ build, test ]
-    if: success()
     name: Publish to Sonatype
     runs-on: ubuntu-latest
-    environment: release_environment
     strategy:
-      max-parallel: ${{ github.event.inputs.max-parallel }}
+      max-parallel: ${{ fromJson(github.event.inputs.max-parallel) }}
       matrix:
         module: [
           "libraries:android",
@@ -151,7 +149,7 @@ jobs:
           force-bump: ${{ github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' }}
 
       - name: Publish module library
-        if: steps.bump-module-version.outputs.result == 'true'
+        if: steps.bump-module-version.outputs.version != ''
         uses: ./.github/actions/publish_module
         with:
           module: ${{ matrix.module }}
@@ -163,9 +161,8 @@ jobs:
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
       - name: Commit changes
-        if: success() && steps.bump-module-version.outputs.result == 'true'
+        if: steps.bump-module-version.outputs.version != ''
         run: |
-          echo "Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }}"
           git config user.name \"Raxden Robot\"
           git config user.email "raxden.dev@gmail.com"
           git add .
@@ -174,7 +171,7 @@ jobs:
         shell: bash
 
       - name: Push changes
-        if: success() && steps.bump-module-version.outputs.result == 'true'
+        if: steps.bump-module-version.outputs.version != ''
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.CI_GIT_TOKEN }}
