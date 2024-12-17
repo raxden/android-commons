@@ -160,22 +160,12 @@ jobs:
           signing-id: ${{ secrets.SIGNING_KEY_ID }}
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
-      - name: Commit changes
-        if: steps.bump-module-version.outputs.version != ''
-        run: |
-          git config user.name \"Raxden Robot\"
-          git config user.email "raxden.dev@gmail.com"
-          git add .
-          git commit -m "Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]"
-          git pull --ff-only
-        shell: bash
-
       - name: Push changes
         if: steps.bump-module-version.outputs.version != ''
-        uses: ad-m/github-push-action@master
+        uses: ./.github/actions/push_changes
         with:
-          github_token: ${{ secrets.CI_GIT_TOKEN }}
-          force: true
+          message: Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]
+          github-token: ${{ secrets.CI_GIT_TOKEN }}
 
   status:
     needs: [ publish ]

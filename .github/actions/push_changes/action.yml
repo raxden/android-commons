@@ -1,0 +1,40 @@
+name: 'Push changes'
+description: "Push changes"
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
+  user-name:
+    description: 'Github User name'
+    required: true
+    default: "Raxden Robot"
+  user-email:
+    description: 'Github User email'
+    required: true
+    default: "raxden.dev@gmail.com"
+  message:
+    description: 'Commit message'
+    required: true
+    default: ""
+  github-token:
+    description: 'Github Token'
+    required: true
+outputs: { }
+runs:
+  using: "composite"
+  steps:
+    - name: Commit changes
+      run: |
+        git config user.name \"${{ inputs.user-name }}\"
+        git config user.email "${{ inputs.user-email }}"
+        git add .
+        git commit -m "${{ inputs.message }}"
+        git pull --ff-only
+      shell: bash
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ inputs.github-token }}
+        force: true
