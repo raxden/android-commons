@@ -30,7 +30,7 @@ runs:
         git config user.email "${{ inputs.user-email }}"
         git add .
         git commit -m "${{ inputs.message }}"
-        git pull --ff-only
+        git config pull.rebase true
       shell: bash
 
     - name: Push changes
