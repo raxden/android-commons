@@ -1,6 +1,10 @@
 name: 'Assemble APK'
 description: "Assemble APK and Upload artifact to GitHub"
 inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
   build-type:
     description: "Build type"
     required: true
@@ -43,8 +47,11 @@ runs:
       if: ${{ inputs.upload-files == 'true' }}
       uses: actions/upload-artifact@v4
       with:
+        name: assemble${{ inputs.build-type }}-${{ inputs.id }}
         path: |
-          app/build/outputs/apk/
-          app/build/outputs/aar/
-          app/build/generated/res/google-services/
+          ./**/**/build/outputs/aar
+          ./**/**/build/generated/res/google-services
+          ./**/build/outputs/apk
+          ./**/build/outputs/aar
+          ./**/build/generated/res/google-services
         retention-days: ${{ inputs.retention-days }}
