@@ -30,11 +30,6 @@ outputs: { }
 runs:
   using: "composite"
   steps:
-    - name: Load assemble artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: assembleRelease-${{ inputs.id }}
-
     - name: Publish ${{ inputs.module }} module in Sonatype
       env:
         OSSRH_ID: ${{ inputs.sonatype-id }}
