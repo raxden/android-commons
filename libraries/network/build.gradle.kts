@@ -30,6 +30,8 @@ dependencies {
     api(libs.okhttp3)
     api(libs.okhttp3.logging.interceptor)
     api(libs.retrofit.core)
+    api(libs.retrofit.gson)
+    api(libs.gson)
     api(libs.network.response.adapter)
 
     testImplementation(libs.bundles.test)
