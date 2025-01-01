@@ -33,7 +33,7 @@ runs:
       uses: ./.github/actions/pull_request_info
 
     - name: Increase patch version
-      if: (steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-patch == 'true')
+      if: (steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-patch == 'true') || inputs.force-bump == 'true'
       run: |
         ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
       shell: bash
