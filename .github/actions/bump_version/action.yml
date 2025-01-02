@@ -9,18 +9,10 @@ inputs:
   module:
     description: 'Module name'
     required: true
-  patch:
-    description: 'Increase patch version'
-    required: false
-    default: 'false'
-  minor:
-    description: 'Increase minor version'
-    required: false
-    default: 'false'
-  major:
-    description: 'Increase major version'
-    required: false
-    default: 'false'
+  version:
+    description: 'Bump module version'
+    required: true
+    default: 'patch'
 
 outputs:
   version:
@@ -31,19 +23,19 @@ runs:
   using: "composite"
   steps:
     - name: Increase patch version
-      if: inputs.patch == 'true'
+      if: inputs.version == 'patch'
       run: |
         ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
       shell: bash
 
     - name: Increase minor version
-      if: inputs.minor == 'true'
+      if: inputs.version == 'minor'
       run: |
         ./gradlew :${{ inputs.module }}:increaseMinorVersion --no-configuration-cache
       shell: bash
 
     - name: Increase major version
-      if: inputs.major == 'true'
+      if: inputs.version == 'major'
       run: |
         ./gradlew :${{ inputs.module }}:increaseMajorVersion --no-configuration-cache
       shell: bash

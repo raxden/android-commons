@@ -16,7 +16,7 @@ on:
         description: 'Max threads in parallel'
         required: true
         default: '1'
-      bump-module:
+      version:
         description: 'Bump module version'
         required: true
         default: 'patch'
@@ -75,9 +75,7 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           module: ${{ matrix.module }}
-          patch: ${{ github.event.inputs.patch == 'patch' }}
-          minor: ${{ github.event.inputs.minor == 'minor' }}
-          major: ${{ github.event.inputs.major == 'major' }}
+          version: ${{ github.event.inputs.version }}
 
       - name: Push changes
         uses: ./.github/actions/push_changes
