@@ -25,6 +25,8 @@ publishLibrary {
 }
 
 dependencies {
+    api(libs.timber)
+
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.truth)
     testImplementation(libs.mockk.android)
