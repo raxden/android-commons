@@ -5,9 +5,7 @@ name: Continuous Integration (Publish)
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - master
 
@@ -21,8 +19,7 @@ on:
       max-parallel:
         description: 'Parallel threads'
         required: true
-        type: number
-        default: 1
+        default: '1'
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
