@@ -105,7 +105,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Generate jacoco reports and upload to codecov
-        uses: ./.github/actions/generate_reports
+        uses: ./.github/actions/reports
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           retention-days: ${{ env.RETENTION_DAYS }}
