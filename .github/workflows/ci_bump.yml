@@ -1,0 +1,86 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Bump module version
+
+# Workflow events: Controls when the action will run.
+# More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module name'
+        required: true
+        default: 'all'
+      max-parallel:
+        description: 'Max threads in parallel'
+        required: true
+        default: '1'
+      bump-module:
+        description: 'Bump module version'
+        required: true
+        default: 'patch'
+
+concurrency:
+  group: build-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Increment this to invalidate the cache.
+  CACHE_VERSION: 1
+  # Enable debug for the `gradle-build-action` cache operations
+  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+  # Retention days used for output files
+  RETENTION_DAYS: 3
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  bump:
+    name: Bump module
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: ${{ fromJson(github.event.inputs.max-parallel) }}
+      matrix:
+        module: [
+          "libraries:android",
+          "libraries:android-binding",
+          "libraries:android-compose",
+          "libraries:android-test",
+          "libraries:core",
+          "libraries:coroutines",
+          "libraries:coroutines-test",
+          "libraries:network",
+          "libraries:network-rx",
+          "libraries:pagination",
+          "libraries:pagination-co",
+          "libraries:pagination-rx",
+          "libraries:permissions",
+          "libraries:preferences",
+          "libraries:rx",
+          "libraries:rx-test",
+          "libraries:threeten",
+          "libraries:threeten-test",
+        ]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/setup
+
+      - name: Bump module version
+        id: bump-module-version
+        uses: ./.github/actions/bump_version
+        with:
+          module: ${{ matrix.module }}
+          patch: ${{ github.event.inputs.patch == 'patch' }}
+          minor: ${{ github.event.inputs.minor == 'minor' }}
+          major: ${{ github.event.inputs.major == 'major' }}
+
+      - name: Push changes
+        uses: ./.github/actions/push_changes
+        with:
+          message: Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]
+          github-token: ${{ secrets.CI_GIT_TOKEN }}

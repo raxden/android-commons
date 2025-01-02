@@ -134,15 +134,15 @@ jobs:
       - name: Setup machine
         uses: ./.github/actions/setup
 
-      - name: Bump module version
-        id: bump-module-version
-        uses: ./.github/actions/bump_version
+      - name: Get module info
+        id: get-module-info
+        uses: ./.github/actions/module_info
         with:
           module: ${{ matrix.module }}
-          force-bump: ${{ github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' }}
 
       - name: Publish module library
-        if: steps.bump-module-version.outputs.version != ''
+        if: steps.get-module-info.outputs.has-changes == 'true' ||
+          ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
         uses: ./.github/actions/publish_module
         with:
           module: ${{ matrix.module }}
@@ -153,19 +153,39 @@ jobs:
           signing-id: ${{ secrets.SIGNING_KEY_ID }}
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
+      - name: Bump module version
+        if: steps.get-module-info.outputs.has-changes == 'true' ||
+          ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
+        id: bump-module-version
+        uses: ./.github/actions/bump_version
+        with:
+          module: ${{ matrix.module }}
+          patch: true
+
       - name: Push changes
-        if: steps.bump-module-version.outputs.version != ''
+        if: steps.get-module-info.outputs.has-changes == 'true' ||
+          ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
         uses: ./.github/actions/push_changes
         with:
           message: Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]
           github-token: ${{ secrets.CI_GIT_TOKEN }}
 
-  status:
+  reports:
     needs: [ publish ]
     if: success()
-    name: Status
+    name: Generate reports
     runs-on: ubuntu-latest
+    environment: release_environment
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+
+      - name: Setup machine
+        uses: ./.github/actions/setup
+
+      - name: Generate jacoco reports and upload to codecov
+        uses: ./.github/actions/reports
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          retention-days: ${{ env.RETENTION_DAYS }}

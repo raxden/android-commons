@@ -9,10 +9,18 @@ inputs:
   module:
     description: 'Module name'
     required: true
-  force-bump:
-    description: 'Force the bump version'
+  patch:
+    description: 'Increase patch version'
     required: false
-    default: "false"
+    default: 'false'
+  minor:
+    description: 'Increase minor version'
+    required: false
+    default: 'false'
+  major:
+    description: 'Increase major version'
+    required: false
+    default: 'false'
 
 outputs:
   version:
@@ -22,38 +30,25 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Get module info
-      id: get-module-info
-      uses: ./.github/actions/module_info
-      with:
-        module: ${{ inputs.module }}
-
-    - name: Get pull request info
-      id: get-pr-info
-      uses: ./.github/actions/pull_request_info
-
     - name: Increase patch version
-      if: (steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-patch == 'true') || inputs.force-bump == 'true'
+      if: inputs.patch == 'true'
       run: |
         ./gradlew :${{ inputs.module }}:increasePatchVersion --no-configuration-cache
       shell: bash
 
     - name: Increase minor version
-      if: steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-minor == 'true'
+      if: inputs.minor == 'true'
       run: |
         ./gradlew :${{ inputs.module }}:increaseMinorVersion --no-configuration-cache
       shell: bash
 
     - name: Increase major version
-      if: steps.get-module-info.outputs.has-changes == 'true' && steps.get-pr-info.outputs.is-major == 'true'
+      if: inputs.major == 'true'
       run: |
         ./gradlew :${{ inputs.module }}:increaseMajorVersion --no-configuration-cache
       shell: bash
 
     - name: Get version
-      if: inputs.force-bump == 'true' ||
-          ( steps.get-module-info.outputs.has-changes == 'true' && 
-          ( steps.get-pr-info.outputs.is-patch == 'true' || steps.get-pr-info.outputs.is-minor == 'true' || steps.get-pr-info.outputs.is-major == 'true' ) )
       id: get-version
       run: |
         echo "Get current version from ${{ inputs.module }}"
