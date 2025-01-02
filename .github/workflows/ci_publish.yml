@@ -16,10 +16,6 @@ on:
         description: 'Module name'
         required: true
         default: 'all'
-      max-parallel:
-        description: 'Parallel threads'
-        required: true
-        default: '1'
 
 concurrency:
   group: build-${{ github.event.pull_request.number || github.ref }}
@@ -108,7 +104,7 @@ jobs:
     name: Publish to Sonatype
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: ${{ fromJson(github.event.inputs.max-parallel) }}
+      max-parallel: 1
       matrix:
         module: [
           "libraries:android",
