@@ -167,6 +167,8 @@ jobs:
           ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
         uses: ./.github/actions/push_changes
         with:
+          user-name: ${{ vars.CI_GIT_USER_NAME }}
+          user-email: ${{ vars.CI_GIT_USER_EMAIL }}
           message: Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]
           github-token: ${{ secrets.CI_GIT_TOKEN }}
 

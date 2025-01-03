@@ -8,11 +8,9 @@ inputs:
   user-name:
     description: 'Github User name'
     required: true
-    default: "Raxden Robot"
   user-email:
     description: 'Github User email'
     required: true
-    default: "raxden.dev@gmail.com"
   message:
     description: 'Commit message'
     required: true
