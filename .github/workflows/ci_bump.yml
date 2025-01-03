@@ -65,9 +65,11 @@ jobs:
 
     steps:
       - name: Check out code
+        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         uses: actions/checkout@v4
 
       - name: Setup machine
+        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         uses: ./.github/actions/setup
 
       - name: Bump module version
