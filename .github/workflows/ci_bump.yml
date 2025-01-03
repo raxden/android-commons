@@ -71,6 +71,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Bump module version
+        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         id: bump-module-version
         uses: ./.github/actions/bump_version
         with:
@@ -78,6 +79,7 @@ jobs:
           version: ${{ github.event.inputs.version }}
 
       - name: Push changes
+        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         uses: ./.github/actions/push_changes
         with:
           message: Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]
