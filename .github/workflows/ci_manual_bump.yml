@@ -31,7 +31,7 @@ env:
   # Enable debug for the `gradle-build-action` cache operations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
   # Retention days used for output files
-  RETENTION_DAYS: 3
+  RETENTION_DAYS: 1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -77,14 +77,9 @@ jobs:
         id: bump-module-version
         uses: ./.github/actions/bump_version
         with:
+          push: true
+          version: "patch"
           module: ${{ matrix.module }}
-          version: ${{ github.event.inputs.version }}
-
-      - name: Push changes
-        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
-        uses: ./.github/actions/push_changes
-        with:
-          user-name: ${{ vars.CI_GIT_USER_NAME }}
-          user-email: ${{ vars.CI_GIT_USER_EMAIL }}
-          message: Bump ${{ matrix.module  }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]
-          github-token: ${{ secrets.CI_GIT_TOKEN }}
+          git-branch: ${{ github.base_ref }}  # master
+          git-user-name: ${{ vars.CI_GIT_USER_NAME }}
+          git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
