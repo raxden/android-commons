@@ -5,6 +5,10 @@ inputs:
     description: 'Value used to identify the workflow run'
     required: false
     default: ${{ github.run_number }}
+  build-type:
+    description: "Build type"
+    required: false
+    default: "Debug"
   retention-days:
     description: 'Remove artifacts after the specified number of days'
     required: false
@@ -14,7 +18,7 @@ runs:
   using: "composite"
   steps:
     - name: Unit tests
-      run: ./gradlew testDebugUnitTest --stacktrace --scan
+      run: ./gradlew test${{ inputs.build-type }}UnitTest --stacktrace --scan
       shell: bash
 
     - name: Upload Outputs

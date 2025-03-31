@@ -1,22 +1,22 @@
 package com.raxdenstudios.commons.network.ext
 
+import com.raxdenstudios.commons.core.Answer
 import com.raxdenstudios.commons.core.NetworkError
-import com.raxdenstudios.commons.core.ResultData
 import retrofit2.Response
 
 @Suppress("SwallowedException", "TooGenericExceptionCaught")
-fun <S : Any> Response<S>.toResultData(
+fun <S : Any> Response<S>.toAnswer(
     errorMessage: String,
-): ResultData<S, NetworkError<S>> {
+): Answer<S, NetworkError<S>> {
 
     val code = code()
     var body: S? = null
 
     return try {
         body = body()
-        code.toResultData(body, body, errorMessage)
+        code.toAnswer(body, body, errorMessage)
     } catch (e: Throwable) {
-        ResultData.Failure(
+        Answer.Failure(
             NetworkError.Unknown(
                 code = code,
                 body = body,
@@ -27,13 +27,13 @@ fun <S : Any> Response<S>.toResultData(
 }
 
 @Suppress("MagicNumber")
-internal fun <S : Any, E : Any> Int.toResultData(
+internal fun <S : Any, E : Any> Int.toAnswer(
     body: S?,
     bodyError: E? = null,
     message: String,
-): ResultData<S, NetworkError<E>> = when (this) {
-    in (200..399) -> ResultData.Success(body!!)
-    in (400..499) -> ResultData.Failure(
+): Answer<S, NetworkError<E>> = when (this) {
+    in (200..399) -> Answer.Success(body!!)
+    in (400..499) -> Answer.Failure(
         NetworkError.Client(
             code = this,
             body = bodyError,
@@ -41,7 +41,7 @@ internal fun <S : Any, E : Any> Int.toResultData(
         )
     )
 
-    in (500..599) -> ResultData.Failure(
+    in (500..599) -> Answer.Failure(
         NetworkError.Server(
             code = this,
             body = bodyError,
@@ -49,7 +49,7 @@ internal fun <S : Any, E : Any> Int.toResultData(
         )
     )
 
-    else -> ResultData.Failure(
+    else -> Answer.Failure(
         NetworkError.Unknown(
             code = this,
             body = bodyError,

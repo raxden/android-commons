@@ -20,14 +20,11 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: outputs-unit-tests-${{ inputs.id }}
-#        if-no-files-found: warn
 
-#  https://github.com/actions/upload-artifact/issues/255
-#    - name: Load instrumental tests outputs
-#      uses: actions/download-artifact@v4
-#      with:
-#        name: outputs-android-tests
-#        if-no-files-found: warn
+    #    - name: Load instrumental tests outputs
+    #      uses: actions/download-artifact@v4
+    #      with:
+    #        name: outputs-android-tests-${{ inputs.id }}
 
     - name: Jacoco Reports
       run: ./gradlew coverageReport --stacktrace --scan

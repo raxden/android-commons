@@ -1,0 +1,28 @@
+name: 'Get module version'
+description: "Get module version"
+
+inputs:
+  id:
+    description: 'Value used to identify the workflow run'
+    required: false
+    default: ${{ github.run_number }}
+  module:
+    description: 'Module name'
+    required: false
+    default: "app"
+
+outputs:
+  version:
+    description: "Module version"
+    value: ${{ steps.get-version.outputs.value }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get version
+      id: get-version
+      run: |
+        echo "Get current version from ${{ inputs.module }}"
+        VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
+        echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+      shell: bash
