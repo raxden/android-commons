@@ -67,6 +67,10 @@ jobs:
       - name: Check out code
         if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         uses: actions/checkout@v4
+        with:
+          # Deploy key: https://github.com/ad-m/github-push-action
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
 
       - name: Setup machine
         if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
