@@ -18,7 +18,7 @@ on:
         default: 'all'
 
 concurrency:
-  group: build-${{ github.event.pull_request.number || github.ref }}
+  group: build-publish-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:

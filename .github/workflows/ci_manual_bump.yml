@@ -22,7 +22,7 @@ on:
         default: 'patch'
 
 concurrency:
-  group: build-${{ github.event.pull_request.number || github.ref }}
+  group: build-manual-bump-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
