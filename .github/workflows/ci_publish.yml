@@ -161,7 +161,8 @@ jobs:
           signing-password: ${{ secrets.SIGNING_PASSWORD }}
 
       - name: Bump version
-        if: steps.get-module-info.outputs.has-changes == 'true'
+        if: steps.get-module-info.outputs.has-changes == 'true' ||
+          ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
         uses: ./.github/actions/bump_version
         with:
           push: true
