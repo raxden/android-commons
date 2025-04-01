@@ -29,80 +29,96 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
-  info:
-    name: Workflow Information
+  create-tag:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Basic Information
-        uses: ./.github/actions/info
+      - name: Set TAG name
+        run: echo "TAG_NAME=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
-  checkstyle:
-    name: Check code (detekt)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Check code via Detekt
-        uses: ./.github/actions/checkstyle
-        with:
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  build:
-    needs: [ checkstyle ]
-    if: success()
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Assemble ${{ env.BUILD_TYPE }}
-        uses: ./.github/actions/assemble
-        with:
-          build-type: ${{ env.BUILD_TYPE }}
-          artifact-type: ${{ env.ARTIFACT_TYPE }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  test:
-    needs: [ build ]
-    if: success()
-    name: Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Unit tests
-        uses: ./.github/actions/unit_tests
-        with:
-          build-type: ${{ env.BUILD_TYPE }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  status:
-    needs: [ test ]
-    if: success()
-    name: Status
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
+      - name: Create and push tag
         run: |
-          echo "Workflow finished"
-        shell: bash
+          git config --global user.name ${{ vars.CI_GIT_USER_NAME }}
+          git config --global user.email ${{ vars.CI_GIT_USER_EMAIL }}
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
+
+#  info:
+#    name: Workflow Information
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Basic Information
+#        uses: ./.github/actions/info
+#
+#  checkstyle:
+#    name: Check code (detekt)
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Check code via Detekt
+#        uses: ./.github/actions/checkstyle
+#        with:
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  build:
+#    needs: [ checkstyle ]
+#    if: success()
+#    name: Build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Assemble ${{ env.BUILD_TYPE }}
+#        uses: ./.github/actions/assemble
+#        with:
+#          build-type: ${{ env.BUILD_TYPE }}
+#          artifact-type: ${{ env.ARTIFACT_TYPE }}
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  test:
+#    needs: [ build ]
+#    if: success()
+#    name: Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Unit tests
+#        uses: ./.github/actions/unit_tests
+#        with:
+#          build-type: ${{ env.BUILD_TYPE }}
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  status:
+#    needs: [ test ]
+#    if: success()
+#    name: Status
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        run: |
+#          echo "Workflow finished"
+#        shell: bash
