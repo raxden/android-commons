@@ -172,13 +172,3 @@ jobs:
           git-create-tag: false
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
-
-      - name: Set TAG name
-        run: echo "TAG_NAME=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
-
-      - name: Create and push tag
-        run: |
-          git config --global user.name ${{ vars.CI_GIT_USER_NAME }}
-          git config --global user.email ${{ vars.CI_GIT_USER_EMAIL }}
-          git tag $TAG_NAME
-          git push origin $TAG_NAME
