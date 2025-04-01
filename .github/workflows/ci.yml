@@ -5,6 +5,7 @@ name: Continuous Integration (PR)
 # Workflow events: Controls when the action will run.
 # More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
+  # Triggers the workflow on pull request events
   pull_request:
     branches:
       - '*'
@@ -19,10 +20,16 @@ env:
   # Enable debug for the `gradle-build-action` cache operations
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
   # Retention days used for output files
-  RETENTION_DAYS: 3
+  RETENTION_DAYS: 1
+  # Build type
+  BUILD_TYPE: "Debug"
+  # Artifact type
+  ARTIFACT_TYPE: "APK"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+
   info:
     name: Workflow Information
     runs-on: ubuntu-latest
@@ -34,88 +41,135 @@ jobs:
       - name: Basic Information
         uses: ./.github/actions/info
 
-  checkstyle:
-    name: Check code (detekt)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Check code via Detekt
-        uses: ./.github/actions/checkstyle
-        with:
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  build:
-    needs: [ checkstyle ]
-    if: success()
-    name: Build
+  bump-version:
+    name: Bump version
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
-        buildType: [ "Release" ]
+        module: [
+          "libraries:android",
+          "libraries:android-binding",
+          "libraries:android-compose",
+          "libraries:android-test",
+          "libraries:core",
+          "libraries:coroutines",
+          "libraries:coroutines-test",
+          "libraries:network",
+          "libraries:network-rx",
+          "libraries:pagination",
+          "libraries:pagination-co",
+          "libraries:pagination-rx",
+          "libraries:permissions",
+          "libraries:preferences",
+          "libraries:rx",
+          "libraries:rx-test",
+          "libraries:threeten",
+          "libraries:threeten-test",
+        ]
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+        with:
+          # Deploy key: https://github.com/ad-m/github-push-action
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
 
       - name: Setup machine
         uses: ./.github/actions/setup
 
-      - name: Assemble ${{ matrix.buildType }}
-        uses: ./.github/actions/assemble
+      - name: Get module info
+        id: get-module-info
+        uses: ./.github/actions/module_info
         with:
-          build-type: ${{ matrix.buildType }}
-          retention-days: ${{ env.RETENTION_DAYS }}
+          module: ${{ matrix.module }}
 
-  test:
-    needs: [ checkstyle ]
-    if: success()
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Unit tests
-        uses: ./.github/actions/unit_tests
+      - name: Bump version
+        if: steps.get-module-info.outputs.has-changes == 'true'
+        uses: ./.github/actions/bump_version
         with:
-          retention-days: ${{ env.RETENTION_DAYS }}
+          push: true
+          version: "patch"
+          module: ${{ matrix.module }}
+          git-branch: ${{ github.base_ref }}  # master
+          git-user-name: ${{ vars.CI_GIT_USER_NAME }}
+          git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
 
-  reports:
-    needs: [ test ]
-    if: success()
-    name: Generate reports
-    runs-on: ubuntu-latest
-    environment: release_environment
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Generate jacoco reports and upload to codecov
-        uses: ./.github/actions/reports
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  status:
-    needs: [ build, reports ]
-    if: success()
-    name: Status
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+#  info:
+#    name: Workflow Information
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Basic Information
+#        uses: ./.github/actions/info
+#
+#  checkstyle:
+#    name: Check code (detekt)
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Check code via Detekt
+#        uses: ./.github/actions/checkstyle
+#        with:
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  build:
+#    needs: [ checkstyle ]
+#    if: success()
+#    name: Build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Assemble ${{ env.BUILD_TYPE }}
+#        uses: ./.github/actions/assemble
+#        with:
+#          build-type: ${{ env.BUILD_TYPE }}
+#          artifact-type: ${{ env.ARTIFACT_TYPE }}
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  test:
+#    needs: [ build ]
+#    if: success()
+#    name: Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Unit tests
+#        uses: ./.github/actions/unit_tests
+#        with:
+#          build-type: ${{ env.BUILD_TYPE }}
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  status:
+#    needs: [ test ]
+#    if: success()
+#    name: Status
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        run: |
+#          echo "Workflow finished"
+#        shell: bash

@@ -1,34 +1,34 @@
 package com.raxdenstudios.commons.network.ext
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.raxdenstudios.commons.core.Answer
 import com.raxdenstudios.commons.core.NetworkError
-import com.raxdenstudios.commons.core.ResultData
 
-fun <S : Any, E : Any> NetworkResponse<S, E>.toResultData(
+fun <S : Any, E : Any> NetworkResponse<S, E>.toAnswer(
     errorMessage: String,
-): ResultData<S, NetworkError<E>> = when (this) {
-    is NetworkResponse.Success -> ResultData.Success(body)
-    is NetworkResponse.ServerError -> toResultData(errorMessage)
-    is NetworkResponse.NetworkError -> toResultData(errorMessage)
-    is NetworkResponse.UnknownError -> toResultData(errorMessage)
+): Answer<S, NetworkError<E>> = when (this) {
+    is NetworkResponse.Success -> Answer.Success(body)
+    is NetworkResponse.ServerError -> toAnswer(errorMessage)
+    is NetworkResponse.NetworkError -> toAnswer(errorMessage)
+    is NetworkResponse.UnknownError -> toAnswer(errorMessage)
 }
 
 @Suppress("MagicNumber")
-private fun <S : Any, E : Any> NetworkResponse.ServerError<S, E>.toResultData(
+private fun <S : Any, E : Any> NetworkResponse.ServerError<S, E>.toAnswer(
     message: String
-): ResultData<S, NetworkError<E>> {
+): Answer<S, NetworkError<E>> {
     val code = code ?: -1
-    return code.toResultData(null, body, message)
+    return code.toAnswer(null, body, message)
 }
 
-private fun <S : Any, E : Any> NetworkResponse.NetworkError<S, E>.toResultData(
+private fun <S : Any, E : Any> NetworkResponse.NetworkError<S, E>.toAnswer(
     message: String
-): ResultData<S, NetworkError<E>> = ResultData.Failure(
+): Answer<S, NetworkError<E>> = Answer.Failure(
     NetworkError.Network(message = message)
 )
 
-private fun <S : Any, E : Any> NetworkResponse.UnknownError<S, E>.toResultData(
+private fun <S : Any, E : Any> NetworkResponse.UnknownError<S, E>.toAnswer(
     message: String
-): ResultData<S, NetworkError<E>> = ResultData.Failure(
+): Answer<S, NetworkError<E>> = Answer.Failure(
     NetworkError.Unknown(code, body, message)
 )

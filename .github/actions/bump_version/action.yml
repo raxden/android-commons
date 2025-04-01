@@ -8,11 +8,29 @@ inputs:
     default: ${{ github.run_number }}
   module:
     description: 'Module name'
-    required: true
+    required: false
+    default: "app"
   version:
     description: 'Bump module version'
-    required: true
+    required: false
     default: 'patch'
+  push:
+    description: 'Push changes to git'
+    required: false
+    default: 'false'
+  git-user-name:
+    description: 'Github User name'
+    required: true
+  git-user-email:
+    description: 'Github User email'
+    required: true
+  git-branch:
+    description: 'Github Branch'
+    required: true
+  git-create-tag:
+    description: 'Create tag'
+    required: false
+    default: 'true'
 
 outputs:
   version:
@@ -42,9 +60,33 @@ runs:
 
     - name: Get version
       id: get-version
+      uses: ./.github/actions/get_version
+      with:
+          module: ${{ inputs.module }}
+
+    - name: Commit changes
       run: |
-        echo "Get current version from ${{ inputs.module }}"
-        VERSION=$(./gradlew -q :${{ inputs.module }}:getVersion | tail -n 1)
-        echo "${{ inputs.module }} module has been updated to version $VERSION" >> $GITHUB_STEP_SUMMARY
-        echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+        git config user.name "${{ inputs.git-user-name }}"
+        git config user.email "${{ inputs.git-user-email }}"
+        git add .
+        git commit -m "Bump app version to ${{ steps.get-version.outputs.version }} [skip ci]"
+      shell: bash
+
+    - name: Create tag
+      if: inputs.git-create-tag == 'true'
+      run: |
+        git tag ${{ steps.get-version.outputs.version }}
+      shell: bash
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: ${{ inputs.git-branch }}
+        ssh: true
+        force: true
+        tags: true
+
+    - name: Module has been updated
+      run: |
+        echo "${{ inputs.module }} module has been updated to version ${{ steps.get-version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
       shell: bash

@@ -2,67 +2,67 @@
 
 package com.raxdenstudios.commons.coroutines.ext
 
-import com.raxdenstudios.commons.core.ResultData
+import com.raxdenstudios.commons.core.Answer
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 @Suppress("TooGenericExceptionCaught")
 suspend fun <T, R> T.coRunCatching(
     function: suspend T.() -> R
-): ResultData<R, Throwable> = try {
-    ResultData.Success(function())
+): Answer<R, Throwable> = try {
+    Answer.Success(function())
 } catch (e: Throwable) {
-    ResultData.Failure(e)
+    Answer.Failure(e)
 }
 
-suspend fun <T, R, E> ResultData<T, E>.coThen(
+suspend fun <T, R, E> Answer<T, E>.coThen(
     function: suspend (value: T) -> R
-): ResultData<R, E> = when (this) {
-    is ResultData.Failure -> ResultData.Failure(value)
-    is ResultData.Success -> ResultData.Success(function(value))
+): Answer<R, E> = when (this) {
+    is Answer.Failure -> Answer.Failure(value)
+    is Answer.Success -> Answer.Success(function(value))
 }
 
-suspend fun <T, R, E> ResultData<T, E>.coThenFailure(
+suspend fun <T, R, E> Answer<T, E>.coThenFailure(
     function: suspend (value: E) -> R
-): ResultData<T, R> = when (this) {
-    is ResultData.Failure -> ResultData.Failure(function(value))
-    is ResultData.Success -> ResultData.Success(value)
+): Answer<T, R> = when (this) {
+    is Answer.Failure -> Answer.Failure(function(value))
+    is Answer.Success -> Answer.Success(value)
 }
 
-suspend fun <T, R, E> ResultData<T, E>.coFlatMap(
-    function: suspend (value: T) -> ResultData<R, E>
-): ResultData<R, E> = when (this) {
-    is ResultData.Failure -> ResultData.Failure(value)
-    is ResultData.Success -> function(value)
+suspend fun <T, R, E> Answer<T, E>.coFlatMap(
+    function: suspend (value: T) -> Answer<R, E>
+): Answer<R, E> = when (this) {
+    is Answer.Failure -> Answer.Failure(value)
+    is Answer.Success -> function(value)
 }
 
-suspend fun <T, R, E> ResultData<T, E>.coFlatMapFailure(
-    function: suspend (value: E) -> ResultData<T, R>
-): ResultData<T, R> = when (this) {
-    is ResultData.Failure -> function(value)
-    is ResultData.Success -> ResultData.Success(value)
+suspend fun <T, R, E> Answer<T, E>.coFlatMapFailure(
+    function: suspend (value: E) -> Answer<T, R>
+): Answer<T, R> = when (this) {
+    is Answer.Failure -> function(value)
+    is Answer.Success -> Answer.Success(value)
 }
 
-suspend fun <T, E> ResultData<T, E>.onCoSuccess(
+suspend fun <T, E> Answer<T, E>.onCoSuccess(
     function: suspend (success: T) -> Unit
-): ResultData<T, E> = when (this) {
-    is ResultData.Failure -> this
-    is ResultData.Success -> also { function(value) }
+): Answer<T, E> = when (this) {
+    is Answer.Failure -> this
+    is Answer.Success -> also { function(value) }
 }
 
-suspend fun <T, E> ResultData<T, E>.onCoFailure(
+suspend fun <T, E> Answer<T, E>.onCoFailure(
     function: suspend (failure: E) -> Unit
-): ResultData<T, E> = when (this) {
-    is ResultData.Failure -> also { function(value) }
-    is ResultData.Success -> this
+): Answer<T, E> = when (this) {
+    is Answer.Failure -> also { function(value) }
+    is Answer.Success -> this
 }
 
-fun <T, R, E> Flow<ResultData<T, E>>.then(
+fun <T, R, E> Flow<Answer<T, E>>.then(
     function: suspend (value: T) -> R
-): Flow<ResultData<R, E>> =
+): Flow<Answer<R, E>> =
     map { result -> result.coThen { function(it) } }
 
-fun <T, R, E> Flow<ResultData<T, E>>.thenFailure(
+fun <T, R, E> Flow<Answer<T, E>>.thenFailure(
     function: (value: E) -> R
-): Flow<ResultData<T, R>> =
+): Flow<Answer<T, R>> =
     map { result -> result.coThenFailure { function(it) } }
