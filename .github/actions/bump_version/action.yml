@@ -72,7 +72,7 @@ runs:
 
     - name: Update branch with latest changes
       run: |
-        git config pull.rebase true
+        git pull origin ${{ inputs.git-branch }} --rebase
       shell: bash
 
     - name: Commit changes
