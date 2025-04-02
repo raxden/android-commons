@@ -41,9 +41,9 @@ runs:
   using: "composite"
   steps:
 
+#        git config pull.rebase true
     - name: Preparing git credentials
       run: |
-#        git config pull.rebase true
         git config user.name "${{ inputs.git-user-name }}"
         git config user.email "${{ inputs.git-user-email }}"
       shell: bash
@@ -81,8 +81,8 @@ runs:
       run: |
         git add .
         git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
-#        git pull origin ${{ inputs.git-branch }} --rebase
       shell: bash
+#        git pull origin ${{ inputs.git-branch }} --rebase
 
     - name: Create tag
       if: inputs.git-create-tag == 'true'
