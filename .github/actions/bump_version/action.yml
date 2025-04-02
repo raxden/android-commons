@@ -14,6 +14,23 @@ inputs:
     description: 'Bump module version'
     required: false
     default: 'patch'
+  push:
+    description: 'Push changes to git'
+    required: false
+    default: 'false'
+  git-user-name:
+    description: 'Github User name'
+    required: true
+  git-user-email:
+    description: 'Github User email'
+    required: true
+  git-branch:
+    description: 'Github Branch'
+    required: true
+  git-create-tag:
+    description: 'Create tag'
+    required: false
+    default: 'true'
 
 outputs:
   version:
@@ -23,7 +40,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-
     - name: Increase patch version
       if: inputs.version == 'patch'
       run: |
@@ -46,7 +62,30 @@ runs:
       id: get-version
       uses: ./.github/actions/get_version
       with:
-        module: ${{ inputs.module }}
+          module: ${{ inputs.module }}
+
+    - name: Commit changes
+      run: |
+        git config user.name "${{ inputs.git-user-name }}"
+        git config user.email "${{ inputs.git-user-email }}"
+        git config pull.rebase true
+        git add .
+        git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
+      shell: bash
+
+    - name: Create tag
+      if: inputs.git-create-tag == 'true'
+      run: |
+        git tag ${{ steps.get-version.outputs.version }}
+      shell: bash
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: ${{ inputs.git-branch }}
+        ssh: true
+        force: true
+        tags: true
 
     - name: Module has been updated
       run: |
