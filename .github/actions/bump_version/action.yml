@@ -40,6 +40,19 @@ outputs:
 runs:
   using: "composite"
   steps:
+
+#        git config pull.rebase true
+    - name: Preparing git credentials
+      run: |
+        git config user.name "${{ inputs.git-user-name }}"
+        git config user.email "${{ inputs.git-user-email }}"
+      shell: bash
+
+#    - name: Pull Commit changes
+#      run: |
+#        git pull origin ${{ inputs.git-branch }} --rebase
+#      shell: bash
+
     - name: Increase patch version
       if: inputs.version == 'patch'
       run: |
@@ -66,12 +79,10 @@ runs:
 
     - name: Commit changes
       run: |
-        git config user.name "${{ inputs.git-user-name }}"
-        git config user.email "${{ inputs.git-user-email }}"
-        git config pull.rebase true
         git add .
         git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
       shell: bash
+#        git pull origin ${{ inputs.git-branch }} --rebase
 
     - name: Create tag
       if: inputs.git-create-tag == 'true'
@@ -79,13 +90,13 @@ runs:
         git tag ${{ steps.get-version.outputs.version }}
       shell: bash
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        branch: ${{ inputs.git-branch }}
-        ssh: true
-        force: true
-        tags: true
+#    - name: Push changes
+#      uses: ad-m/github-push-action@master
+#      with:
+#        branch: ${{ inputs.git-branch }}
+#        ssh: true
+##        force: true
+#        tags: true
 
     - name: Module has been updated
       run: |
