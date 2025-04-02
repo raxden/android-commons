@@ -70,7 +70,7 @@ runs:
         git config user.email "${{ inputs.git-user-email }}"
         git config pull.rebase true
         git add .
-        git commit -m "Bump app version to ${{ steps.get-version.outputs.version }} [skip ci]"
+        git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
       shell: bash
 
     - name: Create tag
