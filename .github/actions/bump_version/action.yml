@@ -50,7 +50,7 @@ runs:
 
     - name: Pull Commit changes
       run: |
-        git pull
+        git pull origin ${{ inputs.git-branch }} --rebase
       shell: bash
 
     - name: Increase patch version
