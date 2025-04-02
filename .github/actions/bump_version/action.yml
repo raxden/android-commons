@@ -70,15 +70,11 @@ runs:
         git config user.email "${{ inputs.git-user-email }}"
       shell: bash
 
-    - name: Update branch with latest changes
-      run: |
-        git pull origin ${{ inputs.git-branch }} --rebase
-      shell: bash
-
     - name: Commit changes
       run: |
         git add .
         git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
+        git pull origin ${{ inputs.git-branch }} --rebase
       shell: bash
 
     - name: Create tag
