@@ -40,69 +40,161 @@ jobs:
       - name: Basic Information
         uses: ./.github/actions/info
 
-  checkstyle:
-    name: Check code (detekt)
+  bump:
+    name: Bump module
     runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        module: [
+          "libraries:android",
+          "libraries:android-binding",
+          #          "libraries:android-compose",
+          #          "libraries:android-test",
+          #          "libraries:core",
+          #          "libraries:coroutines",
+          #          "libraries:coroutines-test",
+          #          "libraries:network",
+          #          "libraries:network-rx",
+          #          "libraries:pagination",
+          #          "libraries:pagination-co",
+          #          "libraries:pagination-rx",
+          #          "libraries:permissions",
+          #          "libraries:preferences",
+          #          "libraries:rx",
+          #          "libraries:rx-test",
+          #          "libraries:threeten",
+          #          "libraries:threeten-test",
+        ]
 
     steps:
       - name: Check out code
+        #        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         uses: actions/checkout@v4
 
       - name: Setup machine
+        #        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
         uses: ./.github/actions/setup
 
-      - name: Check code via Detekt
-        uses: ./.github/actions/checkstyle
+      - name: Bump module version
+        #        if: github.event.inputs.module == matrix.module || github.event.inputs.module == 'all'
+        id: bump-module-version
+        uses: ./.github/actions/bump_version
         with:
-          retention-days: ${{ env.RETENTION_DAYS }}
+          version: "patch"
+          module: ${{ matrix.module }}
 
-  build:
-    needs: [ checkstyle ]
-    if: success()
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Assemble ${{ env.BUILD_TYPE }}
-        uses: ./.github/actions/assemble
-        with:
-          build-type: ${{ env.BUILD_TYPE }}
-          artifact-type: ${{ env.ARTIFACT_TYPE }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  test:
-    needs: [ build ]
-    if: success()
-    name: Unit Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Setup machine
-        uses: ./.github/actions/setup
-
-      - name: Unit tests
-        uses: ./.github/actions/unit_tests
-        with:
-          build-type: ${{ env.BUILD_TYPE }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-  status:
-    needs: [ test ]
-    if: success()
-    name: Status
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check out code
+      - name: Preparing git credentials
         run: |
-          echo "Workflow finished"
+          git config user.name "${{ vars.CI_GIT_USER_NAME }}"
+          git config user.email "${{ vars.CI_GIT_USER_EMAIL }}"
         shell: bash
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "Bump :${{ matrix.module }} version to ${{ steps.bump-module-version.outputs.version }} [skip ci]"
+          git tag ${{ steps.bump-module-version.outputs.version }}
+        shell: bash
+
+  push:
+    needs: [ bump ]
+    if: success()
+    name: Push changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          # Deploy key: https://github.com/ad-m/github-push-action
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+
+
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: "ci_thr_test"
+          ssh: true
+          force: true
+          tags: true
+
+#  info:
+#    name: Workflow Information
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Basic Information
+#        uses: ./.github/actions/info
+#
+#  checkstyle:
+#    name: Check code (detekt)
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Check code via Detekt
+#        uses: ./.github/actions/checkstyle
+#        with:
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  build:
+#    needs: [ checkstyle ]
+#    if: success()
+#    name: Build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Assemble ${{ env.BUILD_TYPE }}
+#        uses: ./.github/actions/assemble
+#        with:
+#          build-type: ${{ env.BUILD_TYPE }}
+#          artifact-type: ${{ env.ARTIFACT_TYPE }}
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  test:
+#    needs: [ build ]
+#    if: success()
+#    name: Unit Tests
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        uses: actions/checkout@v4
+#
+#      - name: Setup machine
+#        uses: ./.github/actions/setup
+#
+#      - name: Unit tests
+#        uses: ./.github/actions/unit_tests
+#        with:
+#          build-type: ${{ env.BUILD_TYPE }}
+#          retention-days: ${{ env.RETENTION_DAYS }}
+#
+#  status:
+#    needs: [ test ]
+#    if: success()
+#    name: Status
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Check out code
+#        run: |
+#          echo "Workflow finished"
+#        shell: bash
