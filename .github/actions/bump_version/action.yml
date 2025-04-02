@@ -64,11 +64,19 @@ runs:
       with:
           module: ${{ inputs.module }}
 
-    - name: Commit changes
+    - name: Preparing git credentials
       run: |
         git config user.name "${{ inputs.git-user-name }}"
         git config user.email "${{ inputs.git-user-email }}"
+      shell: bash
+
+    - name: Update branch with latest changes
+      run: |
         git config pull.rebase true
+      shell: bash
+
+    - name: Commit changes
+      run: |
         git add .
         git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
       shell: bash
