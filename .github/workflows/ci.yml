@@ -44,7 +44,7 @@ jobs:
     name: Bump module
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 1
+      max-parallel: 5
       matrix:
         module: [
           "libraries:android",
