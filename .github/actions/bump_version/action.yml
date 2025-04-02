@@ -88,18 +88,12 @@ runs:
       shell: bash
 
     - name: Push changes
-      run: |
-        git push origin HEAD:${{ inputs.git-branch }}
-        git push --tags
-      shell: bash
-
-#    - name: Push changes
-#      uses: ad-m/github-push-action@master
-#      with:
-#        branch: ${{ inputs.git-branch }}
-#        ssh: true
+      uses: ad-m/github-push-action@master
+      with:
+        branch: ${{ inputs.git-branch }}
+        ssh: true
 #        force: true
-#        tags: true
+        tags: true
 
     - name: Module has been updated
       run: |
