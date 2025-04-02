@@ -49,22 +49,22 @@ jobs:
         module: [
           "libraries:android",
           "libraries:android-binding",
-          "libraries:android-compose",
-          "libraries:android-test",
-          "libraries:core",
-          "libraries:coroutines",
-          "libraries:coroutines-test",
-          "libraries:network",
-          "libraries:network-rx",
-          "libraries:pagination",
-          "libraries:pagination-co",
-          "libraries:pagination-rx",
-          "libraries:permissions",
-          "libraries:preferences",
-          "libraries:rx",
-          "libraries:rx-test",
-          "libraries:threeten",
-          "libraries:threeten-test",
+#          "libraries:android-compose",
+#          "libraries:android-test",
+#          "libraries:core",
+#          "libraries:coroutines",
+#          "libraries:coroutines-test",
+#          "libraries:network",
+#          "libraries:network-rx",
+#          "libraries:pagination",
+#          "libraries:pagination-co",
+#          "libraries:pagination-rx",
+#          "libraries:permissions",
+#          "libraries:preferences",
+#          "libraries:rx",
+#          "libraries:rx-test",
+#          "libraries:threeten",
+#          "libraries:threeten-test",
         ]
 
     steps:
@@ -93,6 +93,24 @@ jobs:
           git-create-tag: false
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
+
+  push:
+    needs: [ bump ]
+    if: success()
+    name: Push changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.head_ref }}
+          ssh: true
+  #        force: true
+          tags: true
 
 #  info:
 #    name: Workflow Information
