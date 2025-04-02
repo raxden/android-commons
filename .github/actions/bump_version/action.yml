@@ -79,13 +79,17 @@ runs:
       run: |
         git add .
         git commit -m "Bump :${{ inputs.module }} version to ${{ steps.get-version.outputs.version }} [skip ci]"
-        git push origin ${{ inputs.git-branch }}
       shell: bash
 
     - name: Create tag
       if: inputs.git-create-tag == 'true'
       run: |
         git tag ${{ steps.get-version.outputs.version }}
+      shell: bash
+
+    - name: Push changes
+      run: |
+        git push origin HEAD:${{ inputs.git-branch }}
         git push --tags
       shell: bash
 
