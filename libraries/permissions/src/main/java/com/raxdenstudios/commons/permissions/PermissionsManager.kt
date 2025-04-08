@@ -1,9 +1,17 @@
 package com.raxdenstudios.commons.permissions
 
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.raxdenstudios.commons.permissions.model.Permission
 
 interface PermissionsManager: DefaultLifecycleObserver {
+
+    /**
+     * Attach activity
+     *
+     * @param activity
+     */
+    fun attach(activity: ComponentActivity)
 
     /**
      * Request permission
