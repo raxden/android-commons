@@ -158,6 +158,7 @@ jobs:
 
   bump:
     needs: [ publish ]
+    if: always()
     name: Bump version
     runs-on: ubuntu-latest
     strategy:

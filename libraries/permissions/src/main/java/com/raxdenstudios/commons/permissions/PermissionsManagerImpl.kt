@@ -3,23 +3,21 @@ package com.raxdenstudios.commons.permissions
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.raxdenstudios.commons.android.ActivityHolder
 import com.raxdenstudios.commons.permissions.model.Permission
 
-class PermissionsManagerImpl(
-    private val activity: ComponentActivity
-) : PermissionsManager {
+@Suppress("TooManyFunctions")
+class PermissionsManagerImpl : PermissionsManager {
 
-    private val registry: ActivityResultRegistry
-        get() = activity.activityResultRegistry
+    private val activityHolder: ActivityHolder = ActivityHolder()
+    private lateinit var _permissionResultLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var _permissionsCallbacks: PermissionsManager.Callbacks
 
-    private lateinit var permissionResultLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var permissionsCallbacks: PermissionsManager.Callbacks
-
-    init {
+    override fun attach(activity: ComponentActivity) {
+        activityHolder.attach(activity)
         activity.lifecycle.addObserver(this)
     }
 
@@ -29,8 +27,15 @@ class PermissionsManagerImpl(
         registerPermissionsResultContract(owner)
     }
 
+    override fun onDestroy(owner: LifecycleOwner) {
+        activityHolder.activity?.run { activityHolder.detach(this) }
+        super.onDestroy(owner)
+    }
+
     private fun registerPermissionsResultContract(owner: LifecycleOwner) {
-        permissionResultLauncher = registry.register(
+        val activity = activityHolder.activity ?: error("You must call attach() before onCreate()")
+
+        _permissionResultLauncher = activity.activityResultRegistry.register(
             REQUEST_PERMISSIONS_KEY,
             owner,
             ActivityResultContracts.RequestMultiplePermissions()
@@ -44,8 +49,8 @@ class PermissionsManagerImpl(
             val isGranted = entryPermissions.value
             val permission = Permission.fromValue(entryPermissions.key)
             when {
-                isGranted -> permissionsCallbacks.onGranted(permission)
-                else -> permissionsCallbacks.onDenied(permission)
+                isGranted -> _permissionsCallbacks.onGranted(permission)
+                else -> _permissionsCallbacks.onDenied(permission)
             }
         }
     }
@@ -54,17 +59,17 @@ class PermissionsManagerImpl(
         callbacks: PermissionsManager.Callbacks,
         vararg permissions: Permission
     ) {
-        permissionsCallbacks = callbacks
+        _permissionsCallbacks = callbacks
 
         val permissionsToRequest = permissions.filter { permission ->
             when {
                 hasPermission(permission) -> {
-                    permissionsCallbacks.onGranted(permission)
+                    _permissionsCallbacks.onGranted(permission)
                     false
                 }
 
                 shouldShowRequestPermissionRationale(permission) -> {
-                    permissionsCallbacks.onRationale(permission)
+                    _permissionsCallbacks.onRationale(permission)
                     false
                 }
 
@@ -77,13 +82,13 @@ class PermissionsManagerImpl(
 
     private fun performRequestPermission(permissions: List<Permission>) {
         val arrayPermissions = permissions.map { it.value }.toTypedArray()
-        if (this::permissionResultLauncher.isInitialized) {
-            permissionResultLauncher.launch(arrayPermissions)
+        if (this::_permissionResultLauncher.isInitialized) {
+            _permissionResultLauncher.launch(arrayPermissions)
         }
     }
 
     private fun shouldShowRequestPermissionRationale(permission: Permission) =
-        activity.shouldShowRequestPermissionRationale(permission.value)
+        activityHolder.activity?.shouldShowRequestPermissionRationale(permission.value) ?: false
 
     override fun hasPermission(
         onGranted: (Boolean) -> Unit,
@@ -96,7 +101,9 @@ class PermissionsManagerImpl(
         checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
     private fun checkSelfPermission(permission: Permission) =
-        ContextCompat.checkSelfPermission(activity, permission.value)
+        activityHolder.activity?.let {
+            ContextCompat.checkSelfPermission(it, permission.value)
+        } ?: PackageManager.PERMISSION_DENIED
 
     private companion object {
         const val REQUEST_PERMISSIONS_KEY = "requestPermissions"

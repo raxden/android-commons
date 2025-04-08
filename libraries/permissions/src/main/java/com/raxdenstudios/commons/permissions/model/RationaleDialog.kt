@@ -10,14 +10,14 @@ sealed class RationaleDialog(
     @StringRes val deniedLabel: Int
 ) {
 
-    object Camera : RationaleDialog(
+    data object Camera : RationaleDialog(
         R.string.permission_rationale_camera_title,
         R.string.permission_rationale_camera_message,
         R.string.permission_rationale_camera_positive,
         R.string.permission_rationale_camera_negative,
     )
 
-    object AccessFineLocation : RationaleDialog(
+    data object AccessFineLocation : RationaleDialog(
         R.string.permission_rationale_access_fine_location_title,
         R.string.permission_rationale_access_fine_location_message,
         R.string.permission_rationale_access_fine_location_positive,
