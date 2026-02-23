@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import com.raxdenstudios.commons.android.ext.getPackageInfo
+import com.raxdenstudios.commons.core.ext.orDefault
 
 object SDK {
 
@@ -48,24 +49,15 @@ object SDK {
         runCatching { context.getPackageInfo().packageName }.getOrDefault("")
 
     fun getVersionName(context: Context): String =
-        runCatching { context.getPackageInfo().versionName }.getOrDefault("")
+        runCatching { context.getPackageInfo().versionName.orDefault() }.getOrDefault("")
 
     fun getVersionCode(context: Context): Long = when {
-        hasPie() -> runCatching { context.getPackageInfo().longVersionCode }.getOrDefault(0L)
-        else -> runCatching { context.getPackageInfo().versionCode.toLong() }.getOrDefault(0L)
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
+            runCatching { context.getPackageInfo().longVersionCode }
+                .getOrDefault(0L)
+
+        else ->
+            runCatching { context.getPackageInfo().versionCode.toLong() }
+                .getOrDefault(0L)
     }
-
-    /**
-     * Checks if the device has Marshmallow or higher version.
-     * @return `true` if device is a tablet.
-     */
-    fun hasMarshmallow(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-
-    /**
-     * Checks if the device has Marshmallow or higher version.
-     * @return `true` if device is a tablet.
-     */
-    fun hasNougat(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-
-    fun hasPie(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 }

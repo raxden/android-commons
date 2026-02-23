@@ -1,45 +1,54 @@
 name: 'Generate reports'
-description: "Generate jacoco reports and upload to codecov"
+description: 'Generate jacoco reports and upload to codecov'
+
 inputs:
   id:
     description: 'Value used to identify the workflow run'
     required: false
     default: ${{ github.run_number }}
+
+  build-type:
+    description: 'Build type (Debug/Release/...)'
+    required: false
+    default: 'Debug'
+
   token:
     description: 'Codecov token'
     required: true
+
   retention-days:
     description: 'Remove artifacts after the specified number of days'
     required: false
-    default: "1"
-outputs: { }
+    default: '1'
+
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
-    - name: Load unit tests outputs
+    - name: Download unit test outputs
       uses: actions/download-artifact@v4
       with:
-        name: outputs-unit-tests-${{ inputs.id }}
+        name: unit-tests-${{ inputs.build-type }}-${{ inputs.id }}
 
-    #    - name: Load instrumental tests outputs
-    #      uses: actions/download-artifact@v4
-    #      with:
-    #        name: outputs-android-tests-${{ inputs.id }}
-
-    - name: Jacoco Reports
-      run: ./gradlew coverageReport --stacktrace --scan
+    - name: Generate JaCoCo reports
       shell: bash
+      run: |
+        set -euo pipefail
+        ./gradlew coverageReport --stacktrace
 
-    - name: Upload Reports
+    - name: Upload JaCoCo reports
       uses: actions/upload-artifact@v4
       with:
         name: reports-jacoco-${{ inputs.id }}
         path: |
-          ./**/build/reports/jacoco.xml
-          ./**/build/reports/jacoco/
+          **/build/reports/jacoco/**/*
+          **/build/reports/jacoco/**/*.xml
+        if-no-files-found: warn
         retention-days: ${{ inputs.retention-days }}
 
-    - name: Uploading reports to Codecov
+    - name: Upload to Codecov
       uses: codecov/codecov-action@v4
       with:
         token: ${{ inputs.token }}
+        files: |
+          **/build/reports/jacoco/**/*.xml
+        fail_ci_if_error: true

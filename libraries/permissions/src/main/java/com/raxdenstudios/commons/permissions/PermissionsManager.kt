@@ -44,9 +44,9 @@ interface PermissionsManager: DefaultLifecycleObserver {
      * @property onDenied
      * @constructor Create empty Callbacks
      */
-    open class Callbacks(
-        open val onGranted: (Permission) -> Unit = {},
-        open val onRationale: (Permission) -> Unit = {},
-        open val onDenied: (Permission) -> Unit = {}
+    class Callbacks(
+        val onGranted: (Permission) -> Unit = {},
+        val onRationale: (Permission) -> Unit = {},
+        val onDenied: (Permission) -> Unit = {}
     )
 }

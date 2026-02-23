@@ -4,6 +4,7 @@ package com.raxdenstudios.commons.coroutines.ext
 
 import com.raxdenstudios.commons.core.Answer
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 @Suppress("TooGenericExceptionCaught")
@@ -66,3 +67,7 @@ fun <T, R, E> Flow<Answer<T, E>>.thenFailure(
     function: (value: E) -> R
 ): Flow<Answer<T, R>> =
     map { result -> result.coThenFailure { function(it) } }
+
+fun <T> Flow<T>.toAnswer() =
+    map { stations -> Answer.Success(stations) }
+        .catch { error -> Answer.Failure(error) }

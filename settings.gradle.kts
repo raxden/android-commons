@@ -39,8 +39,8 @@ dependencyResolutionManagement {
         mavenLocal()
         maven("https://jitpack.io")
         maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven(url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
     }
-
 }
 
 plugins {
@@ -65,14 +65,10 @@ include(":libraries:android-test")
 include(":libraries:coroutines")
 include(":libraries:coroutines-test")
 include(":libraries:network")
-include(":libraries:network-rx")
 include(":libraries:pagination")
 include(":libraries:pagination-co")
-include(":libraries:pagination-rx")
 include(":libraries:permissions")
 include(":libraries:preferences")
-include(":libraries:rx")
-include(":libraries:rx-test")
 include(":libraries:threeten")
 include(":libraries:threeten-test")
 

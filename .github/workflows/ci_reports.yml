@@ -1,77 +1,79 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Continuous Integration (Generate reports)
 
-# Workflow events: Controls when the action will run.
-# More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 concurrency:
-  group: build-generate-reports-${{ github.event.pull_request.number || github.ref }}
+  # Ensure only one run per PR is active
+  group: build-generate-reports-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
-  # Increment this to invalidate the cache.
+  # Increment to invalidate Gradle cache when needed
   CACHE_VERSION: 1
-  # Enable debug for the `gradle-build-action` cache operations
+  # Enable debug for Gradle cache action
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
-  # Retention days used for output files
+  # Artifact retention
   RETENTION_DAYS: 1
-  # Build type
+  # Build configuration
   BUILD_TYPE: "Release"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
   info:
     name: Workflow Information
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Basic Information
+      - name: Print workflow information
         uses: ./.github/actions/info
 
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Unit tests
+      - name: Execute unit tests
         uses: ./.github/actions/unit_tests
         with:
           build-type: ${{ env.BUILD_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
   reports:
-    needs: [ test ]
-    if: success()
     name: Generate reports
+    needs: [ test ]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Generate jacoco reports and upload to codecov
+      - name: Generate JaCoCo reports and upload to codecov
         uses: ./.github/actions/reports
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          build-type: ${{ env.BUILD_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}

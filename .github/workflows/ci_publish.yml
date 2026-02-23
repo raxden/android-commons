@@ -11,15 +11,13 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    inputs:
-      module:
-        description: 'Module name'
-        required: true
-        default: 'all'
 
 concurrency:
-  group: build-publish-${{ github.event.pull_request.number || github.ref }}
+  group: build-publish-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 env:
   # Increment this to invalidate the cache.
@@ -30,8 +28,6 @@ env:
   RETENTION_DAYS: 1
   # Build type
   BUILD_TYPE: "Release"
-  # Artifact type
-  ARTIFACT_TYPE: "APK"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -39,23 +35,44 @@ jobs:
   info:
     name: Workflow Information
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Basic Information
+      - name: Print workflow information
         uses: ./.github/actions/info
 
-  checkstyle:
-    name: Check code (detekt)
+  computeChangedModules:
+    name: Compute changed modules
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      modules: ${{ steps.modules.outputs.modules }}
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Compute changed modules
+        id: modules
+        uses: ./.github/actions/compute_changed_modules
+
+  checkstyle:
+    name: Check code style
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
       - name: Check code via Detekt
@@ -64,153 +81,117 @@ jobs:
           retention-days: ${{ env.RETENTION_DAYS }}
 
   build:
-    needs: [ checkstyle ]
-    if: success()
     name: Build
+    needs: [checkstyle]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
       - name: Assemble ${{ env.BUILD_TYPE }}
         uses: ./.github/actions/assemble
         with:
           build-type: ${{ env.BUILD_TYPE }}
-          artifact-type: ${{ env.ARTIFACT_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
+      - name: Cancel workflow run if failed
+        if: failure()
+        uses: ./.github/actions/workflow_run
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          operation: cancel
+
   test:
-    needs: [ build ]
-    if: success()
     name: Run Unit Tests
+    needs: [checkstyle]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Unit tests
+      - name: Execute unit tests
         uses: ./.github/actions/unit_tests
         with:
           build-type: ${{ env.BUILD_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
+      - name: Cancel workflow run if failed
+        if: failure()
+        uses: ./.github/actions/workflow_run
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          operation: cancel
+
   publish:
-    needs: [ test ]
-    name: Publish to Sonatype
+    needs: [ build, test, computeChangedModules ]
+    if: needs.computeChangedModules.outputs.modules != '[]'
+    name: Publish to Central (aggregation)
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        module: [
-          "libraries:android",
-          "libraries:android-binding",
-          "libraries:android-compose",
-          "libraries:android-test",
-          "libraries:core",
-          "libraries:coroutines",
-          "libraries:coroutines-test",
-          "libraries:network",
-          "libraries:network-rx",
-          "libraries:pagination",
-          "libraries:pagination-co",
-          "libraries:pagination-rx",
-          "libraries:permissions",
-          "libraries:preferences",
-          "libraries:rx",
-          "libraries:rx-test",
-          "libraries:threeten",
-          "libraries:threeten-test",
-        ]
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Get module info
-        id: get-module-info
-        uses: ./.github/actions/module_info
-        with:
-          module: ${{ matrix.module }}
-
-      - name: Publish module library
-        if: steps.get-module-info.outputs.has-changes == 'true' ||
-          ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
-        uses: ./.github/actions/publish_module
-        with:
-          module: ${{ matrix.module }}
-          sonatype-id: ${{ secrets.OSSRH_ID }}
-          sonatype-username: ${{ secrets.OSSRH_USERNAME }}
-          sonatype-password: ${{ secrets.OSSRH_PASSWORD }}
-          signing-key: ${{ secrets.SIGNING_KEY }}
-          signing-id: ${{ secrets.SIGNING_KEY_ID }}
-          signing-password: ${{ secrets.SIGNING_PASSWORD }}
+      - name: Publish aggregation
+        env:
+          CENTRAL_PORTAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          CENTRAL_PORTAL_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+        shell: bash
+        run: |
+          ./gradlew publishAggregationToCentralPortal \
+            -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules), ',') }}" \
+            --no-configuration-cache --scan
 
   bump:
-    needs: [ publish ]
-    if: always()
+    needs: [ publish, computeChangedModules ]
+    if: needs.computeChangedModules.outputs.modules != '[]'
     name: Bump version
     runs-on: ubuntu-latest
+
     strategy:
       max-parallel: 1
       matrix:
-        module: [
-          "libraries:android",
-          "libraries:android-binding",
-          "libraries:android-compose",
-          "libraries:android-test",
-          "libraries:core",
-          "libraries:coroutines",
-          "libraries:coroutines-test",
-          "libraries:network",
-          "libraries:network-rx",
-          "libraries:pagination",
-          "libraries:pagination-co",
-          "libraries:pagination-rx",
-          "libraries:permissions",
-          "libraries:preferences",
-          "libraries:rx",
-          "libraries:rx-test",
-          "libraries:threeten",
-          "libraries:threeten-test",
-        ]
+        module: ${{ fromJson(needs.computeChangedModules.outputs.modules) }}
 
     steps:
       - name: Check out code
         uses: actions/checkout@v4
         with:
-          # Deploy key: https://github.com/ad-m/github-push-action
+          fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           persist-credentials: true
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Get module info
-        id: get-module-info
-        uses: ./.github/actions/module_info
-        with:
-          module: ${{ matrix.module }}
+      - name: Get PR info
+        id: pr_info
+        uses: ./.github/actions/pr_info
 
       - name: Bump version
-        if: steps.get-module-info.outputs.has-changes == 'true' ||
-          ( github.event.inputs.module == matrix.module || github.event.inputs.module == 'all' )
         uses: ./.github/actions/bump_version
         with:
-          push: true
-          version: "patch"
+          version: ${{ steps.pr_info.outputs.bump }}
           module: ${{ matrix.module }}
-          git-branch: ${{ github.base_ref }}  # master
-          git-create-tag: false
+          git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
