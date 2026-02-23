@@ -1,108 +1,137 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Continuous Integration (PR)
 
-# Workflow events: Controls when the action will run.
-# More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  # Triggers the workflow on pull request events
   pull_request:
-    branches:
-      - '*'
+    types: [opened, synchronize, reopened, ready_for_review]
 
 concurrency:
-  group: build-pr-${{ github.event.pull_request.number || github.ref }}
+  # Ensure only one run per PR is active
+  group: build-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
-env:
-  # Increment this to invalidate the cache.
-  CACHE_VERSION: 1
-  # Enable debug for the `gradle-build-action` cache operations
-  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
-  # Retention days used for output files
-  RETENTION_DAYS: 1
-  # Build type
-  BUILD_TYPE: "Debug"
-  # Artifact type
-  ARTIFACT_TYPE: "APK"
+permissions:
+  contents: read
+  actions: write
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  # Increment to invalidate Gradle cache when needed
+  CACHE_VERSION: 1
+  # Enable debug for Gradle cache action
+  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+  # Artifact retention
+  RETENTION_DAYS: 1
+  # Build configuration
+  BUILD_TYPE: "Debug"
+
 jobs:
 
   info:
     name: Workflow Information
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Basic Information
+      - name: Print workflow information
         uses: ./.github/actions/info
 
-  checkstyle:
-    name: Check code (detekt)
+  computeChangedModules:
+    name: Compute changed modules
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Compute changed modules
+        id: modules
+        uses: ./.github/actions/compute_changed_modules
+
+  checkstyle:
+    name: Check code style
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Check code via Detekt
+      - name: Run Detekt
         uses: ./.github/actions/checkstyle
         with:
           retention-days: ${{ env.RETENTION_DAYS }}
 
   build:
-    needs: [ checkstyle ]
-    if: success()
     name: Build
+    needs: [checkstyle]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
       - name: Assemble ${{ env.BUILD_TYPE }}
         uses: ./.github/actions/assemble
         with:
           build-type: ${{ env.BUILD_TYPE }}
-          artifact-type: ${{ env.ARTIFACT_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
+      - name: Cancel workflow run if failed
+        if: failure()
+        uses: ./.github/actions/workflow_run
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          operation: cancel
+
   test:
-    needs: [ build ]
-    if: success()
-    name: Unit Tests
+    name: Run Unit Tests
+    needs: [checkstyle]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Check out code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
 
-      - name: Setup machine
+      - name: Setup build environment
         uses: ./.github/actions/setup
 
-      - name: Unit tests
+      - name: Execute unit tests
         uses: ./.github/actions/unit_tests
         with:
           build-type: ${{ env.BUILD_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
+      - name: Cancel workflow run if failed
+        if: failure()
+        uses: ./.github/actions/workflow_run
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          operation: cancel
+
   status:
-    needs: [ test ]
-    if: success()
     name: Status
+    needs: [checkstyle, build, test]
     runs-on: ubuntu-latest
+    if: always()
 
     steps:
-      - name: Check out code
-        run: |
-          echo "Workflow finished"
+      - name: Final summary
         shell: bash
+        run: |
+          echo "Workflow completed with status: ${{ job.status }}"

@@ -1,19 +1,31 @@
 name: 'Common machine setup'
-description: "Prepares the machine"
+description: 'Prepares the machine (JDK + Gradle)'
+
 inputs:
   java-version:
-    description: "Java version"
-    required: true
+    description: 'Java version'
+    required: false
     default: '17'
+
   distribution:
-    description: "Distribution"
-    required: true
+    description: 'JDK distribution'
+    required: false
     default: 'temurin'
-outputs: { }
+
+  gradle-cache:
+    description: 'Enable Gradle cache (true/false)'
+    required: false
+    default: 'true'
+
+  gradle-cache-cleanup:
+    description: 'Cleanup old Gradle cache entries (true/false)'
+    required: false
+    default: 'true'
+
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
-    - name: Set up JDK ${{ inputs.distribution }} - ${{ inputs.java-version }} and Gradle cache
+    - name: Set up JDK
       uses: actions/setup-java@v4
       with:
         distribution: ${{ inputs.distribution }}
@@ -21,3 +33,21 @@ runs:
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
+      with:
+        cache-disabled: ${{ inputs.gradle-cache != 'true' }}
+        gradle-home-cache-cleanup: ${{ inputs.gradle-cache-cleanup == 'true' }}
+
+    - name: Summary
+      shell: bash
+      run: |
+        {
+          echo "## Setup"
+          echo ""
+          echo "- Java: ${{ inputs.distribution }} ${{ inputs.java-version }}"
+          echo "- Gradle cache: ${{ inputs.gradle-cache }}"
+          echo "- Gradle cache cleanup: ${{ inputs.gradle-cache-cleanup }}"
+          echo ""
+          echo '```'
+          java -version 2>&1 || true
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"

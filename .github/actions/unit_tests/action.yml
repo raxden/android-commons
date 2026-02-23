@@ -1,32 +1,84 @@
 name: 'Launch Unit tests'
-description: "Launch Unit tests and upload outputs to GitHub"
+description: 'Run unit tests and (optionally) upload reports'
+
 inputs:
   id:
     description: 'Value used to identify the workflow run'
     required: false
     default: ${{ github.run_number }}
+
   build-type:
-    description: "Build type"
+    description: 'Build type (Debug/Release/...)'
     required: false
-    default: "Debug"
+    default: 'Debug'
+
+  gradle-args:
+    description: 'Extra Gradle args'
+    required: false
+    default: ''
+
+  upload:
+    description: 'Upload test reports (true/false)'
+    required: false
+    default: 'true'
+
+  reports-path:
+    description: 'Glob paths to upload'
+    required: false
+    default: |
+      **/build/reports/tests/**
+      **/build/test-results/test/**
+      **/build/outputs/unit_test_code_coverage/**
+
   retention-days:
-    description: 'Remove artifacts after the specified number of days'
+    description: 'Artifact retention days'
     required: false
-    default: "1"
-outputs: { }
+    default: '1'
+
+  continue-on-error:
+    description: 'Do not fail the job if tests fail (true/false)'
+    required: false
+    default: 'false'
+
 runs:
   using: "composite"
   steps:
     - name: Unit tests
-      run: ./gradlew test${{ inputs.build-type }}UnitTest --stacktrace --scan
       shell: bash
+      continue-on-error: ${{ inputs.continue-on-error == 'true' }}
+      run: |
+        set -euo pipefail
+        task="test${{ inputs.build-type }}UnitTest"
+        echo "Running: ./gradlew $task --stacktrace ${{ inputs.gradle-args }}"
+        ./gradlew "$task" --stacktrace ${{ inputs.gradle-args }}
 
-    - name: Upload Outputs
-      if: always()
+        {
+          echo "## 🧪 Unit tests"
+          echo ""
+          echo "- Task: \`$task\`"
+          echo "- Continue on error: \`${{ inputs.continue-on-error }}\`"
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Upload test outputs
+      if: always() && inputs.upload == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: outputs-unit-tests-${{ inputs.id }}
-        path: |
-          ./**/build/reports/tests/
-          ./**/build/outputs/unit_test_code_coverage/
+        name: unit-tests-${{ inputs.build-type }}-${{ inputs.id }}
+        path: ${{ inputs.reports-path }}
+        if-no-files-found: warn
         retention-days: ${{ inputs.retention-days }}
+
+    - name: Summary
+      if: always()
+      shell: bash
+      run: |
+        {
+          echo "### ✅ Result"
+          echo ""
+          echo "- Status: **${{ job.status }}**"
+          echo "- Build type: \`${{ inputs.build-type }}\`"
+          echo "- Upload reports: \`${{ inputs.upload }}\`"
+          echo "- Retention days: \`${{ inputs.retention-days }}\`"
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"
