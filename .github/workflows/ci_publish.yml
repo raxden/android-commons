@@ -135,9 +135,9 @@ jobs:
           operation: cancel
 
   publish:
-    needs: [ build, test, computeChangedModules ]
-    if: needs.computeChangedModules.outputs.modules != '[]'
     name: Publish to Central (aggregation)
+    needs: [ build, test, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.modules != '' && needs.computeChangedModules.outputs.modules != '[]' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -158,19 +158,19 @@ jobs:
         shell: bash
         run: |
           ./gradlew publishAggregationToCentralPortal \
-            -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules), ',') }}" \
-            --no-configuration-cache --scan
+            -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules || '[]'), ',') }}" \
+            --no-configuration-cache
 
   bump:
-    needs: [ publish, computeChangedModules ]
-    if: needs.computeChangedModules.outputs.modules != '[]'
     name: Bump version
+    needs: [ publish, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.modules != '' && needs.computeChangedModules.outputs.modules != '[]' }}
     runs-on: ubuntu-latest
 
     strategy:
       max-parallel: 1
       matrix:
-        module: ${{ fromJson(needs.computeChangedModules.outputs.modules) }}
+        module: ${{ fromJson(needs.computeChangedModules.outputs.modules || '[]') }}
 
     steps:
       - name: Check out code
