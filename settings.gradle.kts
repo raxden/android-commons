@@ -13,13 +13,16 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        mavenLocal()
+        // Avoid mavenLocal in CI to keep builds reproducible
+        if (!providers.environmentVariable("CI").isPresent) mavenLocal()
     }
 }
 
 dependencyResolutionManagement {
     versionCatalogs {
-        create("libs") { from(files("./gradle/libraries.versions.toml")) }
+        create("libs") {
+            from(files("gradle/libraries.versions.toml"))
+        }
     }
     /**
      * The dependencyResolutionManagement { repositories {...}}
@@ -36,24 +39,33 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
-        maven("https://jitpack.io")
-        maven("https://oss.sonatype.org/content/repositories/snapshots/")
-        maven(url = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
+        // Avoid mavenLocal in CI to keep builds reproducible
+        if (!providers.environmentVariable("CI").isPresent) mavenLocal()
+
+        // JitPack only for com.github.* coordinates
+        exclusiveContent {
+            forRepository { maven("https://jitpack.io") }
+            filter { includeGroupByRegex("com\\.github\\..*") }
+        }
+
+        // Snapshots repo only for snapshot versions
+        maven("https://oss.sonatype.org/content/repositories/snapshots/") {
+            mavenContent { snapshotsOnly() }
+        }
     }
 }
 
 plugins {
-    id("com.gradle.enterprise") version "3.15.1"
+    id("com.gradle.develocity") version "4.3.2"
 }
 
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
 
         // Publishing a build scan for every build execution
-        publishAlways()
+        publishing.onlyIf { providers.environmentVariable("CI").isPresent }
     }
 }
 
