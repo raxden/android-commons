@@ -1,0 +1,80 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Continuous Integration (Bump version)
+
+# Workflow events: Controls when the action will run.
+# More info: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+
+      modules:
+        description: 'JSON array of modules (e.g. [":libraries:core",":libraries:network"]). Required for this workflow.'
+        required: true
+
+      version:
+        description: 'Bump module version'
+        required: true
+        default: 'patch'
+
+concurrency:
+  group: build-publish-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Increment this to invalidate the cache.
+  CACHE_VERSION: 1
+  # Enable debug for the `gradle-build-action` cache operations
+  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+  # Retention days used for output files
+  RETENTION_DAYS: 1
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  info:
+    name: Workflow Information
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Print workflow information
+        uses: ./.github/actions/info
+
+  bump:
+    name: Bump module
+    if: ${{ (github.event.inputs.modules || '') != '' }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      max-parallel: 1
+      matrix:
+        module: ${{ fromJson(github.event.inputs.modules) }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+
+      - name: Setup build environment
+        uses: ./.github/actions/setup
+
+      - name: Bump version
+        uses: ./.github/actions/bump_version
+        with:
+          version: ${{ github.event.inputs.version }}
+          module: ${{ matrix.module }}
+          git-branch: ${{ github.ref_name }}
+          git-user-name: ${{ vars.CI_GIT_USER_NAME }}
+          git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
