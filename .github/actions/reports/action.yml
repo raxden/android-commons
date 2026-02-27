@@ -33,7 +33,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        ./gradlew coverageReport --stacktrace
+        ./gradlew coverageReport -PbuildType=${{ inputs.build-type }} --stacktrace
 
     - name: Upload JaCoCo reports
       uses: actions/upload-artifact@v4
@@ -42,6 +42,7 @@ runs:
         path: |
           **/build/reports/jacoco/**/*
           **/build/reports/jacoco/**/*.xml
+          **/build/reports/jacoco.xml
         if-no-files-found: warn
         retention-days: ${{ inputs.retention-days }}
 
@@ -49,6 +50,4 @@ runs:
       uses: codecov/codecov-action@v4
       with:
         token: ${{ inputs.token }}
-        files: |
-          **/build/reports/jacoco/**/*.xml
         fail_ci_if_error: true

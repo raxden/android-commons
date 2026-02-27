@@ -1,4 +1,5 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
+import extension.getProperty
 import java.time.Duration
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -22,8 +23,8 @@ nmcpAggregation {
         username = getProperty("CENTRAL_PORTAL_USERNAME")
         password = getProperty("CENTRAL_PORTAL_PASSWORD")
 
-        // optional: publish manually from the portal
-        publishingType = "USER_MANAGED"
+        // optional: publish manually from the portal {AUTOMATIC, USER_MANAGED}
+        publishingType = getProperty("publishingType")
 
         // optional: configure the name of your publication in the portal UI
         publicationName = getPublicationName()
@@ -31,8 +32,12 @@ nmcpAggregation {
         // optional: increase the validation timeout to 30 minutes
         validationTimeout = Duration.of(30, ChronoUnit.MINUTES)
 
-        // optional: disable waiting for publishing
-//        publishingTimeout = Duration.ZERO
+        when (getProperty("publishingType")) {
+            "AUTOMATIC" -> {
+                // optional: disable waiting for publishing and validation, and publish immediately after upload
+                validationTimeout = Duration.ZERO
+            }
+        }
 
         // optional: send publications serially instead of in parallel (might be slower)
         uploadSnapshotsParallelism.set(1)
@@ -41,10 +46,10 @@ nmcpAggregation {
 
 dependencies {
 
-    val selectedProjects: List<String> =
-        providers.gradleProperty("nmcpProjects")
-            .map { it.split(",").map(String::trim).filter(String::isNotBlank) }
-            .getOrElse(emptyList())
+    val selectedProjects = getProperty("nmcpProjects")
+        .split(",")
+        .map(String::trim)
+        .filter(String::isNotBlank)
 
     selectedProjects.forEach { path ->
         nmcpAggregation(project(path))
@@ -85,11 +90,6 @@ tasks {
         delete(buildDir)
     }
 }
-
-private fun getProperty(key: String, defaultValue: String = ""): String =
-    providers.gradleProperty(key)
-        .orElse(providers.environmentVariable(key))
-        .getOrElse(defaultValue)
 
 private fun getPublicationName(): String {
     val gitShortSha = runCatching {
