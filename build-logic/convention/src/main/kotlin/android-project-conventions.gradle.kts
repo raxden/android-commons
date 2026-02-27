@@ -1,3 +1,4 @@
+import extension.getProperty
 import task.DownloadGradleDependencies
 
 plugins {
@@ -24,7 +25,7 @@ detekt {
 
 rootCoverage {
     // The default build variant for every module
-    buildVariant = "debug"
+    buildVariant = getProperty("buildType", "debug")
 
     // Class & package exclude patterns
     excludes = listOf(

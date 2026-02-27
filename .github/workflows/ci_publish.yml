@@ -11,6 +11,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      modules:
+        description: 'JSON array of modules (e.g. [":libraries:core",":libraries:network"]). Leave empty for auto.'
+        required: false
+        default: ''
 
 concurrency:
   group: build-publish-${{ github.ref }}
@@ -28,6 +33,8 @@ env:
   RETENTION_DAYS: 1
   # Build type
   BUILD_TYPE: "Release"
+  # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
+  PUBLICATION_TYPE: "USER_MANAGED"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -59,8 +66,29 @@ jobs:
         with: { fetch-depth: 0 }
 
       - name: Compute changed modules
-        id: modules
+        id: computed
+        if: ${{ github.event.inputs.modules == '' }}
         uses: ./.github/actions/compute_changed_modules
+
+      - name: Resolve modules output
+        id: modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          
+          if [[ -n '${{ github.event.inputs.modules || '' }}' ]]; then
+            modules='${{ github.event.inputs.modules }}'
+          else
+            modules='${{ steps.computed.outputs.modules || steps.computed.outputs.value || '[]' }}'
+          fi
+          
+          {
+            echo "modules<<EOF"
+            echo "$modules"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          
+          echo "Modules: $modules"
 
   checkstyle:
     name: Check code style
@@ -159,6 +187,7 @@ jobs:
         run: |
           ./gradlew publishAggregationToCentralPortal \
             -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules || '[]'), ',') }}" \
+            -PpublishingType="${{ env.PUBLICATION_TYPE }}" \
             --no-configuration-cache
 
   bump:
