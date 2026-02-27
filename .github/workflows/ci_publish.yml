@@ -12,10 +12,21 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
+
       modules:
         description: 'JSON array of modules (e.g. [":libraries:core",":libraries:network"]). Leave empty for auto.'
         required: false
         default: ''
+
+      build_type:
+        description: 'Build type (Debug or Release)'
+        required: false
+        default: 'Release'
+
+      publication_type:
+        description: 'Central Portal publication type (USER_MANAGED or AUTOMATIC)'
+        required: false
+        default: 'USER_MANAGED'
 
 concurrency:
   group: build-publish-${{ github.ref }}
@@ -32,9 +43,9 @@ env:
   # Retention days used for output files
   RETENTION_DAYS: 1
   # Build type
-  BUILD_TYPE: "Release"
+  BUILD_TYPE: ${{ github.event.inputs.build_type || 'Release' }}
   # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
-  PUBLICATION_TYPE: "USER_MANAGED"
+  PUBLICATION_TYPE: ${{ github.event.inputs.publication_type || 'USER_MANAGED' }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -59,6 +70,7 @@ jobs:
 
     outputs:
       modules: ${{ steps.modules.outputs.modules }}
+      hasModules: ${{ steps.modules.outputs.hasModules }}
 
     steps:
       - name: Checkout repository
@@ -67,7 +79,7 @@ jobs:
 
       - name: Compute changed modules
         id: computed
-        if: ${{ github.event.inputs.modules == '' }}
+        if: ${{ (github.event.inputs.modules || '') == '' }}
         uses: ./.github/actions/compute_changed_modules
 
       - name: Resolve modules output
@@ -75,20 +87,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          
+
           if [[ -n '${{ github.event.inputs.modules || '' }}' ]]; then
             modules='${{ github.event.inputs.modules }}'
           else
             modules='${{ steps.computed.outputs.modules || steps.computed.outputs.value || '[]' }}'
           fi
-          
+
+          hasModules=$([[ "$modules" == "[]" ]] && echo false || echo true)
+
           {
             echo "modules<<EOF"
             echo "$modules"
             echo "EOF"
+            echo "hasModules=$hasModules"
           } >> "$GITHUB_OUTPUT"
-          
-          echo "Modules: $modules"
 
   checkstyle:
     name: Check code style
@@ -110,7 +123,8 @@ jobs:
 
   build:
     name: Build
-    needs: [checkstyle]
+    needs: [ checkstyle, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -137,7 +151,8 @@ jobs:
 
   test:
     name: Run Unit Tests
-    needs: [checkstyle]
+    needs: [ checkstyle, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -165,7 +180,7 @@ jobs:
   publish:
     name: Publish to Central (aggregation)
     needs: [ build, test, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.modules != '' && needs.computeChangedModules.outputs.modules != '[]' }}
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -178,28 +193,28 @@ jobs:
 
       - name: Publish aggregation
         env:
-          CENTRAL_PORTAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          CENTRAL_PORTAL_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+          CENTRAL_PORTAL_PASSWORD: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
         shell: bash
         run: |
           ./gradlew publishAggregationToCentralPortal \
-            -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules || '[]'), ',') }}" \
+            -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules), ',') }}" \
             -PpublishingType="${{ env.PUBLICATION_TYPE }}" \
             --no-configuration-cache
 
   bump:
     name: Bump version
     needs: [ publish, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.modules != '' && needs.computeChangedModules.outputs.modules != '[]' }}
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
 
     strategy:
       max-parallel: 1
       matrix:
-        module: ${{ fromJson(needs.computeChangedModules.outputs.modules || '[]') }}
+        module: ${{ fromJson(needs.computeChangedModules.outputs.modules) }}
 
     steps:
       - name: Check out code
