@@ -45,7 +45,7 @@ env:
   # Build type
   BUILD_TYPE: ${{ github.event.inputs.build_type || 'Release' }}
   # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
-  PUBLICATION_TYPE: ${{ github.event.inputs.publication_type || 'USER_MANAGED' }}
+  PUBLICATION_TYPE: ${{ github.event.inputs.publication_type || 'AUTOMATIC' }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
