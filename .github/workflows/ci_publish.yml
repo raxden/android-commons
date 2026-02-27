@@ -28,6 +28,8 @@ env:
   RETENTION_DAYS: 1
   # Build type
   BUILD_TYPE: "Release"
+  # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
+  PUBLICATION_TYPE: "USER_MANAGED"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -159,6 +161,7 @@ jobs:
         run: |
           ./gradlew publishAggregationToCentralPortal \
             -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules || '[]'), ',') }}" \
+            -PpublishingType="${{ env.PUBLICATION_TYPE }}" \
             --no-configuration-cache
 
   bump:

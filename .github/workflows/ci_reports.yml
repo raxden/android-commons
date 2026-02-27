@@ -22,7 +22,7 @@ env:
   # Artifact retention
   RETENTION_DAYS: 1
   # Build configuration
-  BUILD_TYPE: "Release"
+  BUILD_TYPE: "Debug"
 
 jobs:
 

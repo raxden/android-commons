@@ -6,6 +6,11 @@ import org.gradle.api.plugins.ExtensionAware
 import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 import java.util.Properties
 
+fun Project.getProperty(key: String, defaultValue: String = ""): String =
+    providers.gradleProperty(key)
+        .orElse(providers.environmentVariable(key))
+        .getOrElse(defaultValue)
+
 internal fun Project.getSigningConfigProperties(buildType: String): Properties {
     val properties = Properties()
     val propertiesFile = file("$rootDir/config/signing_$buildType.properties")
