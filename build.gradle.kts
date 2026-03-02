@@ -19,6 +19,9 @@ plugins {
 }
 
 nmcpAggregation {
+
+    // ./gradlew publishAggregationToCentralPortal -PnmcpProjects=[moduleA, ..., moduleN] -PpublishingType=USER_MANAGED
+
     centralPortal {
         username = getProperty("CENTRAL_PORTAL_USERNAME")
         password = getProperty("CENTRAL_PORTAL_PASSWORD")
@@ -45,7 +48,6 @@ nmcpAggregation {
 }
 
 dependencies {
-
     val selectedProjects = getProperty("nmcpProjects")
         .split(",")
         .map(String::trim)

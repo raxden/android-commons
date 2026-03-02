@@ -14,7 +14,7 @@ plugins {
 // More info -> https://detekt.dev/docs/gettingstarted/gradle/
 detekt {
     // version found will be used. Override to stay on the same version.
-    config = files("/config/detekt/detekt.yml")
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
     // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects.
     parallel = true
     // Android: Don't create tasks for the specified build types (e.g. "release")

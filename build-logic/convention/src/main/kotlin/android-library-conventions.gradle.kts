@@ -19,7 +19,10 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk
-        targetSdk = libs.versions.targetSdk // needed for instrumental tests
+    }
+
+    testOptions {
+        targetSdk = libs.versions.targetSdk
     }
 
     buildTypes {
@@ -40,12 +43,14 @@ android {
 //            excludes.add("META-INF/*.kotlin_module")
         }
     }
+}
 
-    project.kotlin {
-        jvmToolchain(jdkVersion = libs.versions.jdk.asInt())
-    }
+kotlin {
+    jvmToolchain(jdkVersion = libs.versions.jdk.asInt())
+}
 
-    kotlinOptions {
-        jvmTarget = libs.versions.jdk.toString()
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.jdk.asInt()))
     }
 }
