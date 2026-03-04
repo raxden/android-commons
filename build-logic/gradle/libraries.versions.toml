@@ -8,8 +8,8 @@ sourceCompatibility = "17"
 targetCompatibility = "17"
 
 agp = "8.13.2"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.27"
+kotlin = "2.3.10"
+ksp = "2.3.6"
 
 androidx-core-ktx = "1.13.1"
 androidx-activity-ktx = "1.9.3"
