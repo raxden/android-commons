@@ -1,5 +1,7 @@
 import extension.libs
 import extension.versions
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.java
+import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.kotlin
 
 plugins {
     id("com.android.library")
@@ -40,12 +42,14 @@ android {
 //            excludes.add("META-INF/*.kotlin_module")
         }
     }
+}
 
-    project.kotlin {
-        jvmToolchain(jdkVersion = libs.versions.jdk.asInt())
-    }
+kotlin {
+    jvmToolchain(jdkVersion = libs.versions.jdk.asInt())
+}
 
-    kotlinOptions {
-        jvmTarget = libs.versions.jdk.toString()
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.jdk.asInt()))
     }
 }
