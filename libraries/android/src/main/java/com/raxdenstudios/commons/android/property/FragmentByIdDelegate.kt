@@ -5,9 +5,8 @@ import androidx.fragment.app.Fragment
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-@Suppress("UNCHECKED_CAST")
 class FragmentByIdDelegate<T : Fragment>(
-    @IdRes private val fragmentId: Int
+    @field:IdRes private val fragmentId: Int
 ) : ReadOnlyProperty<Fragment, T> {
 
     private var fragment: T? = null
@@ -17,6 +16,7 @@ class FragmentByIdDelegate<T : Fragment>(
         property: KProperty<*>
     ): T = fragment ?: findFragmentById(thisRef).also { fragment = it }
 
+    @Suppress("UNCHECKED_CAST")
     private fun findFragmentById(
         thisRef: Fragment,
     ): T = thisRef.childFragmentManager.findFragmentById(fragmentId) as T

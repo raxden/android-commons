@@ -4,10 +4,10 @@ import androidx.annotation.StringRes
 import com.raxdenstudios.commons.permissions.R
 
 sealed class RationaleDialog(
-    @StringRes val reason: Int,
-    @StringRes val reasonDescription: Int,
-    @StringRes val acceptLabel: Int,
-    @StringRes val deniedLabel: Int
+    @field:StringRes val reason: Int,
+    @field:StringRes val reasonDescription: Int,
+    @field:StringRes val acceptLabel: Int,
+    @field:StringRes val deniedLabel: Int
 ) {
 
     data object Camera : RationaleDialog(
