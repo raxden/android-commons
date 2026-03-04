@@ -1,7 +1,5 @@
 import extension.libs
 import extension.versions
-import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.java
-import gradle.kotlin.dsl.accessors._8e8a6dd48b2094ffcd3758431423791d.kotlin
 
 plugins {
     id("com.android.library")
