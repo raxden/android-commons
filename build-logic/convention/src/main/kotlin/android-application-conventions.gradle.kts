@@ -4,7 +4,6 @@ import extension.versions
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
 }

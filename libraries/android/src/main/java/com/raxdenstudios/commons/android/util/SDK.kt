@@ -36,7 +36,7 @@ object SDK {
     /**
      * Only works when is called in onCreate
      */
-    @SuppressLint("InternalInsetResource")
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
     fun getStatusBarHeight(context: Context): Int {
         val resourceId: Int =
             context.resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -46,10 +46,12 @@ object SDK {
     }
 
     fun getPackageName(context: Context): String =
-        runCatching { context.getPackageInfo().packageName }.getOrDefault("")
+        runCatching { context.getPackageInfo().packageName }
+            .getOrDefault("")
 
     fun getVersionName(context: Context): String =
-        runCatching { context.getPackageInfo().versionName.orDefault() }.getOrDefault("")
+        runCatching { context.getPackageInfo().versionName.orDefault() }
+            .getOrDefault("")
 
     fun getVersionCode(context: Context): Long = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->

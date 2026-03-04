@@ -89,6 +89,12 @@ tasks {
     val clean by registering(Delete::class) {
         delete(buildDir)
     }
+
+    register("printKotlinVersion") {
+        doLast {
+            println(org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION)
+        }
+    }
 }
 
 private fun getPublicationName(): String {
