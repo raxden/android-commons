@@ -18,12 +18,12 @@ on:
         required: false
         default: ''
 
-      build_type:
+      build-type:
         description: 'Build type (Debug or Release)'
         required: false
         default: 'Release'
 
-      publication_type:
+      publication-type:
         description: 'Central Portal publication type (USER_MANAGED or AUTOMATIC)'
         required: false
         default: 'USER_MANAGED'
@@ -43,9 +43,9 @@ env:
   # Retention days used for output files
   RETENTION_DAYS: 1
   # Build type
-  BUILD_TYPE: ${{ github.event.inputs.build_type || 'Release' }}
+  BUILD_TYPE: ${{ github.event.inputs.build-type || 'Release' }}
   # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
-  PUBLICATION_TYPE: ${{ github.event.inputs.publication_type || 'AUTOMATIC' }}
+  PUBLICATION_TYPE: ${{ github.event.inputs.publication-type || 'AUTOMATIC' }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -167,7 +167,6 @@ jobs:
       - name: Execute unit tests
         uses: ./.github/actions/unit_tests
         with:
-          build-type: ${{ env.BUILD_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
       - name: Cancel workflow run if failed

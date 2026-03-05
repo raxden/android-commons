@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
     inputs:
 
-      build_type:
+      build-type:
         description: 'Build type (Debug or Release)'
         required: false
-        default: 'Release'
+        default: 'Debug'
 
 concurrency:
   # Ensure only one run per PR is active
@@ -28,7 +28,7 @@ env:
   # Artifact retention
   RETENTION_DAYS: 1
   # Build configuration
-  BUILD_TYPE: ${{ github.event.inputs.build_type || 'Release' }}
+  BUILD_TYPE: ${{ github.event.inputs.build-type || 'Release' }}
 
 jobs:
 
