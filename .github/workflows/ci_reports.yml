@@ -28,7 +28,7 @@ env:
   # Artifact retention
   RETENTION_DAYS: 1
   # Build configuration
-  BUILD_TYPE: ${{ github.event.inputs.build-type || 'Release' }}
+  BUILD_TYPE: ${{ github.event.inputs.build-type || 'Debug' }}
 
 jobs:
 
