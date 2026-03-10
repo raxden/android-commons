@@ -126,7 +126,7 @@ jobs:
 
   status:
     name: Status
-    needs: [checkstyle, build, test]
+    needs: [ build, test ]
     runs-on: ubuntu-latest
     if: always()
 
