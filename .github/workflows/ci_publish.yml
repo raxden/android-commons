@@ -92,77 +92,76 @@ jobs:
         with:
           modules: ${{ github.event.inputs.modules || '' }}
 
-#  checkstyle:
-#    name: Check code style
-#    needs: [ computeChangedModules ]
-#    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 10
-#
-#    steps:
-#      - uses: actions/checkout@v6
-#        with: { fetch-depth: 0 }
-#
-#      - uses: ./.github/actions/setup
-#
-#      - name: Check code via Detekt
-#        uses: ./.github/actions/checkstyle
-#        with:
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#  build:
-#    name: Build
-#    needs: [ checkstyle ]
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 20
-#
-#    steps:
-#      - uses: actions/checkout@v6
-#        with: { fetch-depth: 0 }
-#
-#      - uses: ./.github/actions/setup
-#
-#      - name: Assemble ${{ env.BUILD_TYPE }}
-#        uses: ./.github/actions/assemble
-#        with:
-#          build-type: ${{ env.BUILD_TYPE }}
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#      - name: Cancel workflow run if failed
-#        if: failure()
-#        uses: ./.github/actions/workflow_run
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          operation: cancel
-#
-#  test:
-#    name: Run Unit Tests
-#    needs: [ checkstyle ]
-#    runs-on: ubuntu-latest
-#    timeout-minutes: 20
-#
-#    steps:
-#      - uses: actions/checkout@v6
-#        with: { fetch-depth: 0 }
-#
-#      - uses: ./.github/actions/setup
-#
-#      - name: Execute unit tests
-#        uses: ./.github/actions/unit_tests
-#        with:
-#          retention-days: ${{ env.RETENTION_DAYS }}
-#
-#      - name: Cancel workflow run if failed
-#        if: failure()
-#        uses: ./.github/actions/workflow_run
-#        with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          operation: cancel
+  checkstyle:
+    name: Check code style
+    needs: [ computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }
+
+      - uses: ./.github/actions/setup
+
+      - name: Check code via Detekt
+        uses: ./.github/actions/checkstyle
+        with:
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  build:
+    name: Build
+    needs: [ checkstyle ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }
+
+      - uses: ./.github/actions/setup
+
+      - name: Assemble ${{ env.BUILD_TYPE }}
+        uses: ./.github/actions/assemble
+        with:
+          build-type: ${{ env.BUILD_TYPE }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Cancel workflow run if failed
+        if: failure()
+        uses: ./.github/actions/workflow_run
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          operation: cancel
+
+  test:
+    name: Run Unit Tests
+    needs: [ checkstyle ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }
+
+      - uses: ./.github/actions/setup
+
+      - name: Execute unit tests
+        uses: ./.github/actions/unit_tests
+        with:
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Cancel workflow run if failed
+        if: failure()
+        uses: ./.github/actions/workflow_run
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          operation: cancel
 
   publish:
     name: Publish to Central (aggregation)
-#    needs: [ build, test ]
-    needs: [ computeChangedModules ]
+    needs: [ build, test ]
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
