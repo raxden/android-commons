@@ -3,8 +3,12 @@ description: Detects changed modules and returns matrix JSON
 
 outputs:
   value:
-    description: "JSON array of module paths for strategy.matrix"
+    description: "JSON array of module paths"
     value: ${{ steps.matrix.outputs.value }}
+
+  hasModules:
+    description: "Whether modules exist"
+    value: ${{ steps.matrix.outputs.hasModules }}
 
 runs:
   using: "composite"
@@ -23,27 +27,30 @@ runs:
         set -euo pipefail
 
         if [[ "${{ steps.changed.outputs.any_changed }}" != "true" ]]; then
-          echo 'value=[]' >> "$GITHUB_OUTPUT"
+          {
+            echo "value=[]"
+            echo "hasModules=false"
+          } >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
         files_raw='${{ steps.changed.outputs.all_changed_files }}'
 
-        # Normalize to one path per line
         files_list=$(printf "%s" "$files_raw" | tr ' ' '\n' | sed '/^$/d')
 
-        # Extract unique modules as CSV first
         mods_csv=$(printf "%s\n" "$files_list" \
           | sed -n 's|^libraries/\([^/]*\)/.*|:libraries:\1|p' \
           | sort -u \
           | paste -sd, -)
 
         if [[ -z "$mods_csv" ]]; then
-          echo 'value=[]' >> "$GITHUB_OUTPUT"
+          {
+            echo "value=[]"
+            echo "hasModules=false"
+          } >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
-        # Build one-line JSON array
         json=$(printf '%s' "$mods_csv" \
           | tr ',' '\n' \
           | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' \
@@ -58,6 +65,7 @@ runs:
           echo "value<<EOF"
           echo "$json"
           echo "EOF"
+          echo "hasModules=true"
         } >> "$GITHUB_OUTPUT"
 
     - name: Write modules to job summary

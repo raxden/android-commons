@@ -69,8 +69,8 @@ jobs:
     timeout-minutes: 5
 
     outputs:
-      modules: ${{ steps.modules.outputs.modules }}
-      hasModules: ${{ steps.modules.outputs.hasModules }}
+      modules: ${{ steps.computed.outputs.value }}
+      hasModules: ${{ steps.computed.outputs.hasModules }}
 
     steps:
       - name: Checkout repository
@@ -79,29 +79,7 @@ jobs:
 
       - name: Compute changed modules
         id: computed
-        if: ${{ (github.event.inputs.modules || '') == '' }}
         uses: ./.github/actions/compute_changed_modules
-
-      - name: Resolve modules output
-        id: modules
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ -n '${{ github.event.inputs.modules || '' }}' ]]; then
-            modules='${{ github.event.inputs.modules }}'
-          else
-            modules='${{ steps.computed.outputs.modules || steps.computed.outputs.value || '[]' }}'
-          fi
-
-          hasModules=$([[ "$modules" == "[]" ]] && echo false || echo true)
-
-          {
-            echo "modules<<EOF"
-            echo "$modules"
-            echo "EOF"
-            echo "hasModules=$hasModules"
-          } >> "$GITHUB_OUTPUT"
 
   checkstyle:
     name: Check code style
@@ -210,10 +188,35 @@ jobs:
     if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
 
-    strategy:
-      max-parallel: 1
-      matrix:
-        module: ${{ fromJson(needs.computeChangedModules.outputs.modules) }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+
+      - name: Setup build environment
+        uses: ./.github/actions/setup
+
+      - name: Get PR info
+        id: pr_info
+        uses: ./.github/actions/pr_info
+
+      - name: Bump version
+        uses: ./.github/actions/bump_version
+        with:
+          version: ${{ steps.pr_info.outputs.bump }}
+          modules: ${{ needs.computeChangedModules.outputs.modules }}
+          git-branch: ${{ github.ref_name }}
+          git-user-name: ${{ vars.CI_GIT_USER_NAME }}
+          git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
+
+  bump-bom:
+    name: Bump BOM version
+    needs: [ bump, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
@@ -234,7 +237,8 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           version: ${{ steps.pr_info.outputs.bump }}
-          module: ${{ matrix.module }}
+          modules: '[":bom"]'
+          git-create-tag: true
           git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}

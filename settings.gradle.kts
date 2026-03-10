@@ -69,6 +69,7 @@ develocity {
     }
 }
 
+include(":bom")
 include(":libraries:core")
 include(":libraries:android")
 include(":libraries:android-binding")
