@@ -31,9 +31,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
+      - uses: ./.github/actions/checkout
 
       - name: Print workflow information
         uses: ./.github/actions/info
@@ -44,9 +42,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
+      - uses: ./.github/actions/checkout
 
       - name: Compute changed modules
         id: modules
@@ -58,12 +54,8 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Run Detekt
         uses: ./.github/actions/checkstyle
@@ -77,12 +69,8 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Assemble ${{ env.BUILD_TYPE }}
         uses: ./.github/actions/assemble
@@ -104,12 +92,8 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Execute unit tests
         uses: ./.github/actions/unit_tests
