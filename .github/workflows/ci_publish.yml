@@ -18,6 +18,11 @@ on:
         required: false
         default: ''
 
+      bom-module:
+        description: 'BOM module name (used for version bumping, e.g. ":bom")'
+        required: false
+        default: ':bom'
+
       build-type:
         description: 'Build type (Debug or Release)'
         required: false
@@ -46,6 +51,8 @@ env:
   BUILD_TYPE: ${{ github.event.inputs.build-type || 'Release' }}
   # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
   PUBLICATION_TYPE: ${{ github.event.inputs.publication-type || 'AUTOMATIC' }}
+  # BOM module name (used for version bumping)
+  BOM_MODULE: ${{ github.event.inputs.bom-module || ':bom' }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -80,9 +87,13 @@ jobs:
       - name: Compute changed modules
         id: computed
         uses: ./.github/actions/compute_changed_modules
+        with:
+          modules: ${{ github.event.inputs.modules || '' }}
 
   checkstyle:
     name: Check code style
+    needs: [ computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -101,8 +112,7 @@ jobs:
 
   build:
     name: Build
-    needs: [ checkstyle, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    needs: [ checkstyle ]
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -129,8 +139,7 @@ jobs:
 
   test:
     name: Run Unit Tests
-    needs: [ checkstyle, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    needs: [ checkstyle ]
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -156,9 +165,9 @@ jobs:
 
   publish:
     name: Publish to Central (aggregation)
-    needs: [ build, test, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    needs: [ build, test ]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -167,6 +176,18 @@ jobs:
 
       - name: Setup build environment
         uses: ./.github/actions/setup
+
+      - name: Build nmcpProjects
+        id: nmcp
+        shell: bash
+        run: |
+          set -euo pipefail
+          
+          modules='${{ needs.computeChangedModules.outputs.modules }}'
+          nmcpProjects="$(echo "$modules" | jq -r --arg bom "${{ env.BOM_MODULE }}" '. + [$bom] | join(",")')"
+          
+          echo "nmcpProjects=$nmcpProjects" >> "$GITHUB_OUTPUT"
+          echo "nmcpProjects: $nmcpProjects"
 
       - name: Publish aggregation
         env:
@@ -178,15 +199,15 @@ jobs:
         shell: bash
         run: |
           ./gradlew publishAggregationToCentralPortal \
-            -PnmcpProjects="${{ join(fromJson(needs.computeChangedModules.outputs.modules), ',') }}" \
+            -PnmcpProjects="${{ steps.nmcp.outputs.nmcpProjects }}" \
             -PpublishingType="${{ env.PUBLICATION_TYPE }}" \
             --no-configuration-cache
 
   bump:
     name: Bump version
-    needs: [ publish, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    needs: [ publish ]
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Check out code
@@ -214,9 +235,9 @@ jobs:
 
   bump-bom:
     name: Bump BOM version
-    needs: [ bump, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    needs: [ bump ]
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Check out code
@@ -237,7 +258,7 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           version: ${{ steps.pr_info.outputs.bump }}
-          modules: '[":bom"]'
+          modules: '["${{ env.BOM_MODULE }}"]'
           git-create-tag: true
           git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}

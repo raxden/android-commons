@@ -50,14 +50,37 @@ jobs:
         uses: ./.github/actions/info
 
   bump:
-    name: Bump module
+    name: Bump modules
     if: ${{ (github.event.inputs.modules || '') != '' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
-    strategy:
-      max-parallel: 1
-      matrix:
-        module: ${{ fromJson(github.event.inputs.modules) }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+
+      - name: Setup build environment
+        uses: ./.github/actions/setup
+
+      - name: Bump versions
+        uses: ./.github/actions/bump_version
+        with:
+          version: ${{ github.event.inputs.version }}
+          modules: ${{ github.event.inputs.modules }}
+          git-create-tag: ${{ github.event.inputs.create-tag }}
+          git-branch: ${{ github.ref_name }}
+          git-user-name: ${{ vars.CI_GIT_USER_NAME }}
+          git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
+
+  bump-bom:
+    name: Bump BOM version
+    needs: [ bump ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Check out code
@@ -74,7 +97,8 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           version: ${{ github.event.inputs.version }}
-          module: ${{ matrix.module }}
+          modules: '[":bom"]'
+          git-create-tag: true
           git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
