@@ -50,7 +50,7 @@ env:
   # Build type
   BUILD_TYPE: ${{ github.event.inputs.build-type || 'Release' }}
   # Publishing type for Central Portal (USER_MANAGED or AUTOMATIC)
-  PUBLICATION_TYPE: ${{ github.event.inputs.publication-type || 'AUTOMATIC' }}
+  PUBLICATION_TYPE: ${{ github.event.inputs.publication-type || 'USER_MANAGED' }}
   # BOM module name (used for version bumping)
   BOM_MODULE: ${{ github.event.inputs.bom-module || ':bom' }}
 
@@ -63,9 +63,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
+      - uses: ./.github/actions/checkout
 
       - name: Print workflow information
         uses: ./.github/actions/info
@@ -80,9 +78,7 @@ jobs:
       hasModules: ${{ steps.computed.outputs.hasModules }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
+      - uses: ./.github/actions/checkout
 
       - name: Compute changed modules
         id: computed
@@ -98,12 +94,8 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Check code via Detekt
         uses: ./.github/actions/checkstyle
@@ -117,12 +109,8 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Assemble ${{ env.BUILD_TYPE }}
         uses: ./.github/actions/assemble
@@ -144,12 +132,8 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Execute unit tests
         uses: ./.github/actions/unit_tests
@@ -170,12 +154,8 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/checkout
+      - uses: ./.github/actions/setup
 
       - name: Build nmcpProjects
         id: nmcp
@@ -210,15 +190,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v6
+      - uses: ./.github/actions/checkout
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           persist-credentials: true
 
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
 
       - name: Get PR info
         id: pr_info
@@ -240,15 +218,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v6
+      - uses: ./.github/actions/checkout
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           persist-credentials: true
 
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
 
       - name: Get PR info
         id: pr_info

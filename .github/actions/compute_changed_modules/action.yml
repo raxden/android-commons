@@ -19,6 +19,7 @@ outputs:
 runs:
   using: "composite"
   steps:
+
     - name: Changed files in libraries
       id: changed
       if: ${{ inputs.modules == '' }}
@@ -33,21 +34,30 @@ runs:
       run: |
         set -euo pipefail
 
+        # -----------------------------
+        # Manual override
+        # -----------------------------
         if [[ -n '${{ inputs.modules }}' ]]; then
           modules='${{ inputs.modules }}'
-          hasModules=$([[ "$modules" == "[]" ]] && echo false || echo true)
+
+          if [[ "$modules" == "[]" ]]; then
+            hasModules=false
+          else
+            hasModules=true
+          fi
 
           {
-            echo "value<<EOF"
-            echo "$modules"
-            echo "EOF"
+            echo "value=$modules"
             echo "hasModules=$hasModules"
           } >> "$GITHUB_OUTPUT"
 
           exit 0
         fi
 
-        if [[ "${{ steps.changed.outputs.any_changed }}" != "true" ]]; then
+        # -----------------------------
+        # No changes detected
+        # -----------------------------
+        if [[ "${{ steps.changed.outputs.any_changed || 'false' }}" != "true" ]]; then
           {
             echo "value=[]"
             echo "hasModules=false"
@@ -57,14 +67,13 @@ runs:
 
         files_raw='${{ steps.changed.outputs.all_changed_files }}'
 
-        files_list=$(printf "%s" "$files_raw" | tr ' ' '\n' | sed '/^$/d')
+        files_list=$(printf "%s" "$files_raw" | tr ' \n' '\n' | sed '/^$/d')
 
-        mods_csv=$(printf "%s\n" "$files_list" \
+        modules=$(printf "%s\n" "$files_list" \
           | sed -n 's|^libraries/\([^/]*\)/.*|:libraries:\1|p' \
-          | sort -u \
-          | paste -sd, -)
+          | sort -u)
 
-        if [[ -z "$mods_csv" ]]; then
+        if [[ -z "$modules" ]]; then
           {
             echo "value=[]"
             echo "hasModules=false"
@@ -72,20 +81,12 @@ runs:
           exit 0
         fi
 
-        json=$(printf '%s' "$mods_csv" \
-          | tr ',' '\n' \
-          | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' \
-          | sed '/^$/d' \
-          | awk '{printf "%s\"%s\"", (NR==1?"":","), $0}' \
-          | sed 's/^/[/' \
-          | sed 's/$/]/')
+        json=$(printf "%s\n" "$modules" | jq -R . | jq -s .)
 
         echo "Matrix JSON: $json"
 
         {
-          echo "value<<EOF"
-          echo "$json"
-          echo "EOF"
+          echo "value=$json"
           echo "hasModules=true"
         } >> "$GITHUB_OUTPUT"
 
@@ -100,21 +101,18 @@ runs:
           echo "## 🔍 Modules with Changes"
           echo ""
 
-          if [[ "$matrix" == "[]" ]]; then
+          count=$(echo "$matrix" | jq 'length')
+
+          if [[ "$count" -eq 0 ]]; then
             echo "✅ **No modules changed**"
             echo ""
           else
-            count=$(printf "%s" "$matrix" | tr -cd ',' | wc -c | tr -d ' ')
-            count=$((count + 1))
             echo "🧩 **Modules affected:** $count"
             echo ""
             echo "### 📦 Affected modules"
             echo ""
-            printf "%s\n" "$matrix" \
-              | tr -d '[]"' \
-              | tr ',' '\n' \
-              | sed '/^$/d' \
-              | sed 's/^/- `/; s/$/`/'
+
+            echo "$matrix" | jq -r '.[] | "- `\(.)`"'
             echo ""
           fi
 

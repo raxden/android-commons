@@ -42,9 +42,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
+      - uses: ./.github/actions/checkout
 
       - name: Print workflow information
         uses: ./.github/actions/info
@@ -56,15 +54,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v6
+      - uses: ./.github/actions/checkout
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           persist-credentials: true
 
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
 
       - name: Bump versions
         uses: ./.github/actions/bump_version
@@ -83,15 +79,13 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v6
+      - uses: ./.github/actions/checkout
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
           persist-credentials: true
 
-      - name: Setup build environment
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
 
       - name: Bump version
         uses: ./.github/actions/bump_version
