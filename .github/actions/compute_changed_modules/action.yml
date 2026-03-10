@@ -10,17 +10,20 @@ inputs:
 outputs:
   value:
     description: "JSON array of module paths"
-    value: ${{ steps.matrix.outputs.value }}
+    value: ${{ steps.resolve.outputs.value }}
 
   hasModules:
     description: "Whether modules exist"
-    value: ${{ steps.matrix.outputs.hasModules }}
+    value: ${{ steps.resolve.outputs.hasModules }}
 
 runs:
   using: "composite"
   steps:
 
-    - name: Changed files in libraries
+    # --------------------------------
+    # Detect changed files (only if needed)
+    # --------------------------------
+    - name: Detect changed files
       id: changed
       if: ${{ inputs.modules == '' }}
       uses: tj-actions/changed-files@v45
@@ -28,80 +31,65 @@ runs:
         files: |
           libraries/**
 
-    - name: Compute modules (matrix json)
-      id: matrix
+    # --------------------------------
+    # Resolve modules
+    # --------------------------------
+    - name: Resolve modules
+      id: resolve
       shell: bash
       run: |
         set -euo pipefail
 
-        # -----------------------------
+        # -------------------------
         # Manual override
-        # -----------------------------
+        # -------------------------
         if [[ -n '${{ inputs.modules }}' ]]; then
           modules='${{ inputs.modules }}'
 
-          if [[ "$modules" == "[]" ]]; then
-            hasModules=false
+          # Validate JSON
+          echo "$modules" | jq empty
+
+        else
+          # -------------------------
+          # No changed files
+          # -------------------------
+          if [[ "${{ steps.changed.outputs.any_changed }}" != "true" ]]; then
+            modules="[]"
+
           else
-            hasModules=true
+            files_raw='${{ steps.changed.outputs.all_changed_files }}'
+
+            files_list=$(printf "%s" "$files_raw" | tr ' \n' '\n' | sed '/^$/d')
+
+            modules=$(printf "%s\n" "$files_list" \
+              | sed -n 's|^libraries/\([^/]*\)/.*|:libraries:\1|p' \
+              | sort -u \
+              | jq -R . \
+              | jq -s -c .)
           fi
-
-          {
-            echo "value=$modules"
-            echo "hasModules=$hasModules"
-          } >> "$GITHUB_OUTPUT"
-
-          exit 0
         fi
 
-        # -----------------------------
-        # No changes detected
-        # -----------------------------
-        if [[ "${{ steps.changed.outputs.any_changed || 'false' }}" != "true" ]]; then
-          {
-            echo "value=[]"
-            echo "hasModules=false"
-          } >> "$GITHUB_OUTPUT"
-          exit 0
-        fi
+        hasModules=$(echo "$modules" | jq 'length > 0')
 
-        files_raw='${{ steps.changed.outputs.all_changed_files }}'
+        echo "Modules JSON: $modules"
 
-        files_list=$(printf "%s" "$files_raw" | tr ' \n' '\n' | sed '/^$/d')
+        echo "value=$modules" >> "$GITHUB_OUTPUT"
+        echo "hasModules=$hasModules" >> "$GITHUB_OUTPUT"
 
-        modules=$(printf "%s\n" "$files_list" \
-          | sed -n 's|^libraries/\([^/]*\)/.*|:libraries:\1|p' \
-          | sort -u)
-
-        if [[ -z "$modules" ]]; then
-          {
-            echo "value=[]"
-            echo "hasModules=false"
-          } >> "$GITHUB_OUTPUT"
-          exit 0
-        fi
-
-        json=$(printf "%s\n" "$modules" | jq -R . | jq -s .)
-
-        echo "Matrix JSON: $json"
-
-        {
-          echo "value=$json"
-          echo "hasModules=true"
-        } >> "$GITHUB_OUTPUT"
-
+    # --------------------------------
+    # Summary
+    # --------------------------------
     - name: Write modules to job summary
       shell: bash
       run: |
         set -euo pipefail
 
-        matrix='${{ steps.matrix.outputs.value }}'
+        matrix='${{ steps.resolve.outputs.value }}'
+        count=$(echo "$matrix" | jq 'length')
 
         {
           echo "## 🔍 Modules with Changes"
           echo ""
-
-          count=$(echo "$matrix" | jq 'length')
 
           if [[ "$count" -eq 0 ]]; then
             echo "✅ **No modules changed**"
