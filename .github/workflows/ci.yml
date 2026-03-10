@@ -16,6 +16,10 @@ permissions:
 env:
   # Increment to invalidate Gradle cache when needed
   CACHE_VERSION: 1
+  # Increase Gradle heap size to prevent OOM errors in large builds
+  GRADLE_OPTS: >
+    -Dorg.gradle.jvmargs=-Xmx4g
+    -Dkotlin.daemon.jvm.options=-Xmx2g
   # Enable debug for Gradle cache action
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
   # Artifact retention

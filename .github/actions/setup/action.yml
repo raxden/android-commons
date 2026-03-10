@@ -1,35 +1,37 @@
-name: 'Common machine setup'
-description: 'Prepares the machine (JDK + Gradle)'
+name: Common machine setup
+description: Prepares the machine (JDK + Gradle)
 
 inputs:
   java-version:
-    description: 'Java version'
+    description: Java version
     required: false
-    default: '17'
+    default: "17"
 
   distribution:
-    description: 'JDK distribution'
+    description: JDK distribution
     required: false
-    default: 'temurin'
+    default: "temurin"
 
   gradle-cache:
-    description: 'Enable Gradle cache (true/false)'
+    description: Enable Gradle cache
     required: false
-    default: 'true'
+    default: "true"
 
   gradle-cache-cleanup:
-    description: 'Cleanup old Gradle cache entries (true/false)'
+    description: Cleanup old Gradle cache entries
     required: false
-    default: 'true'
+    default: "true"
 
 runs:
-  using: 'composite'
+  using: composite
   steps:
-    - name: Set up JDK
+
+    - name: Setup JDK
       uses: actions/setup-java@v5
       with:
         distribution: ${{ inputs.distribution }}
         java-version: ${{ inputs.java-version }}
+        cache: gradle
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v5
@@ -37,17 +39,39 @@ runs:
         cache-disabled: ${{ inputs.gradle-cache != 'true' }}
         gradle-home-cache-cleanup: ${{ inputs.gradle-cache-cleanup == 'true' }}
 
-    - name: Summary
+    - name: Environment summary
       shell: bash
       run: |
+        set -euo pipefail
+
         {
-          echo "## Setup"
+          echo "## ⚙️ Build Environment"
           echo ""
-          echo "- Java: ${{ inputs.distribution }} ${{ inputs.java-version }}"
-          echo "- Gradle cache: ${{ inputs.gradle-cache }}"
+
+          echo "- JDK distribution: ${{ inputs.distribution }}"
+          echo "- Java version: ${{ inputs.java-version }}"
+          echo "- Gradle cache enabled: ${{ inputs.gradle-cache }}"
           echo "- Gradle cache cleanup: ${{ inputs.gradle-cache-cleanup }}"
           echo ""
+
+          echo "### Java"
           echo '```'
-          java -version 2>&1 || true
+          java -version 2>&1
           echo '```'
+
+          echo ""
+
+          echo "### Gradle"
+          echo '```'
+          ./gradlew --version || gradle --version || true
+          echo '```'
+
+          echo ""
+
+          echo "### Gradle user home"
+          echo '```'
+          echo "$HOME/.gradle"
+          du -sh "$HOME/.gradle" || true
+          echo '```'
+
         } >> "$GITHUB_STEP_SUMMARY"
