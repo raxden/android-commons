@@ -31,7 +31,6 @@ runs:
       with:
         distribution: ${{ inputs.distribution }}
         java-version: ${{ inputs.java-version }}
-        cache: gradle
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v5
