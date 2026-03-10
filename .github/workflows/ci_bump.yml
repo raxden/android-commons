@@ -42,7 +42,8 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - uses: ./.github/actions/checkout
+      - uses: actions/checkout@v6
+        with: { fetch-depth: 0 }
 
       - name: Print workflow information
         uses: ./.github/actions/info
@@ -54,7 +55,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: ./.github/actions/checkout
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -79,7 +80,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: ./.github/actions/checkout
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
