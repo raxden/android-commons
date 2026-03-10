@@ -15,7 +15,7 @@ inputs:
   gradle-args:
     description: 'Extra Gradle arguments'
     required: false
-    default: ''
+    default: '--configuration-cache'
 
   upload-on-success:
     description: 'Upload detekt reports even if success (true/false)'

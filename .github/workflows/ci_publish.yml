@@ -161,7 +161,7 @@ jobs:
 
   publish:
     name: Publish to Central (aggregation)
-    needs: [ build, test ]
+    needs: [ build, test, computeChangedModules ]
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -177,7 +177,7 @@ jobs:
         run: |
           set -euo pipefail
           
-          modules='${{ needs.computeChangedModules.outputs.value }}'
+          modules='${{ needs.computeChangedModules.outputs.modules }}'
           nmcpProjects="$(echo "$modules" | jq -r --arg bom "${{ env.BOM_MODULE }}" '. + [$bom] | join(",")')"
           
           echo "nmcpProjects=$nmcpProjects" >> "$GITHUB_OUTPUT"
@@ -199,7 +199,7 @@ jobs:
 
   bump:
     name: Bump version
-    needs: [ publish ]
+    needs: [ publish, computeChangedModules ]
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -220,7 +220,7 @@ jobs:
         uses: ./.github/actions/bump_version
         with:
           version: ${{ steps.pr_info.outputs.bump }}
-          modules: ${{ needs.computeChangedModules.outputs.value }}
+          modules: ${{ needs.computeChangedModules.outputs.modules }}
           git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}

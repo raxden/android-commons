@@ -15,7 +15,7 @@ inputs:
   gradle-args:
     description: 'Extra Gradle args'
     required: false
-    default: ''
+    default: '--configuration-cache'
 
   upload:
     description: 'Upload test reports (true/false)'

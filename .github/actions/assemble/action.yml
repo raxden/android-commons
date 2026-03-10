@@ -24,7 +24,7 @@ inputs:
   gradle-args:
     description: 'Extra Gradle args'
     required: false
-    default: ''
+    default: '--configuration-cache'
 
   upload-files:
     description: 'Upload build outputs (true/false)'
