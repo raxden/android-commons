@@ -34,7 +34,7 @@ runs:
     - name: Upload Detekt reports
       id: upload_reports
       if: failure() || inputs.upload-on-success == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: detekt-reports-${{ inputs.id }}
         path: |
