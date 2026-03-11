@@ -36,7 +36,7 @@ runs:
         ./gradlew coverageReport -PbuildType=${{ inputs.build-type }} --stacktrace
 
     - name: Upload JaCoCo reports
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: reports-jacoco-${{ inputs.id }}
         path: |

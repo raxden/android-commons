@@ -62,7 +62,7 @@ runs:
 
     - name: Upload test outputs
       if: always() && inputs.upload == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: unit-tests-${{ inputs.build-type }}-${{ inputs.id }}
         path: ${{ inputs.reports-path }}

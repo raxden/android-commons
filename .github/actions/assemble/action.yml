@@ -124,7 +124,7 @@ runs:
 
     - name: Upload outputs
       if: always() && inputs.upload-files == 'true'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: build-${{ steps.artifact_type.outputs.artifact }}-${{ inputs.build-type }}-${{ inputs.id }}
         path: ${{ steps.plan.outputs.paths }}
