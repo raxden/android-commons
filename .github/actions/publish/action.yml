@@ -1,0 +1,102 @@
+name: Publish aggregation
+description: Publishes modules to Central Portal using aggregation task
+
+inputs:
+  modules:
+    description: JSON array of Gradle modules (e.g. [":libraries:core",":bom"])
+    required: true
+
+  publishing-type:
+    description: Central Portal publication type (USER_MANAGED or AUTOMATIC)
+    required: false
+    default: "AUTOMATIC"
+
+  gradle-args:
+    description: 'Extra Gradle args'
+    required: false
+    default: '--no-configuration-cache'
+
+  username:
+    description: Central Portal username
+    required: true
+
+  password:
+    description: Central Portal password
+    required: true
+
+  signing-key:
+    description: ASCII-armored signing key
+    required: true
+
+  signing-key-id:
+    description: Signing key ID
+    required: true
+
+  signing-password:
+    description: Signing key password
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Build nmcpProjects
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        modules='${{ inputs.modules }}'
+
+        echo "$modules" | jq -e 'if type == "array" then . else error("modules must be a JSON array") end' > /dev/null
+
+        count=$(echo "$modules" | jq 'length')
+
+        if [[ "$count" -eq 0 ]]; then
+          echo "Nothing to publish"
+          echo "NMCP_PROJECTS=" >> "$GITHUB_ENV"
+          exit 0
+        fi
+
+        nmcpProjects=$(echo "$modules" | jq -r 'join(",")')
+
+        echo "NMCP_PROJECTS=$nmcpProjects" >> "$GITHUB_ENV"
+
+        echo "Modules JSON: $modules"
+        echo "Gradle modules: $nmcpProjects"
+
+    - name: Publish aggregation
+      shell: bash
+      env:
+        CENTRAL_PORTAL_USERNAME: ${{ inputs.username }}
+        CENTRAL_PORTAL_PASSWORD: ${{ inputs.password }}
+        SIGNING_KEY: ${{ inputs.signing-key }}
+        SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
+        SIGNING_PASSWORD: ${{ inputs.signing-password }}
+      run: |
+        set -euo pipefail
+
+        if [[ -z "${NMCP_PROJECTS:-}" ]]; then
+          echo "Nothing to publish"
+          exit 0
+        fi
+
+        gradleArgs='${{ inputs.gradle-args }}'
+  
+        ./gradlew publishAggregationToCentralPortal \
+          -PnmcpProjects="$NMCP_PROJECTS" \
+          -PpublishingType="${{ inputs.publishing-type }}" \
+          $gradleArgs
+
+        {
+          echo "## 🚀 Publish completed"
+          echo ""
+          echo "### Modules published"
+          echo ""
+          echo '${{ inputs.modules }}' | jq -r '.[] | "- `\(.)`"'
+          echo ""
+          echo "---"
+          echo "Publishing type: \`${{ inputs.publishing-type }}\`"
+          echo ""
+          echo "Gradle modules:"
+          echo "\`$NMCP_PROJECTS\`"
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"

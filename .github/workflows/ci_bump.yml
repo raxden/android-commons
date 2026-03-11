@@ -68,7 +68,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Bump versions
-        uses: ./.github/actions/bump_version
+        uses: ./.github/actions/bump_module_version
         with:
           version: ${{ github.event.inputs.version }}
           modules: ${{ github.event.inputs.modules }}
@@ -93,7 +93,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Bump version
-        uses: ./.github/actions/bump_version
+        uses: ./.github/actions/bump_module_version
         with:
           version: ${{ github.event.inputs.version }}
           modules: '[":bom"]'
