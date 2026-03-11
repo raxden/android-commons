@@ -199,7 +199,7 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Publish aggregation
-        uses: ./.github/actions/publish_aggregation
+        uses: ./.github/actions/publish
         with:
           modules: ${{ needs.computeChangedModules.outputs.modulesWithBom }}
           publishing-type: ${{ env.PUBLICATION_TYPE }}
