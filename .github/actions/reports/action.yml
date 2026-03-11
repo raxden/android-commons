@@ -25,7 +25,7 @@ runs:
   using: 'composite'
   steps:
     - name: Download unit test outputs
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: unit-tests-${{ inputs.build-type }}-${{ inputs.id }}
 
