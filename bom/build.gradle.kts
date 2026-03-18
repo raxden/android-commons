@@ -41,6 +41,7 @@ dependencies {
         api(projects.libraries.pagination)
         api(projects.libraries.paginationCo)
         api(projects.libraries.permissions)
+        api(projects.libraries.preferences)
         api(projects.libraries.threeten)
         api(projects.libraries.threetenTest)
     }
