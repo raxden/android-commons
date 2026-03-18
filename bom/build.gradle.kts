@@ -4,7 +4,7 @@ import com.raxdenstudios.publishing.model.Developer
 plugins {
     `java-platform`
     alias(libs.plugins.android.versioning)
-    alias(libs.plugins.publish.platform)
+    alias(libs.plugins.android.publish.platform)
 }
 
 versioning {
