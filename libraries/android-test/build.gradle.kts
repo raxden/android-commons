@@ -1,4 +1,5 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import com.raxdenstudios.publishing.model.Developer
 
 plugins {
     alias(libs.plugins.android.versioning)
@@ -18,9 +19,11 @@ publishLibrary {
     name = "Android test"
     description = "Android Test library"
     url = "https://github.com/raxden/android-commons"
-    developerId = "raxden"
-    developerName = "Ángel Gómez"
-    developerEmail = "raxden.dev@gmail.com"
+    developer = Developer(
+        id = "raxden",
+        name = "Ángel Gómez",
+        email = "raxden.dev@gmail.com",
+    )
     coordinates = Coordinates.default.copy(artifactId = "commons-android-test")
 }
 

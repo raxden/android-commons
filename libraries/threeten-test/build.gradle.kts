@@ -1,4 +1,5 @@
 import com.raxdenstudios.publishing.model.Coordinates
+import com.raxdenstudios.publishing.model.Developer
 
 plugins {
     alias(libs.plugins.android.versioning)
@@ -19,9 +20,11 @@ publishLibrary {
     description = "Threeten test commons is a library with a set of useful classes to help to " +
             "developer to work with threeten."
     url = "https://github.com/raxden/android-commons"
-    developerId = "raxden"
-    developerName = "Ángel Gómez"
-    developerEmail = "raxden.dev@gmail.com"
+    developer = Developer(
+        id = "raxden",
+        name = "Ángel Gómez",
+        email = "raxden.dev@gmail.com",
+    )
     coordinates = Coordinates.default.copy(artifactId = "commons-threeten-test")
 }
 

@@ -125,8 +125,9 @@ timber-test = "1.0.1"
 # -------------------------------------------------------------------
 # Your artifacts
 # -------------------------------------------------------------------
-android-versioning = "0.57.19"
-android-publish-library = "0.57.19"
+android-versioning = "0.57.29"
+android-publish-library = "0.57.29"
+publish-platform = "0.57.29"
 
 commons-android = "5.0.26"
 commons-android-binding = "1.0.10"
@@ -373,6 +374,7 @@ test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
 # -------------------------------------------------------------------
 android-versioning = { id = "com.raxdenstudios.android-versioning", version.ref = "android-versioning" }
 android-publish-library = { id = "com.raxdenstudios.android-publish-library", version.ref = "android-publish-library" }
+publish-platform = { id = "com.raxdenstudios.publish-platform", version.ref = "publish-platform" }
 
 nmcp-aggregation = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
 nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
