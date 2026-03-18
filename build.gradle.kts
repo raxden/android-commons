@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.versioning) apply false
     alias(libs.plugins.android.publish.library) apply false
+    alias(libs.plugins.publish.platform) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.test.logger)
