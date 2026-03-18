@@ -30,5 +30,5 @@ publishLibrary {
 
 dependencies {
     api(libs.threetenabp)
-    api(libs.androidx.test.core)
+    api(libs.androidx.arch.core.testing)
 }

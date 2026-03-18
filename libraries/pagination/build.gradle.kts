@@ -30,5 +30,5 @@ publishLibrary {
 dependencies {
     implementation(libs.android.material)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
 }

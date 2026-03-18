@@ -31,5 +31,5 @@ dependencies {
     api(projects.libraries.android)
 
     api(platform(libs.androidx.compose.bom))
-    api(libs.androidx.compose.material)
+    api(libs.androidx.compose.material3)
 }

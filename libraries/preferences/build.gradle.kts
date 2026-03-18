@@ -32,7 +32,7 @@ dependencies {
     api(libs.androidx.preference.ktx)
     api(libs.gson)
 
-    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.test.junit.ktx)
     testImplementation(libs.robolectric)
 }
