@@ -127,7 +127,20 @@ jobs:
     if: always()
 
     steps:
+      - name: Check dependencies status
+        shell: bash
+        run: |
+          echo "Build status: ${{ needs.build.result }}"
+          echo "Test status: ${{ needs.test.result }}"
+          
+          if [[ "${{ needs.build.result }}" != "success" || "${{ needs.test.result }}" != "success" ]]; then
+            echo "❌ One or more jobs failed"
+            exit 1
+          fi
+          
+          echo "✅ All jobs succeeded"
+      
       - name: Final summary
         shell: bash
         run: |
-          echo "Workflow completed with status: ${{ job.status }}"
+          echo "Workflow completed successfully"
