@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.raxdenstudios.commons.core.Answer
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
@@ -165,6 +166,62 @@ internal class AnswerExtensionTest {
             assertThat(result.isFailure).isTrue()
             assertThat(result).isEqualTo(Answer.Failure("originalValue"))
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `use thenFailure when result is success`() = runTest {
+        val flowData = flowOf(Answer.Success("originalValue"))
+
+        flowData.thenFailure { "otherValue" }.test {
+            val result = awaitItem()
+            assertThat(result.isSuccess).isTrue()
+            assertThat(result).isEqualTo(Answer.Success("originalValue"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `use thenFailure when result is failure`() = runTest {
+        val flowData = flowOf(Answer.Failure("originalValue"))
+
+        flowData.thenFailure { "otherValue" }.test {
+            val result = awaitItem()
+            assertThat(result.isFailure).isTrue()
+            assertThat(result).isEqualTo(Answer.Failure("otherValue"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `use toAnswer with successful flow`() = runTest {
+        val flowData = flowOf("value1", "value2")
+
+        flowData.toAnswer().test {
+            val result1 = awaitItem()
+            assertThat(result1.isSuccess).isTrue()
+            assertThat(result1).isEqualTo(Answer.Success("value1"))
+
+            val result2 = awaitItem()
+            assertThat(result2.isSuccess).isTrue()
+            assertThat(result2).isEqualTo(Answer.Success("value2"))
+
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `use toAnswer with flow that throws exception`() = runTest {
+        val flowData = flow {
+            emit("value")
+            error("Test error")
+        }
+
+        flowData.toAnswer().test {
+            val result1 = awaitItem()
+            assertThat(result1.isSuccess).isTrue()
+            assertThat(result1).isEqualTo(Answer.Success("value"))
+            awaitComplete()
         }
     }
 }
