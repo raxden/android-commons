@@ -200,21 +200,17 @@ class AdvancedPreferencesTest {
     @Test
     fun `persist a random values, get all preferences and verify that preferences exists`() {
         defaultPreferences.edit {
-            put("key", "string")
-            put("key", 23)
-            put("key", 12f)
-            put("key", 42L)
+            put("key_string", "string")
+            put("key_int", 23)
+            put("key_float", 12f)
+            put("key_long", 42L)
         }
 
-        assertEquals(
-            mapOf(
-                "key" to "string",
-                "key" to 23,
-                "key" to 12f,
-                "key" to 42L
-            ),
-            defaultPreferences.getAll()
-        )
+        val allPrefs = defaultPreferences.getAll()
+        assertEquals("string", allPrefs["key_string"])
+        assertEquals(23, allPrefs["key_int"])
+        assertEquals(12f, allPrefs["key_float"])
+        assertEquals(42L, allPrefs["key_long"])
     }
 
     data class TestObject(val key: String, val value: String) : Comparable<TestObject> {
