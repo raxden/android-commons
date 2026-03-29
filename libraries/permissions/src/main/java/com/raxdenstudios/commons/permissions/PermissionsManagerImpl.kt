@@ -13,8 +13,8 @@ import com.raxdenstudios.commons.permissions.model.Permission
 class PermissionsManagerImpl : PermissionsManager {
 
     private val activityHolder: ActivityHolder = ActivityHolder()
-    private lateinit var _permissionResultLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var _permissionsCallbacks: PermissionsManager.Callbacks
+    private var _permissionResultLauncher: ActivityResultLauncher<Array<String>>? = null
+    private var _permissionsCallbacks: PermissionsManager.Callbacks = PermissionsManager.Callbacks()
 
     override fun attach(activity: ComponentActivity) {
         activityHolder.attach(activity)
@@ -45,7 +45,7 @@ class PermissionsManagerImpl : PermissionsManager {
     private fun handleRegisterPermissionsResult(
         result: Map<String, Boolean>
     ) {
-        result.entries.map { entryPermissions ->
+        result.entries.forEach { entryPermissions ->
             val isGranted = entryPermissions.value
             val permission = Permission.fromValue(entryPermissions.key)
             when {
@@ -81,10 +81,10 @@ class PermissionsManagerImpl : PermissionsManager {
     }
 
     private fun performRequestPermission(permissions: List<Permission>) {
+        if (permissions.isEmpty()) return
+        
         val arrayPermissions = permissions.map { it.value }.toTypedArray()
-        if (this::_permissionResultLauncher.isInitialized) {
-            _permissionResultLauncher.launch(arrayPermissions)
-        }
+        _permissionResultLauncher?.launch(arrayPermissions)
     }
 
     private fun shouldShowRequestPermissionRationale(permission: Permission) =

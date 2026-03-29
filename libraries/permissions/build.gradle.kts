@@ -33,4 +33,7 @@ dependencies {
     api(projects.libraries.android)
 
     implementation(libs.android.material)
+
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk.android)
 }
