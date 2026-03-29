@@ -21,6 +21,48 @@ runs:
   steps:
 
     # --------------------------------
+    # Extract modules and patterns from settings.gradle.kts
+    # --------------------------------
+    - name: Extract modules from settings.gradle.kts
+      id: extract_modules
+      shell: bash
+      run: |
+        set -euo pipefail
+        
+        echo "Extracting modules from settings.gradle.kts..."
+        
+        # Extract module names as JSON array
+        # Example: include(":libraries:core") -> ":libraries:core"
+        modules=$(grep -E '^include\(":libraries:' settings.gradle.kts \
+          | sed 's/include("\(.*\)")/\1/' \
+          | jq -R . \
+          | jq -s -c .)
+        
+        echo "Modules JSON: $modules"
+        echo "Total modules: $(echo "$modules" | jq 'length')"
+        
+        # Extract module paths and convert to file patterns for change detection
+        # Example: :libraries:core -> libraries/core/**
+        module_patterns=$(grep -E '^include\(":libraries:' settings.gradle.kts \
+          | sed 's/include(":\(.*\)")/\1/' \
+          | sed 's/:/\//g' \
+          | sed 's|$|/**|' \
+          | paste -sd '\n' -)
+        
+        echo "Module patterns for change detection:"
+        echo "$module_patterns"
+        
+        # Save modules JSON to output
+        echo "modules=$modules" >> "$GITHUB_OUTPUT"
+        
+        # Save patterns to output (multiline)
+        {
+          echo 'patterns<<EOF'
+          echo "$module_patterns"
+          echo 'EOF'
+        } >> "$GITHUB_OUTPUT"
+
+    # --------------------------------
     # Detect changed files (only if needed)
     # --------------------------------
     - name: Detect changed files
@@ -28,8 +70,7 @@ runs:
       if: ${{ inputs.modules == '' }}
       uses: tj-actions/changed-files@v45
       with:
-        files: |
-          libraries/**
+        files: ${{ steps.extract_modules.outputs.patterns }}
 
     # --------------------------------
     # Resolve modules
@@ -48,15 +89,13 @@ runs:
 
           # Check if input is "all"
           if [[ "$input_modules" == "all" ]]; then
-            echo "Getting all modules from settings.gradle.kts..."
+            echo "Using all modules from settings.gradle.kts..."
             
-            # Extract all library modules from settings.gradle.kts
-            modules=$(grep -E '^include\(":libraries:' settings.gradle.kts \
-              | sed 's/include("\(.*\)")/\1/' \
-              | jq -R . \
-              | jq -s -c .)
+            # Reuse modules already extracted in the first step
+            modules='${{ steps.extract_modules.outputs.modules }}'
             
-            echo "All modules detected: $modules"
+            echo "All modules: $modules"
+            echo "Total: $(echo "$modules" | jq 'length') modules"
           else
             modules="$input_modules"
             
