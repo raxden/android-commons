@@ -1,8 +1,8 @@
 # Android Commons
 
-[![Continuous Delivery](https://github.com/raxden/android-commons/workflows/Continuous%20Delivery/badge.svg)](https://github.com/raxden/android-commons/actions/workflows/deploy_library.yml)
+[![Continuous Delivery](https://github.com/raxden/android-commons/workflows/Continuous%20Delivery/badge.svg)](https://github.com/raxden/android-commons/actions/workflows/ci_publish.yml)
 [![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg?token=E55S5DHJ9B)](https://codecov.io/gh/raxden/android-commons)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
+[![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-bom.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-bom)
 [![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -22,29 +22,31 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 
 ## 📚 Available Modules
 
-| Module | Description | Latest Version |
-|--------|-------------|----------------|
+| Module | Description | Documentation | Latest Version |
+|--------|-------------|---------------|----------------|
+| **Bill of Materials** |
+| `commons-bom` | BOM for version management | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-bom.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-bom) |
 | **Core & Android** |
-| `commons-core` | Core utilities and extensions | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-core.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-core) |
-| `commons-android` | Android-specific utilities and extensions | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-android) |
-| `commons-android-binding` | View binding utilities | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-binding.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-android-binding) |
-| `commons-android-compose` | Jetpack Compose utilities | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-compose.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-android-compose) |
-| `commons-android-test` | Android testing utilities | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-test.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-android-test) |
+| `commons-core` | Core utilities and extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-core.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-core) |
+| `commons-android` | Android-specific utilities and extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android) |
+| `commons-android-binding` | View binding utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-binding.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-binding) |
+| `commons-android-compose` | Jetpack Compose utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-compose.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-compose) |
+| `commons-android-test` | Android testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-test) |
 | **Async & Concurrency** |
-| `commons-coroutines` | Kotlin Coroutines extensions | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-coroutines) |
-| `commons-coroutines-test` | Coroutines testing utilities | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines-test.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-coroutines-test) |
+| `commons-coroutines` | Kotlin Coroutines extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines) |
+| `commons-coroutines-test` | Coroutines testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines-test) |
 | **Networking** |
-| `commons-network` | Network utilities and interceptors | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-network.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-network) |
+| `commons-network` | Network utilities and interceptors | [📖 Docs](libraries/network/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-network.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-network) |
 | **Pagination** |
-| `commons-pagination` | Base pagination framework | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-pagination) |
-| `commons-pagination-co` | Coroutines-based pagination | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination-co.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-pagination-co) |
+| `commons-pagination` | Base pagination framework | [📖 Docs](libraries/pagination/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-pagination) |
+| `commons-pagination-co` | Coroutines-based pagination | [📖 Docs](libraries/pagination/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination-co.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-pagination-co) |
 | **Permissions** |
-| `commons-permissions` | Runtime permissions management | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-permissions.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-permissions) |
+| `commons-permissions` | Runtime permissions management | [📖 Docs](libraries/permissions/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-permissions.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-permissions) |
 | **Storage** |
-| `commons-preferences` | Advanced SharedPreferences wrapper | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-preferences) |
+| `commons-preferences` | Advanced SharedPreferences wrapper | [📖 Docs](libraries/preferences/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-preferences) |
 | **Date & Time** |
-| `commons-threeten` | ThreeTen date/time utilities | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threeten.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-threeten) |
-| `commons-threeten-test` | ThreeTen testing utilities | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threeten-test.svg)](https://search.maven.org/artifact/com.raxdenstudios/commons-threeten-test) |
+| `commons-threeten` | ThreeTen date/time utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threeten.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threeten) |
+| `commons-threeten-test` | ThreeTen testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threeten-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threeten-test) |
 
 ## 🚀 Getting Started
 
@@ -57,125 +59,40 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 
 ### Installation
 
-Add the desired modules to your `build.gradle.kts`:
+#### Using BOM (Bill of Materials) 🎯
+
+The **Bill of Materials (BOM)** manages all library versions automatically, ensuring compatibility between modules.
+
+**Latest BOM version:** [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-bom.svg)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-bom)
 
 ```kotlin
 dependencies {
-    // Core modules
-    implementation("com.raxdenstudios:commons-core:x.y.z")
-    implementation("com.raxdenstudios:commons-android:x.y.z")
+    // Import the BOM with the latest version (check badge above)
+    implementation(platform("com.raxdenstudios:commons-bom:<latest-version>"))
     
-    // Coroutines support
-    implementation("com.raxdenstudios:commons-coroutines:x.y.z")
-    testImplementation("com.raxdenstudios:commons-coroutines-test:x.y.z")
+    // Add modules without specifying versions
+    implementation("com.raxdenstudios:commons-core")
+    implementation("com.raxdenstudios:commons-android")
+    implementation("com.raxdenstudios:commons-coroutines")
+    implementation("com.raxdenstudios:commons-network")
+    implementation("com.raxdenstudios:commons-pagination")
+    implementation("com.raxdenstudios:commons-pagination-co")
+    implementation("com.raxdenstudios:commons-permissions")
+    implementation("com.raxdenstudios:commons-preferences")
+    implementation("com.raxdenstudios:commons-threeten")
     
-    // Networking
-    implementation("com.raxdenstudios:commons-network:x.y.z")
-    
-    // Pagination
-    implementation("com.raxdenstudios:commons-pagination:x.y.z")
-    implementation("com.raxdenstudios:commons-pagination-co:x.y.z")
-    
-    // Permissions
-    implementation("com.raxdenstudios:commons-permissions:x.y.z")
-    
-    // Preferences
-    implementation("com.raxdenstudios:commons-preferences:x.y.z")
-    
-    // Date & Time
-    implementation("com.raxdenstudios:commons-threeten:x.y.z")
-    testImplementation("com.raxdenstudios:commons-threeten-test:x.y.z")
-    
-    // Testing
-    testImplementation("com.raxdenstudios:commons-android-test:x.y.z")
+    // Testing modules
+    testImplementation("com.raxdenstudios:commons-coroutines-test")
+    testImplementation("com.raxdenstudios:commons-threeten-test")
+    testImplementation("com.raxdenstudios:commons-android-test")
 }
 ```
 
-> **Note:** Replace `x.y.z` with the latest version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.raxdenstudios/commons-android)
-
-## 💡 Usage Examples
-
-### Preferences
-
-```kotlin
-// Create preferences instance
-val preferences = AdvancedPreferences.Default(context)
-
-// Save data with extension
-preferences.edit {
-    put("username", "john_doe")
-    put("age", 25)
-    put("settings", Settings(theme = "dark"))
-}
-
-// Read data
-val username = preferences.get("username", "")
-val age = preferences.get("age", 0)
-val settings = preferences.get("settings", Settings())
-```
-
-### Permissions
-
-```kotlin
-class MainActivity : ComponentActivity() {
-    private val permissionsManager = PermissionsManagerImpl()
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        permissionsManager.attach(this)
-        
-        // Request permissions
-        permissionsManager.requestPermission(
-            callbacks = PermissionsManager.Callbacks(
-                onGranted = { permission -> 
-                    // Permission granted
-                },
-                onDenied = { permission -> 
-                    // Permission denied
-                }
-            ),
-            Permission.Camera,
-            Permission.AccessFineLocation
-        )
-    }
-}
-```
-
-### Pagination
-
-```kotlin
-// Create pagination instance
-val pagination = CoPagination<Item>(
-    config = Pagination.Config.default,
-    coroutineScope = viewModelScope
-)
-
-// Request first page
-pagination.requestFirstPage(
-    pageRequest = { page, pageSize -> 
-        repository.getItems(page.value, pageSize.value)
-    },
-    pageResponse = { result ->
-        when (result) {
-            is PageResult.Loading -> showLoading()
-            is PageResult.Content -> showItems(result.items)
-            is PageResult.Error -> showError(result.error)
-            is PageResult.NoMoreResults -> hideLoadMore()
-        }
-    }
-)
-```
-
-### Network Interceptors
-
-```kotlin
-val okHttpClient = OkHttpClient.Builder()
-    .addInterceptor(AuthTokenInterceptor { getAuthToken() })
-    .addInterceptor(RetryInterceptor(maxRetries = 3))
-    .addInterceptor(NetworkMonitorInterceptor(networkMonitor))
-    .addInterceptor(HeadersInterceptor.userAgent("MyApp/1.0"))
-    .build()
-```
+**Benefits of using BOM:**
+- ✅ No need to specify versions for each module
+- ✅ Guaranteed compatibility between all modules
+- ✅ Easier updates - just change the BOM version
+- ✅ Prevents version conflicts
 
 ## 🧪 Testing
 
