@@ -33,8 +33,8 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | `commons-android-compose` | Jetpack Compose utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-compose.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-compose) |
 | `commons-android-test` | Android testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-test) |
 | **Async & Concurrency** |
-| `commons-coroutines` | Kotlin Coroutines extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines) |
-| `commons-coroutines-test` | Coroutines testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines-test) |
+| `commons-coroutines` | Kotlin Coroutines extensions | [📖 Docs](libraries/coroutines/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines) |
+| `commons-coroutines-test` | Coroutines testing utilities | [📖 Docs](libraries/coroutines/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines-test) |
 | **Networking** |
 | `commons-network` | Network utilities and interceptors | [📖 Docs](libraries/network/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-network.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-network) |
 | **Pagination** |
