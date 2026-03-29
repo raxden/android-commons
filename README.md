@@ -45,8 +45,8 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | **Storage** |
 | `commons-preferences` | Advanced SharedPreferences wrapper | [📖 Docs](libraries/preferences/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-preferences) |
 | **Date & Time** |
-| `commons-threeten` | ThreeTen date/time utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threeten.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threeten) |
-| `commons-threeten-test` | ThreeTen testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threeten-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threeten-test) |
+| `commons-threetenabp` | ThreeTenABP date/time utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threetenabp.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threetenabp) |
+| `commons-threetenabp-test` | ThreeTenABP testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threetenabp-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threetenabp-test) |
 
 ## 🚀 Getting Started
 
@@ -79,11 +79,11 @@ dependencies {
     implementation("com.raxdenstudios:commons-pagination-co")
     implementation("com.raxdenstudios:commons-permissions")
     implementation("com.raxdenstudios:commons-preferences")
-    implementation("com.raxdenstudios:commons-threeten")
+    implementation("com.raxdenstudios:commons-threetenabp")
     
     // Testing modules
     testImplementation("com.raxdenstudios:commons-coroutines-test")
-    testImplementation("com.raxdenstudios:commons-threeten-test")
+    testImplementation("com.raxdenstudios:commons-threetenabp-test")
     testImplementation("com.raxdenstudios:commons-android-test")
 }
 ```
