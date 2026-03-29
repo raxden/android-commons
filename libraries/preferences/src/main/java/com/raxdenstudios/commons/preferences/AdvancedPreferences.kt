@@ -51,7 +51,7 @@ sealed class AdvancedPreferences(
             is Set<*> -> sharedPreferencesEditor.putStringSet(key, value as Set<String>)
             is JSONObject -> sharedPreferencesEditor.putString(key, value.toString())
             is JSONArray -> sharedPreferencesEditor.putString(key, value.toString())
-            else -> sharedPreferencesEditor.putString(key, gson.toJson(value).toString())
+            else -> sharedPreferencesEditor.putString(key, gson.toJson(value))
         }.let { this }
     }
 
@@ -64,15 +64,27 @@ sealed class AdvancedPreferences(
     @Suppress("UNCHECKED_CAST")
     fun get(key: String, defaultValue: Any): Any = when (defaultValue) {
         is Int -> sharedPreferences.getInt(key, defaultValue)
-        is String -> sharedPreferences.getString(key, defaultValue) as String
+        is String -> sharedPreferences.getString(key, defaultValue) ?: defaultValue
         is Boolean -> sharedPreferences.getBoolean(key, defaultValue)
         is Float -> sharedPreferences.getFloat(key, defaultValue)
         is Long -> sharedPreferences.getLong(key, defaultValue)
-        is Set<*> -> sharedPreferences.getStringSet(key, defaultValue as Set<String>) as Set<String>
-        is JSONObject -> JSONObject(sharedPreferences.getString(key, defaultValue.toString()) ?: "")
-        is JSONArray -> JSONArray(sharedPreferences.getString(key, defaultValue.toString()))
+        is Set<*> -> sharedPreferences.getStringSet(key, defaultValue as? Set<String>) ?: defaultValue
+        is JSONObject -> try {
+            JSONObject(sharedPreferences.getString(key, null) ?: defaultValue.toString())
+        } catch (e: Exception) {
+            defaultValue
+        }
+        is JSONArray -> try {
+            JSONArray(sharedPreferences.getString(key, null) ?: defaultValue.toString())
+        } catch (e: Exception) {
+            defaultValue
+        }
         else -> sharedPreferences.getString(key, null)?.let {
-            gson.fromJson(it, defaultValue::class.java)
+            try {
+                gson.fromJson(it, defaultValue::class.java)
+            } catch (e: Exception) {
+                defaultValue
+            }
         } ?: defaultValue
     }
 }
