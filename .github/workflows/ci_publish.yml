@@ -185,33 +185,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           operation: cancel
 
-  publish:
-    name: Publish to Central (aggregation)
-    needs: [ build, test, computeChangedModules ]
-    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    steps:
-      - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - uses: ./.github/actions/setup
-
-      - name: Publish aggregation
-        uses: ./.github/actions/publish
-        with:
-          modules: ${{ needs.computeChangedModules.outputs.modulesWithBom }}
-          publishing-type: ${{ env.PUBLICATION_TYPE }}
-          username: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
-          password: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
-          signing-key: ${{ secrets.SIGNING_KEY }}
-          signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
-          signing-password: ${{ secrets.SIGNING_PASSWORD }}
-
   bump:
-    name: Bump version
-    needs: [ publish, computeChangedModules ]
+    name: Bump libraries version
+    needs: [ build, test, computeChangedModules ]
     if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -238,9 +214,41 @@ jobs:
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
 
+  publish-libraries:
+    name: Publish libraries to Central
+    needs: [ bump, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+
+      - uses: ./.github/actions/setup
+
+      - name: Pull latest changes (with bumped versions)
+        shell: bash
+        run: |
+          git pull --rebase origin ${{ github.ref_name }}
+
+      - name: Publish libraries only
+        uses: ./.github/actions/publish
+        with:
+          modules: ${{ needs.computeChangedModules.outputs.modules }}
+          publishing-type: ${{ env.PUBLICATION_TYPE }}
+          username: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+          password: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
+          signing-key: ${{ secrets.SIGNING_KEY }}
+          signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+          signing-password: ${{ secrets.SIGNING_PASSWORD }}
+
   bump-bom:
     name: Bump BOM version
-    needs: [ bump ]
+    needs: [ publish-libraries ]
     if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -254,11 +262,16 @@ jobs:
 
       - uses: ./.github/actions/setup
 
+      - name: Pull latest changes
+        shell: bash
+        run: |
+          git pull --rebase origin ${{ github.ref_name }}
+
       - name: Get PR info
         id: pr_info
         uses: ./.github/actions/pr_info
 
-      - name: Bump version
+      - name: Bump BOM version
         uses: ./.github/actions/bump_module_version
         with:
           version: ${{ steps.pr_info.outputs.bump }}
@@ -267,3 +280,35 @@ jobs:
           git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
+
+  publish-bom:
+    name: Publish BOM to Central
+    needs: [ bump-bom, computeChangedModules ]
+    if: ${{ needs.computeChangedModules.outputs.hasModules == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+
+      - uses: ./.github/actions/setup
+
+      - name: Pull latest changes (with bumped BOM version)
+        shell: bash
+        run: |
+          git pull --rebase origin ${{ github.ref_name }}
+
+      - name: Publish BOM
+        uses: ./.github/actions/publish
+        with:
+          modules: '["${{ env.BOM_MODULE }}"]'
+          publishing-type: ${{ env.PUBLICATION_TYPE }}
+          username: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+          password: ${{ secrets.CENTRAL_PORTAL_PASSWORD }}
+          signing-key: ${{ secrets.SIGNING_KEY }}
+          signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+          signing-password: ${{ secrets.SIGNING_PASSWORD }}
