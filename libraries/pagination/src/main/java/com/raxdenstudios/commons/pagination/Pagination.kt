@@ -5,14 +5,15 @@ import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
+import java.util.concurrent.ConcurrentHashMap
 
 @Suppress("TooManyFunctions")
 abstract class Pagination<T> {
 
     abstract val config: Config
-    abstract val logger: (message: String) -> Unit
+    abstract val logger: (message: () -> String) -> Unit
 
-    private val history: MutableMap<Page, List<T>> = mutableMapOf()
+    private val history: MutableMap<Page, List<T>> = ConcurrentHashMap()
     private var itemsLoaded: Int = 0
     private var status: Status = Status.Empty
     private var currentPage: Page? = null
@@ -98,15 +99,15 @@ abstract class Pagination<T> {
 
     private fun indexItsEndOfTheList(pageIndex: PageIndex, itemsLoaded: Int): Boolean {
         val endOfTheList = pageIndex.value >= (itemsLoaded - config.prefetchDistance)
-        logger("$endOfTheList <- ${pageIndex.value} >= ($itemsLoaded - ${config.prefetchDistance})")
+        logger { "$endOfTheList <- ${pageIndex.value} >= ($itemsLoaded - ${config.prefetchDistance})" }
         return endOfTheList
     }
 
     protected sealed class Status {
-        object Empty : Status()
-        object NotEmpty : Status()
-        object Loading : Status()
-        object NoMoreResults : Status()
+        data object Empty : Status()
+        data object NotEmpty : Status()
+        data object Loading : Status()
+        data object NoMoreResults : Status()
     }
 
     data class Config(

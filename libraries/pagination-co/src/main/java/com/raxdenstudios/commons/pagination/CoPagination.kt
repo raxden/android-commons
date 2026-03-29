@@ -9,12 +9,15 @@ import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 
 class CoPagination<T>(
     override val config: Config = Config.default,
-    override val logger: (message: String) -> Unit = {},
+    override val logger: (message: () -> String) -> Unit = {},
     private val coroutineScope: CoroutineScope,
 ) : Pagination<T>() {
+
+    private var currentJob: Job? = null
 
     fun requestFirstPage(
         pageRequest: suspend (page: Page, pageSize: PageSize) -> PageList<T>,
@@ -48,7 +51,8 @@ class CoPagination<T>(
         pageRequest: suspend (page: Page, pageSize: PageSize) -> PageList<T>,
         pageResponse: (pageResult: PageResult<T>) -> Unit,
     ) {
-        coroutineScope.launch(
+        currentJob?.cancel()
+        currentJob = coroutineScope.launch(
             onError = { error -> processRequestError(error, pageResponse) }
         ) {
             processRequestStart(pageResponse)
@@ -57,5 +61,10 @@ class CoPagination<T>(
                 pageResponse = pageResponse
             )
         }
+    }
+
+    fun cancelCurrentRequest() {
+        currentJob?.cancel()
+        currentJob = null
     }
 }

@@ -5,11 +5,17 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.raxdenstudios.commons.pagination.model.PageIndex
 
-fun LinearLayoutManager.toPageIndex(): PageIndex =
-    PageIndex(childCount + findFirstVisibleItemPosition())
+fun LinearLayoutManager.toPageIndex(): PageIndex {
+    val lastVisiblePosition = findFirstVisibleItemPosition() + childCount - 1
+    return PageIndex(lastVisiblePosition.coerceAtLeast(0))
+}
 
-fun LazyGridState.toPageIndex(): PageIndex =
-    PageIndex(layoutInfo.visibleItemsInfo.size + firstVisibleItemIndex)
+fun LazyGridState.toPageIndex(): PageIndex {
+    val lastVisibleIndex = firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size - 1
+    return PageIndex(lastVisibleIndex.coerceAtLeast(0))
+}
 
-fun LazyListState.toPageIndex(): PageIndex =
-    PageIndex(layoutInfo.visibleItemsInfo.size + firstVisibleItemIndex)
+fun LazyListState.toPageIndex(): PageIndex {
+    val lastVisibleIndex = firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size - 1
+    return PageIndex(lastVisibleIndex.coerceAtLeast(0))
+}
