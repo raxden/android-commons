@@ -14,7 +14,7 @@ on:
     inputs:
 
       modules:
-        description: 'JSON array of modules (e.g. [":libraries:core",":libraries:network"]). Leave empty for auto.'
+        description: 'JSON array of modules (e.g. [":libraries:core",":libraries:network"]), "all" for all modules, or leave empty for auto-detect.'
         required: false
         default: ''
 

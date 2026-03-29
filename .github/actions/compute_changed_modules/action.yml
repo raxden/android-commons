@@ -3,7 +3,7 @@ description: Detects changed modules and returns matrix JSON
 
 inputs:
   modules:
-    description: "Optional JSON array override"
+    description: "Optional JSON array override or 'all' to include all modules"
     required: false
     default: ""
 
@@ -44,10 +44,25 @@ runs:
         # Manual override
         # -------------------------
         if [[ -n '${{ inputs.modules }}' ]]; then
-          modules='${{ inputs.modules }}'
+          input_modules='${{ inputs.modules }}'
 
-          # Validate JSON
-          echo "$modules" | jq empty
+          # Check if input is "all"
+          if [[ "$input_modules" == "all" ]]; then
+            echo "Getting all modules from settings.gradle.kts..."
+            
+            # Extract all library modules from settings.gradle.kts
+            modules=$(grep -E '^include\(":libraries:' settings.gradle.kts \
+              | sed 's/include("\(.*\)")/\1/' \
+              | jq -R . \
+              | jq -s -c .)
+            
+            echo "All modules detected: $modules"
+          else
+            modules="$input_modules"
+            
+            # Validate JSON
+            echo "$modules" | jq empty
+          fi
 
         else
           # -------------------------
@@ -86,20 +101,28 @@ runs:
 
         matrix='${{ steps.resolve.outputs.value }}'
         count=$(echo "$matrix" | jq 'length')
+        input_modules='${{ inputs.modules }}'
 
         {
-          echo "## 🔍 Modules with Changes"
+          if [[ "$input_modules" == "all" ]]; then
+            echo "## 🔍 All Modules Selected"
+            echo ""
+            echo "🧩 **Total modules:** $count"
+          else
+            echo "## 🔍 Modules with Changes"
+            echo ""
+            if [[ "$count" -eq 0 ]]; then
+              echo "✅ **No modules changed**"
+            else
+              echo "🧩 **Modules affected:** $count"
+            fi
+          fi
+          
           echo ""
 
-          if [[ "$count" -eq 0 ]]; then
-            echo "✅ **No modules changed**"
+          if [[ "$count" -gt 0 ]]; then
+            echo "### 📦 Modules"
             echo ""
-          else
-            echo "🧩 **Modules affected:** $count"
-            echo ""
-            echo "### 📦 Affected modules"
-            echo ""
-
             echo "$matrix" | jq -r '.[] | "- `\(.)`"'
             echo ""
           fi
