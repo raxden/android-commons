@@ -9,10 +9,8 @@ class CacheLoggerInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
-        if (response.networkResponse != null)
-            printMessage("Response from network")
-        if (response.cacheResponse != null)
-            printMessage("(HIT) Response from cache")
+        response.networkResponse?.let { printMessage("Response from network") }
+        response.cacheResponse?.let { printMessage("(HIT) Response from cache") }
         return response
     }
 }

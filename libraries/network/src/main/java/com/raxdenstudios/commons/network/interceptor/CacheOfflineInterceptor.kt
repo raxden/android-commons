@@ -38,14 +38,14 @@ class CacheOfflineInterceptor(
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
-        var request = chain.request()
-
-        if (!isNetworkAvailable()) {
-            request = chain.request().newBuilder()
+        val request = if (!isNetworkAvailable()) {
+            chain.request().newBuilder()
                 .removeHeader(HEADER_PRAGMA)
                 .removeHeader(HEADER_CACHE_CONTROL)
                 .cacheControl(cacheControl)
                 .build()
+        } else {
+            chain.request()
         }
         return chain.proceed(request)
     }
