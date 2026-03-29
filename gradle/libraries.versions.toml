@@ -5,8 +5,8 @@
 # -------------------------------------------------------------------
 jdk = "17"
 minSdk = "24"
-targetSdk = "34"
-compileSdk = "36"
+targetSdk = "35"
+compileSdk = "35"
 sourceCompatibility = "17"
 targetCompatibility = "17"
 
