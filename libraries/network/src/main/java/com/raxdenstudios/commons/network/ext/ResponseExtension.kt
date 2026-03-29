@@ -32,7 +32,14 @@ internal fun <S : Any, E : Any> Int.toAnswer(
     bodyError: E? = null,
     message: String,
 ): Answer<S, NetworkError<E>> = when (this) {
-    in (200..399) -> Answer.Success(body!!)
+    in (200..399) -> body?.let { Answer.Success(it) }
+        ?: Answer.Failure(
+            NetworkError.Unknown(
+                code = this,
+                body = bodyError,
+                message = "Success response with null body"
+            )
+        )
     in (400..499) -> Answer.Failure(
         NetworkError.Client(
             code = this,
