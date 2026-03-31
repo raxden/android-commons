@@ -12,7 +12,7 @@ inputs:
     default: "AUTOMATIC"
 
   gradle-args:
-    description: 'Extra Gradle args'
+    description: 'Extra Gradle arguments'
     required: false
     default: '--no-configuration-cache'
 

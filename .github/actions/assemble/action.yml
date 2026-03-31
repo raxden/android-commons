@@ -22,7 +22,7 @@ inputs:
     default: ''
 
   gradle-args:
-    description: 'Extra Gradle args'
+    description: 'Extra Gradle arguments'
     required: false
     default: '--configuration-cache'
 
