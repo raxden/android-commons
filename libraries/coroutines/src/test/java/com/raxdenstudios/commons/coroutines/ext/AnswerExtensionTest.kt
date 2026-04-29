@@ -224,4 +224,48 @@ internal class AnswerExtensionTest {
             awaitComplete()
         }
     }
+
+    @Test
+    fun `use coCombine when both are success`() = runTest {
+        val answer1 = Answer.Success(5)
+        val answer2 = Answer.Success(10)
+
+        val result = answer1.coCombine(answer2) { a, b -> a + b }
+
+        assertTrue(result.isSuccess)
+        assertThat(result).isEqualTo(Answer.Success(15))
+    }
+
+    @Test
+    fun `use coCombine when first is failure`() = runTest {
+        val answer1: Answer<Int, String> = Answer.Failure("error1")
+        val answer2 = Answer.Success(10)
+
+        val result = answer1.coCombine(answer2) { a, b -> a + b }
+
+        assertTrue(result.isFailure)
+        assertThat(result).isEqualTo(Answer.Failure("error1"))
+    }
+
+    @Test
+    fun `use coCombine when second is failure`() = runTest {
+        val answer1 = Answer.Success(5)
+        val answer2: Answer<Int, String> =  Answer.Failure("error2")
+
+        val result = answer1.coCombine(answer2) { a, b -> a + b }
+
+        assertTrue(result.isFailure)
+        assertThat(result).isEqualTo(Answer.Failure("error2"))
+    }
+
+    @Test
+    fun `use coCombine when both are failure`() = runTest {
+        val answer1: Answer<Int, String> = Answer.Failure("error1")
+        val answer2: Answer<Int, String> = Answer.Failure("error2")
+
+        val result = answer1.coCombine(answer2) { a, b -> a + b }
+
+        assertTrue(result.isFailure)
+        assertThat(result).isEqualTo(Answer.Failure("error1"))
+    }
 }
