@@ -69,5 +69,17 @@ fun <T, R, E> Flow<Answer<T, E>>.thenFailure(
     map { result -> result.coThenFailure { function(it) } }
 
 fun <T> Flow<T>.toAnswer() =
-    map { stations -> Answer.Success(stations) }
+    map { data -> Answer.Success(data) }
         .catch { error -> Answer.Failure(error) }
+
+@Suppress("UNCHECKED_CAST")
+suspend fun <T1, T2, R, E> Answer<T1, E>.coCombine(
+    other: Answer<T2, E>,
+    transform: suspend (T1, T2) -> R
+): Answer<R, E> = when (this) {
+    is Answer.Failure -> this as Answer<R, E>
+    is Answer.Success -> when (other) {
+        is Answer.Failure -> other as Answer<R, E>
+        is Answer.Success -> Answer.Success(transform(this.value, other.value))
+    }
+}

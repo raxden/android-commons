@@ -1,6 +1,8 @@
 package com.raxdenstudios.commons.permissions.model
 
 import android.Manifest
+import android.os.Build
+import androidx.annotation.RequiresApi
 
 sealed class Permission(
     val value: String,
@@ -41,6 +43,11 @@ sealed class Permission(
         value = Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    data object PostNotifications : Permission(
+        value = Manifest.permission.POST_NOTIFICATIONS,
+    )
+
     data class Other(
         val permission: String
     ) : Permission(
@@ -55,6 +62,7 @@ sealed class Permission(
          * @param value
          * @return
          */
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         fun fromValue(value: String): Permission = when (value) {
             Manifest.permission.CAMERA -> Camera
             Manifest.permission.ACCESS_FINE_LOCATION -> AccessFineLocation
@@ -65,6 +73,7 @@ sealed class Permission(
             Manifest.permission.CALL_PHONE -> CallPhone
             Manifest.permission.READ_EXTERNAL_STORAGE -> ReadExternalStorage
             Manifest.permission.WRITE_EXTERNAL_STORAGE -> WriteExternalStorage
+            Manifest.permission.POST_NOTIFICATIONS -> PostNotifications
             else -> Other(value)
         }
     }

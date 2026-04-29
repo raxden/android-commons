@@ -70,3 +70,15 @@ fun <T, E> Answer<T, E>.onFailure(
     is Answer.Failure -> also { function(value) }
     is Answer.Success -> this
 }
+
+@Suppress("UNCHECKED_CAST")
+fun <T1, T2, R, E> Answer<T1, E>.combine(
+    other: Answer<T2, E>,
+    transform: (T1, T2) -> R
+): Answer<R, E> = when (this) {
+    is Answer.Failure -> this as Answer<R, E>
+    is Answer.Success -> when (other) {
+        is Answer.Failure -> other as Answer<R, E>
+        is Answer.Success -> Answer.Success(transform(this.value, other.value))
+    }
+}
