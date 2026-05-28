@@ -3,6 +3,7 @@
 package com.raxdenstudios.commons.coroutines.ext
 
 import com.raxdenstudios.commons.core.Answer
+import com.raxdenstudios.commons.core.ext.fold
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -67,6 +68,11 @@ fun <T, R, E> Flow<Answer<T, E>>.thenFailure(
     function: (value: E) -> R
 ): Flow<Answer<T, R>> =
     map { result -> result.coThenFailure { function(it) } }
+
+suspend fun <T, E> Flow<Answer<T, E>>.collectResult(
+    onSuccess: (T) -> Unit,
+    onFailure: (E) -> Unit,
+) = collect { result -> result.fold(onSuccess, onFailure) }
 
 fun <T> Flow<T>.toAnswer() =
     map { data -> Answer.Success(data) }

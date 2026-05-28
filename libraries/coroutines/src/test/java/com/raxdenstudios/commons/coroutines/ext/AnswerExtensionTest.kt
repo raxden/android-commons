@@ -268,4 +268,30 @@ internal class AnswerExtensionTest {
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(Answer.Failure("error1"))
     }
+
+    @Test
+    fun `use collectResult when result is success`() = runTest {
+        val flowData = flowOf(Answer.Success("originalValue"))
+        var successValue: String? = null
+
+        flowData.collectResult(
+            onSuccess = { successValue = it },
+            onFailure = { },
+        )
+
+        assertThat(successValue).isEqualTo("originalValue")
+    }
+
+    @Test
+    fun `use collectResult when result is failure`() = runTest {
+        val flowData = flowOf(Answer.Failure("errorValue"))
+        var failureValue: String? = null
+
+        flowData.collectResult(
+            onSuccess = { },
+            onFailure = { failureValue = it },
+        )
+
+        assertThat(failureValue).isEqualTo("errorValue")
+    }
 }
