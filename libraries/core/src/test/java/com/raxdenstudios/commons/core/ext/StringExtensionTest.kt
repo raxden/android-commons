@@ -1,7 +1,9 @@
 package com.raxdenstudios.commons.core.ext
 
+import com.google.common.truth.Truth.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.Locale
 
 internal class StringExtensionTest {
 
@@ -43,47 +45,56 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `toMD5 should return value`() {
-        val value = "Generando un MD5 de un texto"
+    fun `Given a string with US decimal format, When toDouble is called with US locale, Then return correct Double`() {
+        val value = "123.45"
 
-        assertEquals("5df9f63916ebf8528697b629022993e8", value.toMD5())
+        val result = value.toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(123.45)
     }
 
     @Test
-    fun `toSHA256 should return value`() {
-        val value = "Generando un SHA256 de un texto"
+    fun `Given a string with German decimal format, When toDouble is called with German locale, Then return correct Double`() {
+        val value = "123,45"
 
-        assertEquals(
-            "b2303cd72f71b642f9c57d2b053ecd6521608b4b2f3045cae612090c472c9eff",
-            value.toSHA256()
-        )
+        val result = value.toDouble(Locale.GERMANY)
+
+        assertThat(result).isEqualTo(123.45)
     }
 
     @Test
-    fun `toSHA256 with UTF_16 should return value`() {
-        val value = "Generando un SHA256 de un texto"
+    fun `Given a string with surrounding whitespace, When toDouble is called, Then trim and return correct Double`() {
+        val value = "  123.45  "
 
-        assertEquals(
-            "018e20b7fb568de01403bec144096b34a6bda4c581127bb3298765b2f6fbfa92",
-            value.toSHA256(Charsets.UTF_16)
-        )
+        val result = value.toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(123.45)
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `toSHA512 should return value`() {
-        val value = "Generando un SHA512 de un texto"
+    fun `Given an invalid string, When toDouble is called, Then return 0_0`() {
+        val value = "not-a-number"
 
-        assertEquals(
-            "98096d5bf12e56948667b96ef96561a1813b38353b8434eaf950c61603b80e14a023b66dcdeb80c484b19902cb0818fb40607a15f67b0ca4efa7f37291353c59",
-            value.toSHA512()
-        )
+        val result = value.toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(0.0)
     }
 
     @Test
-    fun `Given a random text, When toMD5 extension is called, Then random text is codified to MD5`() {
-        val result = "Generando un MD5 de un texto".toMD5()
+    fun `Given an empty string, When toDouble is called, Then return 0_0`() {
+        val value = ""
 
-        assertEquals("5df9f63916ebf8528697b629022993e8", result)
+        val result = value.toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(0.0)
+    }
+
+    @Test
+    fun `Given a string in scientific notation, When toDouble is called, Then fallback to toDoubleOrNull and return correct Double`() {
+        val value = "1.5e2"
+
+        val result = value.toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(1.5)
     }
 }
