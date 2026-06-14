@@ -1,66 +1,36 @@
 package task
 
+import extension.downloadRepository
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
-import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.register
 import java.io.File
-import java.net.URL
+import java.net.URI
 
 open class DownloadGradleDependencies : DefaultTask() {
 
     @TaskAction
     fun execute() {
-        println("  Downloading Gradle Dependencies...")
-
         downloadConventionsRepository()
     }
 
     private fun downloadConventionsRepository() {
-        println("  ... downloading 'conventions' files from $GIT_CONVENTIONS_SOURCE...")
+        val separator = "─".repeat(SEPARATOR_LENGTH)
+        println()
+        println("  ┌$separator")
+        println("  │  Downloading Gradle Conventions")
+        println("  │  $GIT_CONVENTIONS_SOURCE")
+        println("  ├$separator")
 
-        val source = URL(GIT_CONVENTIONS_SOURCE)
+        val source = URI.create(GIT_CONVENTIONS_SOURCE).toURL()
         val destination = File(project.rootDir.path + "/build-logic/")
-        val outputDir = downloadRepository(source, destination)
+        val outputDir = project.downloadRepository(source, destination)
 
-        println("  ... files downloaded to ${outputDir.absolutePath}!")
-    }
-
-    private fun downloadRepository(
-        repository: URL,
-        destination: File,
-    ): File {
-        val zipFile = File("${project.rootDir.path}/${repository.path.hashCode()}.zip")
-        val outputDir = destination.also {
-            it.mkdirs()
-            it.deleteRecursively()
-        }
-
-        repository.downloadToFile(zipFile)
-
-        project.copy {
-            from(project.zipTree(zipFile))
-            into(outputDir)
-            duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        }
-
-        outputDir.listFiles()?.firstOrNull()?.run {
-            listFiles()?.forEach { file -> file.renameTo(File(outputDir, file.name)) }
-            deleteRecursively()
-        }
-
-        zipFile.delete()
-
-        return outputDir
-    }
-
-    private fun URL.downloadToFile(output: File) {
-        openStream().use { input ->
-            output.outputStream().use { output ->
-                input.copyTo(output)
-            }
-        }
+        println("  ├$separator")
+        println("  │  Saved to ${outputDir.absolutePath}")
+        println("  └$separator")
+        println()
     }
 
     companion object {
@@ -69,6 +39,8 @@ open class DownloadGradleDependencies : DefaultTask() {
         private const val GROUP_TASK_NAME = "dependencies"
         private const val GIT_CONVENTIONS_SOURCE =
             "https://github.com/raxden/android-convention/archive/refs/heads/master.zip"
+
+        private const val SEPARATOR_LENGTH = 85
 
         fun register(project: Project) {
             project.tasks.register<DownloadGradleDependencies>(TASK_NAME) {

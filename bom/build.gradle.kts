@@ -33,6 +33,7 @@ dependencies {
         api(projects.libraries.android)
         api(projects.libraries.androidBinding)
         api(projects.libraries.androidCompose)
+        api(projects.libraries.androidRoom)
         api(projects.libraries.androidTest)
         api(projects.libraries.core)
         api(projects.libraries.coroutines)

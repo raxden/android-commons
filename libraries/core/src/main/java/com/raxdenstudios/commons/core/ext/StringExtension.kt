@@ -18,7 +18,7 @@ fun String.ifEmptyThen(text: String): String {
     return this.ifEmpty { text }
 }
 
-fun String.toDouble(locale: Locale = Locale.getDefault()): Double = try {
+fun String.toDouble(locale: Locale = Locale.US): Double = try {
     NumberFormat.getInstance(locale)
         .parse(trim())?.toDouble() ?: 0.0
 } catch (_: ParseException) {
