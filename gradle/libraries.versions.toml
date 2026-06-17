@@ -4,9 +4,9 @@
 # Toolchain / SDK
 # -------------------------------------------------------------------
 jdk = "17"
-minSdk = "24"
-targetSdk = "35"
-compileSdk = "35"
+minSdk = "26"
+targetSdk = "36"
+compileSdk = "36"
 sourceCompatibility = "17"
 targetCompatibility = "17"
 
@@ -62,6 +62,7 @@ firebase-appdistribution = "5.2.1"
 firebase-crashlytics = "3.0.6"
 google-services-plugin = "4.4.4"
 play-services-location = "21.3.0"
+play-review = "2.0.2"
 gradle-secrets = "2.0.1"
 
 # -------------------------------------------------------------------
@@ -79,7 +80,7 @@ network-response-adapter = "5.0.0"
 gson = "2.13.2"
 json = "20251224"
 threetenabp = "1.4.9"
-gander = "3.1.0"
+chucker = "4.2.0"
 timber = "5.0.1"
 gradle-play-publisher = "4.0.0"
 
@@ -87,7 +88,7 @@ gradle-play-publisher = "4.0.0"
 # DI / DB
 # -------------------------------------------------------------------
 hilt = "2.59.2"
-koin = "4.1.1"
+koin = "4.2.1"
 room = "2.8.4"
 
 # -------------------------------------------------------------------
@@ -97,6 +98,7 @@ accompanist = "0.36.0"
 coil = "2.7.0"
 glide = "4.13.2"
 landscapist = "2.9.5"
+compose-charts = "0.0.13"
 
 # -------------------------------------------------------------------
 # Debug / QA / Analysis
@@ -127,8 +129,10 @@ android-versioning = "0.57.30"
 android-publish-library = "0.57.30"
 android-publish-platform = "0.57.30"
 
-commons-bom = "1.0.3"
-commons-preferences = "5.0.10"
+commons-bom = "1.3.6"
+platform-bom = "1.0.2"
+component-bom = "1.0.2"
+junit-jupiter = "5.10.0"
 
 [libraries]
 
@@ -203,6 +207,8 @@ landscapist-palette = { module = "com.github.skydoves:landscapist-palette", vers
 landscapist-animation = { module = "com.github.skydoves:landscapist-animation", version.ref = "landscapist" }
 landscapist-placeholder = { module = "com.github.skydoves:landscapist-placeholder", version.ref = "landscapist" }
 
+compose-charts = { module = "io.github.ehsannarmani:compose-charts", version.ref = "compose-charts" }
+
 # -------------------------------------------------------------------
 # Firebase (use BOM)
 # -------------------------------------------------------------------
@@ -215,6 +221,7 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 # Play services
 # -------------------------------------------------------------------
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "play-review" }
 
 # -------------------------------------------------------------------
 # Hilt
@@ -238,6 +245,8 @@ koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-view
 # KotlinX
 # -------------------------------------------------------------------
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
+coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
@@ -288,22 +297,25 @@ truth = { module = "com.google.truth:truth", version.ref = "truth" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 timber-test = { module = "net.lachlanmckee:timber-junit-rule", version.ref = "timber-test" }
 restmock = { module = "com.github.andrzejchm.RESTMock:android", version.ref = "rest-mock" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.10.0" }
 
 # -------------------------------------------------------------------
 # Logging / Misc
 # -------------------------------------------------------------------
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 threetenabp = { module = "com.jakewharton.threetenabp:threetenabp", version.ref = "threetenabp" }
-gander-debug = { module = "com.ashokvarma.android:gander-imdb", version.ref = "gander" }
-gander-release = { module = "com.ashokvarma.android:gander-no-op", version.ref = "gander" }
+chucker-debug = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
+chucker-release = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 
 # -------------------------------------------------------------------
-# Your published libs
+# RaxdenStudios - Android commonts libs
 # -------------------------------------------------------------------
 commons-bom = { module = "com.raxdenstudios:commons-bom", version.ref = "commons-bom" }
 commons-android = { module = "com.raxdenstudios:commons-android" }
 commons-android-binding = { module = "com.raxdenstudios:commons-android-binding" }
 commons-android-compose = { module = "com.raxdenstudios:commons-android-compose" }
+commons-android-room = { module = "com.raxdenstudios:commons-android-room" }
 commons-android-test = { module = "com.raxdenstudios:commons-android-test" }
 commons-core = { module = "com.raxdenstudios:commons-core" }
 commons-coroutines = { module = "com.raxdenstudios:commons-coroutines" }
@@ -311,9 +323,27 @@ commons-coroutines-test = { module = "com.raxdenstudios:commons-coroutines-test"
 commons-network = { module = "com.raxdenstudios:commons-network" }
 commons-pagination-co = { module = "com.raxdenstudios:commons-pagination-co" }
 commons-permissions = { module = "com.raxdenstudios:commons-permissions" }
-commons-preferences = { module = "com.raxdenstudios:commons-preferences", version.ref = "commons-preferences" }
-commons-threetenabp = { module = "com.raxdenstudios:commons-threeten" }
-commons-threetenabp-test = { module = "com.raxdenstudios:commons-threeten-test" }
+commons-preferences = { module = "com.raxdenstudios:commons-preferences" }
+commons-threetenabp = { module = "com.raxdenstudios:commons-threetenabp" }
+commons-threetenabp-test = { module = "com.raxdenstudios:commons-threetenabp-test" }
+
+# -------------------------------------------------------------------
+# RaxdenStudios - Android platform libs
+# -------------------------------------------------------------------
+
+platform-bom = { module = "com.raxdenstudios:platform-bom", version.ref = "platform-bom" }
+platform-core = { module = "com.raxdenstudios:platform-core" }
+platform-ui = { module = "com.raxdenstudios:platform-ui" }
+platform-device = { module = "com.raxdenstudios:platform-device" }
+platform-network = { module = "com.raxdenstudios:platform-network" }
+
+# -------------------------------------------------------------------
+# RaxdenStudios - Android component libs
+# -------------------------------------------------------------------
+
+component-bom = { module = "com.raxdenstudios:component-bom", version.ref = "component-bom" }
+component-rating = { module = "com.raxdenstudios:component-rating" }
+component-permission = { module = "com.raxdenstudios:component-permission" }
 
 # -------------------------------------------------------------------
 # Build-logic / plugin classpath dependencies (included build)
@@ -329,7 +359,6 @@ rootcoverage-gradlePlugin = { module = "nl.neotech.plugin.rootcoverage:nl.neotec
 # Detekt 2.x artifacts
 detekt-gradlePlugin = { module = "dev.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 detekt-formatting = { module = "dev.detekt:detekt-formatting", version.ref = "detekt" }
-
 
 [plugins]
 
@@ -409,6 +438,10 @@ android-project-conventions = { id = "android-project-conventions" }
 # -------------------------------------------------------------------
 # Bundles
 # -------------------------------------------------------------------
+android-material = [
+    "android-material",
+    "timber",
+]
 
 android-compose = [
     "androidx-core-ktx",
@@ -503,6 +536,8 @@ test = [
     "androidx-test-junit-ktx",
     "androidx-test-rules",
     "androidx-test-runner",
+    "junit-jupiter",
+    "junit-platform-launcher",
     "mockk-android",
     "timber-test",
     "truth",
