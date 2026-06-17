@@ -1,9 +1,8 @@
+
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import extension.getProperty
+import extension.getPublicationName
 import java.time.Duration
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 plugins {
@@ -95,17 +94,4 @@ tasks {
             println(org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION)
         }
     }
-}
-
-private fun getPublicationName(): String {
-    val gitShortSha = runCatching {
-        val p = ProcessBuilder("git", "rev-parse", "--short=7", "HEAD")
-            .redirectErrorStream(true)
-            .start()
-        val out = p.inputStream.bufferedReader().readText().trim()
-        if (p.waitFor() == 0 && out.isNotBlank()) out else null
-    }.getOrNull()
-    val utcStamp = ZonedDateTime.now(ZoneOffset.UTC)
-        .format(DateTimeFormatter.ofPattern("yyyyMMdd.HHmmss"))
-    return listOfNotNull(utcStamp, gitShortSha).joinToString("+")
 }
