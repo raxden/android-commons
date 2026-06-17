@@ -1,5 +1,5 @@
 name: Compute changed modules
-description: Detects changed modules and returns matrix JSON
+description: 'Detects which library modules changed in the current push/PR by comparing against settings.gradle.kts. Returns a JSON array suitable for a GitHub Actions matrix. Accepts an override to target specific modules or all modules.'
 
 inputs:
   modules:
@@ -9,11 +9,11 @@ inputs:
 
 outputs:
   value:
-    description: "JSON array of module paths"
+    description: "JSON array of Gradle module paths that changed (e.g. [\":libraries:core\",\":bom\"])"
     value: ${{ steps.resolve.outputs.value }}
 
   hasModules:
-    description: "Whether modules exist"
+    description: "true when at least one module was detected, false otherwise"
     value: ${{ steps.resolve.outputs.hasModules }}
 
 runs:

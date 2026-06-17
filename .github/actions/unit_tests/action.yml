@@ -1,5 +1,5 @@
-name: 'Launch Unit tests'
-description: 'Run unit tests and (optionally) upload reports'
+name: 'Unit tests'
+description: 'Runs unit tests via Gradle and optionally uploads test reports and code-coverage outputs as a workflow artifact'
 
 inputs:
   id:
@@ -13,17 +13,17 @@ inputs:
     default: 'Debug'
 
   gradle-args:
-    description: 'Extra Gradle arguments'
+    description: 'Extra Gradle args'
     required: false
     default: '--configuration-cache'
 
   upload:
-    description: 'Upload test reports (true/false)'
+    description: 'Upload test reports as a workflow artifact (true/false)'
     required: false
     default: 'true'
 
   reports-path:
-    description: 'Glob paths to upload'
+    description: 'Glob patterns matching the test-report files to upload'
     required: false
     default: |
       **/build/reports/tests/**
@@ -31,12 +31,12 @@ inputs:
       **/build/outputs/unit_test_code_coverage/**
 
   retention-days:
-    description: 'Artifact retention days'
+    description: 'Number of days before the uploaded test artifact is removed'
     required: false
     default: '1'
 
   continue-on-error:
-    description: 'Do not fail the job if tests fail (true/false)'
+    description: 'Allow the job to continue even if tests fail (true/false)'
     required: false
     default: 'false'
 

@@ -1,5 +1,5 @@
-name: 'Check code (detekt)'
-description: 'Run Detekt and (optionally) upload reports'
+name: 'Static analysis (detekt)'
+description: 'Runs Detekt static analysis and uploads the reports as a workflow artifact on failure (or always when upload-on-success is true)'
 
 inputs:
   id:
@@ -18,18 +18,18 @@ inputs:
     default: '--configuration-cache'
 
   upload-on-success:
-    description: 'Upload detekt reports even if success (true/false)'
+    description: 'Upload detekt reports even when the job succeeds (true/false)'
     required: false
     default: 'false'
 
 runs:
   using: 'composite'
   steps:
-#    - name: Detekt
-#      shell: bash
-#      run: |
-#        set -euo pipefail
-#        ./gradlew detekt --stacktrace ${{ inputs.gradle-args }}
+    #    - name: Detekt
+    #      shell: bash
+    #      run: |
+    #        set -euo pipefail
+    #        ./gradlew detekt --stacktrace ${{ inputs.gradle-args }}
 
     - name: Upload Detekt reports
       id: upload_reports

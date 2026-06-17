@@ -3,10 +3,10 @@ description: Perform an operation on the current workflow run (cancel, rerun-fai
 
 inputs:
   github_token:
-    description: "Token with actions: write"
+    description: "GitHub token with actions: write permission (e.g. secrets.GITHUB_TOKEN)"
     required: true
   operation:
-    description: "Operation to perform on the workflow run. Supported: cancel | rerun-failed | rerun-all"
+    description: "Operation to perform on the current workflow run: cancel (stop it), rerun-failed (retry only failed jobs) or rerun-all (retry all jobs)"
     required: true
 
 runs:

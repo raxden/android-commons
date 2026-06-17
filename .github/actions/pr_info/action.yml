@@ -1,5 +1,5 @@
 name: Get PR info
-description: Resolves PR metadata and suggested semver bump
+description: 'Resolves pull-request metadata (title, number) from the event payload, the GitHub API, or the commit message as a fallback. Infers a suggested semver bump (patch/minor/major) from the PR title.'
 
 outputs:
   title:
@@ -9,10 +9,10 @@ outputs:
     description: "Pull request number if found"
     value: ${{ steps.resolve.outputs.number }}
   source:
-    description: "Where the info came from: pr_event | api | commit"
+    description: "Resolution strategy used: pr_event (event payload) | api (GitHub REST API) | commit (commit message fallback)"
     value: ${{ steps.resolve.outputs.source }}
   bump:
-    description: "Suggested version bump: major | minor | patch"
+    description: "Suggested semver bump inferred from the PR title: major | minor | patch"
     value: ${{ steps.resolve.outputs.bump }}
 
 runs:
@@ -57,8 +57,11 @@ runs:
             "https://api.github.com/repos/${repo}/commits/${sha}/pulls" || true)"
 
           if command -v jq >/dev/null 2>&1; then
-            title="$(echo "$response" | jq -r '.[0].title // empty')"
-            number="$(echo "$response" | jq -r '.[0].number // empty')"
+            # Check if response is an array and has elements
+            if echo "$response" | jq -e 'type == "array" and length > 0' >/dev/null 2>&1; then
+              title="$(echo "$response" | jq -r '.[0].title // empty')"
+              number="$(echo "$response" | jq -r '.[0].number // empty')"
+            fi
           fi
 
           if [[ -n "$title" ]]; then

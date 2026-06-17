@@ -1,5 +1,5 @@
 name: Common machine setup
-description: Prepares the machine (JDK + Gradle)
+description: 'Sets up the build environment: installs the requested JDK distribution and configures Gradle with optional dependency caching'
 
 inputs:
   java-version:
@@ -13,12 +13,12 @@ inputs:
     default: "temurin"
 
   gradle-cache:
-    description: Enable Gradle cache
+    description: 'Enable Gradle dependency caching to speed up subsequent runs (true/false)'
     required: false
     default: "true"
 
   gradle-cache-cleanup:
-    description: Cleanup old Gradle cache entries
+    description: 'Remove stale Gradle cache entries at the end of the run to keep cache size under control (true/false)'
     required: false
     default: "true"
 

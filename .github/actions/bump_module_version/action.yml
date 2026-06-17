@@ -1,35 +1,35 @@
 name: 'Bump modules version'
-description: 'Bump versions for multiple modules and push once at the end'
+description: 'Increments the version of one or more Gradle modules (patch/minor/major), commits each change individually and optionally pushes the result to origin'
 
 inputs:
   modules:
-    description: 'JSON array of modules to bump'
+    description: 'JSON array of Gradle module paths to bump (e.g. [":libraries:core", ":bom"])'
     required: true
 
   version:
-    description: 'Bump type (patch/minor/major)'
+    description: 'Version component to increment: patch, minor or major'
     required: false
     default: 'patch'
 
   push:
-    description: 'Push changes (true/false)'
+    description: 'Push commits (and tags) to origin after bumping (true/false)'
     required: false
     default: 'true'
 
   git-user-name:
-    description: 'Git user name'
+    description: 'Git commit author name'
     required: true
 
   git-user-email:
-    description: 'Git user email'
+    description: 'Git commit author email'
     required: true
 
   git-branch:
-    description: 'Git branch'
+    description: 'Remote branch to rebase against and push to'
     required: true
 
   git-create-tag:
-    description: 'Create tag (true/false)'
+    description: 'Create a Git tag for each bumped version (true/false)'
     required: false
     default: 'false'
 

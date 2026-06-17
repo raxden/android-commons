@@ -12,27 +12,27 @@ inputs:
     required: true
 
   artifact-type:
-    description: 'Artifact type (APK/AAB/AAR). Leave empty to auto-detect (AAB for apps, AAR for libraries).'
+    description: 'Artifact type to build: APK, AAB or AAR. Leave empty to auto-detect (AAB when the bundle task exists, AAR otherwise).'
     required: false
     default: ''
 
   signing-files:
-    description: 'Base64 encoded tar.gz with signing files (optional)'
+    description: 'Base64-encoded tar.gz archive containing the keystore and signing config files. Extracted to ./config before the build.'
     required: false
     default: ''
 
   gradle-args:
-    description: 'Extra Gradle arguments'
+    description: 'Extra Gradle args'
     required: false
     default: '--configuration-cache'
 
   upload-files:
-    description: 'Upload build outputs (true/false)'
+    description: 'Upload build outputs as a workflow artifact (true/false)'
     required: false
     default: 'true'
 
   retention-days:
-    description: 'Artifact retention days'
+    description: 'Number of days before the uploaded build artifact is removed'
     required: false
     default: '1'
 

@@ -1,5 +1,5 @@
 name: 'Generate reports'
-description: 'Generate jacoco reports and upload to codecov'
+description: 'Downloads unit-test outputs, generates JaCoCo coverage reports via Gradle, uploads them as an artifact and sends the results to Codecov'
 
 inputs:
   id:
@@ -13,11 +13,11 @@ inputs:
     default: 'Debug'
 
   token:
-    description: 'Codecov token'
+    description: 'Codecov upload token for the target repository'
     required: true
 
   retention-days:
-    description: 'Remove artifacts after the specified number of days'
+    description: 'Number of days before the uploaded JaCoCo artifact is removed'
     required: false
     default: '1'
 

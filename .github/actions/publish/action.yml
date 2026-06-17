@@ -1,5 +1,5 @@
 name: Publish aggregation
-description: Publishes modules to Central Portal using aggregation task
+description: Signs and publishes one or more Gradle modules to Maven Central Portal using the NMCP aggregation task
 
 inputs:
   modules:
@@ -7,33 +7,33 @@ inputs:
     required: true
 
   publishing-type:
-    description: Central Portal publication type (USER_MANAGED or AUTOMATIC)
+    description: 'Maven Central Portal release mode: USER_MANAGED (manual promotion) or AUTOMATIC (auto-release)'
     required: false
     default: "AUTOMATIC"
 
   gradle-args:
-    description: 'Extra Gradle arguments'
+    description: 'Extra Gradle arguments appended to the publishAggregationToCentralPortal task'
     required: false
     default: '--no-configuration-cache'
 
   username:
-    description: Central Portal username
+    description: 'Maven Central Portal portal username (CENTRAL_PORTAL_USERNAME)'
     required: true
 
   password:
-    description: Central Portal password
+    description: 'Maven Central Portal password (CENTRAL_PORTAL_PASSWORD)'
     required: true
 
   signing-key:
-    description: ASCII-armored signing key
+    description: 'ASCII-armored GPG private key used to sign the artifacts'
     required: true
 
   signing-key-id:
-    description: Signing key ID
+    description: 'Last 8 characters of the GPG key fingerprint'
     required: true
 
   signing-password:
-    description: Signing key password
+    description: 'Passphrase for the GPG signing key'
     required: true
 
 runs:

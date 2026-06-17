@@ -1,5 +1,5 @@
 name: 'Workflow Information'
-description: 'Show information about the workflow'
+description: 'Writes a workflow summary table with event, repository, ref, actor and runner details. Adds extra sections for pull-request, push and workflow_dispatch events.'
 
 runs:
   using: "composite"
