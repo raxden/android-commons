@@ -33,8 +33,6 @@ runs:
         event_type="${{ inputs.event-type }}"
         version="${{ inputs.version }}"
 
-        echo "Triggering $event_type on $repo with version $version"
-
         gh api \
           --method POST \
           -H "Accept: application/vnd.github+json" \
