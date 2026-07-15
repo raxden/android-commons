@@ -74,9 +74,15 @@ suspend fun <T, E> Flow<Answer<T, E>>.collectResult(
     onFailure: (E) -> Unit,
 ) = collect { result -> result.fold(onSuccess, onFailure) }
 
-fun <T> Flow<T>.toAnswer() =
-    map { data -> Answer.Success(data) }
-        .catch { error -> Answer.Failure(error) }
+fun <T> Flow<T>.toAnswer(): Flow<Answer<T, Throwable>> =
+    toAnswer { error -> error }
+
+fun <T, E> Flow<T>.toAnswer(
+    mapFailure: (Throwable) -> E,
+): Flow<Answer<T, E>> {
+    val answers: Flow<Answer<T, E>> = map { data -> Answer.Success(data) }
+    return answers.catch { error -> emit(Answer.Failure(mapFailure(error))) }
+}
 
 @Suppress("UNCHECKED_CAST")
 suspend fun <T1, T2, R, E> Answer<T1, E>.coCombine(
