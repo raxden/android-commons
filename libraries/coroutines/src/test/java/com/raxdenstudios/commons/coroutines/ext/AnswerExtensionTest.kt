@@ -221,6 +221,20 @@ internal class AnswerExtensionTest {
             val result1 = awaitItem()
             assertThat(result1.isSuccess).isTrue()
             assertThat(result1).isEqualTo(Answer.Success("value"))
+
+            val result2 = awaitItem()
+            assertThat(result2.isFailure).isTrue()
+            assertThat((result2 as Answer.Failure).value.message).isEqualTo("Test error")
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `use toAnswer with mapped failure`() = runTest {
+        val flowData = flow<String> { error("Test error") }
+
+        flowData.toAnswer { error -> "Mapped: ${error.message}" }.test {
+            assertThat(awaitItem()).isEqualTo(Answer.Failure("Mapped: Test error"))
             awaitComplete()
         }
     }
