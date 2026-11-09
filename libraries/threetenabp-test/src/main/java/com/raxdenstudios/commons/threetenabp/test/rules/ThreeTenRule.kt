@@ -8,12 +8,10 @@ import org.threeten.bp.zone.ZoneRulesProvider
 
 class ThreeTenRule : TestRule {
 
-    override fun apply(base: Statement, description: Description): Statement {
-        return object : Statement() {
-            override fun evaluate() {
-                initThreeTen()
-                base.evaluate()
-            }
+    override fun apply(base: Statement, description: Description): Statement = object : Statement() {
+        override fun evaluate() {
+            initThreeTen()
+            base.evaluate()
         }
     }
 

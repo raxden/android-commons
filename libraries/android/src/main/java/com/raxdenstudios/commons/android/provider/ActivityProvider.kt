@@ -4,9 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 
-class ActivityProvider(
-    application: Application
-) {
+class ActivityProvider(application: Application) {
     var activeActivity: Activity? = null
 
     init {

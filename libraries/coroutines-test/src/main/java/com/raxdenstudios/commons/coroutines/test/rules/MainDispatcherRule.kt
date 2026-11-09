@@ -16,9 +16,7 @@ import org.junit.runner.Description
  * More info -> https://developer.android.com/kotlin/coroutines/test
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-class MainDispatcherRule constructor(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
-) : TestWatcher() {
+class MainDispatcherRule constructor(val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()) : TestWatcher() {
 
     override fun starting(description: Description) {
         super.starting(description)

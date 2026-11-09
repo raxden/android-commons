@@ -7,7 +7,7 @@ import java.util.Locale
 internal class DoubleExtensionTest {
 
     @Test
-    fun `Given a Double, When toString is called with default params, Then return formatted string with 3 fraction digits`() {
+    fun `Given a Double, When toString is called with default params, Then return formatted string`() {
         val value = 1.5
 
         val result = value.toString(Locale.US)
@@ -34,7 +34,7 @@ internal class DoubleExtensionTest {
     }
 
     @Test
-    fun `Given a Double with more fraction digits than maximum, When toString is called, Then round to maximum fraction digits`() {
+    fun `Given a Double with more fraction digits than maximum, When toString is called, Then round to maximum`() {
         val value = 1.5555
 
         val result = value.toString(Locale.US, maximumFractionDigits = 3)

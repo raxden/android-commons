@@ -17,7 +17,7 @@ internal class DataMapperTest {
 
         assertEquals(
             listOf("1", "2", "3"),
-            result
+            result,
         )
     }
 }

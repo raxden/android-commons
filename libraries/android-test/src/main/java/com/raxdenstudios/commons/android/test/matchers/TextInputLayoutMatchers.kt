@@ -13,9 +13,7 @@ object TextInputLayoutMatchers {
         override fun describeTo(description: Description) {
         }
 
-        override fun matchesSafely(view: View): Boolean {
-            return !hasTextInputLayoutErrorText(view, "")
-        }
+        override fun matchesSafely(view: View): Boolean = !hasTextInputLayoutErrorText(view, "")
     }
 
     fun hasTextInputLayoutErrorText(expectedError: Int) = object : TypeSafeMatcher<View>() {
@@ -36,9 +34,7 @@ object TextInputLayoutMatchers {
         override fun describeTo(description: Description) {
         }
 
-        override fun matchesSafely(view: View): Boolean {
-            return hasTextInputLayoutErrorText(view, expectedErrorText)
-        }
+        override fun matchesSafely(view: View): Boolean = hasTextInputLayoutErrorText(view, expectedErrorText)
     }
 
     private fun hasTextInputLayoutErrorText(view: View, expectedErrorText: String): Boolean {
@@ -46,12 +42,8 @@ object TextInputLayoutMatchers {
         return hasTextInputLayoutErrorText(textInputLayout, expectedErrorText)
     }
 
-    private fun hasTextInputLayoutErrorText(
-        textInputLayout: TextInputLayout,
-        expectedErrorText: String
-    ): Boolean {
+    private fun hasTextInputLayoutErrorText(textInputLayout: TextInputLayout, expectedErrorText: String): Boolean {
         val error = textInputLayout.error ?: return false
         return error.toString() == expectedErrorText
     }
 }
-

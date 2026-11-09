@@ -22,7 +22,7 @@ class FragmentBottomNavigationDelegate(
     var onFragmentLoaded: (itemId: Int, fragment: Fragment) -> Unit = { _, _ -> }
     var onFragmentTransaction: (
         transaction: FragmentTransaction,
-        fragmentToAdd: Fragment
+        fragmentToAdd: Fragment,
     ) -> Unit = { _, _ -> }
 
     var onItemSelected: (itemId: Int) -> Unit = {}
@@ -41,8 +41,11 @@ class FragmentBottomNavigationDelegate(
     fun init(savedInstanceState: Bundle?) {
         initBottomNavigationView(savedInstanceState)
 
-        if (savedInstanceState == null) initFragments()
-        else restoreFragments(savedInstanceState)
+        if (savedInstanceState == null) {
+            initFragments()
+        } else {
+            restoreFragments(savedInstanceState)
+        }
     }
 
     private fun initBottomNavigationView(savedInstanceState: Bundle?) {
@@ -77,7 +80,7 @@ class FragmentBottomNavigationDelegate(
         restoreSelectedItemIdFromSavedInstanceState(savedInstanceState)
         setOnNavigationItemSelectedListener { itemSelected ->
             navigationMenuItemSelected(
-                itemSelected
+                itemSelected,
             )
         }
     }
@@ -102,11 +105,7 @@ class FragmentBottomNavigationDelegate(
 
     private fun isTheSameMenuItem(menuItem: MenuItem) = selectedItemId == menuItem.itemId
 
-    private fun hideAndAddFragment(
-        fragmentToHide: Fragment,
-        fragmentToAdd: Fragment,
-        fragmentId: Int
-    ) {
+    private fun hideAndAddFragment(fragmentToHide: Fragment, fragmentToAdd: Fragment, fragmentId: Int) {
         fragmentManager.commit {
             hide(fragmentToHide)
             onFragmentTransaction(this, fragmentToAdd)
@@ -122,11 +121,9 @@ class FragmentBottomNavigationDelegate(
         }
     }
 
-    private fun getSelectedFragment(): Fragment =
-        getFragmentFromMap(selectedItemId) ?: error("Fragment not found")
+    private fun getSelectedFragment(): Fragment = getFragmentFromMap(selectedItemId) ?: error("Fragment not found")
 
-    private fun getFragmentFromMap(fragmentId: Int) =
-        containerFragmentMap[fragmentId]
+    private fun getFragmentFromMap(fragmentId: Int) = containerFragmentMap[fragmentId]
 
     private fun setFragmentInMap(fragmentId: Int, fragment: Fragment) {
         containerFragmentMap[fragmentId] = fragment

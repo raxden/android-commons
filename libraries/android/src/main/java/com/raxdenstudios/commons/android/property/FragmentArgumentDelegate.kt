@@ -8,14 +8,10 @@ class FragmentArgumentDelegate<T : Any> : ReadOnlyProperty<Fragment, T> {
 
     private var data: T? = null
 
-    override fun getValue(
-        thisRef: Fragment,
-        property: KProperty<*>
-    ): T = data ?: getValueFromArguments(thisRef, property).also { data = it }
+    override fun getValue(thisRef: Fragment, property: KProperty<*>): T =
+        data ?: getValueFromArguments(thisRef, property).also { data = it }
 
     @Suppress("UNCHECKED_CAST")
-    private fun getValueFromArguments(
-        thisRef: Fragment,
-        property: KProperty<*>
-    ): T = thisRef.arguments?.get(property.name) as T
+    private fun getValueFromArguments(thisRef: Fragment, property: KProperty<*>): T =
+        thisRef.arguments?.get(property.name) as T
 }

@@ -264,7 +264,7 @@ internal class AnswerExtensionTest {
     @Test
     fun `use coCombine when second is failure`() = runTest {
         val answer1 = Answer.Success(5)
-        val answer2: Answer<Int, String> =  Answer.Failure("error2")
+        val answer2: Answer<Int, String> = Answer.Failure("error2")
 
         val result = answer1.coCombine(answer2) { a, b -> a + b }
 

@@ -12,6 +12,6 @@ fun NestedScrollView.scrollToBottom() {
 fun NestedScrollView.scrollToBottomWithDelay(delayInMillis: Long = SHORT_DELAY) {
     postDelayed(
         { fullScroll(View.FOCUS_DOWN) },
-        delayInMillis
+        delayInMillis,
     )
 }

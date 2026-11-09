@@ -64,7 +64,7 @@ internal class ContextExtensionTest {
 
         assertEquals(
             context.packageManager.getPackageInfo(context.packageName, 0),
-            result
+            result,
         )
     }
 

@@ -2,8 +2,8 @@ package com.raxdenstudios.commons.network.ext
 
 import com.google.common.truth.Truth.assertThat
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.raxdenstudios.commons.core.NetworkError
 import com.raxdenstudios.commons.core.Answer
+import com.raxdenstudios.commons.core.NetworkError
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
@@ -25,7 +25,7 @@ internal class NetworkResponseExtensionKtTest {
             mockNetworkResponse400.toAnswer(errorMessage = "message")
 
         assertThat(result).isEqualTo(
-            Answer.Failure(NetworkError.Client(code = 400, body = "", message = "message"))
+            Answer.Failure(NetworkError.Client(code = 400, body = "", message = "message")),
         )
     }
 
@@ -35,7 +35,7 @@ internal class NetworkResponseExtensionKtTest {
             mockNetworkResponse500.toAnswer(errorMessage = "message")
 
         assertThat(result).isEqualTo(
-            Answer.Failure(NetworkError.Server(code = 500, body = "", message = "message"))
+            Answer.Failure(NetworkError.Server(code = 500, body = "", message = "message")),
         )
     }
 
@@ -45,7 +45,7 @@ internal class NetworkResponseExtensionKtTest {
             mockNetworkResponseWithoutCode.toAnswer(errorMessage = "message")
 
         assertThat(result).isEqualTo(
-            Answer.Failure(NetworkError.Unknown(code = -1, body = "", message = "message"))
+            Answer.Failure(NetworkError.Unknown(code = -1, body = "", message = "message")),
         )
     }
 
@@ -55,7 +55,7 @@ internal class NetworkResponseExtensionKtTest {
             mockNetworkResponseError.toAnswer(errorMessage = "message")
 
         assertThat(result).isEqualTo(
-            Answer.Failure(NetworkError.Network(body = null, message = "message"))
+            Answer.Failure(NetworkError.Network(body = null, message = "message")),
         )
     }
 
@@ -65,7 +65,7 @@ internal class NetworkResponseExtensionKtTest {
             mockNetworkResponseUnknownError.toAnswer(errorMessage = "message")
 
         assertThat(result).isEqualTo(
-            Answer.Failure(NetworkError.Unknown(code = -1, body = "", message = "message"))
+            Answer.Failure(NetworkError.Unknown(code = -1, body = "", message = "message")),
         )
     }
 

@@ -4,9 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-class NetworkMonitorInterceptor(
-    private val isNetworkAvailable: () -> Boolean
-) : Interceptor {
+class NetworkMonitorInterceptor(private val isNetworkAvailable: () -> Boolean) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         if (!isNetworkAvailable()) {

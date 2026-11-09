@@ -7,7 +7,7 @@ sealed class RationaleDialog(
     @field:StringRes val reason: Int,
     @field:StringRes val reasonDescription: Int,
     @field:StringRes val acceptLabel: Int,
-    @field:StringRes val deniedLabel: Int
+    @field:StringRes val deniedLabel: Int,
 ) {
 
     data object Camera : RationaleDialog(

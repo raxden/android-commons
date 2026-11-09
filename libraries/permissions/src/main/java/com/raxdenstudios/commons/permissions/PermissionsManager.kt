@@ -4,7 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.raxdenstudios.commons.permissions.model.Permission
 
-interface PermissionsManager: DefaultLifecycleObserver {
+interface PermissionsManager : DefaultLifecycleObserver {
 
     /**
      * Attach activity
@@ -19,10 +19,7 @@ interface PermissionsManager: DefaultLifecycleObserver {
      * @param callbacks
      * @param permissions
      */
-    fun requestPermission(
-        callbacks: Callbacks,
-        vararg permissions: Permission,
-    )
+    fun requestPermission(callbacks: Callbacks, vararg permissions: Permission)
 
     /**
      * Has permission
@@ -31,10 +28,7 @@ interface PermissionsManager: DefaultLifecycleObserver {
      * @param permission
      * @receiver
      */
-    fun hasPermission(
-        onGranted: (Boolean) -> Unit,
-        permission: Permission
-    )
+    fun hasPermission(onGranted: (Boolean) -> Unit, permission: Permission)
 
     /**
      * Callbacks
@@ -47,6 +41,6 @@ interface PermissionsManager: DefaultLifecycleObserver {
     class Callbacks(
         val onGranted: (Permission) -> Unit = {},
         val onRationale: (Permission) -> Unit = {},
-        val onDenied: (Permission) -> Unit = {}
+        val onDenied: (Permission) -> Unit = {},
     )
 }

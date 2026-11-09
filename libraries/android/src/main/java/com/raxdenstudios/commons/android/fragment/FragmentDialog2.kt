@@ -10,17 +10,12 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.raxdenstudios.commons.android.ext.setTransparentBackground
 
-abstract class FragmentDialog2(
-    @LayoutRes private val layoutId: Int
-) : DialogFragment() {
+abstract class FragmentDialog2(@LayoutRes private val layoutId: Int) : DialogFragment() {
 
     private var onDismissListener: MutableList<DialogInterface.OnDismissListener> = mutableListOf()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View = inflater.inflate(layoutId, container)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+        inflater.inflate(layoutId, container)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         super.onCreateDialog(savedInstanceState).also { dialog -> dialog.setTransparentBackground() }
@@ -30,7 +25,7 @@ abstract class FragmentDialog2(
 
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.MATCH_PARENT,
         )
     }
 

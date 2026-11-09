@@ -6,12 +6,16 @@ fun ViewPager.isFirstPage() = currentItem == 0
 
 fun ViewPager.isLastPage() = currentItem == adapter?.let { it.count - 1 } ?: false
 
-fun ViewPager.previousPage(): Boolean = if (isFirstPage()) false else {
+fun ViewPager.previousPage(): Boolean = if (isFirstPage()) {
+    false
+} else {
     currentItem -= 1
     true
 }
 
-fun ViewPager.nextPage(): Boolean = if (isLastPage()) false else {
+fun ViewPager.nextPage(): Boolean = if (isLastPage()) {
+    false
+} else {
     currentItem += 1
     true
 }
@@ -19,14 +23,10 @@ fun ViewPager.nextPage(): Boolean = if (isLastPage()) false else {
 fun ViewPager.addOnPageChangeListener(
     onPageScrolled: (position: Int, positionOffset: Float, positionOffsetPixels: Int) -> Unit,
     onPageSelected: (position: Int) -> Unit,
-    onPageScrollStateChanged: (state: Int) -> Unit
+    onPageScrollStateChanged: (state: Int) -> Unit,
 ) {
     addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-        override fun onPageScrolled(
-            position: Int,
-            positionOffset: Float,
-            positionOffsetPixels: Int
-        ) {
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
             onPageScrolled(position, positionOffset, positionOffsetPixels)
         }
 

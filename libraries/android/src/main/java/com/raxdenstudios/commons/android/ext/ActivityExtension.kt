@@ -19,7 +19,7 @@ fun Activity.setVirtualNavigationBarSafeArea(view: View) {
         view.paddingStart,
         view.paddingTop,
         view.paddingEnd,
-        view.paddingBottom + SDK.getVirtualNavigationBarHeight(this)
+        view.paddingBottom + SDK.getVirtualNavigationBarHeight(this),
     )
 }
 
@@ -28,7 +28,7 @@ fun Activity.setStatusBarSafeArea(view: View) {
         view.paddingStart,
         view.paddingTop + SDK.getStatusBarHeight(this),
         view.paddingEnd,
-        view.paddingBottom
+        view.paddingBottom,
     )
 }
 
@@ -38,11 +38,7 @@ fun Activity.setFullScreen() {
     }
 }
 
-fun <T : Parcelable> Activity.loadParcelable(
-    key: String,
-    defaultValue: T? = null,
-    operation: (value: T) -> Unit
-) {
+fun <T : Parcelable> Activity.loadParcelable(key: String, defaultValue: T? = null, operation: (value: T) -> Unit) {
     val value = intent?.extras?.getParcelable(key) ?: defaultValue
     if (value != null) operation(value)
 }
@@ -69,7 +65,7 @@ fun Activity.setResultOKAndFinish3() {
 inline fun <reified T : Parcelable> Activity.setResultOKWithData(value: T) {
     setResult(
         Activity.RESULT_OK,
-        Intent().apply { putExtra(T::class.java.simpleName, value) }
+        Intent().apply { putExtra(T::class.java.simpleName, value) },
     )
 }
 
@@ -82,6 +78,4 @@ fun Activity.contentView(@LayoutRes resId: Int) = ActivityContentViewDelegate(re
 
 inline fun <reified T : Any> Activity.argument() = ActivityArgumentDelegate<T>()
 
-fun <T : Fragment> Activity.fragmentById(
-    @IdRes fragmentId: Int
-) = FragmentActivityByIdDelegate<T>(fragmentId)
+fun <T : Fragment> Activity.fragmentById(@IdRes fragmentId: Int) = FragmentActivityByIdDelegate<T>(fragmentId)

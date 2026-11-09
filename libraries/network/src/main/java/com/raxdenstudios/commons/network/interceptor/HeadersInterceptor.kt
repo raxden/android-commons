@@ -3,21 +3,19 @@ package com.raxdenstudios.commons.network.interceptor
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class HeadersInterceptor(
-    private val headers: Map<String, String>
-) : Interceptor {
+class HeadersInterceptor(private val headers: Map<String, String>) : Interceptor {
 
     companion object {
         fun withUserAgent(userAgent: String) = HeadersInterceptor(
-            mapOf("User-Agent" to userAgent)
+            mapOf("User-Agent" to userAgent),
         )
 
         fun withApiVersion(version: String) = HeadersInterceptor(
-            mapOf("X-API-Version" to version)
+            mapOf("X-API-Version" to version),
         )
 
         fun withHeaders(vararg pairs: Pair<String, String>) = HeadersInterceptor(
-            mapOf(*pairs)
+            mapOf(*pairs),
         )
     }
 

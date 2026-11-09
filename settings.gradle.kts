@@ -48,7 +48,7 @@ dependencyResolutionManagement {
             forRepository { maven("https://jitpack.io") }
             filter {
                 includeGroupByRegex(
-                    "com\\.github\\.(andrzejchm\\.RESTMock|chuckerteam\\.chucker|haroldadmin|skydoves)\\..*"
+                    "com\\.github\\.(andrzejchm\\.RESTMock|chuckerteam\\.chucker|haroldadmin|skydoves)(\\..*)?"
                 )
             }
         }

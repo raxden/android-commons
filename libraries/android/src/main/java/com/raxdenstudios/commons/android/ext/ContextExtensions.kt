@@ -12,8 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun Context.getPackageInfo(): PackageInfo =
-    packageManager.getPackageInfo(packageName, 0)
+fun Context.getPackageInfo(): PackageInfo = packageManager.getPackageInfo(packageName, 0)
 
 fun Context.createTemporalImageFile(): File {
     val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -22,7 +21,7 @@ fun Context.createTemporalImageFile(): File {
     return File.createTempFile(
         imageFileName, /* prefix */
         ".jpg", /* suffix */
-        storageDir      /* directory */
+        storageDir, /* directory */
     )
 }
 

@@ -6,27 +6,20 @@ import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class CacheOfflineInterceptor(
-    private val cacheControl: CacheControl,
-    private val isNetworkAvailable: () -> Boolean,
-) : Interceptor {
+class CacheOfflineInterceptor(private val cacheControl: CacheControl, private val isNetworkAvailable: () -> Boolean) :
+    Interceptor {
 
     companion object {
         private const val HEADER_PRAGMA = "Pragma"
         private const val HEADER_CACHE_CONTROL = "Cache-Control"
         private const val MAX_STALE = 7
 
-        fun default(
-            isNetworkAvailable: () -> Boolean,
-        ) = CacheOfflineInterceptor(
+        fun default(isNetworkAvailable: () -> Boolean) = CacheOfflineInterceptor(
             initCacheControl(MAX_STALE),
             isNetworkAvailable,
         )
 
-        fun withMaxStale(
-            stale: Int,
-            isNetworkAvailable: () -> Boolean,
-        ) = CacheOfflineInterceptor(
+        fun withMaxStale(stale: Int, isNetworkAvailable: () -> Boolean) = CacheOfflineInterceptor(
             initCacheControl(stale),
             isNetworkAvailable,
         )

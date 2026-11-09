@@ -5,11 +5,7 @@ import android.graphics.Matrix
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 
-fun Bitmap.toBase64(
-    maxSize: Int,
-    quality: Int,
-    flags: Int = Base64.DEFAULT,
-): String {
+fun Bitmap.toBase64(maxSize: Int, quality: Int, flags: Int = Base64.DEFAULT): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
     resize(maxSize).compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
     return Base64.encodeToString(byteArrayOutputStream.toByteArray(), flags)

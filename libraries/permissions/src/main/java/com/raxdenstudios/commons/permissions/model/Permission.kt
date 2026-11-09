@@ -4,19 +4,17 @@ import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-sealed class Permission(
-    val value: String,
-) {
+sealed class Permission(val value: String) {
     data object Camera : Permission(
-        value = Manifest.permission.CAMERA
+        value = Manifest.permission.CAMERA,
     )
 
     data object AccessFineLocation : Permission(
-        value = Manifest.permission.ACCESS_FINE_LOCATION
+        value = Manifest.permission.ACCESS_FINE_LOCATION,
     )
 
     data object AccessCoarseLocation : Permission(
-        value = Manifest.permission.ACCESS_COARSE_LOCATION
+        value = Manifest.permission.ACCESS_COARSE_LOCATION,
     )
 
     data object ReadContacts : Permission(
@@ -48,11 +46,10 @@ sealed class Permission(
         value = Manifest.permission.POST_NOTIFICATIONS,
     )
 
-    data class Other(
-        val permission: String
-    ) : Permission(
-        value = permission
-    )
+    data class Other(val permission: String) :
+        Permission(
+            value = permission,
+        )
 
     companion object {
 

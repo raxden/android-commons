@@ -32,17 +32,17 @@ import com.raxdenstudios.commons.android.ext.registerOnPageChangeCallback
 class FragmentViewPager2Delegate<TFragment : Fragment>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    private val callback: Callback<TFragment>
+    private val callback: Callback<TFragment>,
 ) {
 
     constructor(
         activity: FragmentActivity,
-        callback: Callback<TFragment>
+        callback: Callback<TFragment>,
     ) : this(activity.supportFragmentManager, activity.lifecycle, callback)
 
     constructor(
         fragment: Fragment,
-        callback: Callback<TFragment>
+        callback: Callback<TFragment>,
     ) : this(fragment.childFragmentManager, fragment.lifecycle, callback)
 
     interface Callback<TFragment> {
@@ -87,7 +87,7 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
         viewPager2.registerOnPageChangeCallback(
             onPageScrolled = ::pageScrolled,
             onPageSelected = ::pageSelected,
-            onPageScrollStateChanged = { state -> onPageScrollStateChanged(state) }
+            onPageScrollStateChanged = { state -> onPageScrollStateChanged(state) },
         )
 
         if (callback is TabLayoutCallback) {
@@ -111,7 +111,7 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
 
     private inner class FragmentStateAdapterDelegate constructor(
         fragmentManager: FragmentManager,
-        lifecycle: Lifecycle
+        lifecycle: Lifecycle,
     ) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
         override fun getItemCount() = callback.fragmentCount

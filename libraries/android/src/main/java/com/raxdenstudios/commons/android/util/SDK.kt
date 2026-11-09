@@ -9,14 +9,14 @@ import com.raxdenstudios.commons.core.ext.orDefault
 object SDK {
 
     val isEmulator: Boolean
-        get() = (Build.FINGERPRINT.startsWith("generic")
-                || Build.FINGERPRINT.startsWith("unknown")
-                || Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK built for x86")
-                || Build.MANUFACTURER.contains("Genymotion")
-                || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-                || "google_sdk" == Build.PRODUCT)
+        get() = Build.FINGERPRINT.startsWith("generic") ||
+            Build.FINGERPRINT.startsWith("unknown") ||
+            Build.MODEL.contains("google_sdk") ||
+            Build.MODEL.contains("Emulator") ||
+            Build.MODEL.contains("Android SDK built for x86") ||
+            Build.MANUFACTURER.contains("Genymotion") ||
+            (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")) ||
+            "google_sdk" == Build.PRODUCT
 
     fun hasVirtualNavigationBar(context: Context): Boolean {
         val id = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
@@ -30,7 +30,9 @@ object SDK {
             context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
         return if (resourceId > 0) {
             context.resources.getDimensionPixelSize(resourceId)
-        } else 0
+        } else {
+            0
+        }
     }
 
     /**
@@ -42,16 +44,16 @@ object SDK {
             context.resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) {
             context.resources.getDimensionPixelSize(resourceId)
-        } else 0
+        } else {
+            0
+        }
     }
 
-    fun getPackageName(context: Context): String =
-        runCatching { context.getPackageInfo().packageName }
-            .getOrDefault("")
+    fun getPackageName(context: Context): String = runCatching { context.getPackageInfo().packageName }
+        .getOrDefault("")
 
-    fun getVersionName(context: Context): String =
-        runCatching { context.getPackageInfo().versionName.orDefault() }
-            .getOrDefault("")
+    fun getVersionName(context: Context): String = runCatching { context.getPackageInfo().versionName.orDefault() }
+        .getOrDefault("")
 
     fun getVersionCode(context: Context): Long = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->

@@ -9,11 +9,11 @@ import org.threeten.bp.format.DateTimeFormatter
 internal class StringExtensionTest {
 
     @Test
-    fun `Given a simple date and a sort of possible patterns, When toLocalDate is called, Then return a valid LocalDate`() {
+    fun `Given a simple date and several patterns, When toLocalDate is called, Then return a valid LocalDate`() {
         val aValidDate = "01/01/2000"
         val aSortOfPatterns = listOf(
             "dd/MM/yyyy",
-            "dd-MM-yyyy"
+            "dd-MM-yyyy",
         ).toTypedArray()
 
         val result = aValidDate.toLocalDate(*aSortOfPatterns)
@@ -22,11 +22,11 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given a simple date and a sort of possible patterns, When toLocalDate is called and not found any valid patterm, Then return null`() {
+    fun `Given a simple date and several patterns, When toLocalDate finds no valid pattern, Then return null`() {
         val aValidDate = "01/01/2000"
         val aSortOfPatterns = listOf(
             "dd--MM--yyyy",
-            "dd-MM-yyyy"
+            "dd-MM-yyyy",
         ).toTypedArray()
 
         val result = aValidDate.toLocalDate(*aSortOfPatterns)
@@ -35,7 +35,7 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given a date string and DateTimeFormatter, When toLocalDate is called with valid formatter, Then return LocalDate`() {
+    fun `Given a date string and formatter, When toLocalDate is called with valid formatter, Then return LocalDate`() {
         val dateString = "2023-12-25"
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE
 
@@ -45,12 +45,12 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given a date string and multiple DateTimeFormatters, When toLocalDate is called, Then return LocalDate with first matching formatter`() {
+    fun `Given a date string and multiple formatters, When toLocalDate is called, Then return LocalDate`() {
         val dateString = "25/12/2023"
         val formatters = arrayOf(
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),
             DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-            DateTimeFormatter.ofPattern("MM-dd-yyyy")
+            DateTimeFormatter.ofPattern("MM-dd-yyyy"),
         )
 
         val result = dateString.toLocalDate(*formatters)
@@ -59,11 +59,11 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given a date string and DateTimeFormatters, When toLocalDate is called with no matching formatter, Then return null`() {
+    fun `Given a date string and formatters, When toLocalDate finds no matching formatter, Then return null`() {
         val dateString = "25/12/2023"
         val formatters = arrayOf(
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-            DateTimeFormatter.ofPattern("MM-dd-yyyy")
+            DateTimeFormatter.ofPattern("MM-dd-yyyy"),
         )
 
         val result = dateString.toLocalDate(*formatters)
@@ -92,12 +92,12 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given date with different format, When toLocalDate is called with multiple patterns, Then return LocalDate with correct pattern`() {
+    fun `Given date with different format, When toLocalDate is called with patterns, Then return LocalDate`() {
         val dateString = "2023-09-22"
         val patterns = arrayOf(
             "dd/MM/yyyy",
             "yyyy-MM-dd",
-            "MM-dd-yyyy"
+            "MM-dd-yyyy",
         )
 
         val result = dateString.toLocalDate(*patterns)

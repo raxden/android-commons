@@ -61,7 +61,7 @@ internal class CoroutinesExtensionTest {
             onError = { throwable ->
                 errorCaught = true
                 errorMessage = throwable.message
-            }
+            },
         ) {
             error("Test error")
         }
@@ -80,7 +80,7 @@ internal class CoroutinesExtensionTest {
         var executionCompleted = false
 
         val job = scope.launch(
-            onError = { errorCaught = true }
+            onError = { errorCaught = true },
         ) {
             executionCompleted = true
         }
@@ -101,7 +101,7 @@ internal class CoroutinesExtensionTest {
         }
 
         val job = scope.safeLaunch(
-            exceptionHandler = customHandler
+            exceptionHandler = customHandler,
         ) {
             error("Custom handler test")
         }

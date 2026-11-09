@@ -34,7 +34,7 @@ internal class CoPaginationTest {
     private val pagination: CoPagination<String> by lazy {
         CoPagination(
             config = paginationConfig,
-            coroutineScope = CoroutineScope(mainDispatcherRule.testDispatcher)
+            coroutineScope = CoroutineScope(mainDispatcherRule.testDispatcher),
         )
     }
 
@@ -55,7 +55,7 @@ internal class CoPaginationTest {
 
         pagination.requestFirstPage(
             pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
-            pageResponse = { pageResult -> pageResponse(pageResult) }
+            pageResponse = { pageResult -> pageResponse(pageResult) },
         )
 
         coVerifyOrder {
@@ -78,7 +78,7 @@ internal class CoPaginationTest {
     }
 
     @Test
-    fun `Given a first page with incomplete results (less than 10), When requestPage is called several times, Then return the right states`() {
+    fun `Given an incomplete first page, When requestPage is called several times, Then return the right states`() {
         givenAPageWithIncompleteResults(aFirstPage)
 
         for (index in PageIndex.first.value..4) requestPage(PageIndex(index))
@@ -109,45 +109,45 @@ internal class CoPaginationTest {
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(
                 PageResult.Content(
-                    aPageItems
-                )
+                    aPageItems,
+                ),
             )
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(
                 PageResult.Content(
-                    aPageItems + aPageItems
-                )
+                    aPageItems + aPageItems,
+                ),
             )
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(
                 PageResult.Content(
-                    aPageItems + aPageItems + aPageItems
-                )
+                    aPageItems + aPageItems + aPageItems,
+                ),
             )
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(
                 PageResult.Content(
-                    aPageItems + aPageItems + aPageItems + aPageItems
-                )
+                    aPageItems + aPageItems + aPageItems + aPageItems,
+                ),
             )
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(
                 PageResult.Content(
-                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems
-                )
+                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems,
+                ),
             )
             pageResponse.invoke(PageResult.Loading)
             pageResponse.invoke(
                 PageResult.Content(
-                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems
-                )
+                    aPageItems + aPageItems + aPageItems + aPageItems + aPageItems + aPageItems,
+                ),
             )
         }
         confirmVerified(pageResponse)
     }
 
     @Test
-    fun `Given an error that happens when a page is requested, When requestPage is called, Then return the right states`() {
+    fun `Given a page request error, When requestPage is called, Then return the right states`() {
         givenAPageWithResults(aFirstPage)
         givenAPageWithError(Page(1))
 
@@ -168,7 +168,7 @@ internal class CoPaginationTest {
         pagination.requestPage(
             pageIndex = pageIndex,
             pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
-            pageResponse = { pageResult -> pageResponse(pageResult) }
+            pageResponse = { pageResult -> pageResponse(pageResult) },
         )
     }
 
@@ -199,7 +199,7 @@ internal class CoPaginationTest {
             "item_1",
             "item_2",
             "item_3",
-            "item_4"
+            "item_4",
         )
         private val aPageItems = listOf(
             "item",
@@ -211,12 +211,12 @@ internal class CoPaginationTest {
             "item",
             "item",
             "item",
-            "item"
+            "item",
         )
         private val paginationConfig = Pagination.Config(
             initialPage = aFirstPage,
             pageSize = aPageSize,
-            prefetchDistance = PREFETCH_DISTANCE
+            prefetchDistance = PREFETCH_DISTANCE,
         )
     }
 }
