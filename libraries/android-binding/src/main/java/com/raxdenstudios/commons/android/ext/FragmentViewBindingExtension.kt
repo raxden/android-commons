@@ -4,5 +4,4 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.raxdenstudios.commons.android.property.FragmentViewBindingDelegate
 
-inline fun <reified T : ViewBinding> Fragment.viewBinding() =
-    FragmentViewBindingDelegate(T::class.java, this)
+inline fun <reified T : ViewBinding> Fragment.viewBinding() = FragmentViewBindingDelegate(T::class.java, this)

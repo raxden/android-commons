@@ -8,15 +8,12 @@ import java.util.Locale
 
 fun String?.orDefault(default: String = String.EMPTY) = this ?: default
 
-fun String?.ifEmptyOrNullThen(text: String): String =
-    this?.ifEmpty { text } ?: text
+fun String?.ifEmptyOrNullThen(text: String): String = this?.ifEmpty { text } ?: text
 
 val String.Companion.EMPTY: String
     get() = ""
 
-fun String.ifEmptyThen(text: String): String {
-    return this.ifEmpty { text }
-}
+fun String.ifEmptyThen(text: String): String = this.ifEmpty { text }
 
 fun String.toDouble(locale: Locale = Locale.US): Double = try {
     NumberFormat.getInstance(locale)

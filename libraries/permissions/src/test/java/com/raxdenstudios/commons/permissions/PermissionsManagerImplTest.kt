@@ -48,7 +48,7 @@ internal class PermissionsManagerImplTest {
         val callbacks = PermissionsManager.Callbacks(
             onGranted = { grantedCalled = true },
             onRationale = { rationaleCalled = true },
-            onDenied = { deniedCalled = true }
+            onDenied = { deniedCalled = true },
         )
 
         callbacks.onGranted(Permission.Camera)
@@ -72,7 +72,7 @@ internal class PermissionsManagerImplTest {
         var grantedCalled = false
 
         val callbacks = PermissionsManager.Callbacks(
-            onGranted = { grantedCalled = true }
+            onGranted = { grantedCalled = true },
         )
 
         callbacks.onGranted(Permission.Camera)

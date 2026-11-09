@@ -15,7 +15,7 @@ internal class HeadersInterceptorTest {
     fun `intercept should add all headers to request`() {
         val headers = mapOf(
             "X-Custom-Header" to "custom-value",
-            "X-Another-Header" to "another-value"
+            "X-Another-Header" to "another-value",
         )
         val interceptor = HeadersInterceptor(headers)
 
@@ -87,7 +87,7 @@ internal class HeadersInterceptorTest {
     fun `withHeaders should create interceptor with multiple headers`() {
         val interceptor = HeadersInterceptor.withHeaders(
             "Header1" to "Value1",
-            "Header2" to "Value2"
+            "Header2" to "Value2",
         )
 
         val chain = mockk<Interceptor.Chain>()

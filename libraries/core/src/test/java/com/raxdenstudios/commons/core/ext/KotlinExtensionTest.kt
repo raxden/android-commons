@@ -8,18 +8,18 @@ internal class KotlinExtensionTest {
     @Test
     fun `exhaustive should return the same value when not null`() {
         val value: String? = "test"
-        
+
         val result = value.exhaustive
-        
+
         assertThat(result).isEqualTo("test")
     }
 
     @Test
     fun `exhaustive should return null when value is null`() {
         val value: String? = null
-        
+
         val result = value.exhaustive
-        
+
         assertThat(result).isNull()
     }
 
@@ -50,9 +50,9 @@ internal class KotlinExtensionTest {
     @Test
     fun `exhaustive should preserve type information`() {
         val number: Int? = 42
-        
+
         val result: Int? = number.exhaustive
-        
+
         assertThat(result).isEqualTo(42)
     }
 

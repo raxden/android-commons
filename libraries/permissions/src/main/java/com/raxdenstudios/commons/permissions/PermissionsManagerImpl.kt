@@ -13,8 +13,8 @@ import com.raxdenstudios.commons.permissions.model.Permission
 class PermissionsManagerImpl : PermissionsManager {
 
     private val activityHolder: ActivityHolder = ActivityHolder()
-    private var _permissionResultLauncher: ActivityResultLauncher<Array<String>>? = null
-    private var _permissionsCallbacks: PermissionsManager.Callbacks = PermissionsManager.Callbacks()
+    private var permissionResultLauncher: ActivityResultLauncher<Array<String>>? = null
+    private var permissionsCallbacks: PermissionsManager.Callbacks = PermissionsManager.Callbacks()
 
     override fun attach(activity: ComponentActivity) {
         activityHolder.attach(activity)
@@ -35,41 +35,36 @@ class PermissionsManagerImpl : PermissionsManager {
     private fun registerPermissionsResultContract(owner: LifecycleOwner) {
         val activity = activityHolder.activity ?: error("You must call attach() before onCreate()")
 
-        _permissionResultLauncher = activity.activityResultRegistry.register(
+        permissionResultLauncher = activity.activityResultRegistry.register(
             REQUEST_PERMISSIONS_KEY,
             owner,
-            ActivityResultContracts.RequestMultiplePermissions()
+            ActivityResultContracts.RequestMultiplePermissions(),
         ) { result -> handleRegisterPermissionsResult(result) }
     }
 
-    private fun handleRegisterPermissionsResult(
-        result: Map<String, Boolean>
-    ) {
+    private fun handleRegisterPermissionsResult(result: Map<String, Boolean>) {
         result.entries.forEach { entryPermissions ->
             val isGranted = entryPermissions.value
             val permission = Permission.fromValue(entryPermissions.key)
             when {
-                isGranted -> _permissionsCallbacks.onGranted(permission)
-                else -> _permissionsCallbacks.onDenied(permission)
+                isGranted -> permissionsCallbacks.onGranted(permission)
+                else -> permissionsCallbacks.onDenied(permission)
             }
         }
     }
 
-    override fun requestPermission(
-        callbacks: PermissionsManager.Callbacks,
-        vararg permissions: Permission
-    ) {
-        _permissionsCallbacks = callbacks
+    override fun requestPermission(callbacks: PermissionsManager.Callbacks, vararg permissions: Permission) {
+        permissionsCallbacks = callbacks
 
         val permissionsToRequest = permissions.filter { permission ->
             when {
                 hasPermission(permission) -> {
-                    _permissionsCallbacks.onGranted(permission)
+                    permissionsCallbacks.onGranted(permission)
                     false
                 }
 
                 shouldShowRequestPermissionRationale(permission) -> {
-                    _permissionsCallbacks.onRationale(permission)
+                    permissionsCallbacks.onRationale(permission)
                     false
                 }
 
@@ -82,28 +77,24 @@ class PermissionsManagerImpl : PermissionsManager {
 
     private fun performRequestPermission(permissions: List<Permission>) {
         if (permissions.isEmpty()) return
-        
+
         val arrayPermissions = permissions.map { it.value }.toTypedArray()
-        _permissionResultLauncher?.launch(arrayPermissions)
+        permissionResultLauncher?.launch(arrayPermissions)
     }
 
     private fun shouldShowRequestPermissionRationale(permission: Permission) =
         activityHolder.activity?.shouldShowRequestPermissionRationale(permission.value) ?: false
 
-    override fun hasPermission(
-        onGranted: (Boolean) -> Unit,
-        permission: Permission
-    ) {
+    override fun hasPermission(onGranted: (Boolean) -> Unit, permission: Permission) {
         onGranted(hasPermission(permission))
     }
 
     private fun hasPermission(permission: Permission) =
         checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
-    private fun checkSelfPermission(permission: Permission) =
-        activityHolder.activity?.let {
-            ContextCompat.checkSelfPermission(it, permission.value)
-        } ?: PackageManager.PERMISSION_DENIED
+    private fun checkSelfPermission(permission: Permission) = activityHolder.activity?.let {
+        ContextCompat.checkSelfPermission(it, permission.value)
+    } ?: PackageManager.PERMISSION_DENIED
 
     private companion object {
         const val REQUEST_PERMISSIONS_KEY = "requestPermissions"

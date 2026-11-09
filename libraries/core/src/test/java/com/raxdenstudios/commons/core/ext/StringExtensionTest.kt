@@ -54,7 +54,7 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given a string with German decimal format, When toDouble is called with German locale, Then return correct Double`() {
+    fun `Given a string with German decimal format, When toDouble is called, Then return correct Double`() {
         val value = "123,45"
 
         val result = value.toDouble(Locale.GERMANY)
@@ -90,7 +90,7 @@ internal class StringExtensionTest {
     }
 
     @Test
-    fun `Given a string in scientific notation, When toDouble is called, Then fallback to toDoubleOrNull and return correct Double`() {
+    fun `Given a string in scientific notation, When toDouble is called, Then fallback and return correct Double`() {
         val value = "1.5e2"
 
         val result = value.toDouble(Locale.US)

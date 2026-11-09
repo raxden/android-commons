@@ -9,8 +9,11 @@ class ActivityHolder {
     var activity: ComponentActivity?
         get() = activityReference?.get()
         private set(value) {
-            activityReference = if (value == null) null
-            else WeakReference(value)
+            activityReference = if (value == null) {
+                null
+            } else {
+                WeakReference(value)
+            }
         }
 
     fun attach(activity: ComponentActivity) {

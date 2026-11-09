@@ -3,7 +3,6 @@ package com.raxdenstudios.commons.network.interceptor
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -58,7 +57,7 @@ internal class RequestTimingInterceptorTest {
         try {
             interceptor.intercept(chain)
         } catch (e: RuntimeException) {
-            // Expected
+            assertThat(e).hasMessageThat().contains("Network error")
         }
 
         assertThat(callbackInvoked).isTrue()

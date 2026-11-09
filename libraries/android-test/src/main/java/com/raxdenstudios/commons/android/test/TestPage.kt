@@ -5,9 +5,7 @@ import androidx.test.espresso.Espresso.pressBack
 open class TestPage {
 
     companion object {
-        inline fun <reified T : TestPage> on(): T {
-            return TestPage().on()
-        }
+        inline fun <reified T : TestPage> on(): T = TestPage().on()
     }
 
     inline fun <reified T : TestPage> on(): T {
@@ -16,9 +14,11 @@ open class TestPage {
         return page
     }
 
-    inline fun <reified T : TestPage> initPage() =
-        if (T::class.constructors.isEmpty()) T::class.objectInstance!!
-        else T::class.constructors.first().call()
+    inline fun <reified T : TestPage> initPage() = if (T::class.constructors.isEmpty()) {
+        T::class.objectInstance!!
+    } else {
+        T::class.constructors.first().call()
+    }
 
     open fun verify(): TestPage {
         // Each subpage should have its default assurances here

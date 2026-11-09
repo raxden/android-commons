@@ -16,16 +16,13 @@ fun CoroutineScope.safeLaunch(
     block: suspend CoroutineScope.() -> Unit,
 ): Job = launch(
     context = exceptionHandler,
-    block = block
+    block = block,
 )
 
-fun CoroutineScope.launch(
-    onError: (Throwable) -> Unit = {},
-    block: suspend CoroutineScope.() -> Unit,
-): Job = launch(
+fun CoroutineScope.launch(onError: (Throwable) -> Unit = {}, block: suspend CoroutineScope.() -> Unit): Job = launch(
     context = CoroutineExceptionHandler { _, throwable ->
         defaultCoroutineLogger?.logError("CoroutineException", throwable.message, throwable)
         onError(throwable)
     },
-    block = block
+    block = block,
 )

@@ -10,7 +10,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Client<String>(
             code = 400,
             body = "Bad Request",
-            message = "Invalid input"
+            message = "Invalid input",
         )
 
         assertThat(error.code).isEqualTo(400)
@@ -23,7 +23,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Client<String>(
             code = 401,
             body = null,
-            message = "Unauthorized"
+            message = "Unauthorized",
         )
 
         assertThat(error.code).isEqualTo(401)
@@ -36,7 +36,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Server<String>(
             code = 500,
             body = "Internal Server Error",
-            message = "Server crashed"
+            message = "Server crashed",
         )
 
         assertThat(error.code).isEqualTo(500)
@@ -49,7 +49,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Server<String>(
             code = 503,
             body = null,
-            message = "Service Unavailable"
+            message = "Service Unavailable",
         )
 
         assertThat(error.code).isEqualTo(503)
@@ -61,7 +61,7 @@ internal class NetworkErrorTest {
     fun `Network error should have correct properties`() {
         val error = NetworkError.Network<String>(
             body = "Connection timeout",
-            message = "Network timeout"
+            message = "Network timeout",
         )
 
         assertThat(error.body).isEqualTo("Connection timeout")
@@ -72,7 +72,7 @@ internal class NetworkErrorTest {
     fun `Network error with null body should work`() {
         val error = NetworkError.Network<String>(
             body = null,
-            message = "No internet connection"
+            message = "No internet connection",
         )
 
         assertThat(error.body).isNull()
@@ -84,7 +84,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Unknown<String>(
             code = 999,
             body = "Unknown error body",
-            message = "Unknown error occurred"
+            message = "Unknown error occurred",
         )
 
         assertThat(error.code).isEqualTo(999)
@@ -97,7 +97,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Unknown<String>(
             code = null,
             body = null,
-            message = "Unknown error"
+            message = "Unknown error",
         )
 
         assertThat(error.code).isNull()
@@ -113,7 +113,7 @@ internal class NetworkErrorTest {
         val error = NetworkError.Client(
             code = 400,
             body = errorBody,
-            message = "Validation error"
+            message = "Validation error",
         )
 
         assertThat(error.body).isEqualTo(errorBody)
@@ -127,7 +127,7 @@ internal class NetworkErrorTest {
             NetworkError.Client(code = 400, message = "Bad Request"),
             NetworkError.Server(code = 500, message = "Server Error"),
             NetworkError.Network(message = "Network Error"),
-            NetworkError.Unknown(message = "Unknown Error")
+            NetworkError.Unknown(message = "Unknown Error"),
         )
 
         assertThat(errors).hasSize(4)
@@ -141,7 +141,7 @@ internal class NetworkErrorTest {
     fun `NetworkError can be used in when expression`() {
         val error: NetworkError<String> = NetworkError.Client(
             code = 404,
-            message = "Not Found"
+            message = "Not Found",
         )
 
         val result = when (error) {

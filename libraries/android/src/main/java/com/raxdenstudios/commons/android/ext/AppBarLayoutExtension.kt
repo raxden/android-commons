@@ -45,10 +45,12 @@ abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener 
                 if (mCurrentState != State.EXPANDED) onStateChanged(appBarLayout, State.EXPANDED)
                 State.EXPANDED
             }
+
             isCollapsed(verticalOffset, appBarLayout) -> {
                 if (mCurrentState != State.COLLAPSED) onStateChanged(appBarLayout, State.COLLAPSED)
                 State.COLLAPSED
             }
+
             else -> {
                 if (mCurrentState != State.IDLE) onStateChanged(appBarLayout, State.IDLE)
                 State.IDLE
@@ -56,10 +58,8 @@ abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener 
         }
     }
 
-    private fun isCollapsed(
-        verticalOffset: Int,
-        appBarLayout: AppBarLayout
-    ) = abs(verticalOffset) >= appBarLayout.totalScrollRange
+    private fun isCollapsed(verticalOffset: Int, appBarLayout: AppBarLayout) =
+        abs(verticalOffset) >= appBarLayout.totalScrollRange
 
     private fun isExpanded(verticalOffset: Int) = verticalOffset == 0
 

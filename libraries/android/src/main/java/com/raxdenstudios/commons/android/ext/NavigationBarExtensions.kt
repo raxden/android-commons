@@ -13,5 +13,7 @@ fun Context.getVirtualNavigationBarHeight(): Int {
     val id = resources.getIdentifier("navigation_bar_height", "dimen", "android")
     return if (id > 0) {
         resources.getDimensionPixelSize(id)
-    } else 0
+    } else {
+        0
+    }
 }

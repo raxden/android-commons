@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridLayoutInfo
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.common.truth.Truth.assertThat
-import com.raxdenstudios.commons.pagination.model.PageIndex
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test

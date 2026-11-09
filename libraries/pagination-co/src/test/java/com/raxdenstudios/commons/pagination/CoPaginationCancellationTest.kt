@@ -3,7 +3,6 @@ package com.raxdenstudios.commons.pagination
 import android.util.Log
 import com.raxdenstudios.commons.coroutines.test.rules.MainDispatcherRule
 import com.raxdenstudios.commons.pagination.model.Page
-import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
@@ -32,7 +31,7 @@ internal class CoPaginationCancellationTest {
     private val pagination: CoPagination<String> by lazy {
         CoPagination(
             config = Pagination.Config.default,
-            coroutineScope = CoroutineScope(mainDispatcherRule.testDispatcher)
+            coroutineScope = CoroutineScope(mainDispatcherRule.testDispatcher),
         )
     }
 
@@ -51,7 +50,7 @@ internal class CoPaginationCancellationTest {
     fun `cancelCurrentRequest should cancel ongoing request`() {
         val items = listOf("item1", "item2", "item3")
         var requestStarted = false
-        
+
         coEvery {
             pageRequest.invoke(any(), any())
         } coAnswers {
@@ -62,14 +61,14 @@ internal class CoPaginationCancellationTest {
 
         pagination.requestFirstPage(
             pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
-            pageResponse = { pageResult -> pageResponse(pageResult) }
+            pageResponse = { pageResult -> pageResponse(pageResult) },
         )
 
         // Give time for the request to start
         mainDispatcherRule.testDispatcher.scheduler.advanceTimeBy(100)
-        
+
         pagination.cancelCurrentRequest()
-        
+
         // Advance time to complete the cancelled request
         mainDispatcherRule.testDispatcher.scheduler.advanceUntilIdle()
 
@@ -82,7 +81,7 @@ internal class CoPaginationCancellationTest {
     fun `cancelCurrentRequest method exists and can be called`() {
         // Verify that the cancelCurrentRequest method exists and can be called
         pagination.cancelCurrentRequest()
-        
+
         // No exception should be thrown
     }
 }

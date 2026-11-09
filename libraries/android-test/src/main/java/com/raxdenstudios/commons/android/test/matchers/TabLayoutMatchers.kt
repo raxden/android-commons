@@ -14,7 +14,7 @@ object TabLayoutMatchers {
 
         override fun getConstraints() = Matchers.allOf(
             ViewMatchers.isDisplayed(),
-            ViewMatchers.isAssignableFrom(TabLayout::class.java)
+            ViewMatchers.isAssignableFrom(TabLayout::class.java),
         )
 
         override fun getDescription() = "With tab at index $position"
@@ -26,9 +26,8 @@ object TabLayoutMatchers {
         }
     }
 
-    private fun TabLayout.findTabAt(position: Int): TabLayout.Tab {
-        return getTabAt(position) ?: throw PerformException.Builder()
+    private fun TabLayout.findTabAt(position: Int): TabLayout.Tab =
+        getTabAt(position) ?: throw PerformException.Builder()
             .withCause(Throwable("No tab at index $position"))
             .build()
-    }
 }

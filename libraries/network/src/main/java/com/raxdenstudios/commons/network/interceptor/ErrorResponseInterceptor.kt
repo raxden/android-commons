@@ -3,6 +3,10 @@ package com.raxdenstudios.commons.network.interceptor
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import java.net.HttpURLConnection.HTTP_FORBIDDEN
+import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
+import java.net.HttpURLConnection.HTTP_NOT_FOUND
+import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 
 class ErrorResponseInterceptor : Interceptor {
 
@@ -25,12 +29,10 @@ class ErrorResponseInterceptor : Interceptor {
     }
 }
 
-open class HttpException(
-    val code: Int,
-    val errorBody: String?
-) : IOException("HTTP $code: ${errorBody ?: "Unknown error"}")
+open class HttpException(val code: Int, val errorBody: String?) :
+    IOException("HTTP $code: ${errorBody ?: "Unknown error"}")
 
-class UnauthorizedException(errorBody: String?) : HttpException(401, errorBody)
-class ForbiddenException(errorBody: String?) : HttpException(403, errorBody)
-class NotFoundException(errorBody: String?) : HttpException(404, errorBody)
-class ServerException(errorBody: String?) : HttpException(500, errorBody)
+class UnauthorizedException(errorBody: String?) : HttpException(HTTP_UNAUTHORIZED, errorBody)
+class ForbiddenException(errorBody: String?) : HttpException(HTTP_FORBIDDEN, errorBody)
+class NotFoundException(errorBody: String?) : HttpException(HTTP_NOT_FOUND, errorBody)
+class ServerException(errorBody: String?) : HttpException(HTTP_INTERNAL_ERROR, errorBody)

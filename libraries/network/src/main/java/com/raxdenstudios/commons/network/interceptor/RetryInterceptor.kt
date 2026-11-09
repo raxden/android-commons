@@ -7,7 +7,7 @@ import java.io.IOException
 class RetryInterceptor(
     private val maxRetries: Int = 3,
     private val initialDelayMs: Long = 1000,
-    private val shouldRetry: (Response) -> Boolean = { !it.isSuccessful }
+    private val shouldRetry: (Response) -> Boolean = { !it.isSuccessful },
 ) : Interceptor {
 
     companion object {

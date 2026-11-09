@@ -10,7 +10,7 @@ import androidx.fragment.app.commit
 inline fun <reified TFragment : Fragment> FragmentActivity.loadFragment(
     containerView: View,
     savedInstanceState: Bundle?,
-    create: () -> TFragment
+    create: () -> TFragment,
 ): TFragment = savedInstanceState?.let {
     supportFragmentManager.findFragmentById(containerView.id) as? TFragment
 } ?: create().also { fragment ->
@@ -19,16 +19,14 @@ inline fun <reified TFragment : Fragment> FragmentActivity.loadFragment(
     }
 }
 
-fun FragmentActivity.closeFragment(
-    fragment: Fragment
-) {
+fun FragmentActivity.closeFragment(fragment: Fragment) {
     supportFragmentManager.commit { remove(fragment) }
 }
 
 inline fun <reified TFragment : DialogFragment> FragmentActivity.loadDialogFragment(
     tag: String,
     isCancelable: Boolean = false,
-    create: () -> TFragment
+    create: () -> TFragment,
 ): TFragment {
     val dialogFragment =
         supportFragmentManager.findFragmentByTag(tag) as? TFragment ?: create().also { fragment ->

@@ -20,10 +20,7 @@ object Network {
     }
 
     @SuppressLint("MissingPermission")
-    private fun isNetworkConnected(
-        manager: ConnectivityManager,
-        network: android.net.Network
-    ): Boolean {
+    private fun isNetworkConnected(manager: ConnectivityManager, network: android.net.Network): Boolean {
         val networkCapabilities = manager.getNetworkCapabilities(network) ?: return false
         return when {
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true

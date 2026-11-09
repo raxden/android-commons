@@ -7,10 +7,9 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.ContextCompat
 
-inline fun <reified T : Activity> Context.intentFor(params: Parcelable? = null) =
-    Intent(this, T::class.java).apply {
-        if (params != null) putExtra("params", params)
-    }
+inline fun <reified T : Activity> Context.intentFor(params: Parcelable? = null) = Intent(this, T::class.java).apply {
+    if (params != null) putExtra("params", params)
+}
 
 fun Intent.startActivity(context: Context, options: Bundle? = null) {
     ContextCompat.startActivity(context, this, options)

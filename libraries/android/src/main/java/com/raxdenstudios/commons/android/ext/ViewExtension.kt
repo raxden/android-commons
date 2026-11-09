@@ -28,7 +28,7 @@ fun View.setPaddingTop(padding: Int) {
         paddingStart,
         padding,
         paddingEnd,
-        paddingBottom
+        paddingBottom,
     )
 }
 
@@ -54,7 +54,7 @@ fun View.closeKeyboardWhenTouchScreen() {
             false
         }
     }
-    //If a layout container, iterate over children and seed recursion.
+    // If a layout container, iterate over children and seed recursion.
     if (this is ViewGroup) {
         for (i in 0 until childCount) {
             getChildAt(i).closeKeyboardWhenTouchScreen()
@@ -79,8 +79,11 @@ fun View.doItNonClickable() {
 }
 
 fun View.visibleGone(visible: Boolean) {
-    visibility = if (visible) View.VISIBLE
-    else View.GONE
+    visibility = if (visible) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
 }
 
 fun View.isVisible() = visibility == View.VISIBLE
@@ -144,7 +147,7 @@ fun View.useStyledAttributes(
     @StyleableRes styleableResId: IntArray,
     @AttrRes defStyleAttr: Int = 0,
     @StyleRes defStyleRes: Int = 0,
-    block: (TypedArray) -> Unit
+    block: (TypedArray) -> Unit,
 ) {
     val typedArray =
         context.obtainStyledAttributes(attrs, styleableResId, defStyleAttr, defStyleRes)

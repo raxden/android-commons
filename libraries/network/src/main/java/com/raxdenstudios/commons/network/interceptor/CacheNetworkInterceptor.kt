@@ -6,9 +6,7 @@ import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class CacheNetworkInterceptor(
-    private val cacheControl: CacheControl,
-) : Interceptor {
+class CacheNetworkInterceptor(private val cacheControl: CacheControl) : Interceptor {
 
     companion object {
         private const val HEADER_PRAGMA = "Pragma"
@@ -16,11 +14,11 @@ class CacheNetworkInterceptor(
         private const val MAX_AGE = 5
 
         val default = CacheNetworkInterceptor(
-            initCacheControl(MAX_AGE)
+            initCacheControl(MAX_AGE),
         )
 
         fun withMaxAge(seconds: Int) = CacheNetworkInterceptor(
-            initCacheControl(seconds)
+            initCacheControl(seconds),
         )
 
         private fun initCacheControl(seconds: Int) = CacheControl.Builder()
@@ -29,11 +27,9 @@ class CacheNetworkInterceptor(
     }
 
     @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response =
-        chain.proceed(chain.request()).newBuilder()
-            .removeHeader(HEADER_PRAGMA)
-            .removeHeader(HEADER_CACHE_CONTROL)
-            .header(HEADER_CACHE_CONTROL, cacheControl.toString())
-            .build()
+    override fun intercept(chain: Interceptor.Chain): Response = chain.proceed(chain.request()).newBuilder()
+        .removeHeader(HEADER_PRAGMA)
+        .removeHeader(HEADER_CACHE_CONTROL)
+        .header(HEADER_CACHE_CONTROL, cacheControl.toString())
+        .build()
 }
-

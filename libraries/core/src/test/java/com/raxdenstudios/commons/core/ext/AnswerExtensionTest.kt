@@ -37,7 +37,6 @@ internal class AnswerExtensionTest {
         assertThat(result).isInstanceOf(Answer.Failure::class.java)
     }
 
-
     @Test
     fun `use map when result is success`() {
         val result = Answer.Success("originalValue")
@@ -155,7 +154,7 @@ internal class AnswerExtensionTest {
             onSuccess = { data ->
                 assertThat(data).isEqualTo("otherValue")
             },
-            onFailure = { }
+            onFailure = { },
         )
     }
 
@@ -168,7 +167,7 @@ internal class AnswerExtensionTest {
             onSuccess = { },
             onFailure = { data ->
                 assertThat(data).isEqualTo("originalValue")
-            }
+            },
         )
     }
 
@@ -193,7 +192,6 @@ internal class AnswerExtensionTest {
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(Answer.Failure("originalValue"))
     }
-
 
     @Test
     fun `use onFailure when result is success`() {
@@ -242,7 +240,7 @@ internal class AnswerExtensionTest {
     @Test
     fun `use combine when second is failure`() {
         val answer1 = Answer.Success(5)
-        val answer2: Answer<Int, String> =  Answer.Failure("error2")
+        val answer2: Answer<Int, String> = Answer.Failure("error2")
 
         val result = answer1.combine(answer2) { a, b -> a + b }
 

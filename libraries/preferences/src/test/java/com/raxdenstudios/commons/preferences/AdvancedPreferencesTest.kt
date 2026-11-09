@@ -32,7 +32,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             23,
-            defaultPreferences.get("key", -1)
+            defaultPreferences.get("key", -1),
         )
     }
 
@@ -42,7 +42,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             23,
-            defaultPreferences.get("key", -1)
+            defaultPreferences.get("key", -1),
         )
     }
 
@@ -52,7 +52,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             23,
-            defaultPreferences.get("key", -1)
+            defaultPreferences.get("key", -1),
         )
     }
 
@@ -62,7 +62,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             "test_23",
-            defaultPreferences.get("key", "no_value")
+            defaultPreferences.get("key", "no_value"),
         )
     }
 
@@ -72,7 +72,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             23.0f,
-            defaultPreferences.get("key", -0.1f)
+            defaultPreferences.get("key", -0.1f),
         )
     }
 
@@ -82,7 +82,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             true,
-            defaultPreferences.get("key", false)
+            defaultPreferences.get("key", false),
         )
     }
 
@@ -92,7 +92,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             23L,
-            defaultPreferences.get("key", -1L)
+            defaultPreferences.get("key", -1L),
         )
     }
 
@@ -101,13 +101,13 @@ class AdvancedPreferencesTest {
         defaultPreferences.edit {
             put(
                 "set_key",
-                setOf("test_20", "test_21", "test_22", "test_23")
+                setOf("test_20", "test_21", "test_22", "test_23"),
             )
         }
 
         assertEquals(
             setOf("test_20", "test_21", "test_22", "test_23"),
-            defaultPreferences.get("set_key", emptySet<String>())
+            defaultPreferences.get("set_key", emptySet<String>()),
         )
     }
 
@@ -117,7 +117,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             JSONObject("{\"key\": 23}").toString(),
-            defaultPreferences.get("set_json_object", JSONObject().toString())
+            defaultPreferences.get("set_json_object", JSONObject().toString()),
         )
     }
 
@@ -127,7 +127,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             JSONArray("[{\"key\": 23}]").toString(),
-            defaultPreferences.get("set_json_array", JSONArray().toString())
+            defaultPreferences.get("set_json_array", JSONArray().toString()),
         )
     }
 
@@ -137,7 +137,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             TestObject("key", "value"),
-            defaultPreferences.get("set_test_object", TestObject("empty", "empty"))
+            defaultPreferences.get("set_test_object", TestObject("empty", "empty")),
         )
     }
 
@@ -145,7 +145,7 @@ class AdvancedPreferencesTest {
     fun `return default object when persisted object doesn't exists`() {
         assertEquals(
             TestObject("empty", "empty"),
-            defaultPreferences.get("set_test_object", TestObject("empty", "empty"))
+            defaultPreferences.get("set_test_object", TestObject("empty", "empty")),
         )
     }
 
@@ -155,7 +155,7 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             true,
-            defaultPreferences.contains("key_23")
+            defaultPreferences.contains("key_23"),
         )
     }
 
@@ -169,15 +169,15 @@ class AdvancedPreferencesTest {
 
         assertEquals(
             "test_23",
-            defaultPreferences.get("key_23", "no_value")
+            defaultPreferences.get("key_23", "no_value"),
         )
         assertEquals(
             "no_value",
-            defaultPreferences.get("key_24", "no_value")
+            defaultPreferences.get("key_24", "no_value"),
         )
         assertEquals(
             false,
-            defaultPreferences.contains("key_24")
+            defaultPreferences.contains("key_24"),
         )
     }
 

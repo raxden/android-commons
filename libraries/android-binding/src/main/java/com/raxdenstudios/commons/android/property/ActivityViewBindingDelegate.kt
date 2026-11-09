@@ -9,10 +9,9 @@ import androidx.viewbinding.ViewBinding
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-class ActivityViewBindingDelegate<T : ViewBinding>(
-    bindingClass: Class<T>,
-    private val activity: AppCompatActivity,
-) : ReadOnlyProperty<Activity, T>, DefaultLifecycleObserver {
+class ActivityViewBindingDelegate<T : ViewBinding>(bindingClass: Class<T>, private val activity: AppCompatActivity) :
+    ReadOnlyProperty<Activity, T>,
+    DefaultLifecycleObserver {
 
     private val inflateMethod = bindingClass.getMethod("inflate", LayoutInflater::class.java)
     private var binding: T? = null
@@ -27,10 +26,8 @@ class ActivityViewBindingDelegate<T : ViewBinding>(
         binding ?: createBinding(activity).also { binding = it }
     }
 
-    override fun getValue(
-        thisRef: Activity,
-        property: KProperty<*>
-    ): T = binding ?: createBinding(thisRef).also { binding = it }
+    override fun getValue(thisRef: Activity, property: KProperty<*>): T =
+        binding ?: createBinding(thisRef).also { binding = it }
 
     @Suppress("UNCHECKED_CAST")
     private fun createBinding(thisRef: Activity): T {

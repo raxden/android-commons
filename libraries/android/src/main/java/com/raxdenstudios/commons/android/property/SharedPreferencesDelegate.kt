@@ -11,13 +11,10 @@ class SharedPreferencesDelegate<T : Any>(
     private val key: (KProperty<*>) -> String = KProperty<*>::name,
     private val defaultValue: T,
     private val onAfterGetOperation: (value: T) -> Unit = {},
-    private val onAfterSetOperation: (value: T) -> Unit = {}
+    private val onAfterSetOperation: (value: T) -> Unit = {},
 ) : ReadWriteProperty<Any, T> {
 
-    override fun getValue(
-        thisRef: Any,
-        property: KProperty<*>
-    ): T {
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
         val key = key(property)
         val value = when (defaultValue) {
             is Boolean -> preferences.getBoolean(key, defaultValue)
@@ -29,11 +26,7 @@ class SharedPreferencesDelegate<T : Any>(
         return value
     }
 
-    override fun setValue(
-        thisRef: Any,
-        property: KProperty<*>,
-        value: T
-    ) {
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
         preferences.edit {
             when (defaultValue) {
                 is Boolean -> putBoolean(key(property), value as Boolean)

@@ -82,7 +82,7 @@ internal class RetryInterceptorTest {
         every { chain.request() } returns request
         every { chain.proceed(request) } throwsMany listOf(
             IOException("Network error"),
-            IOException("Network error")
+            IOException("Network error"),
         ) andThen response
         every { response.isSuccessful } returns true
 
@@ -111,7 +111,7 @@ internal class RetryInterceptorTest {
         try {
             interceptor.intercept(chain)
         } catch (e: IOException) {
-            // Expected
+            assertThat(e).isNotNull()
         }
 
         verify(exactly = 5) { chain.proceed(request) }
@@ -125,7 +125,7 @@ internal class RetryInterceptorTest {
         val interceptor = RetryInterceptor(
             maxRetries = 2,
             initialDelayMs = 10,
-            shouldRetry = shouldRetry
+            shouldRetry = shouldRetry,
         )
         val chain = mockk<Interceptor.Chain>()
         val request = mockk<Request>()

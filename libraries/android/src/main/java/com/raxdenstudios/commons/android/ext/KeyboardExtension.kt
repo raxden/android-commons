@@ -19,7 +19,7 @@ fun Activity.closeKeyboardWhenTouchScreen(view: View = findViewById(android.R.id
             false
         }
     }
-    //If a layout container, iterate over children and seed recursion.
+    // If a layout container, iterate over children and seed recursion.
     if (view is ViewGroup) {
         for (i in 0 until view.childCount) {
             closeKeyboardWhenTouchScreen(view.getChildAt(i))

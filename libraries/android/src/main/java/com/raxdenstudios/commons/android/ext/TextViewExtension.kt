@@ -13,26 +13,31 @@ import androidx.core.net.toUri
 
 @Suppress("DEPRECATION")
 fun TextView.setCompatTextAppearance(resId: Int) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setTextAppearance(resId)
-    else setTextAppearance(context, resId)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        setTextAppearance(resId)
+    } else {
+        setTextAppearance(context, resId)
+    }
 }
 
 @Suppress("NestedBlockDepth")
 fun TextView.setHtml(html: String, listener: OnHyperlinkClickListener? = null) {
-    if (TextUtils.isEmpty(html)) text = ""
-    else {
+    if (TextUtils.isEmpty(html)) {
+        text = ""
+    } else {
         var htmlContent = html
         val sequence = htmlContent.toHtml()
         val strBuilder = SpannableStringBuilder(sequence)
         val urls = strBuilder.getSpans(0, sequence.length, URLSpan::class.java)
-        if (urls != null && urls.isNotEmpty())
-            for (span in urls)
+        if (urls != null && urls.isNotEmpty()) {
+            for (span in urls) {
                 makeLinkClickable(
                     strBuilder,
                     span,
-                    listener
+                    listener,
                 )
-        else {
+            }
+        } else {
             var hasLinks = false
             for (word in htmlContent.split(" ".toRegex())) {
                 if (word.isUrl()) {
@@ -50,11 +55,7 @@ fun TextView.setHtml(html: String, listener: OnHyperlinkClickListener? = null) {
     }
 }
 
-private fun makeLinkClickable(
-    strBuilder: SpannableStringBuilder,
-    span: URLSpan,
-    listener: OnHyperlinkClickListener?
-) {
+private fun makeLinkClickable(strBuilder: SpannableStringBuilder, span: URLSpan, listener: OnHyperlinkClickListener?) {
     val start = strBuilder.getSpanStart(span)
     val end = strBuilder.getSpanEnd(span)
     val flags = strBuilder.getSpanFlags(span)

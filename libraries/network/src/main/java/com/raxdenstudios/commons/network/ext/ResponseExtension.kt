@@ -5,10 +5,7 @@ import com.raxdenstudios.commons.core.NetworkError
 import retrofit2.Response
 
 @Suppress("SwallowedException", "TooGenericExceptionCaught")
-fun <S : Any> Response<S>.toAnswer(
-    errorMessage: String,
-): Answer<S, NetworkError<S>> {
-
+fun <S : Any> Response<S>.toAnswer(errorMessage: String): Answer<S, NetworkError<S>> {
     val code = code()
     var body: S? = null
 
@@ -20,8 +17,8 @@ fun <S : Any> Response<S>.toAnswer(
             NetworkError.Unknown(
                 code = code,
                 body = body,
-                message = errorMessage
-            )
+                message = errorMessage,
+            ),
         )
     }
 }
@@ -37,30 +34,31 @@ internal fun <S : Any, E : Any> Int.toAnswer(
             NetworkError.Unknown(
                 code = this,
                 body = bodyError,
-                message = "Success response with null body"
-            )
+                message = "Success response with null body",
+            ),
         )
+
     in (400..499) -> Answer.Failure(
         NetworkError.Client(
             code = this,
             body = bodyError,
-            message = message
-        )
+            message = message,
+        ),
     )
 
     in (500..599) -> Answer.Failure(
         NetworkError.Server(
             code = this,
             body = bodyError,
-            message = message
-        )
+            message = message,
+        ),
     )
 
     else -> Answer.Failure(
         NetworkError.Unknown(
             code = this,
             body = bodyError,
-            message = message
-        )
+            message = message,
+        ),
     )
 }

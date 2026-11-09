@@ -7,27 +7,19 @@ import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
 
-sealed class AdvancedPreferences(
-    private val sharedPreferences: SharedPreferences,
-    private val gson: Gson
-) {
+sealed class AdvancedPreferences(private val sharedPreferences: SharedPreferences, private val gson: Gson) {
 
     private val editor: Editor = Editor()
 
-    data class Default(
-        val context: Context,
-        val gson: Gson = Gson()
-    ) : AdvancedPreferences(PreferenceManager.getDefaultSharedPreferences(context), gson)
+    data class Default(val context: Context, val gson: Gson = Gson()) :
+        AdvancedPreferences(PreferenceManager.getDefaultSharedPreferences(context), gson)
 
     /**
      * File creation mode: the default mode, where the created file can only be accessed by the
      * calling application (or all applications sharing the same user ID).
      */
-    data class Private(
-        val context: Context,
-        val name: String = "privateSharePreferences",
-        val gson: Gson = Gson()
-    ) : AdvancedPreferences(context.getSharedPreferences(name, Context.MODE_PRIVATE), gson)
+    data class Private(val context: Context, val name: String = "privateSharePreferences", val gson: Gson = Gson()) :
+        AdvancedPreferences(context.getSharedPreferences(name, Context.MODE_PRIVATE), gson)
 
     inner class Editor {
 
@@ -64,27 +56,27 @@ sealed class AdvancedPreferences(
     @Suppress("UNCHECKED_CAST")
     fun get(key: String, defaultValue: Any): Any = when (defaultValue) {
         is Int -> sharedPreferences.getInt(key, defaultValue)
+
         is String -> sharedPreferences.getString(key, defaultValue) ?: defaultValue
+
         is Boolean -> sharedPreferences.getBoolean(key, defaultValue)
+
         is Float -> sharedPreferences.getFloat(key, defaultValue)
+
         is Long -> sharedPreferences.getLong(key, defaultValue)
+
         is Set<*> -> sharedPreferences.getStringSet(key, defaultValue as? Set<String>) ?: defaultValue
-        is JSONObject -> try {
+
+        is JSONObject -> runCatching {
             JSONObject(sharedPreferences.getString(key, null) ?: defaultValue.toString())
-        } catch (e: Exception) {
-            defaultValue
-        }
-        is JSONArray -> try {
+        }.getOrElse { defaultValue }
+
+        is JSONArray -> runCatching {
             JSONArray(sharedPreferences.getString(key, null) ?: defaultValue.toString())
-        } catch (e: Exception) {
-            defaultValue
-        }
+        }.getOrElse { defaultValue }
+
         else -> sharedPreferences.getString(key, null)?.let {
-            try {
-                gson.fromJson(it, defaultValue::class.java)
-            } catch (e: Exception) {
-                defaultValue
-            }
+            runCatching { gson.fromJson(it, defaultValue::class.java) }.getOrElse { defaultValue }
         } ?: defaultValue
     }
 }

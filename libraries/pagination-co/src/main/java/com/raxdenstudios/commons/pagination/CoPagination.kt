@@ -53,12 +53,12 @@ class CoPagination<T>(
     ) {
         currentJob?.cancel()
         currentJob = coroutineScope.launch(
-            onError = { error -> processRequestError(error, pageResponse) }
+            onError = { error -> processRequestError(error, pageResponse) },
         ) {
             processRequestStart(pageResponse)
             processRequestSuccess(
                 pageList = pageRequest.invoke(page, config.pageSize),
-                pageResponse = pageResponse
+                pageResponse = pageResponse,
             )
         }
     }

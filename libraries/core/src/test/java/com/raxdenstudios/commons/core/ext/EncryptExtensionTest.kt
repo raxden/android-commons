@@ -18,7 +18,7 @@ internal class EncryptExtensionTest {
 
         assertEquals(
             "b2303cd72f71b642f9c57d2b053ecd6521608b4b2f3045cae612090c472c9eff",
-            value.toSHA256()
+            value.toSHA256(),
         )
     }
 
@@ -28,7 +28,7 @@ internal class EncryptExtensionTest {
 
         assertEquals(
             "018e20b7fb568de01403bec144096b34a6bda4c581127bb3298765b2f6fbfa92",
-            value.toSHA256(Charsets.UTF_16)
+            value.toSHA256(Charsets.UTF_16),
         )
     }
 
@@ -39,7 +39,7 @@ internal class EncryptExtensionTest {
 
         assertEquals(
             "98096d5bf12e56948667b96ef96561a1813b38353b8434eaf950c61603b80e14a023b66dcdeb80c484b19902cb0818fb40607a15f67b0ca4efa7f37291353c59",
-            value.toSHA512()
+            value.toSHA512(),
         )
     }
 
