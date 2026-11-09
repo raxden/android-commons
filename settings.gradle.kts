@@ -42,10 +42,15 @@ dependencyResolutionManagement {
         // Avoid mavenLocal in CI to keep builds reproducible
         if (!providers.environmentVariable("CI").isPresent) mavenLocal()
 
-        // JitPack only for com.github.* coordinates
+        // JitPack only for the com.github.* coordinates actually hosted there
+        // (com.github.* also contains Maven Central artifacts, e.g. ben-manes caffeine)
         exclusiveContent {
             forRepository { maven("https://jitpack.io") }
-            filter { includeGroupByRegex("com\\.github\\..*") }
+            filter {
+                includeGroupByRegex(
+                    "com\\.github\\.(andrzejchm\\.RESTMock|chuckerteam\\.chucker|haroldadmin|skydoves)\\..*"
+                )
+            }
         }
 
         // Snapshots repo only for snapshot versions

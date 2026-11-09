@@ -1,11 +1,14 @@
+import extension.findLibraryOrThrow
 import extension.getProperty
+import extension.libs
 import org.neotech.plugin.rootcoverage.rootCoverage
 import task.DownloadGradleDependencies
+import task.DownloadCheckStyles
 import task.DownloadGithubActions
 
 plugins {
     id("nl.neotech.plugin.rootcoverage")
-//    id("dev.detekt")
+    id("dev.detekt")
 }
 
 // Detekt info ->
@@ -14,16 +17,15 @@ plugins {
 // ./gradlew detektBaseline       - Similar to detekt, but creates a code smell baseline. Further detekt runs will
 //                                      only feature new smells not in this list.
 // More info -> https://detekt.dev/docs/gettingstarted/gradle/
-//detekt {
-//    // version found will be used. Override to stay on the same version.
-//    config = files("/config/detekt/detekt.yml")
-//    // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects.
-//    parallel = true
-//    // Android: Don't create tasks for the specified build types (e.g. "release")
-//    ignoredBuildTypes = listOf("release")
-//    // Specify the base path for file paths in the formatted reports.
-//    basePath = rootProject.projectDir.toString()
-//}
+detekt {
+    config.setFrom(rootProject.files("config/detekt/detekt.yml"))
+    // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects.
+    parallel = true
+    // Android: Don't create tasks for the specified build types (e.g. "release")
+    ignoredBuildTypes = listOf("release")
+    // Specify the base path for file paths in the formatted reports.
+    basePath.set(rootProject.layout.projectDirectory)
+}
 
 rootCoverage {
     // The default build variant for every module
@@ -66,18 +68,21 @@ rootCoverage {
 }
 
 subprojects {
-//    apply(plugin = "dev.detekt")
+    apply(plugin = "dev.detekt")
     // https://docs.gradle.org/current/userguide/project_report_plugin.html#sec:project_reports_tasks
     apply(plugin = "project-report")
 
-    dependencies {
-        // This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
-        // https://detekt.dev/docs/rules/formatting/dawd
-//        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
+    afterEvaluate {
+        dependencies {
+            // This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
+            // https://detekt.dev/docs/rules/formatting/
+            "detektPlugins"(libs.findLibraryOrThrow("detekt-formatting").get())
+        }
     }
 }
 
 tasks {
     DownloadGradleDependencies.register(project)
     DownloadGithubActions.register(project)
+    DownloadCheckStyles.register(project)
 }

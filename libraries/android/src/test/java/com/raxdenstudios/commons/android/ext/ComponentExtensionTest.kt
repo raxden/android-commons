@@ -6,13 +6,17 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 internal class ComponentExtensionTest {
 
     private val lifecycle: Lifecycle = mockk()
-    private val activity: ComponentActivity = mockk {
-        every { this@mockk.lifecycle } returns lifecycle
+    private val activity: ComponentActivity = mockk()
+
+    @Before
+    fun setUp() {
+        every { activity.lifecycle } returns lifecycle
     }
 
     @Test
