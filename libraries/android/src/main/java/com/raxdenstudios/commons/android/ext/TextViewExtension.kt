@@ -12,7 +12,9 @@ import android.widget.TextView
 import androidx.core.net.toUri
 
 @Suppress("DEPRECATION")
-fun TextView.setCompatTextAppearance(resId: Int) {
+fun TextView.setCompatTextAppearance(
+    resId: Int,
+) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         setTextAppearance(resId)
     } else {
@@ -21,7 +23,10 @@ fun TextView.setCompatTextAppearance(resId: Int) {
 }
 
 @Suppress("NestedBlockDepth")
-fun TextView.setHtml(html: String, listener: OnHyperlinkClickListener? = null) {
+fun TextView.setHtml(
+    html: String,
+    listener: OnHyperlinkClickListener? = null,
+) {
     if (TextUtils.isEmpty(html)) {
         text = ""
     } else {
@@ -55,12 +60,18 @@ fun TextView.setHtml(html: String, listener: OnHyperlinkClickListener? = null) {
     }
 }
 
-private fun makeLinkClickable(strBuilder: SpannableStringBuilder, span: URLSpan, listener: OnHyperlinkClickListener?) {
+private fun makeLinkClickable(
+    strBuilder: SpannableStringBuilder,
+    span: URLSpan,
+    listener: OnHyperlinkClickListener?,
+) {
     val start = strBuilder.getSpanStart(span)
     val end = strBuilder.getSpanEnd(span)
     val flags = strBuilder.getSpanFlags(span)
     val clickable = object : ClickableSpan() {
-        override fun onClick(view: View) {
+        override fun onClick(
+            view: View,
+        ) {
             listener?.onHyperlinkClick(span.url.toUri())
         }
     }
@@ -69,5 +80,7 @@ private fun makeLinkClickable(strBuilder: SpannableStringBuilder, span: URLSpan,
 }
 
 interface OnHyperlinkClickListener {
-    fun onHyperlinkClick(uri: Uri)
+    fun onHyperlinkClick(
+        uri: Uri,
+    )
 }

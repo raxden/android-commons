@@ -10,15 +10,21 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.raxdenstudios.commons.android.ext.setTransparentBackground
 
-abstract class FragmentDialog2(@LayoutRes private val layoutId: Int) : DialogFragment() {
+abstract class FragmentDialog2(
+    @LayoutRes private val layoutId: Int,
+) : DialogFragment() {
 
     private var onDismissListener: MutableList<DialogInterface.OnDismissListener> = mutableListOf()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        inflater.inflate(layoutId, container)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View = inflater.inflate(layoutId, container)
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        super.onCreateDialog(savedInstanceState).also { dialog -> dialog.setTransparentBackground() }
+    override fun onCreateDialog(
+        savedInstanceState: Bundle?,
+    ): Dialog = super.onCreateDialog(savedInstanceState).also { dialog -> dialog.setTransparentBackground() }
 
     override fun onStart() {
         super.onStart()
@@ -35,20 +41,28 @@ abstract class FragmentDialog2(@LayoutRes private val layoutId: Int) : DialogFra
         super.onDestroy()
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
+    override fun onDismiss(
+        dialog: DialogInterface,
+    ) {
         super.onDismiss(dialog)
         onDismissListener.forEach { it.onDismiss(dialog) }
     }
 
-    fun addOnDismissListener(onDismissListener: () -> Unit = {}) {
+    fun addOnDismissListener(
+        onDismissListener: () -> Unit = {},
+    ) {
         addOnDismissListener(DialogInterface.OnDismissListener { onDismissListener() })
     }
 
-    fun addOnDismissListener(onDismissListener: DialogInterface.OnDismissListener) {
+    fun addOnDismissListener(
+        onDismissListener: DialogInterface.OnDismissListener,
+    ) {
         this.onDismissListener.add(onDismissListener)
     }
 
-    fun removeOnDismissListener(onDismissListener: DialogInterface.OnDismissListener) {
+    fun removeOnDismissListener(
+        onDismissListener: DialogInterface.OnDismissListener,
+    ) {
         this.onDismissListener.remove(onDismissListener)
     }
 }

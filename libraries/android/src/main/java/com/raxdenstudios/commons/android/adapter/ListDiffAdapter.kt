@@ -11,8 +11,14 @@ abstract class ListDiffAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 ) : ListAdapter<T, VH>(
     object : DiffUtil.ItemCallback<T>() {
 
-        override fun areItemsTheSame(oldItem: T, newItem: T) = areItemsTheSame(oldItem, newItem)
+        override fun areItemsTheSame(
+            oldItem: T,
+            newItem: T,
+        ) = areItemsTheSame(oldItem, newItem)
 
-        override fun areContentsTheSame(oldItem: T, newItem: T): Boolean = areContentsTheSame(oldItem, newItem)
+        override fun areContentsTheSame(
+            oldItem: T,
+            newItem: T,
+        ): Boolean = areContentsTheSame(oldItem, newItem)
     },
 )

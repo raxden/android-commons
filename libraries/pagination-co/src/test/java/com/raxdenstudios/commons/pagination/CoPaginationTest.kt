@@ -164,7 +164,9 @@ internal class CoPaginationTest {
         confirmVerified(pageResponse)
     }
 
-    private fun requestPage(pageIndex: PageIndex) {
+    private fun requestPage(
+        pageIndex: PageIndex,
+    ) {
         pagination.requestPage(
             pageIndex = pageIndex,
             pageRequest = { page, pageSize -> pageRequest(page, pageSize) },
@@ -172,19 +174,25 @@ internal class CoPaginationTest {
         )
     }
 
-    private fun givenAPageWithError(page: Page) {
+    private fun givenAPageWithError(
+        page: Page,
+    ) {
         coEvery {
             pageRequest.invoke(page, aPageSize)
         } coAnswers { error("IllegalStateException") }
     }
 
-    private fun givenAPageWithResults(page: Page) {
+    private fun givenAPageWithResults(
+        page: Page,
+    ) {
         coEvery {
             pageRequest.invoke(page, aPageSize)
         } returns PageList(aPageItems, page)
     }
 
-    private fun givenAPageWithIncompleteResults(page: Page) {
+    private fun givenAPageWithIncompleteResults(
+        page: Page,
+    ) {
         coEvery {
             pageRequest.invoke(page, aPageSize)
         } returns PageList(aIncompletePageItems, page)

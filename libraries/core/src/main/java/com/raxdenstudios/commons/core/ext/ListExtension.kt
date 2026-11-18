@@ -1,7 +1,12 @@
 package com.raxdenstudios.commons.core.ext
 
-fun <T> List<T>.replaceItem(newValue: T, condition: (T) -> Boolean): List<T> = map { list ->
+fun <T> List<T>.replaceItem(
+    newValue: T,
+    condition: (T) -> Boolean,
+): List<T> = map { list ->
     if (condition(list)) newValue else list
 }
 
-fun <T> List<T>.removeItem(condition: (T) -> Boolean): List<T> = filterNot(condition)
+fun <T> List<T>.removeItem(
+    condition: (T) -> Boolean,
+): List<T> = filterNot(condition)

@@ -25,5 +25,7 @@ fun SharedPreferences.string(
     onAfterSetOperation: (value: String) -> Unit = {},
 ) = SharedPreferencesDelegate(this, key, defaultValue, onAfterGetOperation, onAfterSetOperation)
 
-fun SharedPreferences.getStringNotNull(key: String, defaultValue: String): String =
-    getString(key, defaultValue) ?: defaultValue
+fun SharedPreferences.getStringNotNull(
+    key: String,
+    defaultValue: String,
+): String = getString(key, defaultValue) ?: defaultValue

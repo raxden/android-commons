@@ -11,7 +11,9 @@ interface PermissionsManager : DefaultLifecycleObserver {
      *
      * @param activity
      */
-    fun attach(activity: ComponentActivity)
+    fun attach(
+        activity: ComponentActivity,
+    )
 
     /**
      * Request permission
@@ -19,7 +21,10 @@ interface PermissionsManager : DefaultLifecycleObserver {
      * @param callbacks
      * @param permissions
      */
-    fun requestPermission(callbacks: Callbacks, vararg permissions: Permission)
+    fun requestPermission(
+        callbacks: Callbacks,
+        vararg permissions: Permission,
+    )
 
     /**
      * Has permission
@@ -28,7 +33,10 @@ interface PermissionsManager : DefaultLifecycleObserver {
      * @param permission
      * @receiver
      */
-    fun hasPermission(onGranted: (Boolean) -> Unit, permission: Permission)
+    fun hasPermission(
+        onGranted: (Boolean) -> Unit,
+        permission: Permission,
+    )
 
     /**
      * Callbacks

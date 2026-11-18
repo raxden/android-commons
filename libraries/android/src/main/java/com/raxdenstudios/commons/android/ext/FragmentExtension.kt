@@ -10,7 +10,10 @@ import androidx.fragment.app.commit
 import com.raxdenstudios.commons.android.property.FragmentArgumentDelegate
 import com.raxdenstudios.commons.android.property.FragmentByIdDelegate
 
-fun Fragment.inflateView(layoutId: Int, root: ViewGroup? = null): View = layoutInflater.inflate(layoutId, root)
+fun Fragment.inflateView(
+    layoutId: Int,
+    root: ViewGroup? = null,
+): View = layoutInflater.inflate(layoutId, root)
 
 fun Fragment.close() = activity?.closeFragment(this)
 
@@ -45,4 +48,6 @@ inline fun <reified TFragment : DialogFragment> Fragment.loadDialogFragment(
 
 fun <T : Any> Fragment.argument() = FragmentArgumentDelegate<T>()
 
-fun <T : Fragment> Fragment.fragmentById(@IdRes fragmentId: Int) = FragmentByIdDelegate<T>(fragmentId)
+fun <T : Fragment> Fragment.fragmentById(
+    @IdRes fragmentId: Int,
+) = FragmentByIdDelegate<T>(fragmentId)

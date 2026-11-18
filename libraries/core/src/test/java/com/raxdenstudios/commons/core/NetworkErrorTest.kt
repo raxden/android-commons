@@ -107,7 +107,10 @@ internal class NetworkErrorTest {
 
     @Test
     fun `NetworkError should work with different body types`() {
-        data class ErrorBody(val errorCode: String, val details: String)
+        data class ErrorBody(
+            val errorCode: String,
+            val details: String,
+        )
 
         val errorBody = ErrorBody("ERR_001", "Validation failed")
         val error = NetworkError.Client(

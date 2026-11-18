@@ -19,7 +19,9 @@ inline fun <reified TFragment : Fragment> FragmentActivity.loadFragment(
     }
 }
 
-fun FragmentActivity.closeFragment(fragment: Fragment) {
+fun FragmentActivity.closeFragment(
+    fragment: Fragment,
+) {
     supportFragmentManager.commit { remove(fragment) }
 }
 

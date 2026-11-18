@@ -6,7 +6,11 @@ fun RecyclerView.addOnScrolledListener(
     onScrolled: (RecyclerView, Int, Int) -> Unit = { _, _, _ -> },
 ): RecyclerView.OnScrollListener {
     val listener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        override fun onScrolled(
+            recyclerView: RecyclerView,
+            dx: Int,
+            dy: Int,
+        ) {
             onScrolled(recyclerView, dx, dy)
         }
     }

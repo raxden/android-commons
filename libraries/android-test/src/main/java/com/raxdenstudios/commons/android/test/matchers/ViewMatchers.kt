@@ -11,37 +11,55 @@ import org.hamcrest.Description
 
 object ViewMatchers {
 
-    fun clickOnChildViewWithId(resId: Int) = object : ViewAction {
+    fun clickOnChildViewWithId(
+        resId: Int,
+    ) = object : ViewAction {
         override fun getDescription(): String = ""
 
         override fun getConstraints() = object : BaseMatcher<View>() {
 
             @Suppress("EmptyFunctionBlock")
-            override fun describeTo(description: Description) {
+            override fun describeTo(
+                description: Description,
+            ) {
             }
 
-            override fun matches(item: Any) = isA(ViewGroup::class.java).matches(item)
+            override fun matches(
+                item: Any,
+            ) = isA(ViewGroup::class.java).matches(item)
         }
 
-        override fun perform(uiController: UiController?, view: View?) {
+        override fun perform(
+            uiController: UiController?,
+            view: View?,
+        ) {
             val foundedView = view?.findViewById<View>(resId) ?: return
             foundedView.performClick()
         }
     }
 
-    fun setChecked(checked: Boolean) = object : ViewAction {
+    fun setChecked(
+        checked: Boolean,
+    ) = object : ViewAction {
         override fun getConstraints() = object : BaseMatcher<View>() {
 
             @Suppress("EmptyFunctionBlock")
-            override fun describeTo(description: Description) {
+            override fun describeTo(
+                description: Description,
+            ) {
             }
 
-            override fun matches(item: Any) = isA(Checkable::class.java).matches(item)
+            override fun matches(
+                item: Any,
+            ) = isA(Checkable::class.java).matches(item)
         }
 
         override fun getDescription(): String = ""
 
-        override fun perform(uiController: UiController, view: View) {
+        override fun perform(
+            uiController: UiController,
+            view: View,
+        ) {
             val checkableView = view as? Checkable ?: return
             checkableView.isChecked = checked
         }

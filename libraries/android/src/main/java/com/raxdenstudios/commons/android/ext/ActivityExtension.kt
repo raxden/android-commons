@@ -14,7 +14,9 @@ import com.raxdenstudios.commons.android.property.ActivityContentViewDelegate
 import com.raxdenstudios.commons.android.property.FragmentActivityByIdDelegate
 import com.raxdenstudios.commons.android.util.SDK
 
-fun Activity.setVirtualNavigationBarSafeArea(view: View) {
+fun Activity.setVirtualNavigationBarSafeArea(
+    view: View,
+) {
     view.setPaddingRelative(
         view.paddingStart,
         view.paddingTop,
@@ -23,7 +25,9 @@ fun Activity.setVirtualNavigationBarSafeArea(view: View) {
     )
 }
 
-fun Activity.setStatusBarSafeArea(view: View) {
+fun Activity.setStatusBarSafeArea(
+    view: View,
+) {
     view.setPaddingRelative(
         view.paddingStart,
         view.paddingTop + SDK.getStatusBarHeight(this),
@@ -38,7 +42,11 @@ fun Activity.setFullScreen() {
     }
 }
 
-fun <T : Parcelable> Activity.loadParcelable(key: String, defaultValue: T? = null, operation: (value: T) -> Unit) {
+fun <T : Parcelable> Activity.loadParcelable(
+    key: String,
+    defaultValue: T? = null,
+    operation: (value: T) -> Unit,
+) {
     val value = intent?.extras?.getParcelable(key) ?: defaultValue
     if (value != null) operation(value)
 }
@@ -62,20 +70,28 @@ fun Activity.setResultOKAndFinish3() {
     finish()
 }
 
-inline fun <reified T : Parcelable> Activity.setResultOKWithData(value: T) {
+inline fun <reified T : Parcelable> Activity.setResultOKWithData(
+    value: T,
+) {
     setResult(
         Activity.RESULT_OK,
         Intent().apply { putExtra(T::class.java.simpleName, value) },
     )
 }
 
-inline fun <reified T : Parcelable> Activity.setResultOKWithDataAndFinish(value: T) {
+inline fun <reified T : Parcelable> Activity.setResultOKWithDataAndFinish(
+    value: T,
+) {
     setResultOKWithData(value)
     finish()
 }
 
-fun Activity.contentView(@LayoutRes resId: Int) = ActivityContentViewDelegate(resId)
+fun Activity.contentView(
+    @LayoutRes resId: Int,
+) = ActivityContentViewDelegate(resId)
 
 inline fun <reified T : Any> Activity.argument() = ActivityArgumentDelegate<T>()
 
-fun <T : Fragment> Activity.fragmentById(@IdRes fragmentId: Int) = FragmentActivityByIdDelegate<T>(fragmentId)
+fun <T : Fragment> Activity.fragmentById(
+    @IdRes fragmentId: Int,
+) = FragmentActivityByIdDelegate<T>(fragmentId)

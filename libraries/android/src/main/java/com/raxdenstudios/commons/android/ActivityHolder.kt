@@ -16,11 +16,15 @@ class ActivityHolder {
             }
         }
 
-    fun attach(activity: ComponentActivity) {
+    fun attach(
+        activity: ComponentActivity,
+    ) {
         this.activity = activity
     }
 
-    fun detach(activity: ComponentActivity) {
+    fun detach(
+        activity: ComponentActivity,
+    ) {
         if (this.activity == activity) this.activity = null
     }
 }

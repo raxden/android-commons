@@ -49,12 +49,16 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
         val fragmentCount: Int
 
         fun onCreateViewPager(): ViewPager2
-        fun onCreateFragment(position: Int): TFragment
+        fun onCreateFragment(
+            position: Int,
+        ): TFragment
     }
 
     interface TabLayoutCallback<TFragment> : Callback<TFragment> {
         fun onCreateTabLayout(): TabLayout
-        fun onFragmentPageTitle(position: Int): String
+        fun onFragmentPageTitle(
+            position: Int,
+        ): String
     }
 
     private val viewPager2: ViewPager2 = callback.onCreateViewPager()
@@ -98,12 +102,18 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
         }
     }
 
-    private fun pageSelected(position: Int) {
+    private fun pageSelected(
+        position: Int,
+    ) {
         onPageSelected(position)
         if (isLastPage) onLastPageReached()
     }
 
-    private fun pageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    private fun pageScrolled(
+        position: Int,
+        positionOffset: Float,
+        positionOffsetPixels: Int,
+    ) {
         onPageScroll(position, positionOffset, positionOffsetPixels)
         if (positionOffset != 0.0f || positionOffsetPixels != 0) return
         onPageScrolled(position)
@@ -116,6 +126,8 @@ class FragmentViewPager2Delegate<TFragment : Fragment>(
 
         override fun getItemCount() = callback.fragmentCount
 
-        override fun createFragment(position: Int) = callback.onCreateFragment(position)
+        override fun createFragment(
+            position: Int,
+        ) = callback.onCreateFragment(position)
     }
 }

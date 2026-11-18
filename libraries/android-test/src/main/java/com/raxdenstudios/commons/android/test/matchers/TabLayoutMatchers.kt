@@ -10,7 +10,9 @@ import org.hamcrest.Matchers
 
 object TabLayoutMatchers {
 
-    fun selectTabAtPosition(position: Int) = object : ViewAction {
+    fun selectTabAtPosition(
+        position: Int,
+    ) = object : ViewAction {
 
         override fun getConstraints() = Matchers.allOf(
             ViewMatchers.isDisplayed(),
@@ -19,15 +21,19 @@ object TabLayoutMatchers {
 
         override fun getDescription() = "With tab at index $position"
 
-        override fun perform(uiController: UiController?, view: View?) {
+        override fun perform(
+            uiController: UiController?,
+            view: View?,
+        ) {
             val tabLayout = view as? TabLayout ?: return
             val tabAtPosition = tabLayout.findTabAt(position)
             tabAtPosition.select()
         }
     }
 
-    private fun TabLayout.findTabAt(position: Int): TabLayout.Tab =
-        getTabAt(position) ?: throw PerformException.Builder()
-            .withCause(Throwable("No tab at index $position"))
-            .build()
+    private fun TabLayout.findTabAt(
+        position: Int,
+    ): TabLayout.Tab = getTabAt(position) ?: throw PerformException.Builder()
+        .withCause(Throwable("No tab at index $position"))
+        .build()
 }

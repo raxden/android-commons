@@ -5,7 +5,9 @@ import com.raxdenstudios.commons.core.NetworkError
 import retrofit2.Response
 
 @Suppress("SwallowedException", "TooGenericExceptionCaught")
-fun <S : Any> Response<S>.toAnswer(errorMessage: String): Answer<S, NetworkError<S>> {
+fun <S : Any> Response<S>.toAnswer(
+    errorMessage: String,
+): Answer<S, NetworkError<S>> {
     val code = code()
     var body: S? = null
 
