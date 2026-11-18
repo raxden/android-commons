@@ -10,39 +10,61 @@ object TextInputLayoutMatchers {
     fun hasNoTextInputLayoutError() = object : TypeSafeMatcher<View>() {
 
         @Suppress("EmptyFunctionBlock")
-        override fun describeTo(description: Description) {
+        override fun describeTo(
+            description: Description,
+        ) {
         }
 
-        override fun matchesSafely(view: View): Boolean = !hasTextInputLayoutErrorText(view, "")
+        override fun matchesSafely(
+            view: View,
+        ): Boolean = !hasTextInputLayoutErrorText(view, "")
     }
 
-    fun hasTextInputLayoutErrorText(expectedError: Int) = object : TypeSafeMatcher<View>() {
+    fun hasTextInputLayoutErrorText(
+        expectedError: Int,
+    ) = object : TypeSafeMatcher<View>() {
 
         @Suppress("EmptyFunctionBlock")
-        override fun describeTo(description: Description) {
+        override fun describeTo(
+            description: Description,
+        ) {
         }
 
-        override fun matchesSafely(view: View): Boolean {
+        override fun matchesSafely(
+            view: View,
+        ): Boolean {
             val expectedErrorText = view.resources.getString(expectedError)
             return hasTextInputLayoutErrorText(view, expectedErrorText)
         }
     }
 
-    fun hasTextInputLayoutErrorText(expectedErrorText: String) = object : TypeSafeMatcher<View>() {
+    fun hasTextInputLayoutErrorText(
+        expectedErrorText: String,
+    ) = object : TypeSafeMatcher<View>() {
 
         @Suppress("EmptyFunctionBlock")
-        override fun describeTo(description: Description) {
+        override fun describeTo(
+            description: Description,
+        ) {
         }
 
-        override fun matchesSafely(view: View): Boolean = hasTextInputLayoutErrorText(view, expectedErrorText)
+        override fun matchesSafely(
+            view: View,
+        ): Boolean = hasTextInputLayoutErrorText(view, expectedErrorText)
     }
 
-    private fun hasTextInputLayoutErrorText(view: View, expectedErrorText: String): Boolean {
+    private fun hasTextInputLayoutErrorText(
+        view: View,
+        expectedErrorText: String,
+    ): Boolean {
         val textInputLayout = (view as? TextInputLayout) ?: return false
         return hasTextInputLayoutErrorText(textInputLayout, expectedErrorText)
     }
 
-    private fun hasTextInputLayoutErrorText(textInputLayout: TextInputLayout, expectedErrorText: String): Boolean {
+    private fun hasTextInputLayoutErrorText(
+        textInputLayout: TextInputLayout,
+        expectedErrorText: String,
+    ): Boolean {
         val error = textInputLayout.error ?: return false
         return error.toString() == expectedErrorText
     }

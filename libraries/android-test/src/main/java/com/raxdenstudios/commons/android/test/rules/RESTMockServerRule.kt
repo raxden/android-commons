@@ -6,7 +6,9 @@ import org.junit.runner.Description
 
 class RESTMockServerRule : TestWatcher() {
 
-    override fun finished(description: Description?) {
+    override fun finished(
+        description: Description?,
+    ) {
         super.finished(description)
         RESTMockServer.reset()
     }

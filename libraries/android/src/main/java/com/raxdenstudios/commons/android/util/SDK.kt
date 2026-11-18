@@ -18,13 +18,17 @@ object SDK {
             (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")) ||
             "google_sdk" == Build.PRODUCT
 
-    fun hasVirtualNavigationBar(context: Context): Boolean {
+    fun hasVirtualNavigationBar(
+        context: Context,
+    ): Boolean {
         val id = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
         return (id > 0 && context.resources.getBoolean(id)) || isEmulator
     }
 
     @SuppressLint("InternalInsetResource")
-    fun getVirtualNavigationBarHeight(context: Context): Int {
+    fun getVirtualNavigationBarHeight(
+        context: Context,
+    ): Int {
         if (!hasVirtualNavigationBar(context)) return 0
         val resourceId =
             context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
@@ -39,7 +43,9 @@ object SDK {
      * Only works when is called in onCreate
      */
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
-    fun getStatusBarHeight(context: Context): Int {
+    fun getStatusBarHeight(
+        context: Context,
+    ): Int {
         val resourceId: Int =
             context.resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) {
@@ -49,13 +55,19 @@ object SDK {
         }
     }
 
-    fun getPackageName(context: Context): String = runCatching { context.getPackageInfo().packageName }
+    fun getPackageName(
+        context: Context,
+    ): String = runCatching { context.getPackageInfo().packageName }
         .getOrDefault("")
 
-    fun getVersionName(context: Context): String = runCatching { context.getPackageInfo().versionName.orDefault() }
+    fun getVersionName(
+        context: Context,
+    ): String = runCatching { context.getPackageInfo().versionName.orDefault() }
         .getOrDefault("")
 
-    fun getVersionCode(context: Context): Long = when {
+    fun getVersionCode(
+        context: Context,
+    ): Long = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ->
             runCatching { context.getPackageInfo().longVersionCode }
                 .getOrDefault(0L)

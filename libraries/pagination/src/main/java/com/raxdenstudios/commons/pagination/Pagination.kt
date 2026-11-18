@@ -20,7 +20,9 @@ abstract class Pagination<T> {
 
     fun getCurrentPage(): Page = currentPage ?: config.initialPage
 
-    fun getItemsByPage(page: Page) = history[page] ?: emptyList()
+    fun getItemsByPage(
+        page: Page,
+    ) = history[page] ?: emptyList()
 
     fun clear() {
         history.clear()
@@ -29,7 +31,10 @@ abstract class Pagination<T> {
         status = Status.Empty
     }
 
-    protected fun processRequestError(throwable: Throwable, pageResponse: (pageResult: PageResult<T>) -> Unit) {
+    protected fun processRequestError(
+        throwable: Throwable,
+        pageResponse: (pageResult: PageResult<T>) -> Unit,
+    ) {
         status = if (itemsLoadedGreaterThan0()) {
             Status.NotEmpty
         } else {
@@ -46,9 +51,13 @@ abstract class Pagination<T> {
             .forEach { list.addAll(it) }
     }.toList()
 
-    private fun thereAreLessElementsThanPageSize(pageList: PageList<T>) = pageList.totalItems < config.pageSize.value
+    private fun thereAreLessElementsThanPageSize(
+        pageList: PageList<T>,
+    ) = pageList.totalItems < config.pageSize.value
 
-    protected fun processRequestStart(pageResponse: (pageResult: PageResult<T>) -> Unit) {
+    protected fun processRequestStart(
+        pageResponse: (pageResult: PageResult<T>) -> Unit,
+    ) {
         status = Status.Loading
         pageResponse(PageResult.Loading)
     }
@@ -61,7 +70,10 @@ abstract class Pagination<T> {
         Page(indexWithPrefetchDistance / pageSize + config.initialPage.value)
     }
 
-    protected fun processRequestSuccess(pageList: PageList<T>, pageResponse: (pageResult: PageResult<T>) -> Unit) {
+    protected fun processRequestSuccess(
+        pageList: PageList<T>,
+        pageResponse: (pageResult: PageResult<T>) -> Unit,
+    ) {
         itemsLoaded += pageList.totalItems
         status = if (thereAreLessElementsThanPageSize(pageList)) {
             Status.NoMoreResults
@@ -82,21 +94,26 @@ abstract class Pagination<T> {
         pageResponse(pageResult)
     }
 
-    protected fun shouldMakeRequest(pageIndex: PageIndex, pageResponse: (pageResult: PageResult<T>) -> Unit) =
-        when (status) {
-            Status.Empty -> true
+    protected fun shouldMakeRequest(
+        pageIndex: PageIndex,
+        pageResponse: (pageResult: PageResult<T>) -> Unit,
+    ) = when (status) {
+        Status.Empty -> true
 
-            Status.NotEmpty -> indexItsEndOfTheList(pageIndex, itemsLoaded)
+        Status.NotEmpty -> indexItsEndOfTheList(pageIndex, itemsLoaded)
 
-            Status.Loading -> false
+        Status.Loading -> false
 
-            Status.NoMoreResults -> {
-                pageResponse(PageResult.NoMoreResults)
-                false
-            }
+        Status.NoMoreResults -> {
+            pageResponse(PageResult.NoMoreResults)
+            false
         }
+    }
 
-    private fun indexItsEndOfTheList(pageIndex: PageIndex, itemsLoaded: Int): Boolean {
+    private fun indexItsEndOfTheList(
+        pageIndex: PageIndex,
+        itemsLoaded: Int,
+    ): Boolean {
         val endOfTheList = pageIndex.value >= (itemsLoaded - config.prefetchDistance)
         logger { "$endOfTheList <- ${pageIndex.value} >= ($itemsLoaded - ${config.prefetchDistance})" }
         return endOfTheList
@@ -109,7 +126,11 @@ abstract class Pagination<T> {
         data object NoMoreResults : Status()
     }
 
-    data class Config(val initialPage: Page, val pageSize: PageSize, val prefetchDistance: Int) {
+    data class Config(
+        val initialPage: Page,
+        val pageSize: PageSize,
+        val prefetchDistance: Int,
+    ) {
 
         companion object {
 

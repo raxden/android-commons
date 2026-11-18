@@ -10,10 +10,14 @@ object SwipeRefreshLayoutMatchers {
     fun isSwipeRefreshLayoutRefreshing() = object : TypeSafeMatcher<View>() {
 
         @Suppress("EmptyFunctionBlock")
-        override fun describeTo(description: Description) {
+        override fun describeTo(
+            description: Description,
+        ) {
         }
 
-        override fun matchesSafely(view: View): Boolean {
+        override fun matchesSafely(
+            view: View,
+        ): Boolean {
             val swipeRefreshLayout = (view as? SwipeRefreshLayout) ?: return false
             return swipeRefreshLayout.isRefreshing
         }

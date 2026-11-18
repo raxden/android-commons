@@ -16,23 +16,31 @@ class PermissionsManagerImpl : PermissionsManager {
     private var permissionResultLauncher: ActivityResultLauncher<Array<String>>? = null
     private var permissionsCallbacks: PermissionsManager.Callbacks = PermissionsManager.Callbacks()
 
-    override fun attach(activity: ComponentActivity) {
+    override fun attach(
+        activity: ComponentActivity,
+    ) {
         activityHolder.attach(activity)
         activity.lifecycle.addObserver(this)
     }
 
-    override fun onCreate(owner: LifecycleOwner) {
+    override fun onCreate(
+        owner: LifecycleOwner,
+    ) {
         super.onCreate(owner)
 
         registerPermissionsResultContract(owner)
     }
 
-    override fun onDestroy(owner: LifecycleOwner) {
+    override fun onDestroy(
+        owner: LifecycleOwner,
+    ) {
         activityHolder.activity?.run { activityHolder.detach(this) }
         super.onDestroy(owner)
     }
 
-    private fun registerPermissionsResultContract(owner: LifecycleOwner) {
+    private fun registerPermissionsResultContract(
+        owner: LifecycleOwner,
+    ) {
         val activity = activityHolder.activity ?: error("You must call attach() before onCreate()")
 
         permissionResultLauncher = activity.activityResultRegistry.register(
@@ -42,7 +50,9 @@ class PermissionsManagerImpl : PermissionsManager {
         ) { result -> handleRegisterPermissionsResult(result) }
     }
 
-    private fun handleRegisterPermissionsResult(result: Map<String, Boolean>) {
+    private fun handleRegisterPermissionsResult(
+        result: Map<String, Boolean>,
+    ) {
         result.entries.forEach { entryPermissions ->
             val isGranted = entryPermissions.value
             val permission = Permission.fromValue(entryPermissions.key)
@@ -53,7 +63,10 @@ class PermissionsManagerImpl : PermissionsManager {
         }
     }
 
-    override fun requestPermission(callbacks: PermissionsManager.Callbacks, vararg permissions: Permission) {
+    override fun requestPermission(
+        callbacks: PermissionsManager.Callbacks,
+        vararg permissions: Permission,
+    ) {
         permissionsCallbacks = callbacks
 
         val permissionsToRequest = permissions.filter { permission ->
@@ -75,24 +88,33 @@ class PermissionsManagerImpl : PermissionsManager {
         performRequestPermission(permissionsToRequest)
     }
 
-    private fun performRequestPermission(permissions: List<Permission>) {
+    private fun performRequestPermission(
+        permissions: List<Permission>,
+    ) {
         if (permissions.isEmpty()) return
 
         val arrayPermissions = permissions.map { it.value }.toTypedArray()
         permissionResultLauncher?.launch(arrayPermissions)
     }
 
-    private fun shouldShowRequestPermissionRationale(permission: Permission) =
-        activityHolder.activity?.shouldShowRequestPermissionRationale(permission.value) ?: false
+    private fun shouldShowRequestPermissionRationale(
+        permission: Permission,
+    ) = activityHolder.activity?.shouldShowRequestPermissionRationale(permission.value) ?: false
 
-    override fun hasPermission(onGranted: (Boolean) -> Unit, permission: Permission) {
+    override fun hasPermission(
+        onGranted: (Boolean) -> Unit,
+        permission: Permission,
+    ) {
         onGranted(hasPermission(permission))
     }
 
-    private fun hasPermission(permission: Permission) =
-        checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+    private fun hasPermission(
+        permission: Permission,
+    ) = checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
 
-    private fun checkSelfPermission(permission: Permission) = activityHolder.activity?.let {
+    private fun checkSelfPermission(
+        permission: Permission,
+    ) = activityHolder.activity?.let {
         ContextCompat.checkSelfPermission(it, permission.value)
     } ?: PackageManager.PERMISSION_DENIED
 

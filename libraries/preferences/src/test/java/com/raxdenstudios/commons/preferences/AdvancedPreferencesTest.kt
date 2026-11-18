@@ -213,9 +213,14 @@ class AdvancedPreferencesTest {
         assertEquals(42L, allPrefs["key_long"])
     }
 
-    data class TestObject(val key: String, val value: String) : Comparable<TestObject> {
+    data class TestObject(
+        val key: String,
+        val value: String,
+    ) : Comparable<TestObject> {
 
-        override fun compareTo(other: TestObject): Int = when {
+        override fun compareTo(
+            other: TestObject,
+        ): Int = when {
             key == other.key && value == other.value -> 0
             else -> -1
         }

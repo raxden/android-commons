@@ -3,17 +3,27 @@ package com.raxdenstudios.commons.android.ext
 import com.google.android.material.appbar.AppBarLayout
 import kotlin.math.abs
 
-fun AppBarLayout.addOnScrollStateListener(onScrollState: (AppBarStateChangeListener.State) -> Unit) {
+fun AppBarLayout.addOnScrollStateListener(
+    onScrollState: (AppBarStateChangeListener.State) -> Unit,
+) {
     addOnOffsetChangedListener(object : AppBarStateChangeListener() {
-        override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
+        override fun onStateChanged(
+            appBarLayout: AppBarLayout,
+            state: State,
+        ) {
             onScrollState(state)
         }
     })
 }
 
-fun AppBarLayout.addOnScrollProgressListener(onScrollProgress: (Int) -> Unit) {
+fun AppBarLayout.addOnScrollProgressListener(
+    onScrollProgress: (Int) -> Unit,
+) {
     addOnOffsetChangedListener(object : AppBarScrollProgressListener() {
-        override fun onProgressChanged(appBarLayout: AppBarLayout, progress: Int) {
+        override fun onProgressChanged(
+            appBarLayout: AppBarLayout,
+            progress: Int,
+        ) {
             onScrollProgress(progress)
         }
     })
@@ -25,12 +35,18 @@ abstract class AppBarScrollProgressListener : AppBarLayout.OnOffsetChangedListen
         private const val FULL_PROGRESS = 100
     }
 
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+    override fun onOffsetChanged(
+        appBarLayout: AppBarLayout,
+        verticalOffset: Int,
+    ) {
         val progress = abs(verticalOffset) * FULL_PROGRESS / appBarLayout.totalScrollRange
         onProgressChanged(appBarLayout, progress)
     }
 
-    abstract fun onProgressChanged(appBarLayout: AppBarLayout, progress: Int)
+    abstract fun onProgressChanged(
+        appBarLayout: AppBarLayout,
+        progress: Int,
+    )
 }
 
 abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
@@ -39,7 +55,10 @@ abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener 
 
     private var mCurrentState = State.IDLE
 
-    override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+    override fun onOffsetChanged(
+        appBarLayout: AppBarLayout,
+        verticalOffset: Int,
+    ) {
         mCurrentState = when {
             isExpanded(verticalOffset) -> {
                 if (mCurrentState != State.EXPANDED) onStateChanged(appBarLayout, State.EXPANDED)
@@ -58,10 +77,17 @@ abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener 
         }
     }
 
-    private fun isCollapsed(verticalOffset: Int, appBarLayout: AppBarLayout) =
-        abs(verticalOffset) >= appBarLayout.totalScrollRange
+    private fun isCollapsed(
+        verticalOffset: Int,
+        appBarLayout: AppBarLayout,
+    ) = abs(verticalOffset) >= appBarLayout.totalScrollRange
 
-    private fun isExpanded(verticalOffset: Int) = verticalOffset == 0
+    private fun isExpanded(
+        verticalOffset: Int,
+    ) = verticalOffset == 0
 
-    abstract fun onStateChanged(appBarLayout: AppBarLayout, state: State)
+    abstract fun onStateChanged(
+        appBarLayout: AppBarLayout,
+        state: State,
+    )
 }

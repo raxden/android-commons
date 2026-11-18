@@ -11,7 +11,9 @@ import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 class ErrorResponseInterceptor : Interceptor {
 
     @Suppress("MagicNumber")
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override fun intercept(
+        chain: Interceptor.Chain,
+    ): Response {
         val response = chain.proceed(chain.request())
 
         if (!response.isSuccessful) {
@@ -29,10 +31,20 @@ class ErrorResponseInterceptor : Interceptor {
     }
 }
 
-open class HttpException(val code: Int, val errorBody: String?) :
-    IOException("HTTP $code: ${errorBody ?: "Unknown error"}")
+open class HttpException(
+    val code: Int,
+    val errorBody: String?,
+) : IOException("HTTP $code: ${errorBody ?: "Unknown error"}")
 
-class UnauthorizedException(errorBody: String?) : HttpException(HTTP_UNAUTHORIZED, errorBody)
-class ForbiddenException(errorBody: String?) : HttpException(HTTP_FORBIDDEN, errorBody)
-class NotFoundException(errorBody: String?) : HttpException(HTTP_NOT_FOUND, errorBody)
-class ServerException(errorBody: String?) : HttpException(HTTP_INTERNAL_ERROR, errorBody)
+class UnauthorizedException(
+    errorBody: String?,
+) : HttpException(HTTP_UNAUTHORIZED, errorBody)
+class ForbiddenException(
+    errorBody: String?,
+) : HttpException(HTTP_FORBIDDEN, errorBody)
+class NotFoundException(
+    errorBody: String?,
+) : HttpException(HTTP_NOT_FOUND, errorBody)
+class ServerException(
+    errorBody: String?,
+) : HttpException(HTTP_INTERNAL_ERROR, errorBody)

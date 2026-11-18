@@ -23,7 +23,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-fun View.setPaddingTop(padding: Int) {
+fun View.setPaddingTop(
+    padding: Int,
+) {
     setPaddingRelative(
         paddingStart,
         padding,
@@ -32,13 +34,17 @@ fun View.setPaddingTop(padding: Int) {
     )
 }
 
-fun View.onFocusGained(onFocusGained: (View) -> Unit = {}) {
+fun View.onFocusGained(
+    onFocusGained: (View) -> Unit = {},
+) {
     onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
         if (hasFocus) onFocusGained(view)
     }
 }
 
-fun View.onFocusLost(onLostFocus: (View) -> Unit = {}) {
+fun View.onFocusLost(
+    onLostFocus: (View) -> Unit = {},
+) {
     onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
         if (!hasFocus) onLostFocus(view)
     }
@@ -78,7 +84,9 @@ fun View.doItNonClickable() {
     isClickable = false
 }
 
-fun View.visibleGone(visible: Boolean) {
+fun View.visibleGone(
+    visible: Boolean,
+) {
     visibility = if (visible) {
         View.VISIBLE
     } else {
@@ -104,14 +112,23 @@ fun View.doItInvisible() {
 
 fun View.isInvisible() = visibility == View.INVISIBLE
 
-fun View.getColor(resId: Int) = ContextCompat.getColor(context, resId)
+fun View.getColor(
+    resId: Int,
+) = ContextCompat.getColor(context, resId)
 
-fun View.getDrawable(resId: Int) = ContextCompat.getDrawable(context, resId)
+fun View.getDrawable(
+    resId: Int,
+) = ContextCompat.getDrawable(context, resId)
 
-fun ViewGroup.inflateView(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View =
-    LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+fun ViewGroup.inflateView(
+    @LayoutRes layoutRes: Int,
+    attachToRoot: Boolean = false,
+): View = LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
-fun ViewGroup.inflateViewIfEditMode(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false) {
+fun ViewGroup.inflateViewIfEditMode(
+    @LayoutRes layoutRes: Int,
+    attachToRoot: Boolean = false,
+) {
     if (isInEditMode) inflateView(layoutRes, attachToRoot)
 }
 
@@ -124,7 +141,10 @@ fun View.startFadeOutAnimation() {
 }
 
 // Use coroutines|rx boundary...
-fun View.setSafeOnClickListener(debounceTime: Long = 500, onSafeClick: (View) -> Unit) {
+fun View.setSafeOnClickListener(
+    debounceTime: Long = 500,
+    onSafeClick: (View) -> Unit,
+) {
     var lastTimeClicked: Long = 0
     setOnClickListener {
         if (SystemClock.elapsedRealtime() - lastTimeClicked >= debounceTime) {

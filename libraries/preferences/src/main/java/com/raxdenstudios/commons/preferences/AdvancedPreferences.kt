@@ -7,25 +7,35 @@ import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
 
-sealed class AdvancedPreferences(private val sharedPreferences: SharedPreferences, private val gson: Gson) {
+sealed class AdvancedPreferences(
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson,
+) {
 
     private val editor: Editor = Editor()
 
-    data class Default(val context: Context, val gson: Gson = Gson()) :
-        AdvancedPreferences(PreferenceManager.getDefaultSharedPreferences(context), gson)
+    data class Default(
+        val context: Context,
+        val gson: Gson = Gson(),
+    ) : AdvancedPreferences(PreferenceManager.getDefaultSharedPreferences(context), gson)
 
     /**
      * File creation mode: the default mode, where the created file can only be accessed by the
      * calling application (or all applications sharing the same user ID).
      */
-    data class Private(val context: Context, val name: String = "privateSharePreferences", val gson: Gson = Gson()) :
-        AdvancedPreferences(context.getSharedPreferences(name, Context.MODE_PRIVATE), gson)
+    data class Private(
+        val context: Context,
+        val name: String = "privateSharePreferences",
+        val gson: Gson = Gson(),
+    ) : AdvancedPreferences(context.getSharedPreferences(name, Context.MODE_PRIVATE), gson)
 
     inner class Editor {
 
         private val sharedPreferencesEditor: SharedPreferences.Editor = sharedPreferences.edit()
 
-        fun remove(key: String): Editor = sharedPreferencesEditor.remove(key).let { this }
+        fun remove(
+            key: String,
+        ): Editor = sharedPreferencesEditor.remove(key).let { this }
 
         fun commit() = sharedPreferencesEditor.commit()
 
@@ -34,7 +44,10 @@ sealed class AdvancedPreferences(private val sharedPreferences: SharedPreference
         fun clear(): Editor = sharedPreferencesEditor.clear().let { this }
 
         @Suppress("UNCHECKED_CAST")
-        fun put(key: String, value: Any): Editor = when (value) {
+        fun put(
+            key: String,
+            value: Any,
+        ): Editor = when (value) {
             is Int -> sharedPreferencesEditor.putInt(key, value)
             is String -> sharedPreferencesEditor.putString(key, value)
             is Boolean -> sharedPreferencesEditor.putBoolean(key, value)
@@ -47,14 +60,19 @@ sealed class AdvancedPreferences(private val sharedPreferences: SharedPreference
         }.let { this }
     }
 
-    fun contains(key: String): Boolean = sharedPreferences.contains(key)
+    fun contains(
+        key: String,
+    ): Boolean = sharedPreferences.contains(key)
 
     fun getAll(): Map<String, Any?> = sharedPreferences.all
 
     fun edit(): Editor = editor
 
     @Suppress("UNCHECKED_CAST")
-    fun get(key: String, defaultValue: Any): Any = when (defaultValue) {
+    fun get(
+        key: String,
+        defaultValue: Any,
+    ): Any = when (defaultValue) {
         is Int -> sharedPreferences.getInt(key, defaultValue)
 
         is String -> sharedPreferences.getString(key, defaultValue) ?: defaultValue

@@ -6,7 +6,9 @@ import org.junit.Test
 internal class DataMapperTest {
 
     private val dataMapper = object : DataMapper<Int, String>() {
-        override fun transform(source: Int): String = source.toString()
+        override fun transform(
+            source: Int,
+        ): String = source.toString()
     }
 
     @Test

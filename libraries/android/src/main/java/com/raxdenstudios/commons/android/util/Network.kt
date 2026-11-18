@@ -8,19 +8,26 @@ import com.raxdenstudios.commons.android.ext.getConnectivityManager
 
 object Network {
 
-    fun isNetworkConnected(context: Context): Boolean {
+    fun isNetworkConnected(
+        context: Context,
+    ): Boolean {
         val connectivityManager = context.getConnectivityManager()
         return isNetworkConnected(connectivityManager)
     }
 
     @SuppressLint("MissingPermission")
-    private fun isNetworkConnected(manager: ConnectivityManager): Boolean {
+    private fun isNetworkConnected(
+        manager: ConnectivityManager,
+    ): Boolean {
         val activeNetwork = manager.activeNetwork ?: return false
         return isNetworkConnected(manager, activeNetwork)
     }
 
     @SuppressLint("MissingPermission")
-    private fun isNetworkConnected(manager: ConnectivityManager, network: android.net.Network): Boolean {
+    private fun isNetworkConnected(
+        manager: ConnectivityManager,
+        network: android.net.Network,
+    ): Boolean {
         val networkCapabilities = manager.getNetworkCapabilities(network) ?: return false
         return when {
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true

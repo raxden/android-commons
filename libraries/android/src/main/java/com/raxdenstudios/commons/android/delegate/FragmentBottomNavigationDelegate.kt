@@ -33,12 +33,16 @@ class FragmentBottomNavigationDelegate(
             bottomNavigationView.selectedItemId = value
         }
 
-    fun saveState(outState: Bundle) {
+    fun saveState(
+        outState: Bundle,
+    ) {
         outState.putInt("selectedItemId", selectedItemId)
         outState.putIntArray("itemIds", containerFragmentMap.keys.toIntArray())
     }
 
-    fun init(savedInstanceState: Bundle?) {
+    fun init(
+        savedInstanceState: Bundle?,
+    ) {
         initBottomNavigationView(savedInstanceState)
 
         if (savedInstanceState == null) {
@@ -48,7 +52,9 @@ class FragmentBottomNavigationDelegate(
         }
     }
 
-    private fun initBottomNavigationView(savedInstanceState: Bundle?) {
+    private fun initBottomNavigationView(
+        savedInstanceState: Bundle?,
+    ) {
         bottomNavigationView.setUp(savedInstanceState)
     }
 
@@ -57,7 +63,10 @@ class FragmentBottomNavigationDelegate(
         onCreateFragment(fragmentId).also { fragment -> createFragment(fragment, fragmentId) }
     }
 
-    private fun createFragment(fragment: Fragment, fragmentId: Int) {
+    private fun createFragment(
+        fragment: Fragment,
+        fragmentId: Int,
+    ) {
         fragmentManager.commit {
             replace(fragmentContainerView.id, fragment, "fragment_$fragmentId")
         }
@@ -65,18 +74,24 @@ class FragmentBottomNavigationDelegate(
         setFragmentInMap(fragmentId, fragment)
     }
 
-    private fun restoreFragments(savedInstanceState: Bundle) {
+    private fun restoreFragments(
+        savedInstanceState: Bundle,
+    ) {
         val fragmentIds = savedInstanceState.getIntArray("itemIds")
         fragmentIds?.forEach { fragmentId -> restoreFragment(fragmentId) }
     }
 
-    private fun restoreFragment(fragmentId: Int) {
+    private fun restoreFragment(
+        fragmentId: Int,
+    ) {
         val fragment = fragmentManager.findFragmentByTag("fragment_$fragmentId") ?: return
         onFragmentLoaded(fragmentId, fragment)
         setFragmentInMap(fragmentId, fragment)
     }
 
-    private fun BottomNavigationView.setUp(savedInstanceState: Bundle?) {
+    private fun BottomNavigationView.setUp(
+        savedInstanceState: Bundle?,
+    ) {
         restoreSelectedItemIdFromSavedInstanceState(savedInstanceState)
         setOnNavigationItemSelectedListener { itemSelected ->
             navigationMenuItemSelected(
@@ -85,11 +100,15 @@ class FragmentBottomNavigationDelegate(
         }
     }
 
-    private fun BottomNavigationView.restoreSelectedItemIdFromSavedInstanceState(savedInstanceState: Bundle?) {
+    private fun BottomNavigationView.restoreSelectedItemIdFromSavedInstanceState(
+        savedInstanceState: Bundle?,
+    ) {
         savedInstanceState?.getInt("selectedItemId")?.also { id -> selectedItemId = id }
     }
 
-    private fun navigationMenuItemSelected(menuItem: MenuItem): Boolean {
+    private fun navigationMenuItemSelected(
+        menuItem: MenuItem,
+    ): Boolean {
         if (isTheSameMenuItem(menuItem)) return true
         val fragmentToHide = getSelectedFragment()
         val fragmentToShow = getFragmentFromMap(menuItem.itemId)?.also { fragmentToShow ->
@@ -103,9 +122,15 @@ class FragmentBottomNavigationDelegate(
         return true
     }
 
-    private fun isTheSameMenuItem(menuItem: MenuItem) = selectedItemId == menuItem.itemId
+    private fun isTheSameMenuItem(
+        menuItem: MenuItem,
+    ) = selectedItemId == menuItem.itemId
 
-    private fun hideAndAddFragment(fragmentToHide: Fragment, fragmentToAdd: Fragment, fragmentId: Int) {
+    private fun hideAndAddFragment(
+        fragmentToHide: Fragment,
+        fragmentToAdd: Fragment,
+        fragmentId: Int,
+    ) {
         fragmentManager.commit {
             hide(fragmentToHide)
             onFragmentTransaction(this, fragmentToAdd)
@@ -113,7 +138,10 @@ class FragmentBottomNavigationDelegate(
         }
     }
 
-    private fun hideAndShowFragment(fragmentToHide: Fragment, fragmentToShow: Fragment) {
+    private fun hideAndShowFragment(
+        fragmentToHide: Fragment,
+        fragmentToShow: Fragment,
+    ) {
         fragmentManager.commit {
             hide(fragmentToHide)
             onFragmentTransaction(this, fragmentToShow)
@@ -123,9 +151,14 @@ class FragmentBottomNavigationDelegate(
 
     private fun getSelectedFragment(): Fragment = getFragmentFromMap(selectedItemId) ?: error("Fragment not found")
 
-    private fun getFragmentFromMap(fragmentId: Int) = containerFragmentMap[fragmentId]
+    private fun getFragmentFromMap(
+        fragmentId: Int,
+    ) = containerFragmentMap[fragmentId]
 
-    private fun setFragmentInMap(fragmentId: Int, fragment: Fragment) {
+    private fun setFragmentInMap(
+        fragmentId: Int,
+        fragment: Fragment,
+    ) {
         containerFragmentMap[fragmentId] = fragment
     }
 }

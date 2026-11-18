@@ -1,16 +1,28 @@
 package com.raxdenstudios.commons.core.ext
 
-fun Byte?.orDefault(default: Byte = Byte.ZERO) = this ?: default
+fun Byte?.orDefault(
+    default: Byte = Byte.ZERO,
+) = this ?: default
 
-fun Float?.orDefault(default: Float = Float.ZERO) = this ?: default
+fun Float?.orDefault(
+    default: Float = Float.ZERO,
+) = this ?: default
 
-fun Double?.orDefault(default: Double = Double.ZERO) = this ?: default
+fun Double?.orDefault(
+    default: Double = Double.ZERO,
+) = this ?: default
 
-fun Int?.orDefault(default: Int = Int.ZERO) = this ?: default
+fun Int?.orDefault(
+    default: Int = Int.ZERO,
+) = this ?: default
 
-fun Short?.orDefault(default: Short = Short.ZERO) = this ?: default
+fun Short?.orDefault(
+    default: Short = Short.ZERO,
+) = this ?: default
 
-fun Long?.orDefault(default: Long = Long.ZERO) = this ?: default
+fun Long?.orDefault(
+    default: Long = Long.ZERO,
+) = this ?: default
 
 val Byte.Companion.ZERO: Byte
     get() = 0

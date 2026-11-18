@@ -3,11 +3,19 @@ package com.raxdenstudios.commons.android.ext
 import android.content.Context
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun Context.showSimpleDialog(title: Int, message: Int, positiveButton: Int = android.R.string.ok) {
+fun Context.showSimpleDialog(
+    title: Int,
+    message: Int,
+    positiveButton: Int = android.R.string.ok,
+) {
     showSimpleDialog(getString(title), getString(message), getString(positiveButton))
 }
 
-fun Context.showSimpleDialog(title: String, message: String, positiveButton: String = getString(android.R.string.ok)) {
+fun Context.showSimpleDialog(
+    title: String,
+    message: String,
+    positiveButton: String = getString(android.R.string.ok),
+) {
     MaterialAlertDialogBuilder(this)
         .setTitle(title)
         .setMessage(message)

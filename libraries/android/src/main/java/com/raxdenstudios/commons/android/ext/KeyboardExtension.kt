@@ -11,7 +11,9 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 
 @SuppressLint("ClickableViewAccessibility")
-fun Activity.closeKeyboardWhenTouchScreen(view: View = findViewById(android.R.id.content)) {
+fun Activity.closeKeyboardWhenTouchScreen(
+    view: View = findViewById(android.R.id.content),
+) {
     // Set up touch listener for non-text box views to hide keyboard.
     if (view !is EditText) {
         view.setOnTouchListener { _, _ ->
@@ -31,7 +33,9 @@ fun Fragment.closeKeyboard() {
     requireActivity().closeKeyboard()
 }
 
-fun Fragment.closeKeyboard(binder: IBinder) {
+fun Fragment.closeKeyboard(
+    binder: IBinder,
+) {
     requireActivity().closeKeyboard(binder)
 }
 
@@ -40,7 +44,9 @@ fun Activity.closeKeyboard() {
     imm.hideSoftInputFromWindow(findViewById<View>(android.R.id.content).windowToken, 0)
 }
 
-fun Activity.closeKeyboard(binder: IBinder) {
+fun Activity.closeKeyboard(
+    binder: IBinder,
+) {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(binder, 0)
 }

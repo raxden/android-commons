@@ -13,13 +13,19 @@ class RetryInterceptor(
     companion object {
         val default = RetryInterceptor()
 
-        fun withMaxRetries(retries: Int) = RetryInterceptor(maxRetries = retries)
+        fun withMaxRetries(
+            retries: Int,
+        ) = RetryInterceptor(maxRetries = retries)
 
-        fun withDelay(delayMs: Long) = RetryInterceptor(initialDelayMs = delayMs)
+        fun withDelay(
+            delayMs: Long,
+        ) = RetryInterceptor(initialDelayMs = delayMs)
     }
 
     @Suppress("TooGenericExceptionCaught")
-    override fun intercept(chain: Interceptor.Chain): Response {
+    override fun intercept(
+        chain: Interceptor.Chain,
+    ): Response {
         var attempt = 0
         var response: Response? = null
         var exception: IOException? = null
