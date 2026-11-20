@@ -88,6 +88,7 @@ include(":libraries:pagination")
 include(":libraries:pagination-co")
 include(":libraries:permissions")
 include(":libraries:preferences")
+include(":libraries:time")
 include(":libraries:threetenabp")
 include(":libraries:threetenabp-test")
 

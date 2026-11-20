@@ -17,7 +17,8 @@ versioning {
 
 publishLibrary {
     name = "ThreeTenABP Commons"
-    description = "ThreeTenABP commons is a library with a set of useful classes to help to developer " +
+    description = "Deprecated: use commons-time (java.time) instead. " +
+            "ThreeTenABP commons is a library with a set of useful classes to help to developer " +
             "to work with ThreeTenABP."
     url = "https://github.com/raxden/android-commons"
     developer = Developer(

@@ -45,8 +45,9 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | **Storage** |
 | `commons-preferences` | Advanced SharedPreferences wrapper | [📖 Docs](libraries/preferences/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-preferences) |
 | **Date & Time** |
-| `commons-threetenabp` | ThreeTenABP date/time utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threetenabp.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threetenabp) |
-| `commons-threetenabp-test` | ThreeTenABP testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threetenabp-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threetenabp-test) |
+| `commons-time` | `java.time` date/time extensions (no init needed) | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-time.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-time) |
+| `commons-threetenabp` | **Deprecated**, use `commons-time`. ThreeTenABP date/time utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threetenabp.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threetenabp) |
+| `commons-threetenabp-test` | **Deprecated**, not needed with `java.time`. ThreeTenABP testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-threetenabp-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-threetenabp-test) |
 
 ## 🚀 Getting Started
 
@@ -79,11 +80,10 @@ dependencies {
     implementation("com.raxdenstudios:commons-pagination-co")
     implementation("com.raxdenstudios:commons-permissions")
     implementation("com.raxdenstudios:commons-preferences")
-    implementation("com.raxdenstudios:commons-threetenabp")
+    implementation("com.raxdenstudios:commons-time")
     
     // Testing modules
     testImplementation("com.raxdenstudios:commons-coroutines-test")
-    testImplementation("com.raxdenstudios:commons-threetenabp-test")
     testImplementation("com.raxdenstudios:commons-android-test")
 }
 ```

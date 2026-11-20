@@ -43,6 +43,7 @@ dependencies {
         api(projects.libraries.paginationCo)
         api(projects.libraries.permissions)
         api(projects.libraries.preferences)
+        api(projects.libraries.time)
         api(projects.libraries.threetenabp)
         api(projects.libraries.threetenabpTest)
     }
