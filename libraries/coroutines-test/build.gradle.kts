@@ -28,7 +28,11 @@ publishLibrary {
 }
 
 dependencies {
+    api(projects.libraries.coroutines)
+
     api(libs.androidx.arch.core.testing)
     api(libs.coroutines.test)
     api(libs.turbine)
+
+    testImplementation(libs.truth)
 }
