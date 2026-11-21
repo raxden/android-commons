@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.versioning)
     alias(libs.plugins.android.library.conventions)
     alias(libs.plugins.android.publish.library)
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -31,6 +32,7 @@ publishLibrary {
 dependencies {
     api(libs.androidx.preference.ktx)
     api(libs.gson)
+    api(libs.kotlinx.serialization.json)
 
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.test.junit.ktx)
