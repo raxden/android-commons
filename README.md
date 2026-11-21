@@ -35,7 +35,7 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | `commons-android-room` | Room `BaseDao` helpers | [📖 Docs](libraries/android-room/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-room.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-room) |
 | **Async & Concurrency** |
 | `commons-coroutines` | Kotlin Coroutines extensions | [📖 Docs](libraries/coroutines/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines) |
-| `commons-coroutines-test` | Coroutines testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines-test) |
+| `commons-coroutines-test` | Coroutines testing utilities | [📖 Docs](libraries/coroutines-test/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-coroutines-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-coroutines-test) |
 | **Networking** |
 | `commons-network` | Network utilities and interceptors | [📖 Docs](libraries/network/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-network.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-network) |
 | **Pagination** |
@@ -122,6 +122,7 @@ Detailed documentation for each module is available in their respective director
 
 - [Android Room](libraries/android-room/README.md)
 - [Coroutines](libraries/coroutines/README.md)
+- [Coroutines Test](libraries/coroutines-test/README.md)
 - [Network](libraries/network/README.md)
 - [Pagination](libraries/pagination/README.md)
 - [Permissions](libraries/permissions/README.md)
