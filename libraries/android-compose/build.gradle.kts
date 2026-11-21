@@ -32,4 +32,9 @@ dependencies {
 
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.material3)
+    api(libs.androidx.compose.ui)
+    api(libs.androidx.compose.ui.tooling.preview)
+    api(libs.androidx.compose.lifecycle.runtime)
+
+    testImplementation(libs.bundles.test)
 }
