@@ -1,6 +1,5 @@
 import com.raxdenstudios.publishing.model.Coordinates
 import com.raxdenstudios.publishing.model.Developer
-import extension.implementationBundle
 
 plugins {
     alias(libs.plugins.android.versioning)
@@ -30,5 +29,7 @@ publishLibrary {
 }
 
 dependencies {
-    implementationBundle(libs.bundles.room)
+    api(libs.room.runtime)
+    api(libs.room.ktx)
+    ksp(libs.room.compiler)
 }

@@ -9,9 +9,8 @@ import java.util.TimeZone
  * Converts this epoch-milliseconds value to a [LocalDate] in [timeZone].
  *
  * Extensions on [Long] that convert epoch milliseconds to java.time values. The receiver is
- * always epoch milliseconds, not seconds. They are the `java.time` replacements for the
- * `commons-threetenabp` extensions and keep the same API. The library needs no initialisation
- * and targets minSdk 26+ or projects that enable core library desugaring.
+ * always epoch milliseconds, not seconds. They are `java.time` extensions. The library needs
+ * no initialisation and targets minSdk 26+ or projects that enable core library desugaring.
  *
  * Defaults to the JVM default zone ([TimeZone.getDefault]).
  */

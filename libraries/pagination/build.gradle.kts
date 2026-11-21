@@ -28,9 +28,9 @@ publishLibrary {
 }
 
 dependencies {
-    implementation(libs.android.material)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
+    api(libs.androidx.recyclerview)
+    api(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.foundation)
 
     testImplementation(libs.truth)
     testImplementation(libs.mockk.android)

@@ -9,9 +9,8 @@ import java.time.format.DateTimeFormatter
  *
  * Extensions on [String] that parse a date with java.time. Parsing a non-matching input never
  * throws: it returns `null`. The only exception is an invalid pattern string, see below. These
- * are the `java.time` replacements for the `commons-threetenabp` extensions and keep the same
- * API. The library needs no initialisation and targets minSdk 26+ or projects that enable core
- * library desugaring.
+ * are `java.time` extensions. The library needs no initialisation and targets minSdk 26+ or
+ * projects that enable core library desugaring.
  *
  * Each pattern is compiled with `DateTimeFormatter.ofPattern` in the default format locale.
  * Patterns are compiled one at a time while scanning, so an invalid pattern throws

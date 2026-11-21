@@ -32,6 +32,7 @@ dependencies {
     api(projects.libraries.core)
 
     api(libs.android.material)
+    api(libs.coroutines.android)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.swiperefreshlayout)
 
