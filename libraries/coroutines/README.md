@@ -195,12 +195,8 @@ interface DispatcherProvider {
     val default: CoroutineDispatcher
 }
 
-// Implementation
-class DefaultDispatcherProvider : DispatcherProvider {
-    override val main = Dispatchers.Main
-    override val io = Dispatchers.IO
-    override val default = Dispatchers.Default
-}
+// Built-in implementation: Dispatchers.Main / Dispatchers.IO / Dispatchers.Default
+val dispatchers: DispatcherProvider = DefaultDispatcherProvider()
 
 // Usage in ViewModel
 class MyViewModel(
@@ -228,6 +224,12 @@ interface CoroutineScopeProvider {
     val io: CoroutineScope
     val default: CoroutineScope
 }
+
+// Built-in implementation: each scope is created once with its own SupervisorJob
+val scopes: CoroutineScopeProvider = DefaultCoroutineScopeProvider()
+
+// Or on top of a custom dispatcher provider
+val customScopes = DefaultCoroutineScopeProvider(dispatcherProvider = myDispatchers)
 
 // Usage
 class MyRepository(
@@ -348,6 +350,19 @@ interface CoroutineScopeProvider {
     val default: CoroutineScope
 }
 ```
+
+### Implementations
+
+```kotlin
+class DefaultDispatcherProvider : DispatcherProvider
+
+class DefaultCoroutineScopeProvider(
+    dispatcherProvider: DispatcherProvider = DefaultDispatcherProvider()
+) : CoroutineScopeProvider
+```
+
+Test doubles (`TestDispatcherProvider`, `TestCoroutineScopeProvider`) live in
+[`commons-coroutines-test`](../coroutines-test/README.md).
 
 ## 💡 Best Practices
 
