@@ -29,7 +29,7 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | **Core & Android** |
 | `commons-core` | Core utilities and extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-core.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-core) |
 | `commons-android` | Android-specific utilities and extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android) |
-| `commons-android-compose` | Jetpack Compose utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-compose.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-compose) |
+| `commons-android-compose` | Jetpack Compose utilities | [📖 Docs](libraries/android-compose/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-compose.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-compose) |
 | `commons-android-test` | Android testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-test) |
 | **Storage (Room)** |
 | `commons-android-room` | Room `BaseDao` helpers | [📖 Docs](libraries/android-room/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-room.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-room) |
@@ -120,6 +120,7 @@ For coverage reports:
 
 Detailed documentation for each module is available in their respective directories:
 
+- [Android Compose](libraries/android-compose/README.md)
 - [Android Room](libraries/android-room/README.md)
 - [Coroutines](libraries/coroutines/README.md)
 - [Coroutines Test](libraries/coroutines-test/README.md)
