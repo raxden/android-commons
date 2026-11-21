@@ -7,10 +7,9 @@ import java.util.TimeZone
 /**
  * Returns the whole seconds since the Unix epoch of this date-time interpreted in [timeZone].
  *
- * Extensions on [LocalDateTime] for epoch conversion and formatting. They are the `java.time`
- * replacements for the `commons-threetenabp` extensions and keep the same API. The library
- * needs no initialisation and targets minSdk 26+ or projects that enable core library
- * desugaring.
+ * Extensions on [LocalDateTime] for epoch conversion and formatting. They are `java.time`
+ * extensions. The library needs no initialisation and targets minSdk 26+ or projects that
+ * enable core library desugaring.
  *
  * Fractional seconds are dropped, so negative results are truncated toward zero. In a DST
  * gap the time is shifted later by the gap length; in an overlap the earlier offset is used.

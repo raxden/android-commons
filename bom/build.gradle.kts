@@ -31,7 +31,6 @@ dependencies {
     // If anyone use these dependencies, then are added
     constraints {
         api(projects.libraries.android)
-        api(projects.libraries.androidBinding)
         api(projects.libraries.androidCompose)
         api(projects.libraries.androidRoom)
         api(projects.libraries.androidTest)
@@ -44,7 +43,5 @@ dependencies {
         api(projects.libraries.permissions)
         api(projects.libraries.preferences)
         api(projects.libraries.time)
-        api(projects.libraries.threetenabp)
-        api(projects.libraries.threetenabpTest)
     }
 }

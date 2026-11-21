@@ -30,7 +30,9 @@ publishLibrary {
 dependencies {
     implementation(libs.androidx.swiperefreshlayout)
 
+    api(libs.androidx.test.junit.ktx)
+    api(libs.bundles.test.espresso)
+
     implementation(libs.bundles.test)
-    implementation(libs.bundles.test.espresso)
     implementation(libs.bundles.test.mockwebserver)
 }

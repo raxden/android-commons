@@ -8,9 +8,8 @@ import java.util.TimeZone
  * Returns the whole seconds since the Unix epoch of the start of this date in [timeZone].
  *
  * Extensions on [LocalDate] for epoch conversion, the today check and formatting. They are
- * the `java.time` replacements for the `commons-threetenabp` extensions and keep the same API.
- * The library needs no initialisation and targets minSdk 26+ or projects that enable core
- * library desugaring.
+ * `java.time` extensions. The library needs no initialisation and targets minSdk 26+ or
+ * projects that enable core library desugaring.
  *
  * The start of day is the earliest valid time on this date in that zone. Fractional
  * seconds are dropped, so negative results are truncated toward zero. Defaults to the
