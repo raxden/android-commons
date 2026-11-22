@@ -1,6 +1,6 @@
 # Time Commons
 
-`java.time` extensions for epoch conversion and time formatting. No initialisation is needed.
+`java.time` extension for epoch conversion. No initialisation is needed.
 
 ## Installation
 
@@ -15,15 +15,10 @@ dependencies {
 
 ### Epoch conversion
 
-- `LocalDate.toMilliseconds(timeZone)` and `toSeconds(timeZone)`: the start of the day in the zone.
-- `LocalDateTime.toMilliseconds(timeZone)` and `toSeconds(timeZone)`: the date-time in the zone.
-
-### Formatting
-
-- `LocalDateTime.toHourMinutes()`: 24-hour `HH:mm`, e.g. `"09:05"`.
+- `LocalDateTime.toMilliseconds(timeZone)`: the milliseconds since the Unix epoch of the date-time in the zone.
 
 ```kotlin
-LocalDateTime.of(2024, 3, 15, 9, 5).toHourMinutes()            // "09:05"
+LocalDateTime.now().toMilliseconds()
 ```
 
 ## Removed in 2.0.0
@@ -31,6 +26,14 @@ LocalDateTime.of(2024, 3, 15, 9, 5).toHourMinutes()            // "09:05"
 - `LocalDate.isToday()`: compare with `LocalDate.now()`.
 - `LocalDate.toFormat()` and `LocalDateTime.toFormat()`: use `format` with `DateTimeFormatter.ofPattern`.
 - `LocalDate.toLocalizedString()`: use `format` with `DateTimeFormatter.ofLocalizedDate`.
+
+## Removed in 3.0.0
+
+- `LocalDate.toMilliseconds()` and `LocalDate.toSeconds()`: use `atStartOfDay().atZone(zone).toInstant().toEpochMilli()`.
+- `LocalDateTime.toSeconds()`: use `toMilliseconds() / 1000` (floor division).
+- `LocalDateTime.toHourMinutes()`: use `format` with `DateTimeFormatter.ofPattern("HH:mm")`.
+- `String.toLocalDate(patterns)` and `String.toLocalDate(formatters)`: use `LocalDate.parse` with a `DateTimeFormatter`.
+- `Long.toLocalDate()` and `Long.toLocalDateTime()`: use `Instant.ofEpochMilli` with `atZone`.
 
 ## License
 

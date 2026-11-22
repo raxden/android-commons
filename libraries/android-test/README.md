@@ -1,6 +1,6 @@
 # Android Test Commons
 
-Helpers for instrumented and Espresso tests: a base test runner, and an OkHttp idling resource.
+Helpers for instrumented and Espresso tests: a base test runner.
 
 ## Installation
 
@@ -17,16 +17,10 @@ dependencies {
 
 `AppTestRunner` extends `AndroidJUnitRunner`. Subclass it to swap the `Application` used by the tests, then set your subclass as `testInstrumentationRunner`.
 
-### OkHttp3IdlingResource
+## Removed in 7.0.0
 
-Espresso waits for OkHttp calls to finish before it checks the UI:
-
-```kotlin
-val idlingResource = OkHttp3IdlingResource.create("api", okHttpClient)
-Espresso.registerIdlingResources(idlingResource)
-```
-
-Creating it replaces the dispatcher's idle callback, so use one resource per client.
+- `OkHttp3IdlingResource`: keep your own copy.
+- The transitive `okhttp3` dependency: declare it in your own test modules.
 
 ## Removed in 6.0.0
 

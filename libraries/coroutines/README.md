@@ -291,10 +291,6 @@ suspend fun <T, R, E> Answer<T, E>.coFlatMap(
     function: suspend (value: T) -> Answer<R, E>
 ): Answer<R, E>
 
-suspend fun <T, R, E> Answer<T, E>.coFlatMapFailure(
-    function: suspend (value: E) -> Answer<T, R>
-): Answer<T, R>
-
 suspend fun <T, E> Answer<T, E>.onCoSuccess(
     function: suspend (success: T) -> Unit
 ): Answer<T, E>
@@ -438,3 +434,7 @@ The module includes comprehensive unit tests for all functionality.
 
 - `Answer.coCombine`: combine the values with `Answer.fold` or a `when` expression.
 - `Flow<Answer>.collectResult`: use `collect` with `Answer.fold`.
+
+## Removed in 7.0.0
+
+- `Answer.coFlatMapFailure`: use a `when` expression over `Answer`.

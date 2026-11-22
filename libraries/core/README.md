@@ -44,6 +44,12 @@ In `com.raxdenstudios.commons.core.ext`:
 - `applyWhen` and `alsoWhen` (`AnyExtension`): use an `if` expression.
 - `Answer.flatMapFailure`: use a `when` expression over `Answer`.
 
+## Removed in 7.0.0
+
+- `AnyExtension`: `castAs`, `requireAs`, `letAs`, `runAs`, `applyAs`, `alsoAs`: use `as?` / `as` with the standard scope functions.
+- `String.toMD5()` and `String.toSHA512()`: use `MessageDigest.getInstance` directly. `toSHA256` is kept.
+- `orDefault` for `Byte?`, `Short?`, `Long?` and `Float?`, and `ZERO` for `Byte`, `Short`, `Long`, `Float`: use the elvis operator. `Boolean?`, `Int?`, `Double?` and `String?` `orDefault` and `Int`/`Double` `ZERO` are kept.
+
 ## License
 
 See the [LICENSE](../../LICENSE.txt) file for details.

@@ -6,13 +6,6 @@ import org.junit.Test
 internal class EncryptExtensionTest {
 
     @Test
-    fun `toMD5 should return value`() {
-        val value = "Generando un MD5 de un texto"
-
-        assertEquals("5df9f63916ebf8528697b629022993e8", value.toMD5())
-    }
-
-    @Test
     fun `toSHA256 should return value`() {
         val value = "Generando un SHA256 de un texto"
 
@@ -30,23 +23,5 @@ internal class EncryptExtensionTest {
             "018e20b7fb568de01403bec144096b34a6bda4c581127bb3298765b2f6fbfa92",
             value.toSHA256(Charsets.UTF_16),
         )
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
-    fun `toSHA512 should return value`() {
-        val value = "Generando un SHA512 de un texto"
-
-        assertEquals(
-            "98096d5bf12e56948667b96ef96561a1813b38353b8434eaf950c61603b80e14a023b66dcdeb80c484b19902cb0818fb40607a15f67b0ca4efa7f37291353c59",
-            value.toSHA512(),
-        )
-    }
-
-    @Test
-    fun `Given a random text, When toMD5 extension is called, Then random text is codified to MD5`() {
-        val result = "Generando un MD5 de un texto".toMD5()
-
-        assertEquals("5df9f63916ebf8528697b629022993e8", result)
     }
 }

@@ -1,7 +1,7 @@
 package com.raxdenstudios.commons.permissions.model
 
 /**
- * Outcome of requesting a [Permission], returned by the `requestPermission` extension.
+ * Outcome of requesting a [Permission].
  *
  * Each subtype carries the [permission] it refers to, so one handler can serve several requests.
  */

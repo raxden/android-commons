@@ -89,24 +89,6 @@ internal class AnswerExtensionTest {
     }
 
     @Test
-    fun `use coFlatMapFailure when result is success`() = runTest {
-        val result = Answer.Success("originalValue")
-            .coFlatMapFailure { Answer.Success("otherValue") }
-
-        assertTrue(result.isSuccess)
-        assertThat(result).isEqualTo(Answer.Success("originalValue"))
-    }
-
-    @Test
-    fun `use coFlatMapFailure when result is failure`() = runTest {
-        val result = Answer.Failure("originalValue")
-            .coFlatMapFailure { Answer.Failure("otherValue") }
-
-        assertTrue(result.isFailure)
-        assertThat(result).isEqualTo(Answer.Failure("otherValue"))
-    }
-
-    @Test
     fun `use onCoSuccess when result is success`() = runTest {
         val answer = Answer.Success("originalValue")
 

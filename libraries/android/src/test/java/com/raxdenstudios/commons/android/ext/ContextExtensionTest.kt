@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -16,22 +14,6 @@ internal class ContextExtensionTest {
 
     private val context: Context = mockk(relaxed = true)
     private val connectivityManager: ConnectivityManager = mockk(relaxed = true)
-    private val network: Network = mockk(relaxed = true)
-    private val networkCapabilities: NetworkCapabilities = mockk(relaxed = true)
-
-    @Test
-    fun `isNetworkConnected should return true`() {
-        every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivityManager
-        every { connectivityManager.activeNetwork } returns network
-        every { connectivityManager.getNetworkCapabilities(network) } returns networkCapabilities
-        every { networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) } returns true
-        every { networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) } returns false
-        every { networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) } returns false
-
-        val result = context.isNetworkConnected()
-
-        assertTrue(result)
-    }
 
     @Test
     fun `getConnectivityManager should return valid data`() {

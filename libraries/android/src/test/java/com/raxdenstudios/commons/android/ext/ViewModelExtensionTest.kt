@@ -30,25 +30,4 @@ internal class ViewModelExtensionTest {
         assertThat(job.isCompleted).isTrue()
         assertThat(job.isCancelled).isTrue()
     }
-
-    @Test
-    fun `Given a failing block, When launch is called, Then onError receives the throwable`() {
-        val failure = IllegalStateException("boom")
-        var received: Throwable? = null
-
-        viewModel.launch(onError = { received = it }) { throw failure }
-
-        assertThat(received).isSameInstanceAs(failure)
-    }
-
-    @Test
-    fun `Given a successful block, When launch is called, Then it runs and onError is not called`() {
-        var executed = false
-        var received: Throwable? = null
-
-        viewModel.launch(onError = { received = it }) { executed = true }
-
-        assertThat(executed).isTrue()
-        assertThat(received).isNull()
-    }
 }

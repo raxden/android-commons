@@ -1,6 +1,6 @@
 # Android Compose Commons
 
-A library with Jetpack Compose helpers: UI resource models, lifecycle observation, `Modifier` and `PaddingValues` extensions, a multi preview annotation and coroutine helpers for callbacks.
+A library with Jetpack Compose helpers: UI resource models, `Modifier` and `PaddingValues` extensions, a multi preview annotation and coroutine helpers for callbacks.
 
 ## Installation
 
@@ -47,24 +47,11 @@ Text(text = title.toText())
 - `ImageResource.Vector(image)`: an `ImageVector`.
 - `toPainter()`: `@Composable` that returns the `Painter`.
 
-### ComposableLifecycle
-
-`com.raxdenstudios.commons.android.compose.ComposableLifecycle(observer, lifeCycleOwner)` registers a `LifecycleEventObserver` on the `LocalLifecycleOwner` (or the given owner) and removes it when it leaves the composition.
-
-```kotlin
-ComposableLifecycle(
-    observer = LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_RESUME) onResume()
-    },
-)
-```
-
 ### Modifier extensions
 
 In `com.raxdenstudios.commons.android.compose.ext`:
 
-- `Modifier.mirror()`: flips the content horizontally.
-- `Modifier.aspectRatio11()`, `aspectRatio43()`, `aspectRatio169()`, `aspectRatio23()`: fixed aspect ratios (1:1, 4:3, 16:9, 2:3).
+- `Modifier.aspectRatio11()`: fixes the aspect ratio to 1:1.
 
 ### PaddingValues extensions
 
@@ -73,20 +60,6 @@ In `com.raxdenstudios.commons.android.compose.ext`:
 - `PaddingValues.copy(start, top, end, bottom)`: `@Composable` copy that overrides only the given sides.
 - `PaddingValues + PaddingValues`: sums two paddings side by side.
 
-### LockScreenOrientation
-
-`com.raxdenstudios.commons.android.compose.LockScreenOrientation(orientation)` locks the host activity to a `ScreenOrientation` while the composable is composed, and restores the previous orientation when it leaves. `ScreenOrientation` has `Unspecified`, `Portrait` and `Landscape`.
-
-```kotlin
-@Composable
-fun VideoScreen() {
-    LockScreenOrientation(orientation = ScreenOrientation.Landscape)
-    // ...
-}
-```
-
-If no activity is found in the context (for example in a preview), nothing changes.
-
 ### DevicePreviews
 
 `com.raxdenstudios.commons.android.compose.preview.DevicePreviews` is a multi preview annotation that renders a composable in light and dark phone previews.
@@ -94,6 +67,13 @@ If no activity is found in the context (for example in a preview), nothing chang
 ## Removed in 2.0.0
 
 - `runAsync` and both `consumeAsync` overloads: use `rememberCoroutineScope` and `launch` directly.
+
+## Removed in 3.0.0
+
+- `Modifier.mirror()`: use `Modifier.scale(scaleX = -1f, scaleY = 1f)`.
+- `ComposableLifecycle`: use `LifecycleEventEffect` or `DisposableEffect` with `LocalLifecycleOwner` from `lifecycle-runtime-compose`.
+- `LockScreenOrientation` and `ScreenOrientation`: set `Activity.requestedOrientation` in a `DisposableEffect`.
+- `Modifier.aspectRatio43()`, `aspectRatio169()`, `aspectRatio23()`: use `Modifier.aspectRatio(ratio)`.
 
 ## License
 

@@ -31,5 +31,4 @@ dependencies {
     api(libs.androidx.test.junit.ktx)
     api(libs.bundles.test.espresso)
     api(libs.androidx.test.runner)
-    api(libs.okhttp3)
 }

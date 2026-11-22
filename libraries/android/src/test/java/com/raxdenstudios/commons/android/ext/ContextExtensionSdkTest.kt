@@ -53,23 +53,6 @@ internal class ContextExtensionSdkTest {
     }
 
     @Test
-    @Config(sdk = [32])
-    fun `Given a package info, When firstInstallTimeMillis is called, Then return its first install time`() {
-        packageInfo.firstInstallTime = 1_700_000_000_000L
-        every { packageManager.getPackageInfo(PACKAGE_NAME, 0) } returns packageInfo
-
-        assertThat(context.firstInstallTimeMillis()).isEqualTo(1_700_000_000_000L)
-    }
-
-    @Test
-    @Config(sdk = [32])
-    fun `Given the package info cannot be read, When firstInstallTimeMillis is called, Then return zero`() {
-        every { packageManager.getPackageInfo(PACKAGE_NAME, 0) } throws PackageManager.NameNotFoundException()
-
-        assertThat(context.firstInstallTimeMillis()).isEqualTo(0L)
-    }
-
-    @Test
     @Config(sdk = [30])
     fun `Given API below 31, When isExactAlarmAllowed is called, Then return true without asking the system`() {
         assertThat(context.isExactAlarmAllowed()).isTrue()

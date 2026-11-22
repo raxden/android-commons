@@ -1,6 +1,6 @@
 # Android Commons
 
-Android helpers for activities, fragments, views, context, intents, audio and WorkManager. It depends on `commons-core` and `commons-coroutines`.
+Android helpers for context, intents, audio, ViewModel, SavedStateHandle and WorkManager. It depends on `commons-core` and `commons-coroutines`.
 
 ## Installation
 
@@ -31,14 +31,9 @@ startActivity(intentFactory.build(IntentType.ShareText(subject = "Check this", t
 
 In `com.raxdenstudios.commons.android.ext`:
 
-- `firstInstallTimeMillis()`: first install time in epoch millis, or `0` if it cannot be read.
 - `isExactAlarmAllowed()`: always `true` below API 31, otherwise `AlarmManager.canScheduleExactAlarms()`.
 - `isFullScreenIntentAllowed()`: always `true` below API 34, otherwise `NotificationManager.canUseFullScreenIntent()`.
 - `getPackageInfo()`: the app's `PackageInfo`, using the typed flags overload on API 33+.
-
-### ActivityHolder
-
-`ActivityHolder.resumedActivity()` returns the attached activity only while it is resumed, or `null`.
 
 ### Audio
 
@@ -51,7 +46,7 @@ HeadphonesConnectionObserverImpl(applicationContext).observeConnectionChanges()
 
 ### ViewModel and WorkManager
 
-- `ViewModel.safeLaunch { }` and `ViewModel.launch(onError) { }`: run work on `viewModelScope`, logging uncaught errors.
+- `ViewModel.safeLaunch { }`: runs work on `viewModelScope`, logging uncaught errors.
 - `WorkManager.enqueueUniqueOneTime<W>(policy, uniqueName, configure)`: enqueues unique one-time work. The default policy is `ExistingWorkPolicy.KEEP`.
 
 ## Removed in 6.0.0
@@ -68,6 +63,19 @@ HeadphonesConnectionObserverImpl(applicationContext).observeConnectionChanges()
 - `ActivityExtension`: `setStatusBarSafeArea`, `setVirtualNavigationBarSafeArea` (use `WindowInsets`), `setResultOKWithData`, `setResultOKWithDataAndFinish` (use `setResult` with an explicit `Intent`).
 - `Context.createTemporalImageFile()` (use `File.createTempFile`), `AppCompatActivity.setupToolbar`, `DialogFragment.showForResult` (use the Fragment Result API), `DialogFragment.setFullscreen`.
 - The `material` and `swiperefreshlayout` dependencies are no longer exposed through `commons-android` (only `appcompat` is): declare them in your own modules.
+
+## Removed in 7.0.0
+
+- `ActivityHolder.resumedActivity()` and `ComponentActivity.isAtLeastCreated/isAtLeastStarted/isAtLeastResumed`: check `activity?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED)` directly.
+- `ViewExtension`: `setPaddingTop`, `doItSelectable`, `doItUnselectable`, `doItClickable`, `doItNonClickable`, `visibleGone`, `isVisible()`, `isGone()`, `isInvisible()`, `getColor`, `getDrawable`, `inflateView`, `inflateViewIfEditMode`, `startFadeInAnimation`, `startFadeOutAnimation`, `setSafeOnClickListener`, `useStyledAttributes`: use the `androidx.core.view` and framework APIs directly.
+- `FragmentExtension` (`Fragment.inflateView`, `Fragment.close`, `Fragment.loadFragment`, `Fragment.loadDialogFragment`) and `FragmentActivityExtension` (`FragmentActivity.loadFragment`, `closeFragment`, `loadDialogFragment`): use `FragmentManager.commit { }` directly.
+- `IntentExtensions`: `intentFor`, `Intent.startActivity`, `startActivityAndFinishCurrent`, `startActivityAndFinishAll`: use `ContextCompat.startActivity` and `Intent` flags directly.
+- `ActivityExtension`: `loadParcelable`, `setResultOK`, `setResultOKAndFinish` (use `setResult` and `finish`), `setFullScreen` (use `WindowInsetsControllerCompat`).
+- `Application.initCompatVector`: call `AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)` directly.
+- `Context.isNetworkConnected()`: use `Network.isNetworkConnected(context)`.
+- `SavedStateHandle.getOrElse`, `getOrDefault` and `getOrNull`: use `SavedStateHandle.get` with Kotlin's `runCatching` / elvis operator. `getOrThrow` is kept.
+- `Context.firstInstallTimeMillis()`: read `packageManager.getPackageInfo(...).firstInstallTime` directly.
+- `ViewModel.launch(onError) { }`: use `viewModelScope.launch(onError = ...)` from `commons-coroutines`.
 
 ## License
 

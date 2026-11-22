@@ -46,13 +46,6 @@ suspend fun <T, R, E> Answer<T, E>.coFlatMap(
     is Answer.Success -> function(value)
 }
 
-suspend fun <T, R, E> Answer<T, E>.coFlatMapFailure(
-    function: suspend (value: E) -> Answer<T, R>,
-): Answer<T, R> = when (this) {
-    is Answer.Failure -> function(value)
-    is Answer.Success -> Answer.Success(value)
-}
-
 suspend fun <T, E> Answer<T, E>.onCoSuccess(
     function: suspend (success: T) -> Unit,
 ): Answer<T, E> = when (this) {

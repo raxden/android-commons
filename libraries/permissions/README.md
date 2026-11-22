@@ -105,21 +105,11 @@ val permissionsModule = module {
 }
 ```
 
-Requests and `shouldShowRationale` still need an attached activity: without one, requests report `onDenied` (or `PermissionResult.Denied`) and `shouldShowRationale` returns `false`.
+Requests and `shouldShowRationale` still need an attached activity: without one, requests report `onDenied` and `shouldShowRationale` returns `false`.
 
-### Suspending API
+### Rationale
 
-`requestPermission(permission)` and `hasPermission(permission)` are `suspend` extensions in `com.raxdenstudios.commons.permissions.ext`. The request returns a `PermissionResult`:
-
-```kotlin
-when (val result = permissionsManager.requestPermission(Permission.RecordAudio)) {
-    is PermissionResult.Granted -> startRecording()
-    is PermissionResult.Rationale -> showRationaleDialog(result.permission)
-    is PermissionResult.Denied -> showDeniedMessage()
-}
-```
-
-`Rationale` is returned without showing the system dialog. Explain the permission, then call `requestPermissionAfterRationale` to show it (calling `requestPermission` again would only return `Rationale` again). Starting a new request while another is waiting for the dialog ends the earlier one with `Denied`.
+`requestPermission(callbacks, permission)` reports `onRationale` without showing the system dialog. Explain the permission, then call `requestPermissionAfterRationale(callbacks, permission)` to show it (calling `requestPermission` again would only report `onRationale` again). Starting a new request while another is waiting for the dialog ends the earlier one with `onDenied`.
 
 ### Rationale check
 
@@ -127,7 +117,7 @@ when (val result = permissionsManager.requestPermission(Permission.RecordAudio))
 
 `shouldShowRationale` is a new `PermissionsManager` interface member: custom implementations of the interface must add it (source-breaking).
 
-A request made before `attach` and the activity's `onCreate` reports `onDenied` (or `PermissionResult.Denied`) instead of waiting forever.
+A request made before `attach` and the activity's `onCreate` reports `onDenied` instead of waiting forever.
 
 ## 📋 Available Permissions
 
@@ -206,3 +196,9 @@ The library automatically checks if permissions are already granted before reque
 ```bash
 ./gradlew :libraries:permissions:testDebugUnitTest
 ```
+
+## Removed in 6.0.0
+
+- `RationaleDialog` (and its Spanish `permission_rationale_*` string resources): build your own rationale dialog.
+- The `suspend` extensions `PermissionsManager.requestPermission(permission)`, `hasPermission(permission)` and `requestPermissionAfterRationale(permission)` (package `commons.permissions.ext`): call the interface members with `Callbacks` and wrap them in `suspendCancellableCoroutine` if you need suspension.
+- The `commons-coroutines` implementation dependency (still available through `commons-android`).
