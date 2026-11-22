@@ -14,8 +14,8 @@ import java.util.TimeZone
  * projects that enable core library desugaring.
  *
  * The start of day is the earliest valid time on this date in that zone. Fractional
- * seconds are dropped, so negative results are truncated toward zero. Defaults to the
- * JVM default zone ([TimeZone.getDefault]).
+ * seconds are floored, so pre-1970 values round toward negative infinity (one millisecond
+ * before the epoch is -1, not 0). Defaults to the JVM default zone ([TimeZone.getDefault]).
  *
  * ## Setup
  *
@@ -33,7 +33,7 @@ import java.util.TimeZone
  */
 fun LocalDate.toSeconds(
     timeZone: TimeZone = TimeZone.getDefault(),
-): Long = toMilliseconds(timeZone) / MILLIS_IN_SECOND
+): Long = toMilliseconds(timeZone).floorDiv(MILLIS_IN_SECOND)
 
 /**
  * Returns the milliseconds since the Unix epoch of the start of this date in [timeZone].

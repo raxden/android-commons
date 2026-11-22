@@ -7,9 +7,8 @@ import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 import retrofit2.Response
-import java.io.IOException
 
-internal class ResponseExtensionKtText {
+internal class ResponseExtensionTest {
 
     @Test
     fun `toAnswer should be return a success result data`() {
@@ -17,16 +16,6 @@ internal class ResponseExtensionKtText {
             mockResponse200.toAnswer(errorMessage = "message")
 
         assertThat(result).isEqualTo(Answer.Success("originalValue"))
-    }
-
-    @Test
-    fun `toAnswer should be return a failure`() {
-        val result: Answer<String, NetworkError<String>> =
-            mockResponseWithException.toAnswer(errorMessage = "message")
-
-        assertThat(result).isEqualTo(
-            Answer.Failure(NetworkError.Unknown(code = 200, body = null, message = "message")),
-        )
     }
 
     @Test
@@ -59,14 +48,63 @@ internal class ResponseExtensionKtText {
         )
     }
 
+    @Test
+    fun `Given a Unit response 204 without body, When toAnswer is called, Then return Success Unit`() {
+        val result = unitResponse(code = 204).toAnswer(errorMessage = "message")
+
+        assertThat(result).isEqualTo(Answer.Success(Unit))
+    }
+
+    @Test
+    fun `Given a Unit response 205 without body, When toAnswer is called, Then return Success Unit`() {
+        val result = unitResponse(code = 205).toAnswer(errorMessage = "message")
+
+        assertThat(result).isEqualTo(Answer.Success(Unit))
+    }
+
+    @Test
+    fun `Given a Unit response 200 without body, When toAnswer is called, Then return Failure Unknown`() {
+        val result = unitResponse(code = 200).toAnswer(errorMessage = "message")
+
+        assertThat(result).isEqualTo(
+            Answer.Failure(NetworkError.Unknown(code = 200, body = null, message = "Success response with null body")),
+        )
+    }
+
+    @Test
+    fun `Given a String response 204 without body, When toAnswer is called, Then return Failure Unknown`() {
+        val response = mockk<Response<String>> {
+            every { body() } returns null
+            every { code() } returns 204
+        }
+
+        val result = response.toAnswer(errorMessage = "message")
+
+        assertThat(result).isEqualTo(
+            Answer.Failure(NetworkError.Unknown(code = 204, body = null, message = "Success response with null body")),
+        )
+    }
+
+    @Test
+    fun `Given a Unit response 404, When toAnswer is called, Then return Failure Client`() {
+        val result = unitResponse(code = 404).toAnswer(errorMessage = "message")
+
+        assertThat(result).isEqualTo(
+            Answer.Failure(NetworkError.Client(code = 404, body = null, message = "message")),
+        )
+    }
+
+    private fun unitResponse(
+        code: Int,
+    ): Response<Unit> = mockk {
+        every { body() } returns null
+        every { code() } returns code
+    }
+
     companion object {
 
         private val mockResponse200 = mockk<Response<String>> {
             every { body() } returns "originalValue"
-            every { code() } answers { 200 }
-        }
-        private val mockResponseWithException = mockk<Response<String>> {
-            every { body() } answers { throw IOException("") }
             every { code() } answers { 200 }
         }
         private val mockNetwork400 = mockk<Response<String>> {

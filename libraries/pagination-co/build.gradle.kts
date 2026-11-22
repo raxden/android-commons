@@ -32,5 +32,6 @@ dependencies {
     api(projects.libraries.coroutines)
 
     testImplementation(projects.libraries.coroutinesTest)
+    testImplementation(libs.truth)
     testImplementation(libs.mockk.android)
 }

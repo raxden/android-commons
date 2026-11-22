@@ -8,8 +8,10 @@ import com.raxdenstudios.commons.pagination.model.PageIndex
 import com.raxdenstudios.commons.pagination.model.PageList
 import com.raxdenstudios.commons.pagination.model.PageResult
 import com.raxdenstudios.commons.pagination.model.PageSize
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 
 class CoPagination<T>(
     override val config: Config = Config.default,
@@ -17,6 +19,7 @@ class CoPagination<T>(
     private val coroutineScope: CoroutineScope,
 ) : Pagination<T>() {
 
+    @Volatile
     private var currentJob: Job? = null
 
     fun requestFirstPage(
@@ -52,19 +55,29 @@ class CoPagination<T>(
         pageResponse: (pageResult: PageResult<T>) -> Unit,
     ) {
         currentJob?.cancel()
-        currentJob = coroutineScope.launch(
+        val job = coroutineScope.launch(
             onError = { error -> processRequestError(error, pageResponse) },
         ) {
             processRequestStart(pageResponse)
+            val pageList = pageRequest.invoke(page, config.pageSize)
+            // A request cancelled while fetching must not overwrite the state of the one that replaced it.
+            ensureActive()
             processRequestSuccess(
-                pageList = pageRequest.invoke(page, config.pageSize),
+                pageList = pageList,
                 pageResponse = pageResponse,
             )
+        }
+        currentJob = job
+        job.invokeOnCompletion { cause ->
+            // Only the current request owns the status: a replaced one must not reset the new one's loading.
+            if (cause is CancellationException && currentJob === job) processRequestCancelled()
         }
     }
 
     fun cancelCurrentRequest() {
-        currentJob?.cancel()
+        val job = currentJob ?: return
         currentJob = null
+        job.cancel()
+        processRequestCancelled()
     }
 }

@@ -4,25 +4,34 @@ import com.raxdenstudios.commons.core.Answer
 import com.raxdenstudios.commons.core.NetworkError
 import retrofit2.Response
 
-@Suppress("SwallowedException", "TooGenericExceptionCaught")
+/**
+ * Maps this Retrofit [Response] to an [Answer]: 2xx/3xx with a body is [Answer.Success], a null body
+ * on a success code is [NetworkError.Unknown], and 4xx/5xx map to [NetworkError.Client] and
+ * [NetworkError.Server].
+ *
+ * A `Response<Unit>` resolves to the [Unit] overload instead, which treats 204/205 without body as
+ * success.
+ */
 fun <S : Any> Response<S>.toAnswer(
     errorMessage: String,
 ): Answer<S, NetworkError<S>> {
-    val code = code()
-    var body: S? = null
+    val body = body()
+    return code().toAnswer(body, body, errorMessage)
+}
 
-    return try {
-        body = body()
-        code.toAnswer(body, body, errorMessage)
-    } catch (e: Throwable) {
-        Answer.Failure(
-            NetworkError.Unknown(
-                code = code,
-                body = body,
-                message = errorMessage,
-            ),
-        )
-    }
+/**
+ * Maps this Retrofit `Response<Unit>` to an [Answer] like the generic overload, except that a
+ * 204 No Content or 205 Reset Content without body is [Answer.Success] with [Unit]: Retrofit never
+ * delivers a body for those codes.
+ */
+@JvmName("toUnitAnswer")
+fun Response<Unit>.toAnswer(
+    errorMessage: String,
+): Answer<Unit, NetworkError<Unit>> {
+    val code = code()
+    val body = body()
+    val successBody = body ?: Unit.takeIf { code in NO_CONTENT_CODES }
+    return code.toAnswer(successBody, body, errorMessage)
 }
 
 @Suppress("MagicNumber")
@@ -64,3 +73,5 @@ internal fun <S : Any, E : Any> Int.toAnswer(
         ),
     )
 }
+
+private val NO_CONTENT_CODES = setOf(204, 205)

@@ -3,9 +3,14 @@ package com.raxdenstudios.commons.coroutines.ext
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.raxdenstudios.commons.core.Answer
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -308,4 +313,56 @@ internal class AnswerExtensionTest {
 
         assertThat(failureValue).isEqualTo("errorValue")
     }
+
+    @Test
+    fun `Given a java CancellationException, When coRunCatching is called, Then it propagates`() = runTest {
+        val exception = java.util.concurrent.CancellationException("cancelled")
+
+        val thrown = try {
+            Unit.coRunCatching { throw exception }
+            null
+        } catch (e: java.util.concurrent.CancellationException) {
+            e
+        }
+
+        assertThat(thrown).isSameInstanceAs(exception)
+    }
+
+    @Test
+    fun `Given a kotlinx CancellationException, When coRunCatching is called, Then it propagates`() = runTest {
+        val exception = CancellationException("cancelled")
+
+        val thrown = try {
+            Unit.coRunCatching { throw exception }
+            null
+        } catch (e: CancellationException) {
+            e
+        }
+
+        assertThat(thrown).isSameInstanceAs(exception)
+    }
+
+    @Test
+    fun `Given a non cancellation exception, When coRunCatching is called, Then return Failure`() = runTest {
+        val exception = IllegalStateException("boom")
+
+        val result = Unit.coRunCatching { throw exception }
+
+        assertThat(result).isEqualTo(Answer.Failure(exception))
+    }
+
+    @Test
+    fun `Given a coroutine suspended in coRunCatching, When cancelled, Then job is cancelled without Failure`() =
+        runTest {
+            var result: Answer<Nothing, Throwable>? = null
+            val job = launch {
+                result = Unit.coRunCatching { awaitCancellation() }
+            }
+            runCurrent()
+
+            job.cancelAndJoin()
+
+            assertThat(job.isCancelled).isTrue()
+            assertThat(result).isNull()
+        }
 }

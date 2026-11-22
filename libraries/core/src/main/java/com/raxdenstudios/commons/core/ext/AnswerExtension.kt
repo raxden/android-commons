@@ -1,12 +1,21 @@
 package com.raxdenstudios.commons.core.ext
 
 import com.raxdenstudios.commons.core.Answer
+import java.util.concurrent.CancellationException
 
+/**
+ * Runs [function] and wraps its result in [Answer.Success], or any thrown error in [Answer.Failure].
+ *
+ * A [CancellationException] (which `kotlinx.coroutines.CancellationException` aliases on the JVM) is
+ * rethrown instead of being wrapped, so cancellation keeps propagating.
+ */
 @Suppress("TooGenericExceptionCaught")
 fun <T, R> T.runCatching(
     function: T.() -> R,
 ): Answer<R, Throwable> = try {
     Answer.Success(function())
+} catch (e: CancellationException) {
+    throw e
 } catch (e: Throwable) {
     Answer.Failure(e)
 }

@@ -28,8 +28,9 @@ import kotlinx.coroutines.flow.callbackFlow
 interface HeadphonesConnectionObserver {
 
     /**
-     * Emits `true` when a supported headphone-like output is added and `false` when a supported output
-     * that was connected is removed. Only changes are emitted: the devices already connected when
+     * Emits `true` when a supported headphone-like output is added. When a connected supported output is
+     * removed, emits `true` if another supported output is still connected and `false` if none is left.
+     * Only changes are emitted: the devices already connected when
      * collection starts produce no initial value.
      *
      * The flow is cold: every collector registers its own audio device callback, which is removed when
@@ -62,7 +63,9 @@ class HeadphonesConnectionObserverImpl(
             override fun onAudioDevicesRemoved(
                 removedDevices: Array<out AudioDeviceInfo>,
             ) {
-                if (connectedIds.removeAll(removedDevices.map { it.id }.toSet())) trySend(false)
+                // Only report the remaining state: another headphone may still be connected.
+                val removed = connectedIds.removeAll(removedDevices.map { it.id }.toSet())
+                if (removed) trySend(connectedIds.isNotEmpty())
             }
         }
 
