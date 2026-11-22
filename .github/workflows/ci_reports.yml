@@ -21,14 +21,10 @@ permissions:
   contents: read
 
 env:
-  # Increment to invalidate Gradle cache when needed
-  CACHE_VERSION: 1
   # Increase Gradle heap size to prevent OOM errors in large builds
   GRADLE_OPTS: >
     -Dorg.gradle.jvmargs=-Xmx4g
     -Dkotlin.daemon.jvm.options=-Xmx2g
-  # Enable debug for Gradle cache action
-  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
   # Artifact retention
   RETENTION_DAYS: 1
   # Build configuration
@@ -43,19 +39,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
 
       - name: Print workflow information
         uses: ./.github/actions/info
 
-  test:
-    name: Unit Tests
+  reports:
+    name: Unit Tests and reports
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
 
       - uses: ./.github/actions/setup
 
@@ -65,18 +59,7 @@ jobs:
           build-type: ${{ env.BUILD_TYPE }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
-  reports:
-    name: Generate reports
-    needs: [ test ]
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - uses: ./.github/actions/setup
-
+      # Same job as the tests: compiled classes and test outputs are reused
       - name: Generate JaCoCo reports and upload to codecov
         uses: ./.github/actions/reports
         with:

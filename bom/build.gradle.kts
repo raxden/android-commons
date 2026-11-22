@@ -23,10 +23,6 @@ publishPlatform {
     coordinates = Coordinates.default.copy(artifactId = "commons-bom")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     // If anyone use these dependencies, then are added
     constraints {

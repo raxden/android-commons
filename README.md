@@ -1,7 +1,8 @@
 # Android Commons
 
-[![Continuous Delivery](https://github.com/raxden/android-commons/workflows/Continuous%20Delivery/badge.svg)](https://github.com/raxden/android-commons/actions/workflows/ci_publish.yml)
-[![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg?token=E55S5DHJ9B)](https://codecov.io/gh/raxden/android-commons)
+[![CI](https://github.com/raxden/android-commons/actions/workflows/ci.yml/badge.svg)](https://github.com/raxden/android-commons/actions/workflows/ci.yml)
+[![Publish](https://github.com/raxden/android-commons/actions/workflows/ci_publish.yml/badge.svg)](https://github.com/raxden/android-commons/actions/workflows/ci_publish.yml)
+[![codecov](https://codecov.io/gh/raxden/android-commons/branch/master/graph/badge.svg)](https://codecov.io/gh/raxden/android-commons)
 [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-bom.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-bom)
 [![API](https://img.shields.io/badge/API-28%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=28)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -16,7 +17,7 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 
 - 🎯 **Modular Architecture** - Include only the modules you need
 - 🚀 **Modern Android** - Built with Kotlin, Coroutines, and Jetpack Compose
-- 🧪 **Well Tested** - Comprehensive unit test coverage
+- 🧪 **Tested** - Unit tests with coverage reported to Codecov
 - 📦 **Small Footprint** - Minimal dependencies per module
 - 🔄 **Active Maintenance** - Regular updates and improvements
 
@@ -40,7 +41,7 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | `commons-network` | Network utilities and interceptors | [📖 Docs](libraries/network/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-network.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-network) |
 | **Pagination** |
 | `commons-pagination` | Base pagination framework | [📖 Docs](libraries/pagination/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-pagination) |
-| `commons-pagination-co` | Coroutines-based pagination | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination-co.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-pagination-co) |
+| `commons-pagination-co` | Coroutines-based pagination | [📖 Docs](libraries/pagination-co/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-pagination-co.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-pagination-co) |
 | **Permissions** |
 | `commons-permissions` | Runtime permissions management | [📖 Docs](libraries/permissions/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-permissions.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-permissions) |
 | **Storage** |
@@ -82,6 +83,8 @@ dependencies {
     // Add modules without specifying versions
     implementation("com.raxdenstudios:commons-core")
     implementation("com.raxdenstudios:commons-android")
+    implementation("com.raxdenstudios:commons-android-compose")
+    implementation("com.raxdenstudios:commons-android-room")
     implementation("com.raxdenstudios:commons-coroutines")
     implementation("com.raxdenstudios:commons-network")
     implementation("com.raxdenstudios:commons-pagination")
@@ -104,31 +107,32 @@ dependencies {
 
 ## 🧪 Testing
 
-All modules include comprehensive unit tests. Run tests with:
+Run the unit tests with:
 
 ```bash
-./gradlew test
+./gradlew testDebugUnitTest
 ```
 
 For coverage reports:
 
 ```bash
-./gradlew jacocoTestReport
+./gradlew testDebugUnitTest coverageReport
 ```
 
 ## 📖 Documentation
 
 Detailed documentation for each module is available in their respective directories:
 
+- [Core](libraries/core/README.md)
 - [Android](libraries/android/README.md)
 - [Android Compose](libraries/android-compose/README.md)
 - [Android Test](libraries/android-test/README.md)
 - [Android Room](libraries/android-room/README.md)
 - [Coroutines](libraries/coroutines/README.md)
 - [Coroutines Test](libraries/coroutines-test/README.md)
-- [Core](libraries/core/README.md)
 - [Network](libraries/network/README.md)
 - [Pagination](libraries/pagination/README.md)
+- [Pagination Coroutines](libraries/pagination-co/README.md)
 - [Permissions](libraries/permissions/README.md)
 - [Preferences](libraries/preferences/README.md)
 - [Time](libraries/time/README.md)
