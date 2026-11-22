@@ -110,4 +110,18 @@ internal class LocalDateExtensionTest {
 
         assertThat(result).isEqualTo("3/15/24")
     }
+
+    @Test
+    fun `Given a pre epoch date, When toSeconds is called, Then return minus one day in seconds`() {
+        val result = LocalDate.of(1969, 12, 31).toSeconds(TimeZone.getTimeZone("UTC"))
+
+        assertThat(result).isEqualTo(-86400)
+    }
+
+    @Test
+    fun `Given a post epoch date, When toSeconds is called, Then value is unchanged`() {
+        val result = LocalDate.of(1970, 1, 2).toSeconds(TimeZone.getTimeZone("UTC"))
+
+        assertThat(result).isEqualTo(86400)
+    }
 }

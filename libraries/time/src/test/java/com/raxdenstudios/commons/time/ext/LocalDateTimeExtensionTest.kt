@@ -81,4 +81,22 @@ internal class LocalDateTimeExtensionTest {
         assertThat(LocalDateTime.of(2024, 3, 15, 9, 5, 59).toHourMinutes()).isEqualTo("09:05")
         assertThat(LocalDateTime.of(2024, 3, 15, 23, 45).toHourMinutes()).isEqualTo("23:45")
     }
+
+    @Test
+    fun `Given a pre epoch date time with fraction, When toSeconds is called, Then floor toward negative infinity`() {
+        val aDate = LocalDateTime.of(1969, 12, 31, 23, 59, 59, 500_000_000)
+
+        val result = aDate.toSeconds(TimeZone.getTimeZone("UTC"))
+
+        assertThat(result).isEqualTo(-1)
+    }
+
+    @Test
+    fun `Given a post epoch date time, When toSeconds is called, Then value is unchanged`() {
+        val aDate = LocalDateTime.of(2023, 9, 22, 11, 32, 7, 999_000_000)
+
+        val result = aDate.toSeconds(TimeZone.getTimeZone("UTC"))
+
+        assertThat(result).isEqualTo(1695382327)
+    }
 }

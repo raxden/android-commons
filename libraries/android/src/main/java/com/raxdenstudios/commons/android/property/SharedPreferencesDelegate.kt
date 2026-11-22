@@ -23,7 +23,7 @@ class SharedPreferencesDelegate<T : Any>(
             is Boolean -> preferences.getBoolean(key, defaultValue)
             is Long -> preferences.getLong(key, defaultValue)
             is String -> preferences.getString(key, defaultValue)
-            else -> IllegalStateException("type not supported")
+            else -> throw IllegalStateException("type not supported")
         } as T
         onAfterGetOperation(value)
         return value
@@ -39,6 +39,7 @@ class SharedPreferencesDelegate<T : Any>(
                 is Boolean -> putBoolean(key(property), value as Boolean)
                 is Long -> putLong(key(property), value as Long)
                 is String -> putString(key(property), value as String)
+                else -> throw IllegalStateException("type not supported")
             }
         }
         onAfterSetOperation(value)

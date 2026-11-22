@@ -14,8 +14,16 @@ abstract class Pagination<T> {
     abstract val logger: (message: () -> String) -> Unit
 
     private val history: MutableMap<Page, List<T>> = ConcurrentHashMap()
-    private var itemsLoaded: Int = 0
+
+    // Derived from history so re-fetching a page (or loading a previous one) does not count its items twice.
+    private val itemsLoaded: Int
+        get() = history.values.sumOf { items -> items.size }
+
+    // Read and written from the caller's thread and from the thread that completes each request.
+    @Volatile
     private var status: Status = Status.Empty
+
+    @Volatile
     private var currentPage: Page? = null
 
     fun getCurrentPage(): Page = currentPage ?: config.initialPage
@@ -27,7 +35,6 @@ abstract class Pagination<T> {
     fun clear() {
         history.clear()
         currentPage = null
-        itemsLoaded = 0
         status = Status.Empty
     }
 
@@ -42,6 +49,19 @@ abstract class Pagination<T> {
         }
 
         pageResponse(PageResult.Error(throwable))
+    }
+
+    /**
+     * Leaves the loading state after the in-flight request was cancelled, so the next request is not
+     * ignored. Does nothing when no request is loading.
+     */
+    protected fun processRequestCancelled() {
+        if (status != Status.Loading) return
+        status = if (itemsLoadedGreaterThan0()) {
+            Status.NotEmpty
+        } else {
+            Status.Empty
+        }
     }
 
     private fun itemsLoadedGreaterThan0() = itemsLoaded > 0
@@ -74,7 +94,6 @@ abstract class Pagination<T> {
         pageList: PageList<T>,
         pageResponse: (pageResult: PageResult<T>) -> Unit,
     ) {
-        itemsLoaded += pageList.totalItems
         status = if (thereAreLessElementsThanPageSize(pageList)) {
             Status.NoMoreResults
         } else {

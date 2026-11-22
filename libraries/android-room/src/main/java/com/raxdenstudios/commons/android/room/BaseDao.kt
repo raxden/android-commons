@@ -3,7 +3,6 @@ package com.raxdenstudios.commons.android.room
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
 
@@ -54,11 +53,12 @@ interface BaseDao<in T> {
         types: List<T>,
     )
 
-    @Transaction
+    /**
+     * Inserts [type], or updates the existing row with the same primary key. Unlike [insert], an existing
+     * row is updated in place, not deleted and re-inserted, so `ON DELETE CASCADE` children are kept.
+     */
+    @Upsert
     suspend fun upsert(
         type: T,
-    ) {
-        val id: Long = insert(type)
-        if (id == -1L) update(type)
-    }
+    )
 }

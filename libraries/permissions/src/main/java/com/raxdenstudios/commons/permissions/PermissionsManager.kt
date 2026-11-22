@@ -47,8 +47,15 @@ interface PermissionsManager : DefaultLifecycleObserver {
     /**
      * Request permission. Granted permissions call [Callbacks.onGranted] and those needing a rationale call
      * [Callbacks.onRationale], without a dialog. The rest show the system dialog, or call [Callbacks.onDenied]
-     * right away when no launcher is registered (not attached or not created yet). A new request replaces
-     * the callbacks of one still pending.
+     * right away when no launcher is registered (not attached or not created yet). A new request that shows
+     * the dialog while another is still pending ends the pending one with [Callbacks.onDenied].
+     *
+     * A request still waiting for the dialog is kept across a configuration change, so the recreated
+     * activity delivers its result: keep [callbacks] free of references to the activity (route them through a
+     * ViewModel, for example), or the old activity is retained until the result arrives.
+     *
+     * After showing the rationale, call [requestPermissionAfterRationale] to show the system dialog: calling
+     * this again would only report [Callbacks.onRationale] again.
      *
      * @param callbacks
      * @param permissions
@@ -57,6 +64,21 @@ interface PermissionsManager : DefaultLifecycleObserver {
         callbacks: Callbacks,
         vararg permissions: Permission,
     )
+
+    /**
+     * Like [requestPermission], but shows the system dialog even when a rationale should be shown. Call it
+     * once the user has seen the rationale. Granted permissions still call [Callbacks.onGranted] without a
+     * dialog.
+     *
+     * The default implementation delegates to [requestPermission], so implementations written before this
+     * method existed keep compiling; [PermissionsManagerImpl] overrides it.
+     */
+    fun requestPermissionAfterRationale(
+        callbacks: Callbacks,
+        vararg permissions: Permission,
+    ) {
+        requestPermission(callbacks, *permissions)
+    }
 
     /**
      * Has permission

@@ -95,7 +95,7 @@ when (val result = permissionsManager.requestPermission(Permission.RecordAudio))
 }
 ```
 
-`Rationale` is returned without showing the system dialog. Explain the permission, then call `requestPermission` again to show it. Do not run two requests at the same time.
+`Rationale` is returned without showing the system dialog. Explain the permission, then call `requestPermissionAfterRationale` to show it (calling `requestPermission` again would only return `Rationale` again). Starting a new request while another is waiting for the dialog ends the earlier one with `Denied`.
 
 ### Rationale check
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.raxdenstudios.commons.android.Event
 
 fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(
@@ -26,7 +27,7 @@ fun <T : Any, L : LiveData<T>> View.observe(
     liveData: L,
     body: (T) -> Unit,
 ) {
-    liveData.observe(context as LifecycleOwner, Observer(body))
+    liveData.observe(requireLifecycleOwner(), Observer(body))
 }
 
 inline fun <T : Any, L : LiveData<Event<T>>> LifecycleOwner.observeEvent(
@@ -47,8 +48,17 @@ inline fun <T : Any, L : LiveData<Event<T>>> View.observeEvent(
     liveData: L,
     crossinline body: (T) -> Unit,
 ) {
-    liveData.observe(context as LifecycleOwner) { it?.getContentIfNotHandled()?.let(body) }
+    liveData.observe(requireLifecycleOwner()) { it?.getContentIfNotHandled()?.let(body) }
 }
+
+/**
+ * The [LifecycleOwner] of the view tree this view belongs to, falling back to its context when that is a
+ * [LifecycleOwner] (for example a view not attached yet inside an activity).
+ */
+@PublishedApi
+internal fun View.requireLifecycleOwner(): LifecycleOwner = findViewTreeLifecycleOwner()
+    ?: context as? LifecycleOwner
+    ?: error("View $this has no LifecycleOwner: attach it to a lifecycle-aware host before observing")
 
 fun <T> MutableLiveData<T>.update(
     function: (T) -> T,

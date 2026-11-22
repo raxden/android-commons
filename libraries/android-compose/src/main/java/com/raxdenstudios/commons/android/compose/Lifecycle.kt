@@ -2,6 +2,8 @@ package com.raxdenstudios.commons.android.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -11,7 +13,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
  * composable leaves.
  *
  * The owner defaults to [LocalLifecycleOwner], the owner of the screen hosting the composable. Changing the
- * owner removes the observer from the old one and adds it to the new one.
+ * owner removes the observer from the old one and adds it to the new one. Passing a different [observer] on
+ * recomposition does not re-register: later events go to the latest observer.
  *
  * ## Usage
  *
@@ -28,10 +31,15 @@ fun ComposableLifecycle(
     observer: LifecycleEventObserver,
     lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 ) {
+    // The registered observer forwards to the latest one, so a new observer is honoured without re-registering.
+    val currentObserver by rememberUpdatedState(observer)
     DisposableEffect(lifeCycleOwner) {
-        lifeCycleOwner.lifecycle.addObserver(observer)
+        val forwardingObserver = LifecycleEventObserver { owner, event ->
+            currentObserver.onStateChanged(owner, event)
+        }
+        lifeCycleOwner.lifecycle.addObserver(forwardingObserver)
         onDispose {
-            lifeCycleOwner.lifecycle.removeObserver(observer)
+            lifeCycleOwner.lifecycle.removeObserver(forwardingObserver)
         }
     }
 }

@@ -11,13 +11,14 @@ import java.util.TimeZone
  * extensions. The library needs no initialisation and targets minSdk 26+ or projects that
  * enable core library desugaring.
  *
- * Fractional seconds are dropped, so negative results are truncated toward zero. In a DST
- * gap the time is shifted later by the gap length; in an overlap the earlier offset is used.
+ * Fractional seconds are floored, so pre-1970 values round toward negative infinity (one
+ * millisecond before the epoch is -1, not 0). In a DST gap the time is shifted later by the
+ * gap length; in an overlap the earlier offset is used.
  * Defaults to the JVM default zone ([TimeZone.getDefault]).
  */
 fun LocalDateTime.toSeconds(
     timeZone: TimeZone = TimeZone.getDefault(),
-): Long = toMilliseconds(timeZone) / MILLIS_IN_SECOND
+): Long = toMilliseconds(timeZone).floorDiv(MILLIS_IN_SECOND)
 
 /**
  * Returns the milliseconds since the Unix epoch of this date-time interpreted in [timeZone].

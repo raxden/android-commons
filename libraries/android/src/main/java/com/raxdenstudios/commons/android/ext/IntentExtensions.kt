@@ -33,6 +33,6 @@ fun Intent.startActivityAndFinishAll(
     context: Context,
     options: Bundle? = null,
 ) {
-    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
     ContextCompat.startActivity(context, this, options)
 }
