@@ -81,11 +81,16 @@ interface PermissionsManager : DefaultLifecycleObserver {
     }
 
     /**
-     * Has permission
+     * Reports whether [permission] is granted, without requesting it. The check uses the attached activity when
+     * there is one, otherwise the application context: the one given to the manager, or else the application
+     * context of the first attached activity. With no activity and no context it reports `false`.
      *
-     * @param onGranted
-     * @param permission
-     * @receiver
+     * [onGranted] is called synchronously on the calling thread, before this function returns. When the manager
+     * was created with a context, this is safe from background callers (services, workers, FCM messages) with no
+     * activity attached. Without a context, it reports `false` until an activity has been attached once.
+     *
+     * @param onGranted receives `true` when the permission is granted.
+     * @param permission the permission to check.
      */
     fun hasPermission(
         onGranted: (Boolean) -> Unit,

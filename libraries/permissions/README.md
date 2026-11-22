@@ -83,6 +83,30 @@ permissionsManager.hasPermission(
 )
 ```
 
+`hasPermission` works without an attached activity when the manager was given a context (see [Background use](#background-use)). It checks the attached activity first, then the application context, and reports `false` when neither is available.
+
+### Background use
+
+Pass a `Context` to `PermissionsManagerImpl` to check permissions when no activity is attached, for example from a service, worker or FCM message. Use the application context so the manager does not keep an activity alive:
+
+```kotlin
+// Manual construction
+val permissionsManager: PermissionsManager = PermissionsManagerImpl(applicationContext)
+```
+
+```kotlin
+// Koin
+import org.koin.android.ext.koin.androidContext
+import org.koin.dsl.bind
+import org.koin.dsl.module
+
+val permissionsModule = module {
+    single { PermissionsManagerImpl(androidContext()) } bind PermissionsManager::class
+}
+```
+
+Requests and `shouldShowRationale` still need an attached activity: without one, requests report `onDenied` (or `PermissionResult.Denied`) and `shouldShowRationale` returns `false`.
+
 ### Suspending API
 
 `requestPermission(permission)` and `hasPermission(permission)` are `suspend` extensions in `com.raxdenstudios.commons.permissions.ext`. The request returns a `PermissionResult`:
@@ -99,7 +123,7 @@ when (val result = permissionsManager.requestPermission(Permission.RecordAudio))
 
 ### Rationale check
 
-`shouldShowRationale(permission)` tells whether the attached activity should explain the permission before asking again. It returns `false` when no activity is attached.
+`shouldShowRationale(permission)` tells whether the attached activity should explain the permission before asking again. It returns `false` when no activity is attached, even if the manager has a context: unlike `hasPermission`, it has no application-context fallback.
 
 `shouldShowRationale` is a new `PermissionsManager` interface member: custom implementations of the interface must add it (source-breaking).
 
@@ -140,9 +164,10 @@ val customPermission = Permission.Other("android.permission.CUSTOM_PERMISSION")
 
 #### Methods
 
+- `PermissionsManagerImpl(context: Context? = null)` - Default implementation; the optional context enables `hasPermission` without an attached activity
 - `attach(activity: ComponentActivity)` - Attach to activity lifecycle
-- `requestPermission(callbacks: Callbacks, vararg permissions: Permission)` - Request permissions
-- `hasPermission(onGranted: (Boolean) -> Unit, permission: Permission)` - Check permission status
+- `requestPermission(callbacks: Callbacks, vararg permissions: Permission)` - Request permissions (needs an attached activity)
+- `hasPermission(onGranted: (Boolean) -> Unit, permission: Permission)` - Check permission status (attached activity, then application context, else `false`)
 
 ### Callbacks
 
