@@ -27,10 +27,10 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | **Bill of Materials** |
 | `commons-bom` | BOM for version management | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-bom.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-bom) |
 | **Core & Android** |
-| `commons-core` | Core utilities and extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-core.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-core) |
-| `commons-android` | Android-specific utilities and extensions | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android) |
+| `commons-core` | Core utilities and extensions | [📖 Docs](libraries/core/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-core.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-core) |
+| `commons-android` | Android-specific utilities and extensions | [📖 Docs](libraries/android/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android) |
 | `commons-android-compose` | Jetpack Compose utilities | [📖 Docs](libraries/android-compose/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-compose.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-compose) |
-| `commons-android-test` | Android testing utilities | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-test) |
+| `commons-android-test` | Android testing utilities | [📖 Docs](libraries/android-test/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-test.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-test) |
 | **Storage (Room)** |
 | `commons-android-room` | Room `BaseDao` helpers | [📖 Docs](libraries/android-room/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-android-room.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-android-room) |
 | **Async & Concurrency** |
@@ -46,7 +46,7 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | **Storage** |
 | `commons-preferences` | Advanced SharedPreferences wrapper | [📖 Docs](libraries/preferences/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-preferences) |
 | **Date & Time** |
-| `commons-time` | `java.time` date/time extensions (no init needed) | - | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-time.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-time) |
+| `commons-time` | `java.time` date/time extensions (no init needed) | [📖 Docs](libraries/time/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-time.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-time) |
 
 ## 🎯 Scope
 
@@ -120,14 +120,18 @@ For coverage reports:
 
 Detailed documentation for each module is available in their respective directories:
 
+- [Android](libraries/android/README.md)
 - [Android Compose](libraries/android-compose/README.md)
+- [Android Test](libraries/android-test/README.md)
 - [Android Room](libraries/android-room/README.md)
 - [Coroutines](libraries/coroutines/README.md)
 - [Coroutines Test](libraries/coroutines-test/README.md)
+- [Core](libraries/core/README.md)
 - [Network](libraries/network/README.md)
 - [Pagination](libraries/pagination/README.md)
 - [Permissions](libraries/permissions/README.md)
 - [Preferences](libraries/preferences/README.md)
+- [Time](libraries/time/README.md)
 
 ## 🤝 Contributing
 

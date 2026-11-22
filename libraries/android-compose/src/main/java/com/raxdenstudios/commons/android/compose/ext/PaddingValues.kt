@@ -8,6 +8,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 
+/**
+ * Returns a copy of these paddings with only the given sides replaced. Sides left at their default keep the
+ * current value. The defaults for [start] and [end] read the current [LocalLayoutDirection], so they follow RTL.
+ */
 @Composable
 fun PaddingValues.copy(
     start: Dp = calculateStartPadding(LocalLayoutDirection.current),
@@ -21,6 +25,7 @@ fun PaddingValues.copy(
     bottom = bottom,
 )
 
+/** Sums two paddings side by side: each side of the result is the sum of the same side in both values. */
 operator fun PaddingValues.plus(
     that: PaddingValues,
 ): PaddingValues = object : PaddingValues {

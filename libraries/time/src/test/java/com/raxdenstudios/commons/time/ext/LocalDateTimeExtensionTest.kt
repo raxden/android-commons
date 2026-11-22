@@ -75,4 +75,10 @@ internal class LocalDateTimeExtensionTest {
 
         assertThat(result).isEqualTo(1695333600000)
     }
+
+    @Test
+    fun `Given a date-time, When toHourMinutes is called, Then return zero padded 24-hour time`() {
+        assertThat(LocalDateTime.of(2024, 3, 15, 9, 5, 59).toHourMinutes()).isEqualTo("09:05")
+        assertThat(LocalDateTime.of(2024, 3, 15, 23, 45).toHourMinutes()).isEqualTo("23:45")
+    }
 }

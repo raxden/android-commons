@@ -122,6 +122,22 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
+### HttpClientFactory
+
+`HttpClientFactory` builds an `OkHttpClient`. `DefaultHttpClientFactory` takes the optional interceptors and timeouts:
+
+```kotlin
+val factory: HttpClientFactory = DefaultHttpClientFactory(
+    retryInterceptor = RetryInterceptor(maxRetries = 3),
+    httpLoggingInterceptor = HttpLoggingInterceptor(),
+    interceptors = listOf(AuthTokenInterceptor { tokenProvider.getToken() }),
+    readTimeout = 20.seconds,
+)
+val client: OkHttpClient = factory.create()
+```
+
+Each `create()` call builds a new client, so create it once and reuse it. Application interceptors run in this order: `interceptors` (list order), `retryInterceptor`, `httpLoggingInterceptor`, `cacheOfflineInterceptor`. Network interceptors run after that, in this order: `cacheNetworkInterceptor`, `cacheLoggerInterceptor`, then `networkInterceptors`. Null parameters are skipped.
+
 ## 📋 Available Interceptors
 
 | Interceptor | Description |

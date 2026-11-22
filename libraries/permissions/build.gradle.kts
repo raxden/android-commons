@@ -31,9 +31,11 @@ publishLibrary {
 
 dependencies {
     api(projects.libraries.android)
+    api(projects.libraries.coroutines)
 
     implementation(libs.android.material)
 
     testImplementation(libs.truth)
     testImplementation(libs.mockk.android)
+    testImplementation(libs.coroutines.test)
 }

@@ -7,6 +7,8 @@ import com.raxdenstudios.commons.time.ext.toMilliseconds
 import com.raxdenstudios.commons.time.ext.toSeconds
 import org.junit.Test
 import java.time.LocalDate
+import java.time.format.FormatStyle
+import java.util.Locale
 import java.util.TimeZone
 
 internal class LocalDateExtensionTest {
@@ -93,5 +95,19 @@ internal class LocalDateExtensionTest {
         val result = date.toSeconds(utcTimeZone)
 
         assertThat(result).isEqualTo(1695340800)
+    }
+
+    @Test
+    fun `Given a date, When toLocalizedString is called with LONG and US locale, Then return long format`() {
+        val result = LocalDate.of(2024, 3, 15).toLocalizedString(FormatStyle.LONG, Locale.US)
+
+        assertThat(result).isEqualTo("March 15, 2024")
+    }
+
+    @Test
+    fun `Given a date, When toLocalizedString is called with SHORT and US locale, Then return short format`() {
+        val result = LocalDate.of(2024, 3, 15).toLocalizedString(FormatStyle.SHORT, Locale.US)
+
+        assertThat(result).isEqualTo("3/15/24")
     }
 }

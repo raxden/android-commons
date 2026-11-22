@@ -30,11 +30,15 @@ publishLibrary {
 
 dependencies {
     api(projects.libraries.core)
+    api(projects.libraries.coroutines)
 
     api(libs.android.material)
     api(libs.coroutines.android)
+    api(libs.androidx.work.ktx)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.swiperefreshlayout)
 
     testImplementation(libs.bundles.test)
+    testImplementation(projects.libraries.coroutinesTest)
+    testImplementation(libs.robolectric)
 }

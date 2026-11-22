@@ -28,7 +28,7 @@ publishLibrary {
 }
 
 dependencies {
-    api(projects.libraries.android)
+    api(projects.libraries.core)
 
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.compose.material3)
@@ -37,4 +37,6 @@ dependencies {
     api(libs.androidx.compose.lifecycle.runtime)
 
     testImplementation(libs.bundles.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.compose.activity)
 }

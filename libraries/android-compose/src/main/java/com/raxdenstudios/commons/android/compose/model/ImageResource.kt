@@ -7,14 +7,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 
+/**
+ * Describes an image without loading it, so a ViewModel can emit it. Call [toPainter] inside composition to
+ * get the [Painter] to draw.
+ */
 sealed interface ImageResource {
+
+    /** A drawable resource, given by its `R.drawable` id. */
     data class Drawable(
         @DrawableRes val image: Int,
     ) : ImageResource
+
+    /** An already built [ImageVector], e.g. from an icon set. */
     data class Vector(
         val image: ImageVector,
     ) : ImageResource
 
+    /** Returns the [Painter] for this image, remembering vector images across recompositions. */
     @Composable
     fun toPainter(): Painter = when (this) {
         is Drawable -> painterResource(id = image)

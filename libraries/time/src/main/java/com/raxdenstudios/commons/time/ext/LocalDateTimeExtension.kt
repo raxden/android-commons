@@ -39,4 +39,8 @@ fun LocalDateTime.toFormat(
     pattern: String = "dd MMM yyyy",
 ): String = format(DateTimeFormatter.ofPattern(pattern))
 
+/** Formats the time of this date-time as 24-hour "HH:mm", e.g. "09:05". */
+fun LocalDateTime.toHourMinutes(): String = format(DateTimeFormatter.ofPattern(HOUR_MINUTES_PATTERN))
+
+private const val HOUR_MINUTES_PATTERN = "HH:mm"
 private const val MILLIS_IN_SECOND = 1000L
