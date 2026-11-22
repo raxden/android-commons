@@ -28,10 +28,14 @@ publishLibrary {
 }
 
 dependencies {
-    api(libs.androidx.recyclerview)
-    api(platform(libs.androidx.compose.bom))
-    api(libs.androidx.compose.foundation)
+    // Consumers calling the toPageIndex extensions already provide these libraries.
+    compileOnly(libs.androidx.recyclerview)
+    compileOnly(platform(libs.androidx.compose.bom))
+    compileOnly(libs.androidx.compose.foundation)
 
+    testImplementation(libs.androidx.recyclerview)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.foundation)
     testImplementation(libs.truth)
     testImplementation(libs.mockk.android)
 }

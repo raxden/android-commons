@@ -35,6 +35,5 @@ dependencies {
     api(libs.androidx.test.runner)
     api(libs.okhttp3)
 
-    implementation(libs.bundles.test)
     implementation(libs.bundles.test.mockwebserver)
 }
