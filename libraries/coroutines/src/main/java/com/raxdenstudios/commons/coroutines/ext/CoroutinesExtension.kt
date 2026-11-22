@@ -6,6 +6,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+/**
+ * Logger used by [defaultExceptionHandler], [safeLaunch] and [launch] to report uncaught coroutine errors.
+ * Usually set once at app start. It is volatile, so a value set on one thread is seen by coroutines failing
+ * on any other.
+ */
+@Volatile
 var defaultCoroutineLogger: CoroutineLogger? = null
 val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
     defaultCoroutineLogger?.logError("CoroutineException", throwable.message, throwable)
