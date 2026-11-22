@@ -3,7 +3,6 @@
 package com.raxdenstudios.commons.coroutines.ext
 
 import com.raxdenstudios.commons.core.Answer
-import com.raxdenstudios.commons.core.ext.fold
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -76,20 +75,6 @@ fun <T, R, E> Flow<Answer<T, E>>.thenFailure(
     function: (value: E) -> R,
 ): Flow<Answer<T, R>> = map { result -> result.coThenFailure { function(it) } }
 
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use Flow.collect with Answer.fold instead.",
-    replaceWith = ReplaceWith(
-        "collect { result -> result.fold(onSuccess, onFailure) }",
-        "com.raxdenstudios.commons.core.ext.fold",
-    ),
-    level = DeprecationLevel.WARNING,
-)
-suspend fun <T, E> Flow<Answer<T, E>>.collectResult(
-    onSuccess: (T) -> Unit,
-    onFailure: (E) -> Unit,
-) = collect { result -> result.fold(onSuccess, onFailure) }
-
 fun <T> Flow<T>.toAnswer(): Flow<Answer<T, Throwable>> = toAnswer { error -> error }
 
 fun <T, E> Flow<T>.toAnswer(
@@ -97,22 +82,4 @@ fun <T, E> Flow<T>.toAnswer(
 ): Flow<Answer<T, E>> {
     val answers: Flow<Answer<T, E>> = map { data -> Answer.Success(data) }
     return answers.catch { error -> emit(Answer.Failure(mapFailure(error))) }
-}
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use a when expression over Answer instead.",
-    level = DeprecationLevel.WARNING,
-)
-@Suppress("UNCHECKED_CAST")
-suspend fun <T1, T2, R, E> Answer<T1, E>.coCombine(
-    other: Answer<T2, E>,
-    transform: suspend (T1, T2) -> R,
-): Answer<R, E> = when (this) {
-    is Answer.Failure -> this as Answer<R, E>
-
-    is Answer.Success -> when (other) {
-        is Answer.Failure -> other as Answer<R, E>
-        is Answer.Success -> Answer.Success(transform(this.value, other.value))
-    }
 }

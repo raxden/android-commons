@@ -9,12 +9,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
-import android.os.Environment
 import com.raxdenstudios.commons.android.util.Network
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * Returns the [PackageInfo] of this app. Uses the typed flags overload on API 33+ and the
@@ -51,22 +46,6 @@ fun Context.isExactAlarmAllowed(): Boolean = Build.VERSION.SDK_INT < Build.VERSI
  */
 fun Context.isFullScreenIntentAllowed(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE ||
     getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use File.createTempFile with getExternalFilesDir directly.",
-    level = DeprecationLevel.WARNING,
-)
-fun Context.createTemporalImageFile(): File {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    val imageFileName = "JPEG_" + timeStamp + "_"
-    val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-    return File.createTempFile(
-        imageFileName, /* prefix */
-        ".jpg", /* suffix */
-        storageDir, /* directory */
-    )
-}
 
 fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this

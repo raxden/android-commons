@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.raxdenstudios.commons.core.ext
 
 import com.google.common.truth.Truth.assertThat
@@ -16,34 +14,6 @@ internal class StringExtensionTest {
         assertEquals(String.EMPTY, nullValue.orDefault())
         assertEquals("empty", nullValue.orDefault("empty"))
         assertEquals("empty", "empty".orDefault("empty2"))
-    }
-
-    @Test
-    fun `ifEmptyThen should return default value`() {
-        val emptyValue: String = String.EMPTY
-
-        assertEquals("default", emptyValue.ifEmptyThen("default"))
-    }
-
-    @Test
-    fun `ifEmptyOrNullThen should return default value, When value is null`() {
-        val emptyValue: String? = null
-
-        assertEquals("default", emptyValue.ifEmptyOrNullThen("default"))
-    }
-
-    @Test
-    fun `ifEmptyOrNullThen should return default value, When value is empty`() {
-        val emptyValue: String = String.EMPTY
-
-        assertEquals("default", emptyValue.ifEmptyOrNullThen("default"))
-    }
-
-    @Test
-    fun `ifEmptyOrNullThen should return value, When value is not empty`() {
-        val notEmptyValue = "notEmptyValue"
-
-        assertEquals(notEmptyValue, notEmptyValue.ifEmptyOrNullThen("default"))
     }
 
     @Test

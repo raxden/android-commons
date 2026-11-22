@@ -54,20 +54,20 @@ HeadphonesConnectionObserverImpl(applicationContext).observeConnectionChanges()
 - `ViewModel.safeLaunch { }` and `ViewModel.launch(onError) { }`: run work on `viewModelScope`, logging uncaught errors.
 - `WorkManager.enqueueUniqueOneTime<W>(policy, uniqueName, configure)`: enqueues unique one-time work. The default policy is `ExistingWorkPolicy.KEEP`.
 
-## Deprecated (removed in next major)
+## Removed in 6.0.0
 
-Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
-
-- `Event` (`getContentIfNotHandled`, `peekContent`) and `observeEvent` / `observe` / `update` in `LiveDataExtension`: use `StateFlow`/`SharedFlow` and `collectAsStateWithLifecycle`.
+- `Event` and the `LiveData` extensions `observeEvent` / `observe` / `update`: use `StateFlow` / `SharedFlow` and `collectAsStateWithLifecycle`.
 - `launchAndCollect` (`StateFlowExtension`): use `repeatOnLifecycle(Lifecycle.State.STARTED)`.
-- `ListDiffAdapter`, `FragmentBottomNavigationDelegate`, `FragmentViewPager2Delegate`, `FragmentDialog2`, `ActivityProvider`.
-- Property delegates: `ActivityArgumentDelegate`, `ActivityContentViewDelegate`, `FragmentActivityByIdDelegate`, `FragmentArgumentDelegate`, `FragmentByIdDelegate`, `SharedPreferencesDelegate`, and the factories `Activity.contentView/argument/fragmentById`, `Fragment.argument/fragmentById`, `SharedPreferences.boolean/long/string/getStringNotNull`.
-- `ViewPagerExtension` (use ViewPager2), `ViewPager2Extension`, `AppBarLayoutExtension` (including `AppBarStateChangeListener` and `AppBarScrollProgressListener`), `TextViewExtension`, `RecyclerViewExtension`, `NestedScrollViewExtension` (including `SHORT_DELAY`), `SwipeRefreshLayoutExtension`, `StringExtension`, `BitmapExtension`, `DrawableExtensions`, `DialogExtension`, `MaterialAlertDialogExtensions`, `NavigationBarExtensions`.
+- `ListDiffAdapter`, `FragmentBottomNavigationDelegate`, `FragmentViewPager2Delegate`, `FragmentDialog2`, `ActivityProvider`: keep your own copies or use Compose.
+- Property delegates `ActivityArgumentDelegate`, `ActivityContentViewDelegate`, `FragmentActivityByIdDelegate`, `FragmentArgumentDelegate`, `FragmentByIdDelegate`, `SharedPreferencesDelegate` and their factories (`Activity.contentView/argument/fragmentById`, `Fragment.argument/fragmentById`, `SharedPreferences.boolean/long/string/getStringNotNull`): read the intent extras or fragment arguments directly, or use `SavedStateHandle`.
+- `ViewPagerExtension` and `ViewPager2Extension`: use the ViewPager2 APIs directly.
+- `AppBarLayoutExtension` (including `AppBarStateChangeListener` and `AppBarScrollProgressListener`), `TextViewExtension`, `RecyclerViewExtension`, `NestedScrollViewExtension`, `SwipeRefreshLayoutExtension`, `StringExtension`, `BitmapExtension`, `DrawableExtensions`, `DialogExtension`, `MaterialAlertDialogExtensions`, `NavigationBarExtensions`: use the framework or Material APIs directly.
 - `Int.toDp()` / `Int.toPx()`: use Compose `Dp` or `TypedValue.applyDimension`.
 - `KeyboardExtension`: use `WindowInsetsControllerCompat.show(ime())` / `hide(ime())`.
-- `ViewExtension`: `doItVisible()`, `doItGone()`, `doItInvisible()` (use `isVisible`/`isGone`/`isInvisible = true` from `androidx.core.view`), `onFocusGained`, `onFocusLost`, `closeKeyboardWhenTouchScreen`, `clicks()`.
-- `ActivityExtension`: `setStatusBarSafeArea`, `setVirtualNavigationBarSafeArea`, `setResultOKWithData`, `setResultOKWithDataAndFinish`.
-- `Context.createTemporalImageFile()`, `AppCompatActivity.setupToolbar`, `DialogFragment.showForResult`.
+- `ViewExtension`: `doItVisible()`, `doItGone()`, `doItInvisible()` (use `isVisible` / `isGone` / `isInvisible = true` from `androidx.core.view`), `onFocusGained`, `onFocusLost` (use `View.setOnFocusChangeListener`), `closeKeyboardWhenTouchScreen`, `clicks()`.
+- `ActivityExtension`: `setStatusBarSafeArea`, `setVirtualNavigationBarSafeArea` (use `WindowInsets`), `setResultOKWithData`, `setResultOKWithDataAndFinish` (use `setResult` with an explicit `Intent`).
+- `Context.createTemporalImageFile()` (use `File.createTempFile`), `AppCompatActivity.setupToolbar`, `DialogFragment.showForResult` (use the Fragment Result API), `DialogFragment.setFullscreen`.
+- The `material` and `swiperefreshlayout` dependencies are no longer exposed through `commons-android` (only `appcompat` is): declare them in your own modules.
 
 ## License
 

@@ -1,9 +1,6 @@
-@file:Suppress("DEPRECATION")
-
 package com.raxdenstudios.commons.time.ext
 
 import com.google.common.truth.Truth.assertThat
-import com.raxdenstudios.commons.time.ext.toFormat
 import com.raxdenstudios.commons.time.ext.toMilliseconds
 import com.raxdenstudios.commons.time.ext.toSeconds
 import org.junit.Test
@@ -30,33 +27,6 @@ internal class LocalDateTimeExtensionTest {
         val result = aValidDate.toMilliseconds(timeZone)
 
         assertThat(result).isEqualTo(1695375127000)
-    }
-
-    @Test
-    fun `toFormat should be return a right value`() {
-        val aValidDate = LocalDateTime.of(2023, 9, 22, 11, 32, 7, 0)
-
-        val result = aValidDate.toFormat()
-
-        assertThat(result).isEqualTo("22 Sep 2023")
-    }
-
-    @Test
-    fun `toFormat with custom pattern including time should return formatted string`() {
-        val dateTime = LocalDateTime.of(2023, 9, 22, 11, 32, 7, 0)
-
-        val result = dateTime.toFormat("yyyy-MM-dd HH:mm:ss")
-
-        assertThat(result).isEqualTo("2023-09-22 11:32:07")
-    }
-
-    @Test
-    fun `toFormat with time pattern should return formatted time`() {
-        val dateTime = LocalDateTime.of(2023, 9, 22, 11, 32, 7, 0)
-
-        val result = dateTime.toFormat("HH:mm")
-
-        assertThat(result).isEqualTo("11:32")
     }
 
     @Test

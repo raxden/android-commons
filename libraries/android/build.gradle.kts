@@ -32,11 +32,10 @@ dependencies {
     api(projects.libraries.core)
     api(projects.libraries.coroutines)
 
-    api(libs.android.material)
+    api(libs.androidx.appcompat)
     api(libs.coroutines.android)
     api(libs.androidx.work.ktx)
     api(libs.androidx.fragment.ktx)
-    api(libs.androidx.swiperefreshlayout)
 
     testImplementation(libs.bundles.test)
     testImplementation(projects.libraries.coroutinesTest)

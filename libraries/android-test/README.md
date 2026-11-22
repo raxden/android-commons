@@ -1,6 +1,6 @@
 # Android Test Commons
 
-Helpers for instrumented and Espresso tests: a base test runner, an OkHttp idling resource, a RESTMock rule and view matchers.
+Helpers for instrumented and Espresso tests: a base test runner, and an OkHttp idling resource.
 
 ## Installation
 
@@ -28,28 +28,12 @@ Espresso.registerIdlingResources(idlingResource)
 
 Creating it replaces the dispatcher's idle callback, so use one resource per client.
 
-### RESTMockServerRule
+## Removed in 6.0.0
 
-Starts the RESTMock server before each test and resets it after. It serves HTTPS unless `useHttps = false` is passed.
-
-```kotlin
-@get:Rule
-val restMockServerRule = RESTMockServerRule()
-```
-
-Do not start RESTMock yourself in the test, because the rule already does.
-
-### Matchers
-
-Matchers for `ViewMatchers`, `TextInputLayoutMatchers`, `RecyclerViewMatchers`, `SwipeRefreshLayoutMatchers`, `ProgressBarMatchers` and `TabLayoutMatchers` under `com.raxdenstudios.commons.android.test.matchers`.
-
-## Deprecated (removed in next major)
-
-Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
-
-- `TestPage`, `RESTMockServerRule` and the matcher objects `ViewMatchers`, `TextInputLayoutMatchers`, `RecyclerViewMatchers`, `SwipeRefreshLayoutMatchers`, `ProgressBarMatchers`, `TabLayoutMatchers`: consumers keep their own copies.
-
-`AppTestRunner` is still in use (referenced from Gradle `testInstrumentationRunner`) and is not deprecated.
+- `TestPage`: keep your own page object base class.
+- `RESTMockServerRule`: start `RESTMockServer` in your own rule.
+- `ViewMatchers`, `TextInputLayoutMatchers`, `RecyclerViewMatchers`, `SwipeRefreshLayoutMatchers`, `ProgressBarMatchers` and `TabLayoutMatchers`: keep your own copies.
+- The transitive `swiperefreshlayout`, RESTMock and MockWebServer dependencies: declare them in your own test modules.
 
 ## License
 

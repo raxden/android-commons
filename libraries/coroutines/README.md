@@ -434,8 +434,7 @@ The module includes comprehensive unit tests for all functionality.
 - ✅ Flow transformations
 - ✅ Error propagation
 
-## Deprecated (removed in next major)
+## Removed in 6.0.0
 
-Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
-
-- `Answer.coCombine` and `Flow<Answer>.collectResult` (use `collect` with `Answer.fold`).
+- `Answer.coCombine`: combine the values with `Answer.fold` or a `when` expression.
+- `Flow<Answer>.collectResult`: use `collect` with `Answer.fold`.

@@ -1,6 +1,6 @@
 # Core Commons
 
-Kotlin and JVM helpers with no Android dependency: string, list, number, locale and `Answer` utilities.
+Kotlin and JVM helpers with no Android dependency: string, list and `Answer` utilities.
 
 ## Installation
 
@@ -32,23 +32,17 @@ In `com.raxdenstudios.commons.core.ext`:
 
 - `List<T>.filterByQuery(query, ignoreCase = true) { item -> text }`: keeps the items whose text contains `query`. A blank query returns the list unchanged.
 
-### Numbers
+## Removed in 6.0.0
 
-- `Double.toCurrencyString(currency, locale)`: formats money, e.g. `"$1,234.50"` for USD in en-US.
-
-### Locales
-
-- `Locale.displayLanguageName(inLocale)`: the language name written in `inLocale`, e.g. "Spanish" for `es-ES` in English.
-
-## Deprecated (removed in next major)
-
-Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
-
-- `Random.generateStringWithSize`, `Locale.displayLanguageName` (use `getDisplayLanguage(inLocale)`), `Double.toCurrencyString` (use `NumberFormat.getCurrencyInstance`).
-- `List.replaceItem` (use `map`) and `List.removeItem` (use `filterNot`).
-- `String.ifEmptyThen` (use `ifEmpty { }`) and `String?.ifEmptyOrNullThen` (use `orEmpty().ifEmpty { }`).
+- `Random.generateStringWithSize`: use `kotlin.random.Random` with a character pool.
+- `Locale.displayLanguageName`: use `getDisplayLanguage(inLocale)`.
+- `Double.toCurrencyString`: use `NumberFormat.getCurrencyInstance`.
+- `List.replaceItem`: use `map`.
+- `List.removeItem`: use `filterNot`.
+- `String.ifEmptyThen`: use `ifEmpty { }`.
+- `String?.ifEmptyOrNullThen`: use `orEmpty().ifEmpty { }`.
 - `applyWhen` and `alsoWhen` (`AnyExtension`): use an `if` expression.
-- `Answer.flatMapFailure`.
+- `Answer.flatMapFailure`: use a `when` expression over `Answer`.
 
 ## License
 

@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.raxdenstudios.commons.core.ext
 
 import org.junit.Assert.assertEquals
@@ -57,20 +55,6 @@ internal class AnyExtensionTest {
     @Test
     fun `alsoAs should return right value`() {
         val value = "String".alsoAs<String> { it.length }
-
-        assertEquals("String", value)
-    }
-
-    @Test
-    fun `applyWhen should return right value`() {
-        val value = "String".applyWhen(true) { length }
-
-        assertEquals("String", value)
-    }
-
-    @Test
-    fun `alsoWhen should return right value`() {
-        val value = "String".alsoWhen(true) { it.length }
 
         assertEquals("String", value)
     }

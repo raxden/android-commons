@@ -45,7 +45,7 @@ Android Commons is a curated set of libraries designed to accelerate Android dev
 | **Permissions** |
 | `commons-permissions` | Runtime permissions management | [📖 Docs](libraries/permissions/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-permissions.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-permissions) |
 | **Storage** |
-| `commons-preferences` | Advanced SharedPreferences wrapper | [📖 Docs](libraries/preferences/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-preferences) |
+| `commons-preferences` | `SharedPreferences` JSON extensions (kotlinx.serialization) | [📖 Docs](libraries/preferences/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-preferences.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-preferences) |
 | **Date & Time** |
 | `commons-time` | `java.time` date/time extensions (no init needed) | [📖 Docs](libraries/time/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.raxdenstudios/commons-time.svg?label=version)](https://central.sonatype.com/artifact/com.raxdenstudios/commons-time) |
 
@@ -56,6 +56,10 @@ Commons holds app-agnostic utilities with no DI framework, no Firebase/Play SDKs
 ### Removed modules
 
 `commons-threetenabp`, `commons-threetenabp-test` (use `commons-time`) and `commons-android-binding` were removed; last published versions remain on Maven Central.
+
+### Removed APIs
+
+Unused public APIs were removed in the next major version of each module. Each module README lists them, with the suggested replacement, in its "Removed in" section.
 
 ## 🚀 Getting Started
 

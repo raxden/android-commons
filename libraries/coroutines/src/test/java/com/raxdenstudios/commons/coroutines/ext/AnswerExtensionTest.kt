@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.raxdenstudios.commons.coroutines.ext
 
 import app.cash.turbine.test
@@ -244,76 +242,6 @@ internal class AnswerExtensionTest {
             assertThat(awaitItem()).isEqualTo(Answer.Failure("Mapped: Test error"))
             awaitComplete()
         }
-    }
-
-    @Test
-    fun `use coCombine when both are success`() = runTest {
-        val answer1 = Answer.Success(5)
-        val answer2 = Answer.Success(10)
-
-        val result = answer1.coCombine(answer2) { a, b -> a + b }
-
-        assertTrue(result.isSuccess)
-        assertThat(result).isEqualTo(Answer.Success(15))
-    }
-
-    @Test
-    fun `use coCombine when first is failure`() = runTest {
-        val answer1: Answer<Int, String> = Answer.Failure("error1")
-        val answer2 = Answer.Success(10)
-
-        val result = answer1.coCombine(answer2) { a, b -> a + b }
-
-        assertTrue(result.isFailure)
-        assertThat(result).isEqualTo(Answer.Failure("error1"))
-    }
-
-    @Test
-    fun `use coCombine when second is failure`() = runTest {
-        val answer1 = Answer.Success(5)
-        val answer2: Answer<Int, String> = Answer.Failure("error2")
-
-        val result = answer1.coCombine(answer2) { a, b -> a + b }
-
-        assertTrue(result.isFailure)
-        assertThat(result).isEqualTo(Answer.Failure("error2"))
-    }
-
-    @Test
-    fun `use coCombine when both are failure`() = runTest {
-        val answer1: Answer<Int, String> = Answer.Failure("error1")
-        val answer2: Answer<Int, String> = Answer.Failure("error2")
-
-        val result = answer1.coCombine(answer2) { a, b -> a + b }
-
-        assertTrue(result.isFailure)
-        assertThat(result).isEqualTo(Answer.Failure("error1"))
-    }
-
-    @Test
-    fun `use collectResult when result is success`() = runTest {
-        val flowData = flowOf(Answer.Success("originalValue"))
-        var successValue: String? = null
-
-        flowData.collectResult(
-            onSuccess = { successValue = it },
-            onFailure = { },
-        )
-
-        assertThat(successValue).isEqualTo("originalValue")
-    }
-
-    @Test
-    fun `use collectResult when result is failure`() = runTest {
-        val flowData = flowOf(Answer.Failure("errorValue"))
-        var failureValue: String? = null
-
-        flowData.collectResult(
-            onSuccess = { },
-            onFailure = { failureValue = it },
-        )
-
-        assertThat(failureValue).isEqualTo("errorValue")
     }
 
     @Test

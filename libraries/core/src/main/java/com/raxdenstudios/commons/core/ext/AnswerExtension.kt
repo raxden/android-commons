@@ -41,18 +41,6 @@ fun <T, R, E> Answer<T, E>.flatMap(
     is Answer.Success -> function(value)
 }
 
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use a when expression over Answer instead.",
-    level = DeprecationLevel.WARNING,
-)
-fun <T, R, E> Answer<T, E>.flatMapFailure(
-    function: (value: E) -> Answer<T, R>,
-): Answer<T, R> = when (this) {
-    is Answer.Failure -> function(value)
-    is Answer.Success -> Answer.Success(value)
-}
-
 fun <T, E> Answer<T, E>.getValueOrNull(): T? = when (this) {
     is Answer.Failure -> null
     is Answer.Success -> value

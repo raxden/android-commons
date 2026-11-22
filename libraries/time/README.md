@@ -1,6 +1,6 @@
 # Time Commons
 
-`java.time` extensions for epoch conversion, formatting and today checks. No initialisation is needed.
+`java.time` extensions for epoch conversion and time formatting. No initialisation is needed.
 
 ## Installation
 
@@ -20,25 +20,17 @@ dependencies {
 
 ### Formatting
 
-- `LocalDate.toFormat(pattern)`: pattern-based, default `dd MMM yyyy`.
-- `LocalDate.toLocalizedString(style, locale)`: localized style, e.g. "March 15, 2024" for `FormatStyle.LONG` in en-US.
-- `LocalDateTime.toFormat(pattern)`: pattern-based, default `dd MMM yyyy`.
 - `LocalDateTime.toHourMinutes()`: 24-hour `HH:mm`, e.g. `"09:05"`.
 
 ```kotlin
-LocalDate.of(2024, 3, 15).toLocalizedString()                  // "March 15, 2024" in en-US
 LocalDateTime.of(2024, 3, 15, 9, 5).toHourMinutes()            // "09:05"
 ```
 
-### Checks
+## Removed in 2.0.0
 
-- `LocalDate.isToday()`: compares with `LocalDate.now()` in the system default zone.
-
-## Deprecated (removed in next major)
-
-Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
-
-- `LocalDate.isToday()`, `LocalDate.toFormat()`, `LocalDateTime.toFormat()` and `LocalDate.toLocalizedString()`: use `LocalDate.now()` and `DateTimeFormatter` directly.
+- `LocalDate.isToday()`: compare with `LocalDate.now()`.
+- `LocalDate.toFormat()` and `LocalDateTime.toFormat()`: use `format` with `DateTimeFormatter.ofPattern`.
+- `LocalDate.toLocalizedString()`: use `format` with `DateTimeFormatter.ofLocalizedDate`.
 
 ## License
 
