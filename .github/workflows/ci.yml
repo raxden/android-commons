@@ -15,14 +15,10 @@ permissions:
   contents: read
 
 env:
-  # Increment to invalidate Gradle cache when needed
-  CACHE_VERSION: 1
   # Increase Gradle heap size to prevent OOM errors in large builds
   GRADLE_OPTS: >
     -Dorg.gradle.jvmargs=-Xmx4g
     -Dkotlin.daemon.jvm.options=-Xmx2g
-  # Enable debug for Gradle cache action
-  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
   # Artifact retention
   RETENTION_DAYS: 1
   # Build configuration
@@ -37,23 +33,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
 
       - name: Print workflow information
         uses: ./.github/actions/info
-
-  computeChangedModules:
-    name: Compute changed modules
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
-
-      - name: Compute changed modules
-        id: modules
-        uses: ./.github/actions/compute_changed_modules
 
   checkstyle:
     name: Check code style
@@ -62,7 +44,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
 
       - uses: ./.github/actions/setup
 
@@ -72,60 +53,52 @@ jobs:
           retention-days: ${{ env.RETENTION_DAYS }}
 
   verify:
-    name: ${{ matrix.name }}
-    needs: [checkstyle]
+    name: Build and Unit Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      # A failure cancels the sibling matrix jobs (replaces the old cancel steps)
-      fail-fast: true
-      matrix:
-        include:
-          - name: Build
-            task: build
-          - name: Run Unit Tests
-            task: test
 
     steps:
       - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
 
       - uses: ./.github/actions/setup
 
-      - name: Assemble ${{ env.BUILD_TYPE }}
-        if: matrix.task == 'build'
-        uses: ./.github/actions/assemble
-        with:
-          build-type: ${{ env.BUILD_TYPE }}
-          retention-days: ${{ env.RETENTION_DAYS }}
-
-      - name: Execute unit tests
-        if: matrix.task == 'test'
+      # Libraries only: assemble and test in a single Gradle invocation so the
+      # modules are configured and compiled once. The unit_tests action appends
+      # `gradle-args` to `./gradlew test<BuildType>UnitTest`, so the extra
+      # assemble task rides along there (keeps its report upload and summary).
+      - name: Assemble and execute unit tests
         uses: ./.github/actions/unit_tests
         with:
           build-type: ${{ env.BUILD_TYPE }}
+          gradle-args: assemble${{ env.BUILD_TYPE }} --configuration-cache
           retention-days: ${{ env.RETENTION_DAYS }}
 
   status:
     name: Status
-    needs: [ verify ]
+    needs: [ info, checkstyle, verify ]
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: always()
+    permissions: {}
 
     steps:
       - name: Check dependencies status
         shell: bash
+        env:
+          INFO_RESULT: ${{ needs.info.result }}
+          CHECKSTYLE_RESULT: ${{ needs.checkstyle.result }}
+          VERIFY_RESULT: ${{ needs.verify.result }}
         run: |
-          echo "Build and test status: ${{ needs.verify.result }}"
+          set -euo pipefail
+          echo "Info: $INFO_RESULT"
+          echo "Code style: $CHECKSTYLE_RESULT"
+          echo "Build and unit tests: $VERIFY_RESULT"
 
-          if [[ "${{ needs.verify.result }}" != "success" ]]; then
-            echo "❌ One or more jobs failed"
-            exit 1
-          fi
-          
-          echo "✅ All jobs succeeded"
-      
-      - name: Final summary
-        shell: bash
-        run: |
-          echo "Workflow completed successfully"
+          for result in "$INFO_RESULT" "$CHECKSTYLE_RESULT" "$VERIFY_RESULT"; do
+            if [[ "$result" != "success" ]]; then
+              echo "::error::One or more jobs did not succeed"
+              exit 1
+            fi
+          done
+
+          echo "All jobs succeeded"

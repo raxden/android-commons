@@ -31,14 +31,10 @@ permissions:
   contents: read
 
 env:
-  # Increment this to invalidate the cache.
-  CACHE_VERSION: 1
   # Increase Gradle heap size to prevent OOM errors in large builds
   GRADLE_OPTS: >
     -Dorg.gradle.jvmargs=-Xmx4g
     -Dkotlin.daemon.jvm.options=-Xmx2g
-  # Enable debug for the `gradle-build-action` cache operations
-  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
   # Retention days used for output files
   RETENTION_DAYS: 1
   # BOM module name (used for version bumping)
@@ -54,7 +50,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with: { fetch-depth: 0 }
 
       - name: Print workflow information
         uses: ./.github/actions/info
@@ -79,7 +74,6 @@ jobs:
         with:
           version: ${{ github.event.inputs.version }}
           modules: ${{ github.event.inputs.modules }}
-          git-create-tag: ${{ github.event.inputs.create-tag }}
           git-branch: ${{ github.ref_name }}
           git-user-name: ${{ vars.CI_GIT_USER_NAME }}
           git-user-email: ${{ vars.CI_GIT_USER_EMAIL }}
