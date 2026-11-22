@@ -10,7 +10,18 @@ dependencies {
 }
 ```
 
-The module exposes `commons-android`, the Compose BOM, `material3`, `ui`, `ui-tooling-preview` and `lifecycle-runtime-compose` as `api` dependencies.
+The module exposes `commons-core`, the Compose BOM, `material3`, `ui`, `ui-tooling-preview` and `lifecycle-runtime-compose` as `api` dependencies.
+
+> **Migration note:** this module used to depend on `commons-android`. It now depends on `commons-core` only.
+> If your code uses APIs from `commons-android` through this module (for example `ActivityHolder` or the
+> helpers in `com.raxdenstudios.commons.android.ext`), declare it explicitly:
+>
+> ```kotlin
+> dependencies {
+>     implementation("com.raxdenstudios:commons-android-compose:{version}")
+>     implementation("com.raxdenstudios:commons-android:{version}")
+> }
+> ```
 
 ## Features
 
@@ -61,6 +72,20 @@ In `com.raxdenstudios.commons.android.compose.ext`:
 
 - `PaddingValues.copy(start, top, end, bottom)`: `@Composable` copy that overrides only the given sides.
 - `PaddingValues + PaddingValues`: sums two paddings side by side.
+
+### LockScreenOrientation
+
+`com.raxdenstudios.commons.android.compose.LockScreenOrientation(orientation)` locks the host activity to a `ScreenOrientation` while the composable is composed, and restores the previous orientation when it leaves. `ScreenOrientation` has `Unspecified`, `Portrait` and `Landscape`.
+
+```kotlin
+@Composable
+fun VideoScreen() {
+    LockScreenOrientation(orientation = ScreenOrientation.Landscape)
+    // ...
+}
+```
+
+If no activity is found in the context (for example in a preview), nothing changes.
 
 ### DevicePreviews
 

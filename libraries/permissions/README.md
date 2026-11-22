@@ -83,6 +83,28 @@ permissionsManager.hasPermission(
 )
 ```
 
+### Suspending API
+
+`requestPermission(permission)` and `hasPermission(permission)` are `suspend` extensions in `com.raxdenstudios.commons.permissions.ext`. The request returns a `PermissionResult`:
+
+```kotlin
+when (val result = permissionsManager.requestPermission(Permission.RecordAudio)) {
+    is PermissionResult.Granted -> startRecording()
+    is PermissionResult.Rationale -> showRationaleDialog(result.permission)
+    is PermissionResult.Denied -> showDeniedMessage()
+}
+```
+
+`Rationale` is returned without showing the system dialog. Explain the permission, then call `requestPermission` again to show it. Do not run two requests at the same time.
+
+### Rationale check
+
+`shouldShowRationale(permission)` tells whether the attached activity should explain the permission before asking again. It returns `false` when no activity is attached.
+
+`shouldShowRationale` is a new `PermissionsManager` interface member: custom implementations of the interface must add it (source-breaking).
+
+A request made before `attach` and the activity's `onCreate` reports `onDenied` (or `PermissionResult.Denied`) instead of waiting forever.
+
 ## 📋 Available Permissions
 
 ### Predefined Permissions
