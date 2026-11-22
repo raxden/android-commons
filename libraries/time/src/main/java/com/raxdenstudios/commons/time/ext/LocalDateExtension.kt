@@ -2,6 +2,8 @@ package com.raxdenstudios.commons.time.ext
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 import java.util.TimeZone
 
 /**
@@ -62,5 +64,11 @@ fun LocalDate.isToday(): Boolean = this == LocalDate.now()
 fun LocalDate.toFormat(
     pattern: String = "dd MMM yyyy",
 ): String = format(DateTimeFormatter.ofPattern(pattern))
+
+/** Formats this date with the localized [style] of [locale], e.g. "March 15, 2024" for LONG in en-US. */
+fun LocalDate.toLocalizedString(
+    style: FormatStyle = FormatStyle.LONG,
+    locale: Locale = Locale.getDefault(),
+): String = format(DateTimeFormatter.ofLocalizedDate(style).withLocale(locale))
 
 private const val MILLIS_IN_SECOND = 1000L

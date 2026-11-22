@@ -97,4 +97,52 @@ internal class StringExtensionTest {
 
         assertThat(result).isEqualTo(1.5)
     }
+
+    @Test
+    fun `Given a string with diacritics, When removeDiacritics is called, Then marks are removed`() {
+        assertThat("Canción".removeDiacritics()).isEqualTo("Cancion")
+        assertThat("Ñandú àéîöü".removeDiacritics()).isEqualTo("Nandu aeiou")
+    }
+
+    @Test
+    fun `Given a string without diacritics, When removeDiacritics is called, Then it is unchanged`() {
+        assertThat("Song".removeDiacritics()).isEqualTo("Song")
+    }
+
+    @Test
+    fun `Given a string with symbols, When alphanumericOnly is called, Then only letters and digits remain`() {
+        assertThat("Rock & Roll 80's".alphanumericOnly()).isEqualTo("RockRoll80s")
+    }
+
+    @Test
+    fun `Given a string with no alphanumerics, When alphanumericOnly is called, Then return empty`() {
+        assertThat("!? -_".alphanumericOnly()).isEmpty()
+    }
+
+    @Test
+    fun `Given runs of whitespace, When collapseWhitespace is called, Then runs collapse and ends are trimmed`() {
+        assertThat("  a \t b\n\nc  ".collapseWhitespace()).isEqualTo("a b c")
+    }
+
+    @Test
+    fun `Given a blank string, When collapseWhitespace is called, Then return empty`() {
+        assertThat("   ".collapseWhitespace()).isEmpty()
+    }
+
+    @Test
+    fun `Given a lowercase country code, When toFlagEmoji is called, Then return the flag`() {
+        assertThat("es".toFlagEmoji()).isEqualTo("🇪🇸")
+    }
+
+    @Test
+    fun `Given a padded country code, When toFlagEmoji is called, Then it is trimmed and returns the flag`() {
+        assertThat(" US ".toFlagEmoji()).isEqualTo("🇺🇸")
+    }
+
+    @Test
+    fun `Given an invalid country code, When toFlagEmoji is called, Then return empty`() {
+        assertThat("".toFlagEmoji()).isEmpty()
+        assertThat("ESP".toFlagEmoji()).isEmpty()
+        assertThat("1A".toFlagEmoji()).isEmpty()
+    }
 }
