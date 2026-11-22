@@ -30,7 +30,7 @@ publishLibrary {
 dependencies {
     api(projects.libraries.coroutines)
 
-    api(libs.androidx.arch.core.testing)
+    api(libs.junit4)
     api(libs.coroutines.test)
     api(libs.turbine)
 

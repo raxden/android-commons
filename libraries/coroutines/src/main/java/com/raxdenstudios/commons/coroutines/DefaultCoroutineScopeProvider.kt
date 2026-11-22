@@ -8,9 +8,13 @@ import kotlinx.coroutines.SupervisorJob
  *
  * [main], [io] and [default] are created once, when the provider is constructed. Each is a
  * `CoroutineScope` built from the matching dispatcher of [dispatcherProvider] plus its own
- * [SupervisorJob], so a failing child coroutine does not cancel its siblings or the scope. The
- * provider never cancels these scopes; they live as long as the provider does. Callers should cancel
- * the jobs they launch rather than the shared scopes.
+ * [SupervisorJob], so a failing child coroutine does not cancel its siblings or the scope.
+ *
+ * The scopes are app-lifetime: nothing ever cancels them, so they live as long as the provider does
+ * (register the provider as a DI singleton). Work launched in them outlives any screen, ViewModel or
+ * lifecycle, so do not use them for UI-bound work (use `viewModelScope` or `lifecycleScope` instead).
+ * Callers own the jobs they launch and must cancel those jobs, never the shared scopes: a cancelled
+ * scope cancels every later launch immediately, silently.
  *
  * ## Usage
  *

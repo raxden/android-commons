@@ -35,8 +35,8 @@ dependencies {
     api(libs.android.material)
     api(libs.coroutines.android)
     api(libs.androidx.work.ktx)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.swiperefreshlayout)
+    api(libs.androidx.fragment.ktx)
+    api(libs.androidx.swiperefreshlayout)
 
     testImplementation(libs.bundles.test)
     testImplementation(projects.libraries.coroutinesTest)
