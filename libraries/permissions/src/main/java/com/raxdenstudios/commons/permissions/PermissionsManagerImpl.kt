@@ -76,7 +76,7 @@ class PermissionsManagerImpl : PermissionsManager {
                     false
                 }
 
-                shouldShowRequestPermissionRationale(permission) -> {
+                shouldShowRationale(permission) -> {
                     permissionsCallbacks.onRationale(permission)
                     false
                 }
@@ -93,13 +93,19 @@ class PermissionsManagerImpl : PermissionsManager {
     ) {
         if (permissions.isEmpty()) return
 
+        val launcher = permissionResultLauncher
+        if (launcher == null) {
+            // Not attached or not created yet: nothing can show the dialog, so report a denial.
+            permissions.forEach { permission -> permissionsCallbacks.onDenied(permission) }
+            return
+        }
         val arrayPermissions = permissions.map { it.value }.toTypedArray()
-        permissionResultLauncher?.launch(arrayPermissions)
+        launcher.launch(arrayPermissions)
     }
 
-    private fun shouldShowRequestPermissionRationale(
+    override fun shouldShowRationale(
         permission: Permission,
-    ) = activityHolder.activity?.shouldShowRequestPermissionRationale(permission.value) ?: false
+    ): Boolean = activityHolder.activity?.shouldShowRequestPermissionRationale(permission.value) ?: false
 
     override fun hasPermission(
         onGranted: (Boolean) -> Unit,

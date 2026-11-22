@@ -81,4 +81,41 @@ internal class PermissionsManagerImplTest {
 
         assertThat(grantedCalled).isTrue()
     }
+
+    @Test
+    fun `Given an activity that should show rationale, When shouldShowRationale is called, Then return true`() {
+        every { activity.shouldShowRequestPermissionRationale(Permission.Camera.value) } returns true
+        permissionsManager.attach(activity)
+
+        val result = permissionsManager.shouldShowRationale(Permission.Camera)
+
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `Given an activity that should not show rationale, When shouldShowRationale is called, Then return false`() {
+        every { activity.shouldShowRequestPermissionRationale(Permission.Camera.value) } returns false
+        permissionsManager.attach(activity)
+
+        val result = permissionsManager.shouldShowRationale(Permission.Camera)
+
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `Given no attached activity, When shouldShowRationale is called, Then return false`() {
+        val result = permissionsManager.shouldShowRationale(Permission.Camera)
+
+        assertThat(result).isFalse()
+    }
+
+    @Test
+    fun `Given no attached activity, When requestPermission is called, Then call onDenied`() {
+        val denied = mutableListOf<Permission>()
+        val callbacks = PermissionsManager.Callbacks(onDenied = { permission -> denied += permission })
+
+        permissionsManager.requestPermission(callbacks, Permission.Camera, Permission.RecordAudio)
+
+        assertThat(denied).containsExactly(Permission.Camera, Permission.RecordAudio).inOrder()
+    }
 }
