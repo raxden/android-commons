@@ -91,22 +91,9 @@ If no activity is found in the context (for example in a preview), nothing chang
 
 `com.raxdenstudios.commons.android.compose.preview.DevicePreviews` is a multi preview annotation that renders a composable in light and dark phone previews.
 
-### Async helpers
+## Removed in 2.0.0
 
-In `com.raxdenstudios.commons.android`:
-
-- `runAsync { }`: returns a `() -> Unit` that launches the block in a `rememberCoroutineScope`.
-- `consumeAsync { value -> }` and `consumeAsync { a, b -> }`: return `(T) -> Unit` / `(T, R) -> Unit` callbacks that launch the block in that scope.
-
-```kotlin
-Button(onClick = runAsync { viewModel.refresh() })
-```
-
-## Deprecated (removed in next major)
-
-Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
-
-- `runAsync` and both `consumeAsync` overloads (`AsyncActions.kt`): use `rememberCoroutineScope` and `launch` directly.
+- `runAsync` and both `consumeAsync` overloads: use `rememberCoroutineScope` and `launch` directly.
 
 ## License
 

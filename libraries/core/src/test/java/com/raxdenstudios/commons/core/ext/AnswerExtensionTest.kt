@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.raxdenstudios.commons.core.ext
 
 import com.google.common.truth.Truth.assertThat
@@ -92,24 +90,6 @@ internal class AnswerExtensionTest {
 
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(Answer.Failure("originalValue"))
-    }
-
-    @Test
-    fun `use flatMapFailure when result is success`() {
-        val result = Answer.Success("originalValue")
-            .flatMapFailure { Answer.Success("otherValue") }
-
-        assertTrue(result.isSuccess)
-        assertThat(result).isEqualTo(Answer.Success("originalValue"))
-    }
-
-    @Test
-    fun `use flatMapFailure when result is failure`() {
-        val result = Answer.Failure("originalValue")
-            .flatMapFailure { Answer.Failure("otherValue") }
-
-        assertTrue(result.isFailure)
-        assertThat(result).isEqualTo(Answer.Failure("otherValue"))
     }
 
     @Test

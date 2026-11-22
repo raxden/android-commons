@@ -13,7 +13,7 @@ dependencies {
 
 ## Usage
 
-`requestFirstPage` loads the first page. `requestPage` takes the index of the last visible item (`PageIndex`) and only fires a request when the end of the loaded list is within `Config.prefetchDistance`. The `toPageIndex()` extensions in `commons-pagination` convert a `LazyListState`, `LazyGridState` or `LinearLayoutManager` into a `PageIndex`.
+`requestFirstPage` loads the first page. `requestPage` takes the index of the last visible item (`PageIndex`) and only fires a request when the end of the loaded list is within `Config.prefetchDistance`. Compute the index from your list state and wrap it in `PageIndex` (see the `commons-pagination` README).
 
 ```kotlin
 class ItemsViewModel(

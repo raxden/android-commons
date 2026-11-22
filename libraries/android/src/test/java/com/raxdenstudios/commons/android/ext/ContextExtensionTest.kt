@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.raxdenstudios.commons.android.ext
 
 import android.app.Activity
@@ -8,17 +6,11 @@ import android.content.ContextWrapper
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import android.os.Environment
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 internal class ContextExtensionTest {
 
@@ -26,16 +18,6 @@ internal class ContextExtensionTest {
     private val connectivityManager: ConnectivityManager = mockk(relaxed = true)
     private val network: Network = mockk(relaxed = true)
     private val networkCapabilities: NetworkCapabilities = mockk(relaxed = true)
-
-    @Before
-    fun setUp() {
-        mockkStatic(File::class)
-    }
-
-    @After
-    fun after() {
-        unmockkStatic(File::class)
-    }
 
     @Test
     fun `isNetworkConnected should return true`() {
@@ -87,18 +69,5 @@ internal class ContextExtensionTest {
         val result = context.findActivity()
 
         assertTrue(result != null)
-    }
-
-    @Test
-    fun `createTemporalImageFile should return a file`() {
-        val context = mockk<ContextWrapper>()
-        val storageDir = mockk<File>()
-        val temporalFile = mockk<File>()
-        every { context.getExternalFilesDir(Environment.DIRECTORY_PICTURES) } returns storageDir
-        every { File.createTempFile(any(), any(), any()) } returns temporalFile
-
-        val result = context.createTemporalImageFile()
-
-        assertEquals(temporalFile, result)
     }
 }

@@ -12,28 +12,8 @@ fun String?.orDefault(
     default: String = String.EMPTY,
 ) = this ?: default
 
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use orEmpty().ifEmpty { } instead.",
-    replaceWith = ReplaceWith("orEmpty().ifEmpty { text }"),
-    level = DeprecationLevel.WARNING,
-)
-fun String?.ifEmptyOrNullThen(
-    text: String,
-): String = this?.ifEmpty { text } ?: text
-
 val String.Companion.EMPTY: String
     get() = ""
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use String.ifEmpty { } instead.",
-    replaceWith = ReplaceWith("ifEmpty { text }"),
-    level = DeprecationLevel.WARNING,
-)
-fun String.ifEmptyThen(
-    text: String,
-): String = this.ifEmpty { text }
 
 /**
  * Parses this string, trimmed, as a number written in the format of [locale], e.g. "1,234.5" in

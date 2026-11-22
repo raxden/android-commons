@@ -2,8 +2,6 @@
 
 package com.raxdenstudios.commons.android.ext
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.TypedArray
 import android.os.SystemClock
 import android.util.AttributeSet
@@ -11,17 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.annotation.AttrRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import androidx.annotation.StyleableRes
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 
 fun View.setPaddingTop(
     padding: Int,
@@ -32,56 +24,6 @@ fun View.setPaddingTop(
         paddingEnd,
         paddingBottom,
     )
-}
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use View.setOnFocusChangeListener directly.",
-    level = DeprecationLevel.WARNING,
-)
-fun View.onFocusGained(
-    onFocusGained: (View) -> Unit = {},
-) {
-    onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-        if (hasFocus) onFocusGained(view)
-    }
-}
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use View.setOnFocusChangeListener directly.",
-    level = DeprecationLevel.WARNING,
-)
-fun View.onFocusLost(
-    onLostFocus: (View) -> Unit = {},
-) {
-    onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-        if (!hasFocus) onLostFocus(view)
-    }
-}
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use WindowInsetsControllerCompat.hide(ime()) instead.",
-    level = DeprecationLevel.WARNING,
-)
-@Suppress("DEPRECATION")
-@SuppressLint("ClickableViewAccessibility")
-fun View.closeKeyboardWhenTouchScreen() {
-    // Set up touch listener for non-text box views to hide keyboard.
-    if (this !is EditText) {
-        setOnTouchListener { _, _ ->
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(windowToken, 0)
-            false
-        }
-    }
-    // If a layout container, iterate over children and seed recursion.
-    if (this is ViewGroup) {
-        for (i in 0 until childCount) {
-            getChildAt(i).closeKeyboardWhenTouchScreen()
-        }
-    }
 }
 
 fun View.doItSelectable() {
@@ -112,37 +54,7 @@ fun View.visibleGone(
 
 fun View.isVisible() = visibility == View.VISIBLE
 
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use the isVisible property from androidx.core.view instead.",
-    replaceWith = ReplaceWith("isVisible = true", "androidx.core.view.isVisible"),
-    level = DeprecationLevel.WARNING,
-)
-fun View.doItVisible() {
-    if (visibility != View.VISIBLE) visibility = View.VISIBLE
-}
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use the isGone property from androidx.core.view instead.",
-    replaceWith = ReplaceWith("isGone = true", "androidx.core.view.isGone"),
-    level = DeprecationLevel.WARNING,
-)
-fun View.doItGone() {
-    if (visibility != View.GONE) visibility = View.GONE
-}
-
 fun View.isGone() = visibility == View.GONE
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use the isInvisible property from androidx.core.view instead.",
-    replaceWith = ReplaceWith("isInvisible = true", "androidx.core.view.isInvisible"),
-    level = DeprecationLevel.WARNING,
-)
-fun View.doItInvisible() {
-    if (visibility != View.INVISIBLE) visibility = View.INVISIBLE
-}
 
 fun View.isInvisible() = visibility == View.INVISIBLE
 
@@ -186,19 +98,6 @@ fun View.setSafeOnClickListener(
             onSafeClick(it)
         }
     }
-}
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use callbackFlow with setOnClickListener directly or Jetpack Compose.",
-    level = DeprecationLevel.WARNING,
-)
-@OptIn(ExperimentalCoroutinesApi::class)
-fun View.clicks(): Flow<Unit> = callbackFlow {
-    setOnClickListener {
-        trySend(Unit).isSuccess
-    }
-    awaitClose { setOnClickListener(null) }
 }
 
 fun View.useStyledAttributes(

@@ -157,14 +157,9 @@ suspend fun loadPage(page: Page, pageSize: PageSize): PageList<Item> {
 }
 ```
 
-## Deprecated (removed in next major)
+## Removed in 6.0.0
 
-They are marked `@Deprecated` (warning) and will be removed in the next
-major version.
-
-- `LinearLayoutManager.toPageIndex()`, `LazyListState.toPageIndex()`, `LazyGridState.toPageIndex()`
-  (`ext/PaginationExtension.kt`): compute the last visible item index and wrap it in `PageIndex` directly,
-  as in the examples above.
+- `LinearLayoutManager.toPageIndex()`, `LazyListState.toPageIndex()` and `LazyGridState.toPageIndex()`: compute the last visible item index and wrap it in `PageIndex` directly, as in the examples above.
 
 ## Testing
 

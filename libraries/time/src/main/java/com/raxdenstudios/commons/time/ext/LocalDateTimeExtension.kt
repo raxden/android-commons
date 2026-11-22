@@ -30,21 +30,6 @@ fun LocalDateTime.toMilliseconds(
     timeZone: TimeZone = TimeZone.getDefault(),
 ): Long = atZone(timeZone.toZoneId()).toInstant().toEpochMilli()
 
-/**
- * Formats this date-time with [pattern], using the default format locale of the JVM.
- *
- * Defaults to `dd MMM yyyy`, which omits the time; pass a pattern with time fields to show
- * them. An invalid pattern throws [IllegalArgumentException].
- */
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use LocalDateTime.format with DateTimeFormatter.ofPattern instead.",
-    level = DeprecationLevel.WARNING,
-)
-fun LocalDateTime.toFormat(
-    pattern: String = "dd MMM yyyy",
-): String = format(DateTimeFormatter.ofPattern(pattern))
-
 /** Formats the time of this date-time as 24-hour "HH:mm", e.g. "09:05". */
 fun LocalDateTime.toHourMinutes(): String = format(DateTimeFormatter.ofPattern(HOUR_MINUTES_PATTERN))
 

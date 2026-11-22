@@ -3,7 +3,6 @@ package com.raxdenstudios.commons.android.ext
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -43,21 +42,3 @@ inline fun <reified TFragment : DialogFragment> Fragment.loadDialogFragment(
     dialogFragment.isCancelable = isCancelable
     return dialogFragment
 }
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Read the fragment arguments directly or use SavedStateHandle.",
-    level = DeprecationLevel.WARNING,
-)
-@Suppress("DEPRECATION")
-fun <T : Any> Fragment.argument() = com.raxdenstudios.commons.android.property.FragmentArgumentDelegate<T>()
-
-@Deprecated(
-    message = "Will be removed in the next major version. " +
-        "Use FragmentManager.findFragmentById directly.",
-    level = DeprecationLevel.WARNING,
-)
-@Suppress("DEPRECATION")
-fun <T : Fragment> Fragment.fragmentById(
-    @IdRes fragmentId: Int,
-) = com.raxdenstudios.commons.android.property.FragmentByIdDelegate<T>(fragmentId)
