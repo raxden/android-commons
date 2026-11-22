@@ -140,6 +140,24 @@ internal class PaddingValuesTest {
         assertComposableCopyMatchesOverload(LayoutDirection.Rtl)
     }
 
+    @Test
+    fun `Given Ltr When composable copy with start and bottom Then only those change`() {
+        var composed: PaddingValues? = null
+        activity.setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                composed = first.copy(start = 11.dp, bottom = 12.dp)
+            }
+        }
+        shadowOf(Looper.getMainLooper()).idle()
+
+        val actual = checkNotNull(composed)
+        assertThat(actual.calculateStartPadding(LayoutDirection.Ltr)).isEqualTo(11.dp)
+        assertThat(actual.calculateBottomPadding()).isEqualTo(12.dp)
+        assertThat(actual.calculateTopPadding()).isEqualTo(first.calculateTopPadding())
+        assertThat(actual.calculateEndPadding(LayoutDirection.Ltr))
+            .isEqualTo(first.calculateEndPadding(LayoutDirection.Ltr))
+    }
+
     private fun assertComposableCopyMatchesOverload(
         direction: LayoutDirection,
     ) {

@@ -358,6 +358,27 @@ internal class RetryInterceptorTest {
         verify(atMost = 39) { chain.proceed(request) }
     }
 
+    @Test(timeout = 5_000)
+    fun `withDelay should retry using the given initial delay`() {
+        val interceptor = RetryInterceptor.withDelay(0)
+        every { chain.proceed(request) } answers { response(503) }
+
+        val result = interceptor.intercept(chain)
+
+        assertThat(result.code).isEqualTo(503)
+        verify(exactly = 3) { chain.proceed(request) }
+    }
+
+    @Test(timeout = 5_000)
+    fun `Given the default instance, When every attempt returns 503, Then it makes three attempts`() {
+        every { chain.proceed(request) } answers { response(503, retryAfter = "0") }
+
+        val result = RetryInterceptor.default.intercept(chain)
+
+        assertThat(result.code).isEqualTo(503)
+        verify(exactly = 3) { chain.proceed(request) }
+    }
+
     private fun response(
         code: Int,
         retryAfter: String? = null,

@@ -57,12 +57,10 @@ sealed class Permission(
     companion object {
 
         /**
-         * From value
-         *
-         * @param value
-         * @return
+         * Maps a raw Android permission [value] to its [Permission], or [Other] when it is not modelled.
+         * [Manifest.permission.POST_NOTIFICATIONS] maps to [PostNotifications] only on API 33+, where it
+         * exists; on older versions it maps to [Other].
          */
-        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         fun fromValue(
             value: String,
         ): Permission = when (value) {
@@ -75,8 +73,12 @@ sealed class Permission(
             Manifest.permission.CALL_PHONE -> CallPhone
             Manifest.permission.READ_EXTERNAL_STORAGE -> ReadExternalStorage
             Manifest.permission.WRITE_EXTERNAL_STORAGE -> WriteExternalStorage
-            Manifest.permission.POST_NOTIFICATIONS -> PostNotifications
+            Manifest.permission.POST_NOTIFICATIONS -> postNotificationsOrOther(value)
             else -> Other(value)
         }
+
+        private fun postNotificationsOrOther(
+            value: String,
+        ): Permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) PostNotifications else Other(value)
     }
 }

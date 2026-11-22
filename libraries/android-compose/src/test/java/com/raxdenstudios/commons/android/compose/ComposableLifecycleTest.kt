@@ -86,5 +86,30 @@ internal class ComposableLifecycleTest {
         assertThat(lifecycle.observerCount).isEqualTo(0)
     }
 
+    @Test
+    fun `Given no owner, When composed, Then it observes the local lifecycle owner`() {
+        val events = mutableListOf<Lifecycle.Event>()
+        activity.setContent { ComposableLifecycle({ _, event -> events += event }) }
+        idle()
+
+        assertThat(events).isNotEmpty()
+    }
+
+    @Test
+    fun `Given a new owner, When recomposed, Then the observer moves to the new owner`() {
+        val otherOwner = object : LifecycleOwner {
+            override val lifecycle = LifecycleRegistry.createUnsafe(this)
+        }
+        var current by mutableStateOf<LifecycleOwner>(owner)
+        activity.setContent { ComposableLifecycle({ _, _ -> }, current) }
+        idle()
+
+        current = otherOwner
+        idle()
+
+        assertThat(lifecycle.observerCount).isEqualTo(0)
+        assertThat((otherOwner.lifecycle as LifecycleRegistry).observerCount).isEqualTo(1)
+    }
+
     private fun idle() = shadowOf(Looper.getMainLooper()).idle()
 }

@@ -1,12 +1,15 @@
 package com.raxdenstudios.commons.android.compose
 
+import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,6 +62,48 @@ internal class LockScreenOrientationTest {
         idle()
 
         assertThat(activity.requestedOrientation).isEqualTo(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+    }
+
+    @Test
+    fun `Given a context wrapper around the activity, When composed, Then the activity is locked`() {
+        activity.setContent {
+            CompositionLocalProvider(LocalContext provides ContextWrapper(ContextWrapper(activity))) {
+                LockScreenOrientation(ScreenOrientation.Landscape)
+            }
+        }
+        idle()
+
+        assertThat(activity.requestedOrientation).isEqualTo(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+    }
+
+    @Test
+    fun `Given a context without an activity, When composed, Then nothing is locked and disposing is safe`() {
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        var visible by mutableStateOf(true)
+        activity.setContent {
+            CompositionLocalProvider(LocalContext provides activity.applicationContext) {
+                if (visible) LockScreenOrientation(ScreenOrientation.Landscape)
+            }
+        }
+        idle()
+        assertThat(activity.requestedOrientation).isEqualTo(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+
+        visible = false
+        idle()
+
+        assertThat(activity.requestedOrientation).isEqualTo(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+    }
+
+    @Test
+    fun `Given a locked orientation, When the orientation changes, Then the new one is applied`() {
+        var orientation by mutableStateOf(ScreenOrientation.Landscape)
+        activity.setContent { LockScreenOrientation(orientation) }
+        idle()
+
+        orientation = ScreenOrientation.Portrait
+        idle()
+
+        assertThat(activity.requestedOrientation).isEqualTo(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     }
 
     private fun idle() {

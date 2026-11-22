@@ -3,7 +3,12 @@ package com.raxdenstudios.commons.permissions.model
 import android.Manifest
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 internal class PermissionTest {
 
     @Test
@@ -97,5 +102,22 @@ internal class PermissionTest {
         val permission = Permission.Other(customPermission)
 
         assertThat(permission.value).isEqualTo(customPermission)
+    }
+
+    @Test
+    @Config(sdk = [33])
+    fun `Given API 33 When fromValue with post notifications Then returns PostNotifications`() {
+        val result = Permission.fromValue(Manifest.permission.POST_NOTIFICATIONS)
+
+        assertThat(result).isEqualTo(Permission.PostNotifications)
+        assertThat(Permission.PostNotifications.value).isEqualTo(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
+    @Test
+    @Config(sdk = [32])
+    fun `Given API below 33 When fromValue with post notifications Then returns Other`() {
+        val result = Permission.fromValue(Manifest.permission.POST_NOTIFICATIONS)
+
+        assertThat(result).isEqualTo(Permission.Other(Manifest.permission.POST_NOTIFICATIONS))
     }
 }
