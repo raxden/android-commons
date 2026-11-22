@@ -2,9 +2,10 @@
 
 package com.raxdenstudios.commons.core.ext
 
+import java.text.DecimalFormat
 import java.text.Normalizer
 import java.text.NumberFormat
-import java.text.ParseException
+import java.text.ParsePosition
 import java.util.Locale
 
 fun String?.orDefault(
@@ -22,13 +23,46 @@ fun String.ifEmptyThen(
     text: String,
 ): String = this.ifEmpty { text }
 
+/**
+ * Parses this string, trimmed, as a number written in the format of [locale], e.g. "1,234.5" in
+ * [Locale.US] or "1.234,5" in [Locale.GERMANY] become 1234.5.
+ *
+ * The whole string must be a number, so "12abc" is rejected instead of read as 12.0. Grouping
+ * separators are accepted only in complete groups ("1,234" but not "1,5" or "12,34" in
+ * [Locale.US]), so a decimal comma typed in the wrong locale is not silently read as 15.0. A
+ * rejected string falls back to Kotlin's [String.toDoubleOrNull] (which reads "1.5" or "1.5e2"),
+ * and to 0.0 when that fails too.
+ */
 fun String.toDouble(
     locale: Locale = Locale.US,
-): Double = try {
-    NumberFormat.getInstance(locale)
-        .parse(trim())?.toDouble() ?: 0.0
-} catch (_: ParseException) {
-    toDoubleOrNull() ?: 0.0
+): Double {
+    val text = trim()
+    return text.toLocalizedDoubleOrNull(locale) ?: text.toDoubleOrNull() ?: 0.0
+}
+
+private fun String.toLocalizedDoubleOrNull(
+    locale: Locale,
+): Double? {
+    val format = NumberFormat.getInstance(locale)
+    val position = ParsePosition(0)
+    val number = format.parse(this, position)
+    val isWholeNumber = position.index == length
+    val hasValidGrouping = format !is DecimalFormat || hasValidGrouping(format)
+    return number?.toDouble()?.takeIf { isWholeNumber && hasValidGrouping }
+}
+
+private fun String.hasValidGrouping(
+    format: DecimalFormat,
+): Boolean {
+    val symbols = format.decimalFormatSymbols
+    val integerPart = substringBefore(symbols.decimalSeparator).trimStart(symbols.minusSign, '+')
+    val groups = integerPart.split(symbols.groupingSeparator)
+    if (groups.size == 1) return true
+    val groupingSize = format.groupingSize
+    val usesGrouping = format.isGroupingUsed && groupingSize > 0
+    return usesGrouping &&
+        groups.first().length in 1..groupingSize &&
+        groups.drop(1).all { group -> group.length == groupingSize }
 }
 
 /**

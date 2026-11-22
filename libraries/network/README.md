@@ -172,11 +172,15 @@ AuthTokenInterceptor(tokenProvider: () -> String?)
 
 ```kotlin
 RetryInterceptor(
-    maxRetries: Int = 3,
-    delayMillis: Long = 1000L,
-    shouldRetry: (Response) -> Boolean = { !it.isSuccessful }
+    maxRetries: Int = 3,             // total attempts, at least one
+    initialDelayMs: Long = 1000L,    // doubled after each failed attempt
+    shouldRetry: (Response) -> Boolean = { it.code == 408 || it.code == 429 || it.code in 500..599 },
+    retryNonIdempotent: Boolean = false, // by default only GET, HEAD, OPTIONS, PUT and DELETE are retried
 )
 ```
+
+Retrying stops when the call is cancelled. When no attempt is left, the last response is returned
+as is, or the last `IOException` is rethrown.
 
 ### NetworkMonitorInterceptor
 

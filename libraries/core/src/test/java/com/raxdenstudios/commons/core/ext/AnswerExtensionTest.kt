@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.util.concurrent.CancellationException
 
 internal class AnswerExtensionTest {
 
@@ -257,5 +258,19 @@ internal class AnswerExtensionTest {
 
         assertTrue(result.isFailure)
         assertThat(result).isEqualTo(Answer.Failure("error1"))
+    }
+
+    @Test(expected = CancellationException::class)
+    fun `Given a CancellationException, When runCatching is called, Then it propagates`() {
+        Unit.runCatching { throw CancellationException("cancelled") }
+    }
+
+    @Test
+    fun `Given a non cancellation exception, When runCatching is called, Then return Failure`() {
+        val exception = IllegalStateException("boom")
+
+        val result = Unit.runCatching { throw exception }
+
+        assertThat(result).isEqualTo(Answer.Failure(exception))
     }
 }

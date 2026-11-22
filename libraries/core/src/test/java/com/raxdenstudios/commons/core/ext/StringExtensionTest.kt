@@ -95,7 +95,7 @@ internal class StringExtensionTest {
 
         val result = value.toDouble(Locale.US)
 
-        assertThat(result).isEqualTo(1.5)
+        assertThat(result).isEqualTo(150.0)
     }
 
     @Test
@@ -144,5 +144,40 @@ internal class StringExtensionTest {
         assertThat("".toFlagEmoji()).isEmpty()
         assertThat("ESP".toFlagEmoji()).isEmpty()
         assertThat("1A".toFlagEmoji()).isEmpty()
+    }
+
+    @Test
+    fun `Given a string with US grouping separator, When toDouble is called, Then return correct Double`() {
+        val result = "1,234.5".toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(1234.5)
+    }
+
+    @Test
+    fun `Given a decimal comma string, When toDouble is called with US locale, Then return 0_0`() {
+        val result = "1,5".toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(0.0)
+    }
+
+    @Test
+    fun `Given a string with trailing letters, When toDouble is called, Then return 0_0`() {
+        val result = "12abc".toDouble(Locale.US)
+
+        assertThat(result).isEqualTo(0.0)
+    }
+
+    @Test
+    fun `Given a German grouped string, When toDouble is called with GERMANY locale, Then return correct Double`() {
+        val result = "1.234,5".toDouble(Locale.GERMANY)
+
+        assertThat(result).isEqualTo(1234.5)
+    }
+
+    @Test
+    fun `Given a US decimal string, When toDouble is called with GERMANY locale, Then return correct Double`() {
+        val result = "1.5".toDouble(Locale.GERMANY)
+
+        assertThat(result).isEqualTo(1.5)
     }
 }

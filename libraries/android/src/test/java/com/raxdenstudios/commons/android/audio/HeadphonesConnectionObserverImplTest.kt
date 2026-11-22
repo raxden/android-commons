@@ -72,6 +72,54 @@ internal class HeadphonesConnectionObserverImplTest {
     }
 
     @Test
+    fun `Given two headphones connected, When one is removed, Then emit true`() = runTest {
+        observer.observeConnectionChanges().test {
+            val first = device(1, AudioDeviceInfo.TYPE_WIRED_HEADPHONES)
+            val second = device(2, AudioDeviceInfo.TYPE_BLUETOOTH_A2DP)
+            callbackSlot.captured.onAudioDevicesAdded(arrayOf(first))
+            assertThat(awaitItem()).isTrue()
+            callbackSlot.captured.onAudioDevicesAdded(arrayOf(second))
+            assertThat(awaitItem()).isTrue()
+
+            callbackSlot.captured.onAudioDevicesRemoved(arrayOf(first))
+
+            assertThat(awaitItem()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `Given two headphones connected, When both are removed one by one, Then the last removal emits false`() =
+        runTest {
+            observer.observeConnectionChanges().test {
+                val first = device(1, AudioDeviceInfo.TYPE_WIRED_HEADPHONES)
+                val second = device(2, AudioDeviceInfo.TYPE_BLUETOOTH_A2DP)
+                callbackSlot.captured.onAudioDevicesAdded(arrayOf(first, second))
+                assertThat(awaitItem()).isTrue()
+
+                callbackSlot.captured.onAudioDevicesRemoved(arrayOf(first))
+                assertThat(awaitItem()).isTrue()
+                callbackSlot.captured.onAudioDevicesRemoved(arrayOf(second))
+
+                assertThat(awaitItem()).isFalse()
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+
+    @Test
+    fun `Given a connected headphone, When an untracked device is removed, Then nothing is emitted`() = runTest {
+        observer.observeConnectionChanges().test {
+            callbackSlot.captured.onAudioDevicesAdded(arrayOf(device(1, AudioDeviceInfo.TYPE_WIRED_HEADPHONES)))
+            assertThat(awaitItem()).isTrue()
+
+            callbackSlot.captured.onAudioDevicesRemoved(arrayOf(device(99, AudioDeviceInfo.TYPE_WIRED_HEADSET)))
+
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `Given an unsupported device type, When it is added or removed, Then nothing is emitted`() = runTest {
         observer.observeConnectionChanges().test {
             val speaker = device(2, AudioDeviceInfo.TYPE_BUILTIN_SPEAKER)

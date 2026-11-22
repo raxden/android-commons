@@ -31,5 +31,9 @@ publishLibrary {
 dependencies {
     api(libs.room.runtime)
     api(libs.room.ktx)
-    ksp(libs.room.compiler)
+
+    testImplementation(libs.bundles.test)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.robolectric)
+    kspTest(libs.room.compiler)
 }

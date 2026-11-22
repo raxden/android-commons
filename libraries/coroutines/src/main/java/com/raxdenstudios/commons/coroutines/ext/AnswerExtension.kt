@@ -4,15 +4,24 @@ package com.raxdenstudios.commons.coroutines.ext
 
 import com.raxdenstudios.commons.core.Answer
 import com.raxdenstudios.commons.core.ext.fold
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
+/**
+ * Runs [function] and wraps its result in [Answer.Success], or any thrown error in [Answer.Failure].
+ *
+ * A [CancellationException] is rethrown instead of being wrapped, so the calling coroutine is
+ * cancelled as expected.
+ */
 @Suppress("TooGenericExceptionCaught")
 suspend fun <T, R> T.coRunCatching(
     function: suspend T.() -> R,
 ): Answer<R, Throwable> = try {
     Answer.Success(function())
+} catch (e: CancellationException) {
+    throw e
 } catch (e: Throwable) {
     Answer.Failure(e)
 }

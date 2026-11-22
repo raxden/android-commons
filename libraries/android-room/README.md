@@ -18,7 +18,7 @@ dependencies {
   - `update(type)` / `update(types)`: update, returning the number of rows updated.
   - `delete(type)` / `delete(types)`: delete, returning the number of rows deleted.
   - `upsert(types)`: Room `@Upsert` for a list.
-  - `upsert(type)`: a `@Transaction` that inserts and falls back to an update when the insert returns `-1`.
+  - `upsert(type)`: Room `@Upsert` for one entity. An existing row is updated in place (not deleted and re-inserted), so `ON DELETE CASCADE` children are kept.
 
 All methods are `suspend`. The module exposes `room-runtime` and `room-ktx` as `api` dependencies. It does not provide type converters. Consumers still need to add the Room compiler themselves, for example `ksp("androidx.room:room-compiler:{version}")`.
 

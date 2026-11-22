@@ -39,7 +39,9 @@ abstract class AppBarScrollProgressListener : AppBarLayout.OnOffsetChangedListen
         appBarLayout: AppBarLayout,
         verticalOffset: Int,
     ) {
-        val progress = abs(verticalOffset) * FULL_PROGRESS / appBarLayout.totalScrollRange
+        val totalScrollRange = appBarLayout.totalScrollRange
+        // A layout that cannot scroll has no progress to report.
+        val progress = if (totalScrollRange > 0) abs(verticalOffset) * FULL_PROGRESS / totalScrollRange else 0
         onProgressChanged(appBarLayout, progress)
     }
 
