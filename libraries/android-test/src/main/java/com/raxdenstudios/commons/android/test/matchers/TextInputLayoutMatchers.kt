@@ -5,6 +5,11 @@ import com.google.android.material.textfield.TextInputLayout
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Keep project-owned Espresso matchers instead.",
+    level = DeprecationLevel.WARNING,
+)
 object TextInputLayoutMatchers {
 
     fun hasNoTextInputLayoutError() = object : TypeSafeMatcher<View>() {

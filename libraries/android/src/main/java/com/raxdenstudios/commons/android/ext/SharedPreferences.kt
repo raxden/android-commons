@@ -1,9 +1,16 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import android.content.SharedPreferences
 import com.raxdenstudios.commons.android.property.SharedPreferencesDelegate
 import kotlin.reflect.KProperty
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use DataStore or the preferences library of this repository.",
+    level = DeprecationLevel.WARNING,
+)
 fun SharedPreferences.boolean(
     key: (KProperty<*>) -> String = KProperty<*>::name,
     defaultValue: Boolean = false,
@@ -11,6 +18,11 @@ fun SharedPreferences.boolean(
     onAfterSetOperation: (value: Boolean) -> Unit = {},
 ) = SharedPreferencesDelegate(this, key, defaultValue, onAfterGetOperation, onAfterSetOperation)
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use DataStore or the preferences library of this repository.",
+    level = DeprecationLevel.WARNING,
+)
 fun SharedPreferences.long(
     key: (KProperty<*>) -> String = KProperty<*>::name,
     defaultValue: Long = 0L,
@@ -18,6 +30,11 @@ fun SharedPreferences.long(
     onAfterSetOperation: (value: Long) -> Unit = {},
 ) = SharedPreferencesDelegate(this, key, defaultValue, onAfterGetOperation, onAfterSetOperation)
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use DataStore or the preferences library of this repository.",
+    level = DeprecationLevel.WARNING,
+)
 fun SharedPreferences.string(
     key: (KProperty<*>) -> String = KProperty<*>::name,
     defaultValue: String = "",
@@ -25,6 +42,11 @@ fun SharedPreferences.string(
     onAfterSetOperation: (value: String) -> Unit = {},
 ) = SharedPreferencesDelegate(this, key, defaultValue, onAfterGetOperation, onAfterSetOperation)
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use DataStore or the preferences library of this repository.",
+    level = DeprecationLevel.WARNING,
+)
 fun SharedPreferences.getStringNotNull(
     key: String,
     defaultValue: String,

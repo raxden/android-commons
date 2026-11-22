@@ -181,3 +181,9 @@ The module includes comprehensive unit tests covering all functionality.
 ```bash
 ./gradlew :libraries:preferences:testDebugUnitTest
 ```
+
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `AdvancedPreferences` (`Default`, `Private`, `Editor`) and `AdvancedPreferences.edit { }`: use `SharedPreferences` with the `getJson` / `putJson` / `putOrRemove` extensions, which are still supported, or DataStore.

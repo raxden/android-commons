@@ -433,3 +433,9 @@ The module includes comprehensive unit tests for all functionality.
 - ✅ All Answer extension functions
 - ✅ Flow transformations
 - ✅ Error propagation
+
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `Answer.coCombine` and `Flow<Answer>.collectResult` (use `collect` with `Answer.fold`).

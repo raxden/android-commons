@@ -8,6 +8,11 @@ import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Implement a project-owned OkHttp Interceptor instead.",
+    level = DeprecationLevel.WARNING,
+)
 class ErrorResponseInterceptor : Interceptor {
 
     @Suppress("MagicNumber")

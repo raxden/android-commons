@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.property
 
 import android.content.SharedPreferences

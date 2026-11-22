@@ -9,6 +9,11 @@ import org.hamcrest.BaseMatcher
 import org.hamcrest.CoreMatchers.isA
 import org.hamcrest.Description
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Keep project-owned Espresso matchers instead.",
+    level = DeprecationLevel.WARNING,
+)
 object ViewMatchers {
 
     fun clickOnChildViewWithId(

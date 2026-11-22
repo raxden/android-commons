@@ -1,7 +1,14 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.test
 
 import androidx.test.espresso.Espresso.pressBack
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Keep a project-owned page object base class instead.",
+    level = DeprecationLevel.WARNING,
+)
 open class TestPage {
 
     companion object {

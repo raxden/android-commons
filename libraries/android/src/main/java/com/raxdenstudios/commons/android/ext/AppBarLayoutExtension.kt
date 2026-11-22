@@ -1,8 +1,15 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import com.google.android.material.appbar.AppBarLayout
 import kotlin.math.abs
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Compose TopAppBarScrollBehavior or AppBarLayout.OnOffsetChangedListener.",
+    level = DeprecationLevel.WARNING,
+)
 fun AppBarLayout.addOnScrollStateListener(
     onScrollState: (AppBarStateChangeListener.State) -> Unit,
 ) {
@@ -16,6 +23,11 @@ fun AppBarLayout.addOnScrollStateListener(
     })
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Compose TopAppBarScrollBehavior or AppBarLayout.OnOffsetChangedListener.",
+    level = DeprecationLevel.WARNING,
+)
 fun AppBarLayout.addOnScrollProgressListener(
     onScrollProgress: (Int) -> Unit,
 ) {
@@ -29,6 +41,11 @@ fun AppBarLayout.addOnScrollProgressListener(
     })
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Compose TopAppBarScrollBehavior or AppBarLayout.OnOffsetChangedListener.",
+    level = DeprecationLevel.WARNING,
+)
 abstract class AppBarScrollProgressListener : AppBarLayout.OnOffsetChangedListener {
 
     companion object {
@@ -51,6 +68,11 @@ abstract class AppBarScrollProgressListener : AppBarLayout.OnOffsetChangedListen
     )
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Compose TopAppBarScrollBehavior or AppBarLayout.OnOffsetChangedListener.",
+    level = DeprecationLevel.WARNING,
+)
 abstract class AppBarStateChangeListener : AppBarLayout.OnOffsetChangedListener {
 
     enum class State { EXPANDED, COLLAPSED, IDLE }

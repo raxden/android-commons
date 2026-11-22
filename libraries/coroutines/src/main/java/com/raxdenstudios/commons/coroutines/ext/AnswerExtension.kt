@@ -76,6 +76,15 @@ fun <T, R, E> Flow<Answer<T, E>>.thenFailure(
     function: (value: E) -> R,
 ): Flow<Answer<T, R>> = map { result -> result.coThenFailure { function(it) } }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Flow.collect with Answer.fold instead.",
+    replaceWith = ReplaceWith(
+        "collect { result -> result.fold(onSuccess, onFailure) }",
+        "com.raxdenstudios.commons.core.ext.fold",
+    ),
+    level = DeprecationLevel.WARNING,
+)
 suspend fun <T, E> Flow<Answer<T, E>>.collectResult(
     onSuccess: (T) -> Unit,
     onFailure: (E) -> Unit,
@@ -90,6 +99,11 @@ fun <T, E> Flow<T>.toAnswer(
     return answers.catch { error -> emit(Answer.Failure(mapFailure(error))) }
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use a when expression over Answer instead.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("UNCHECKED_CAST")
 suspend fun <T1, T2, R, E> Answer<T1, E>.coCombine(
     other: Answer<T2, E>,

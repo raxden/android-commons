@@ -8,6 +8,11 @@ import java.util.Locale
  * The text is exactly what the JDK returns, so its capitalisation follows [inLocale]'s conventions
  * (some languages are lowercase in their own language). Returns the language code when no name is known.
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Locale.getDisplayLanguage(inLocale) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Locale.displayLanguageName(
     inLocale: Locale = Locale.getDefault(),
 ): String = getDisplayLanguage(inLocale)

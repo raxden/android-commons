@@ -9,7 +9,7 @@ import java.util.TimeZone
 /**
  * Returns the whole seconds since the Unix epoch of the start of this date in [timeZone].
  *
- * Extensions on [LocalDate] for epoch conversion, the today check and formatting. They are
+ * Extensions on [LocalDate] for epoch conversion. They are
  * `java.time` extensions. The library needs no initialisation and targets minSdk 26+ or
  * projects that enable core library desugaring.
  *
@@ -27,8 +27,6 @@ import java.util.TimeZone
  * val date = LocalDate.of(2024, 3, 15)
  * val millis = date.toMilliseconds()          // start of day in the default time zone
  * val seconds = date.toSeconds(TimeZone.getTimeZone("UTC"))
- * val label = date.toFormat("dd/MM/yyyy")     // "15/03/2024"
- * val isToday = date.isToday()
  * ```
  */
 fun LocalDate.toSeconds(
@@ -52,6 +50,12 @@ fun LocalDate.toMilliseconds(
  * This check does not take a [TimeZone] parameter, unlike the other extensions in this file,
  * so it can disagree with them near midnight in a non-default zone.
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Compare with LocalDate.now() instead.",
+    replaceWith = ReplaceWith("this == LocalDate.now()", "java.time.LocalDate"),
+    level = DeprecationLevel.WARNING,
+)
 fun LocalDate.isToday(): Boolean = this == LocalDate.now()
 
 /**
@@ -61,11 +65,21 @@ fun LocalDate.isToday(): Boolean = this == LocalDate.now()
  * pattern that uses fields a [LocalDate] does not carry, such as `HH`, throws
  * [java.time.DateTimeException].
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use LocalDate.format with DateTimeFormatter.ofPattern instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun LocalDate.toFormat(
     pattern: String = "dd MMM yyyy",
 ): String = format(DateTimeFormatter.ofPattern(pattern))
 
 /** Formats this date with the localized [style] of [locale], e.g. "March 15, 2024" for LONG in en-US. */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use LocalDate.format with DateTimeFormatter.ofLocalizedDate instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun LocalDate.toLocalizedString(
     style: FormatStyle = FormatStyle.LONG,
     locale: Locale = Locale.getDefault(),

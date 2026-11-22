@@ -2,6 +2,11 @@ package com.raxdenstudios.commons.android.ext
 
 import androidx.recyclerview.widget.RecyclerView
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use RecyclerView.addOnScrollListener directly or Jetpack Compose lists.",
+    level = DeprecationLevel.WARNING,
+)
 fun RecyclerView.addOnScrolledListener(
     onScrolled: (RecyclerView, Int, Int) -> Unit = { _, _, _ -> },
 ): RecyclerView.OnScrollListener {

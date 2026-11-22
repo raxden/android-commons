@@ -255,3 +255,9 @@ All interceptors include comprehensive unit tests.
 ```bash
 ./gradlew :libraries:network:testDebugUnitTest
 ```
+
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `HeadersInterceptor`, `ErrorResponseInterceptor`, `NetworkMonitorInterceptor` and `RequestTimingInterceptor`: implement a project-owned OkHttp `Interceptor`. The exception types they throw (`HttpException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `ServerException`, `NoNetworkException`) are not deprecated yet.

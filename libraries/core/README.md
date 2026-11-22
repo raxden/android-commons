@@ -40,6 +40,16 @@ In `com.raxdenstudios.commons.core.ext`:
 
 - `Locale.displayLanguageName(inLocale)`: the language name written in `inLocale`, e.g. "Spanish" for `es-ES` in English.
 
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `Random.generateStringWithSize`, `Locale.displayLanguageName` (use `getDisplayLanguage(inLocale)`), `Double.toCurrencyString` (use `NumberFormat.getCurrencyInstance`).
+- `List.replaceItem` (use `map`) and `List.removeItem` (use `filterNot`).
+- `String.ifEmptyThen` (use `ifEmpty { }`) and `String?.ifEmptyOrNullThen` (use `orEmpty().ifEmpty { }`).
+- `applyWhen` and `alsoWhen` (`AnyExtension`): use an `if` expression.
+- `Answer.flatMapFailure`.
+
 ## License
 
 See the [LICENSE](../../LICENSE.txt) file for details.

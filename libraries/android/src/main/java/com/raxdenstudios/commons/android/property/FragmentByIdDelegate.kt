@@ -5,6 +5,11 @@ import androidx.fragment.app.Fragment
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use FragmentManager.findFragmentById directly.",
+    level = DeprecationLevel.WARNING,
+)
 class FragmentByIdDelegate<T : Fragment>(
     @field:IdRes private val fragmentId: Int,
 ) : ReadOnlyProperty<Fragment, T> {

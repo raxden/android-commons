@@ -6,6 +6,11 @@ import androidx.annotation.LayoutRes
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use ViewBinding or setContent with Jetpack Compose.",
+    level = DeprecationLevel.WARNING,
+)
 class ActivityContentViewDelegate(
     @LayoutRes private val layoutId: Int,
 ) : ReadOnlyProperty<Activity, View> {

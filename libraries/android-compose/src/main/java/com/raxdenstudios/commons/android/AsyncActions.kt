@@ -15,6 +15,11 @@ import kotlinx.coroutines.launch
  * scope does), so passing it to a child composable does not prevent that child from skipping. Each
  * invocation runs the [block] from the latest recomposition.
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use rememberCoroutineScope and launch directly.",
+    level = DeprecationLevel.WARNING,
+)
 @Composable
 fun runAsync(
     block: suspend CoroutineScope.() -> Unit,
@@ -28,6 +33,11 @@ fun runAsync(
  * Returns a callback that launches [block] with the given value in the composition's coroutine scope each
  * time it is invoked. Same instance across recompositions; each invocation runs the latest [block].
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use rememberCoroutineScope and launch directly.",
+    level = DeprecationLevel.WARNING,
+)
 @Composable
 fun <T> consumeAsync(
     block: suspend CoroutineScope.(T) -> Unit,
@@ -41,6 +51,11 @@ fun <T> consumeAsync(
  * Returns a callback that launches [block] with the given values in the composition's coroutine scope each
  * time it is invoked. Same instance across recompositions; each invocation runs the latest [block].
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use rememberCoroutineScope and launch directly.",
+    level = DeprecationLevel.WARNING,
+)
 @Composable
 fun <T, R> consumeAsync(
     block: suspend CoroutineScope.(T, R) -> Unit,

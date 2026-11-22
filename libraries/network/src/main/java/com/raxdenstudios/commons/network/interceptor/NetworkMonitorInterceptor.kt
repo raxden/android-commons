@@ -4,6 +4,11 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Implement a project-owned OkHttp Interceptor instead.",
+    level = DeprecationLevel.WARNING,
+)
 class NetworkMonitorInterceptor(
     private val isNetworkAvailable: () -> Boolean,
 ) : Interceptor {

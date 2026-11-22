@@ -26,11 +26,21 @@ inline fun <reified T> Any.alsoAs(
 
 // Conditional scope functions
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use an if expression with apply instead.",
+    level = DeprecationLevel.WARNING,
+)
 inline fun <reified T> T.applyWhen(
     condition: Boolean,
     block: T.() -> Unit,
 ): T = if (condition) apply(block) else this
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use an if expression with also instead.",
+    level = DeprecationLevel.WARNING,
+)
 inline fun <reified T> T.alsoWhen(
     condition: Boolean,
     block: (T) -> Unit,

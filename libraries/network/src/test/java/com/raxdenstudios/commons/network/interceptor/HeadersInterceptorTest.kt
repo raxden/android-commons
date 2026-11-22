@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.network.interceptor
 
 import com.google.common.truth.Truth.assertThat

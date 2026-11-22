@@ -52,6 +52,11 @@ fun Context.isExactAlarmAllowed(): Boolean = Build.VERSION.SDK_INT < Build.VERSI
 fun Context.isFullScreenIntentAllowed(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE ||
     getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use File.createTempFile with getExternalFilesDir directly.",
+    level = DeprecationLevel.WARNING,
+)
 fun Context.createTemporalImageFile(): File {
     val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
     val imageFileName = "JPEG_" + timeStamp + "_"

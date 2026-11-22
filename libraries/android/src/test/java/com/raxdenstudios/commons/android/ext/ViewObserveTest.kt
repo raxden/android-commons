@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import android.view.View

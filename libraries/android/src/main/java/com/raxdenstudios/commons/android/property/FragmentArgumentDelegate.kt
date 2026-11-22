@@ -4,6 +4,11 @@ import androidx.fragment.app.Fragment
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Read the intent extras / fragment arguments directly or use SavedStateHandle.",
+    level = DeprecationLevel.WARNING,
+)
 class FragmentArgumentDelegate<T : Any> : ReadOnlyProperty<Fragment, T> {
 
     private var data: T? = null
