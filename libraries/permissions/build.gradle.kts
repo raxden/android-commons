@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.coroutines)
 
     testImplementation(libs.truth)
+    testImplementation(libs.robolectric)
     testImplementation(libs.mockk.android)
     testImplementation(libs.coroutines.test)
 }

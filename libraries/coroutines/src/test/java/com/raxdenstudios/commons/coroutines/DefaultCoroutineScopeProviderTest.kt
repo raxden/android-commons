@@ -80,4 +80,23 @@ internal class DefaultCoroutineScopeProviderTest {
         assertThat(sibling.isCancelled).isFalse()
         failingDispatcherScope.cancel()
     }
+
+    @Test
+    fun `Given no dispatcher provider When created Then scopes use the default dispatchers`() {
+        val defaultProvider = DefaultCoroutineScopeProvider()
+        val expected = DefaultDispatcherProvider()
+        try {
+            assertThat(defaultProvider.main.coroutineContext[kotlin.coroutines.ContinuationInterceptor])
+                .isSameInstanceAs(expected.main)
+            assertThat(defaultProvider.io.coroutineContext[kotlin.coroutines.ContinuationInterceptor])
+                .isSameInstanceAs(expected.io)
+            assertThat(defaultProvider.default.coroutineContext[kotlin.coroutines.ContinuationInterceptor])
+                .isSameInstanceAs(expected.default)
+            assertThat(defaultProvider.main.coroutineContext[Job]!!.isActive).isTrue()
+        } finally {
+            defaultProvider.main.cancel()
+            defaultProvider.io.cancel()
+            defaultProvider.default.cancel()
+        }
+    }
 }

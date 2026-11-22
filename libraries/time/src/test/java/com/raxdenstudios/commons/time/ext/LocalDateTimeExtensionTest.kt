@@ -3,6 +3,7 @@ package com.raxdenstudios.commons.time.ext
 import com.google.common.truth.Truth.assertThat
 import com.raxdenstudios.commons.time.ext.toMilliseconds
 import com.raxdenstudios.commons.time.ext.toSeconds
+import org.junit.After
 import org.junit.Test
 import java.time.LocalDateTime
 import java.util.TimeZone
@@ -10,6 +11,13 @@ import java.util.TimeZone
 internal class LocalDateTimeExtensionTest {
 
     private val timeZone = TimeZone.getTimeZone("Europe/Madrid")
+
+    private val originalDefault: TimeZone = TimeZone.getDefault()
+
+    @After
+    fun restoreDefaultTimeZone() {
+        TimeZone.setDefault(originalDefault)
+    }
 
     @Test
     fun `toSeconds should be return a right value`() {
@@ -70,5 +78,37 @@ internal class LocalDateTimeExtensionTest {
         val result = aDate.toSeconds(TimeZone.getTimeZone("UTC"))
 
         assertThat(result).isEqualTo(1695382327)
+    }
+
+    @Test
+    fun `Given a default time zone When toMilliseconds without zone Then uses the default zone`() {
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Madrid"))
+
+        assertThat(LocalDateTime.of(2023, 9, 22, 11, 32, 7, 0).toMilliseconds()).isEqualTo(1695375127000)
+    }
+
+    @Test
+    fun `Given a default time zone When toSeconds without zone Then uses the default zone`() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+
+        assertThat(LocalDateTime.of(2023, 9, 22, 11, 32, 7, 0).toSeconds()).isEqualTo(1695382327)
+    }
+
+    @Test
+    fun `Given a DST gap When toMilliseconds Then the time is shifted later by the gap`() {
+        val madrid = TimeZone.getTimeZone("Europe/Madrid")
+        // 2023-03-26 02:30 does not exist in Madrid: shifted to 03:30 (+02:00) = 01:30 UTC.
+        val result = LocalDateTime.of(2023, 3, 26, 2, 30).toMilliseconds(madrid)
+
+        assertThat(result).isEqualTo(1679794200000)
+    }
+
+    @Test
+    fun `Given a DST overlap When toMilliseconds Then the earlier offset is used`() {
+        val madrid = TimeZone.getTimeZone("Europe/Madrid")
+        // 2023-10-29 02:30 happens twice in Madrid: earlier offset +02:00 = 00:30 UTC.
+        val result = LocalDateTime.of(2023, 10, 29, 2, 30).toMilliseconds(madrid)
+
+        assertThat(result).isEqualTo(1698539400000)
     }
 }
