@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.permissions
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
@@ -13,10 +14,23 @@ import com.raxdenstudios.commons.permissions.model.Permission
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 
+/**
+ * Default [PermissionsManager].
+ *
+ * @param context optional; when given (e.g. the application context from DI), [hasPermission] answers
+ * correctly with no activity attached, as when a service, worker or FCM message runs in the background.
+ * Without it, the application context of the first attached activity is used once one has been attached.
+ */
 @Suppress("TooManyFunctions")
-class PermissionsManagerImpl : PermissionsManager {
+class PermissionsManagerImpl(
+    context: Context? = null,
+) : PermissionsManager {
 
     private val activityHolder: ActivityHolder = ActivityHolder()
+
+    // Written on the main thread by attach(), read from any thread by hasPermission().
+    @Volatile
+    private var applicationContext: Context? = context?.applicationContext
     private var permissionResultLauncher: ActivityResultLauncher<Array<String>>? = null
     private var launcherOwner: WeakReference<LifecycleOwner>? = null
     private var pendingRequest: PendingRequest? = null
@@ -29,6 +43,7 @@ class PermissionsManagerImpl : PermissionsManager {
         activity: ComponentActivity,
     ) {
         activityHolder.attach(activity)
+        if (applicationContext == null) applicationContext = activity.applicationContext
         activity.lifecycle.addObserver(this)
     }
 
@@ -187,8 +202,8 @@ class PermissionsManagerImpl : PermissionsManager {
 
     private fun checkSelfPermission(
         permission: Permission,
-    ) = activityHolder.activity?.let {
-        ContextCompat.checkSelfPermission(it, permission.value)
+    ) = (activityHolder.activity ?: applicationContext)?.let { context ->
+        ContextCompat.checkSelfPermission(context, permission.value)
     } ?: PackageManager.PERMISSION_DENIED
 
     /** A request whose system dialog is showing, waiting for its result. */

@@ -69,8 +69,8 @@ private suspend fun awaitPermissionResult(
 }
 
 /**
- * Whether [permission] is currently granted to the attached activity. Returns `false` when no activity is
- * attached. Does not request the permission.
+ * Whether [permission] is currently granted, checked with the attached activity or else the manager's
+ * application context. Returns `false` when neither is available. Does not request the permission.
  */
 suspend fun PermissionsManager.hasPermission(
     permission: Permission,
