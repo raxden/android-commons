@@ -32,7 +32,7 @@ In `com.raxdenstudios.commons.core.ext`:
 
 - `List<T>.filterByQuery(query, ignoreCase = true) { item -> text }`: keeps the items whose text contains `query`. A blank query returns the list unchanged.
 
-## Removed in 6.0.0
+## Removed in 7.0.0
 
 - `Random.generateStringWithSize`: use `kotlin.random.Random` with a character pool.
 - `Locale.displayLanguageName`: use `getDisplayLanguage(inLocale)`.
@@ -44,7 +44,7 @@ In `com.raxdenstudios.commons.core.ext`:
 - `applyWhen` and `alsoWhen` (`AnyExtension`): use an `if` expression.
 - `Answer.flatMapFailure`: use a `when` expression over `Answer`.
 
-## Removed in 7.0.0
+## Removed in 8.0.0
 
 - `AnyExtension`: `castAs`, `requireAs`, `letAs`, `runAs`, `applyAs`, `alsoAs`: use `as?` / `as` with the standard scope functions.
 - `String.toMD5()` and `String.toSHA512()`: use `MessageDigest.getInstance` directly. `toSHA256` is kept.

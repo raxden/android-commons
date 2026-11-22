@@ -130,7 +130,7 @@ All interceptors include comprehensive unit tests.
 ./gradlew :libraries:network:testDebugUnitTest
 ```
 
-## Removed in 2.0.0
+## Removed in 3.0.0
 
 - `HeadersInterceptor`: implement a project-owned OkHttp `Interceptor` that adds the headers.
 - `ErrorResponseInterceptor` and the exception types `HttpException`, `UnauthorizedException`, `ForbiddenException`, `NotFoundException`, `ServerException`: implement a project-owned OkHttp `Interceptor` that maps HTTP status codes to your own exceptions.

@@ -49,7 +49,7 @@ HeadphonesConnectionObserverImpl(applicationContext).observeConnectionChanges()
 - `ViewModel.safeLaunch { }`: runs work on `viewModelScope`, logging uncaught errors.
 - `WorkManager.enqueueUniqueOneTime<W>(policy, uniqueName, configure)`: enqueues unique one-time work. The default policy is `ExistingWorkPolicy.KEEP`.
 
-## Removed in 6.0.0
+## Removed in 7.0.0
 
 - `Event` and the `LiveData` extensions `observeEvent` / `observe` / `update`: use `StateFlow` / `SharedFlow` and `collectAsStateWithLifecycle`.
 - `launchAndCollect` (`StateFlowExtension`): use `repeatOnLifecycle(Lifecycle.State.STARTED)`.
@@ -64,7 +64,7 @@ HeadphonesConnectionObserverImpl(applicationContext).observeConnectionChanges()
 - `Context.createTemporalImageFile()` (use `File.createTempFile`), `AppCompatActivity.setupToolbar`, `DialogFragment.showForResult` (use the Fragment Result API), `DialogFragment.setFullscreen`.
 - The `material` and `swiperefreshlayout` dependencies are no longer exposed through `commons-android` (only `appcompat` is): declare them in your own modules.
 
-## Removed in 7.0.0
+## Removed in 8.0.0
 
 - `ActivityHolder.resumedActivity()` and `ComponentActivity.isAtLeastCreated/isAtLeastStarted/isAtLeastResumed`: check `activity?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED)` directly.
 - `ViewExtension`: `setPaddingTop`, `doItSelectable`, `doItUnselectable`, `doItClickable`, `doItNonClickable`, `visibleGone`, `isVisible()`, `isGone()`, `isInvisible()`, `getColor`, `getDrawable`, `inflateView`, `inflateViewIfEditMode`, `startFadeInAnimation`, `startFadeOutAnimation`, `setSafeOnClickListener`, `useStyledAttributes`: use the `androidx.core.view` and framework APIs directly.

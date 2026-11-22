@@ -64,11 +64,11 @@ In `com.raxdenstudios.commons.android.compose.ext`:
 
 `com.raxdenstudios.commons.android.compose.preview.DevicePreviews` is a multi preview annotation that renders a composable in light and dark phone previews.
 
-## Removed in 2.0.0
+## Removed in 3.0.0
 
 - `runAsync` and both `consumeAsync` overloads: use `rememberCoroutineScope` and `launch` directly.
 
-## Removed in 3.0.0
+## Removed in 4.0.0
 
 - `Modifier.mirror()`: use `Modifier.scale(scaleX = -1f, scaleY = 1f)`.
 - `ComposableLifecycle`: use `LifecycleEventEffect` or `DisposableEffect` with `LocalLifecycleOwner` from `lifecycle-runtime-compose`.

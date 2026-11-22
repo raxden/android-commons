@@ -430,11 +430,11 @@ The module includes comprehensive unit tests for all functionality.
 - ✅ Flow transformations
 - ✅ Error propagation
 
-## Removed in 6.0.0
+## Removed in 7.0.0
 
 - `Answer.coCombine`: combine the values with `Answer.fold` or a `when` expression.
 - `Flow<Answer>.collectResult`: use `collect` with `Answer.fold`.
 
-## Removed in 7.0.0
+## Removed in 8.0.0
 
 - `Answer.coFlatMapFailure`: use a `when` expression over `Answer`.

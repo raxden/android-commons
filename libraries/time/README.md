@@ -21,13 +21,13 @@ dependencies {
 LocalDateTime.now().toMilliseconds()
 ```
 
-## Removed in 2.0.0
+## Removed in 3.0.0
 
 - `LocalDate.isToday()`: compare with `LocalDate.now()`.
 - `LocalDate.toFormat()` and `LocalDateTime.toFormat()`: use `format` with `DateTimeFormatter.ofPattern`.
 - `LocalDate.toLocalizedString()`: use `format` with `DateTimeFormatter.ofLocalizedDate`.
 
-## Removed in 3.0.0
+## Removed in 4.0.0
 
 - `LocalDate.toMilliseconds()` and `LocalDate.toSeconds()`: use `atStartOfDay().atZone(zone).toInstant().toEpochMilli()`.
 - `LocalDateTime.toSeconds()`: use `toMilliseconds() / 1000` (floor division).

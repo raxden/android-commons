@@ -157,7 +157,7 @@ suspend fun loadPage(page: Page, pageSize: PageSize): PageList<Item> {
 }
 ```
 
-## Removed in 6.0.0
+## Removed in 7.0.0
 
 - `LinearLayoutManager.toPageIndex()`, `LazyListState.toPageIndex()` and `LazyGridState.toPageIndex()`: compute the last visible item index and wrap it in `PageIndex` directly, as in the examples above.
 

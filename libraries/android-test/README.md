@@ -17,12 +17,12 @@ dependencies {
 
 `AppTestRunner` extends `AndroidJUnitRunner`. Subclass it to swap the `Application` used by the tests, then set your subclass as `testInstrumentationRunner`.
 
-## Removed in 7.0.0
+## Removed in 8.0.0
 
 - `OkHttp3IdlingResource`: keep your own copy.
 - The transitive `okhttp3` dependency: declare it in your own test modules.
 
-## Removed in 6.0.0
+## Removed in 7.0.0
 
 - `TestPage`: keep your own page object base class.
 - `RESTMockServerRule`: start `RESTMockServer` in your own rule.
