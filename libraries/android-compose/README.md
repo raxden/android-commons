@@ -102,6 +102,12 @@ In `com.raxdenstudios.commons.android`:
 Button(onClick = runAsync { viewModel.refresh() })
 ```
 
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `runAsync` and both `consumeAsync` overloads (`AsyncActions.kt`): use `rememberCoroutineScope` and `launch` directly.
+
 ## License
 
 See the [LICENSE](../../LICENSE.txt) file for details.

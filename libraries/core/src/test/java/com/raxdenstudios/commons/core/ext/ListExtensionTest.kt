@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.core.ext
 
 import org.junit.Assert.assertEquals

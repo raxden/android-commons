@@ -36,6 +36,11 @@ fun LocalDateTime.toMilliseconds(
  * Defaults to `dd MMM yyyy`, which omits the time; pass a pattern with time fields to show
  * them. An invalid pattern throws [IllegalArgumentException].
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use LocalDateTime.format with DateTimeFormatter.ofPattern instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun LocalDateTime.toFormat(
     pattern: String = "dd MMM yyyy",
 ): String = format(DateTimeFormatter.ofPattern(pattern))

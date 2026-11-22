@@ -7,8 +7,6 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.raxdenstudios.commons.android.property.FragmentArgumentDelegate
-import com.raxdenstudios.commons.android.property.FragmentByIdDelegate
 
 fun Fragment.inflateView(
     layoutId: Int,
@@ -46,8 +44,20 @@ inline fun <reified TFragment : DialogFragment> Fragment.loadDialogFragment(
     return dialogFragment
 }
 
-fun <T : Any> Fragment.argument() = FragmentArgumentDelegate<T>()
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Read the fragment arguments directly or use SavedStateHandle.",
+    level = DeprecationLevel.WARNING,
+)
+@Suppress("DEPRECATION")
+fun <T : Any> Fragment.argument() = com.raxdenstudios.commons.android.property.FragmentArgumentDelegate<T>()
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use FragmentManager.findFragmentById directly.",
+    level = DeprecationLevel.WARNING,
+)
+@Suppress("DEPRECATION")
 fun <T : Fragment> Fragment.fragmentById(
     @IdRes fragmentId: Int,
-) = FragmentByIdDelegate<T>(fragmentId)
+) = com.raxdenstudios.commons.android.property.FragmentByIdDelegate<T>(fragmentId)

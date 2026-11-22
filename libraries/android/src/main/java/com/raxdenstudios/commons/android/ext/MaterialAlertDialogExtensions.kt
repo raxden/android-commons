@@ -1,8 +1,15 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import android.content.Context
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use MaterialAlertDialogBuilder directly or a Jetpack Compose dialog.",
+    level = DeprecationLevel.WARNING,
+)
 fun Context.showSimpleDialog(
     title: Int,
     message: Int,
@@ -11,6 +18,11 @@ fun Context.showSimpleDialog(
     showSimpleDialog(getString(title), getString(message), getString(positiveButton))
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use MaterialAlertDialogBuilder directly or a Jetpack Compose dialog.",
+    level = DeprecationLevel.WARNING,
+)
 fun Context.showSimpleDialog(
     title: String,
     message: String,
@@ -24,6 +36,11 @@ fun Context.showSimpleDialog(
         .show()
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use MaterialAlertDialogBuilder directly or a Jetpack Compose dialog.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("LongParameterList")
 fun Context.showDialog(
     title: Int,
@@ -43,6 +60,11 @@ fun Context.showDialog(
     )
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use MaterialAlertDialogBuilder directly or a Jetpack Compose dialog.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("LongParameterList")
 fun Context.showDialog(
     title: String,

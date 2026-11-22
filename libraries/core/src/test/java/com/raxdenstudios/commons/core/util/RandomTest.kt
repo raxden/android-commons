@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.core.util
 
 import com.raxdenstudios.commons.core.util.Random.generateStringWithSize

@@ -43,6 +43,14 @@ Do not start RESTMock yourself in the test, because the rule already does.
 
 Matchers for `ViewMatchers`, `TextInputLayoutMatchers`, `RecyclerViewMatchers`, `SwipeRefreshLayoutMatchers`, `ProgressBarMatchers` and `TabLayoutMatchers` under `com.raxdenstudios.commons.android.test.matchers`.
 
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `TestPage`, `RESTMockServerRule` and the matcher objects `ViewMatchers`, `TextInputLayoutMatchers`, `RecyclerViewMatchers`, `SwipeRefreshLayoutMatchers`, `ProgressBarMatchers`, `TabLayoutMatchers`: consumers keep their own copies.
+
+`AppTestRunner` is still in use (referenced from Gradle `testInstrumentationRunner`) and is not deprecated.
+
 ## License
 
 See the [LICENSE](../../LICENSE.txt) file for details.

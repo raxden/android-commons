@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.pagination.ext
 
 import androidx.compose.foundation.lazy.LazyListState

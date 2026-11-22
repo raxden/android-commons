@@ -34,6 +34,12 @@ LocalDateTime.of(2024, 3, 15, 9, 5).toHourMinutes()            // "09:05"
 
 - `LocalDate.isToday()`: compares with `LocalDate.now()` in the system default zone.
 
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `LocalDate.isToday()`, `LocalDate.toFormat()`, `LocalDateTime.toFormat()` and `LocalDate.toLocalizedString()`: use `LocalDate.now()` and `DateTimeFormatter` directly.
+
 ## License
 
 See the [LICENSE](../../LICENSE.txt) file for details.

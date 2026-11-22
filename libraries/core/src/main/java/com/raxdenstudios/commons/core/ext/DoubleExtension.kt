@@ -17,6 +17,11 @@ fun Double.toString(
  * Formats this amount as money in [currency] with the grouping and symbol style of [locale], e.g. "$1,234.50"
  * for USD in en-US. The number of decimal digits comes from [currency].
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use NumberFormat.getCurrencyInstance instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Double.toCurrencyString(
     currency: Currency,
     locale: Locale = Locale.getDefault(),

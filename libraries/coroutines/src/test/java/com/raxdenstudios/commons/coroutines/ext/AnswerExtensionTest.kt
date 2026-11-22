@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.coroutines.ext
 
 import app.cash.turbine.test

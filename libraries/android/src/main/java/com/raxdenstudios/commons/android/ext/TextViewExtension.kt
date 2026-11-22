@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import android.net.Uri
@@ -11,6 +13,11 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.net.toUri
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use TextViewCompat / HtmlCompat directly or Jetpack Compose Text.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("DEPRECATION")
 fun TextView.setCompatTextAppearance(
     resId: Int,
@@ -22,6 +29,11 @@ fun TextView.setCompatTextAppearance(
     }
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use TextViewCompat / HtmlCompat directly or Jetpack Compose Text.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("NestedBlockDepth")
 fun TextView.setHtml(
     html: String,
@@ -79,6 +91,11 @@ private fun makeLinkClickable(
     strBuilder.removeSpan(span)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use TextViewCompat / HtmlCompat directly or Jetpack Compose Text.",
+    level = DeprecationLevel.WARNING,
+)
 interface OnHyperlinkClickListener {
     fun onHyperlinkClick(
         uri: Uri,

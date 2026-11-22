@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import android.annotation.SuppressLint
@@ -10,6 +12,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 @SuppressLint("ClickableViewAccessibility")
 fun Activity.closeKeyboardWhenTouchScreen(
     view: View = findViewById(android.R.id.content),
@@ -29,21 +36,41 @@ fun Activity.closeKeyboardWhenTouchScreen(
     }
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Fragment.closeKeyboard() {
     requireActivity().closeKeyboard()
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Fragment.closeKeyboard(
     binder: IBinder,
 ) {
     requireActivity().closeKeyboard(binder)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Activity.closeKeyboard() {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(findViewById<View>(android.R.id.content).windowToken, 0)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Activity.closeKeyboard(
     binder: IBinder,
 ) {
@@ -51,11 +78,21 @@ fun Activity.closeKeyboard(
     imm.hideSoftInputFromWindow(binder, 0)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Activity.openKeyboard() {
     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.show(ime()) / hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
 fun Fragment.openKeyboard() {
     requireActivity().openKeyboard()
 }

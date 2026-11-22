@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.delegate
 
 import androidx.fragment.app.Fragment
@@ -29,6 +31,11 @@ import com.raxdenstudios.commons.android.ext.registerOnPageChangeCallback
  *
  * More info -> https://developer.android.com/training/animation/vp2-migration
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use ViewPager2 with FragmentStateAdapter directly or Jetpack Compose Pager.",
+    level = DeprecationLevel.WARNING,
+)
 class FragmentViewPager2Delegate<TFragment : Fragment>(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,

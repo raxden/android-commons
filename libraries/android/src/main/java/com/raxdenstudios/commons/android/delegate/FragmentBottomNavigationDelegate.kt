@@ -9,6 +9,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Navigation Component or Jetpack Compose navigation.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("TooManyFunctions")
 class FragmentBottomNavigationDelegate(
     private val fragmentManager: FragmentManager,

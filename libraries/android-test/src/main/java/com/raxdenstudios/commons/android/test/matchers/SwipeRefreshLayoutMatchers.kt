@@ -5,6 +5,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Keep project-owned Espresso matchers instead.",
+    level = DeprecationLevel.WARNING,
+)
 object SwipeRefreshLayoutMatchers {
 
     fun isSwipeRefreshLayoutRefreshing() = object : TypeSafeMatcher<View>() {

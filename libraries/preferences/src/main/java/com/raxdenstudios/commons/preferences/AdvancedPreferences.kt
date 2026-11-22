@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.preferences
 
 import android.content.Context
@@ -7,6 +9,11 @@ import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use SharedPreferences with the getJson/putJson/putOrRemove extensions or DataStore.",
+    level = DeprecationLevel.WARNING,
+)
 sealed class AdvancedPreferences(
     private val sharedPreferences: SharedPreferences,
     private val gson: Gson,

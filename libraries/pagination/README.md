@@ -1,210 +1,172 @@
 # Pagination Module
 
-Base pagination framework for Android with support for RecyclerView and Jetpack Compose.
+Base pagination framework for Android. `Pagination<T>` (this module) keeps the loaded pages, the
+state and the `PageResult` mapping. `CoPagination<T>` (module `commons-pagination-co`) is its
+coroutines implementation and the class you instantiate.
 
-## 📦 Installation
+## Installation
 
 ```kotlin
 dependencies {
     implementation(platform("com.raxdenstudios:commons-bom:<latest-version>"))
     implementation("com.raxdenstudios:commons-pagination")
-    
-    // For coroutines support
+
+    // Coroutines implementation (CoPagination)
     implementation("com.raxdenstudios:commons-pagination-co")
 }
 ```
 
-## 🚀 Usage
+## Usage
 
-### With Coroutines (Recommended)
+`CoPagination` runs each page request in the `CoroutineScope` you provide and reports progress through
+`pageResponse` as `PageResult` values. `requestFirstPage` and `requestPage` are ignored while a request is
+loading; only `requestPreviousPage` cancels the in-flight request before starting its own.
 
 ```kotlin
-class MyViewModel : ViewModel() {
+class ItemsViewModel(
+    private val repository: ItemsRepository,
+) : ViewModel() {
+
     private val pagination = CoPagination<Item>(
         config = Pagination.Config.default,
-        coroutineScope = viewModelScope
+        coroutineScope = viewModelScope,
     )
-    
-    fun loadFirstPage() {
+
+    fun onFirstLoad() {
         pagination.requestFirstPage(
-            pageRequest = { page, pageSize -> 
-                repository.getItems(page.value, pageSize.value)
-            },
-            pageResponse = { result ->
-                when (result) {
-                    is PageResult.Loading -> _state.value = State.Loading
-                    is PageResult.Content -> _state.value = State.Success(result.items)
-                    is PageResult.Error -> _state.value = State.Error(result.error)
-                    is PageResult.NoResults -> _state.value = State.Empty
-                    is PageResult.NoMoreResults -> _hasMore.value = false
-                }
-            }
+            pageRequest = ::loadPage,
+            pageResponse = ::onPageResult,
         )
     }
-    
-    fun loadNextPage() {
-        pagination.requestNextPage(
-            pageRequest = { page, pageSize -> 
-                repository.getItems(page.value, pageSize.value)
-            },
-            pageResponse = { result -> handlePageResult(result) }
+
+    fun onScrolled(lastVisibleIndex: Int) {
+        pagination.requestPage(
+            pageIndex = PageIndex(lastVisibleIndex),
+            pageRequest = ::loadPage,
+            pageResponse = ::onPageResult,
         )
+    }
+
+    fun onRefresh() {
+        pagination.cancelCurrentRequest()
+        pagination.clear()
+        onFirstLoad()
+    }
+
+    private suspend fun loadPage(page: Page, pageSize: PageSize): PageList<Item> =
+        PageList(items = repository.getItems(page.value, pageSize.value), page = page)
+
+    private fun onPageResult(result: PageResult<Item>) {
+        when (result) {
+            PageResult.Loading -> showLoading()
+            is PageResult.Content -> showItems(result.items) // all items loaded so far
+            is PageResult.Error -> showError(result.throwable)
+            PageResult.NoResults -> showEmpty()
+            PageResult.NoMoreResults -> Unit
+        }
     }
 }
 ```
 
-### With RecyclerView
+### Operations
+
+| Method | Description |
+|---|---|
+| `requestFirstPage(pageRequest, pageResponse)` | Loads the first page (same as `requestPage(PageIndex.first, ...)`). It is a no-op once pages are loaded, unless `clear()` was called first. |
+| `requestPage(pageIndex, pageRequest, pageResponse)` | Takes the index of the last visible item. Only fires a request when the end of the loaded list is within `Config.prefetchDistance`, and returns early while another request is loading. |
+| `requestPreviousPage(pageRequest, pageResponse)` | Loads the page before the current one, cancelling the in-flight request. Does nothing on the initial page. |
+| `cancelCurrentRequest()` | Cancels the in-flight request and leaves the loading state so the next request is not ignored. |
+| `clear()` | Resets the loaded history, the current page and the state (for example on pull-to-refresh). It does not cancel an in-flight request: call `cancelCurrentRequest()` first. |
+| `getCurrentPage()` / `getItemsByPage(page)` | Reads the current page and the items loaded for a page. |
+
+There is no `requestNextPage`: call `requestPage` with the index of the last visible item and the
+pagination decides when the next page is needed.
+
+### Feeding `requestPage` from a list
+
+`requestPage` needs the index of the last visible item. Compute it from your list state and call
+`requestPage` on every scroll change.
 
 ```kotlin
+// Compose LazyColumn
+val lazyListState = rememberLazyListState()
+
+LaunchedEffect(lazyListState) {
+    snapshotFlow {
+        (lazyListState.firstVisibleItemIndex + lazyListState.layoutInfo.visibleItemsInfo.size - 1)
+            .coerceAtLeast(0)
+    }.collect { lastVisibleIndex -> viewModel.onScrolled(lastVisibleIndex) }
+}
+```
+
+```kotlin
+// RecyclerView
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        val pageIndex = layoutManager.toPageIndex()
-        
-        pagination.requestPage(
-            pageIndex = pageIndex,
-            pageRequest = { page, pageSize -> loadPage(page, pageSize) },
-            pageResponse = { result -> handleResult(result) }
-        )
+        val lastVisibleIndex = (layoutManager.findFirstVisibleItemPosition() + layoutManager.childCount - 1)
+            .coerceAtLeast(0)
+        viewModel.onScrolled(lastVisibleIndex)
     }
 })
 ```
 
-### With Jetpack Compose LazyColumn
-
-```kotlin
-val lazyListState = rememberLazyListState()
-
-LazyColumn(state = lazyListState) {
-    items(items) { item ->
-        ItemCard(item)
-    }
-}
-
-LaunchedEffect(lazyListState) {
-    snapshotFlow { lazyListState.toPageIndex() }
-        .collect { pageIndex ->
-            pagination.requestPage(
-                pageIndex = pageIndex,
-                pageRequest = { page, pageSize -> loadPage(page, pageSize) },
-                pageResponse = { result -> handleResult(result) }
-            )
-        }
-}
-```
-
-## 📋 Configuration
-
-### Custom Configuration
+## Configuration
 
 ```kotlin
 val pagination = CoPagination<Item>(
     config = Pagination.Config(
         initialPage = Page(0),
         pageSize = PageSize(20),
-        prefetchDistance = 5
+        prefetchDistance = 5,
     ),
-    coroutineScope = viewModelScope
+    coroutineScope = viewModelScope,
 )
 ```
 
-### Default Configuration
+`Pagination.Config.default` is `Page(0)`, `PageSize(10)` and `prefetchDistance = 2`. `PageSize` must be
+greater than 0. An optional `logger` lambda receives the prefetch decisions.
+
+## Page results
 
 ```kotlin
-Pagination.Config.default // Page(0), PageSize(10), prefetchDistance = 3
-```
-
-## 🎯 Page Results
-
-### PageResult Types
-
-```kotlin
-sealed class PageResult<T> {
-    object Loading : PageResult<Nothing>()
+sealed class PageResult<out T> {
+    data object Loading : PageResult<Nothing>()
     data class Content<T>(val items: List<T>) : PageResult<T>()
-    data class Error(val error: Throwable) : PageResult<Nothing>()
-    object NoResults : PageResult<Nothing>()
-    object NoMoreResults : PageResult<Nothing>()
+    data class Error(val throwable: Throwable) : PageResult<Nothing>()
+    data object NoResults : PageResult<Nothing>()
+    data object NoMoreResults : PageResult<Nothing>()
 }
 ```
 
-### Handling Results
+- `Loading`: a request started.
+- `Content`: every item loaded so far, ordered by page (not only the last page).
+- `Error`: the request failed. The state becomes not-empty when items were already loaded, otherwise empty, so the next `requestPage` can retry.
+- `NoResults`: the first page returned no items.
+- `NoMoreResults`: the last loaded page had fewer items than `PageSize`; further `requestPage` calls only
+  repeat this result.
 
-```kotlin
-when (result) {
-    is PageResult.Loading -> {
-        // Show loading indicator
-    }
-    is PageResult.Content -> {
-        // Add items to list
-        items.addAll(result.items)
-    }
-    is PageResult.Error -> {
-        // Show error message
-        showError(result.error)
-    }
-    is PageResult.NoResults -> {
-        // Show empty state
-    }
-    is PageResult.NoMoreResults -> {
-        // Hide load more button
-    }
-}
-```
+## Page request
 
-## ✨ Features
-
-- ✅ Automatic page management
-- ✅ Prefetch distance configuration
-- ✅ Support for RecyclerView and Compose
-- ✅ Coroutine-based async loading
-- ✅ Request cancellation support
-- ✅ Thread-safe implementation
-- ✅ Comprehensive error handling
-
-## 📖 API Reference
-
-### CoPagination
-
-#### Methods
-
-- `requestFirstPage(pageRequest, pageResponse)` - Load first page
-- `requestPreviousPage(pageRequest, pageResponse)` - Load previous page
-- `requestNextPage(pageRequest, pageResponse)` - Load next page
-- `requestPage(pageIndex, pageRequest, pageResponse)` - Load specific page
-- `cancelCurrentRequest()` - Cancel ongoing request
-
-### Extension Functions
-
-- `LinearLayoutManager.toPageIndex(): PageIndex` - Get current page index
-- `LazyListState.toPageIndex(): PageIndex` - Get current page index
-- `LazyGridState.toPageIndex(): PageIndex` - Get current page index
-
-## 💡 Advanced Usage
-
-### Cancel Requests
-
-```kotlin
-// Cancel current request when user scrolls rapidly
-pagination.cancelCurrentRequest()
-```
-
-### Custom Page Request
+`pageRequest` receives the `Page` and `PageSize` to load and returns a `PageList`:
 
 ```kotlin
 suspend fun loadPage(page: Page, pageSize: PageSize): PageList<Item> {
-    val response = api.getItems(
-        page = page.value,
-        limit = pageSize.value
-    )
-    return PageList(
-        items = response.items,
-        page = page
-    )
+    val response = api.getItems(page = page.value, limit = pageSize.value)
+    return PageList(items = response.items, page = page)
 }
 ```
 
-## 🧪 Testing
+## Deprecated (removed in next major)
+
+They are marked `@Deprecated` (warning) and will be removed in the next
+major version.
+
+- `LinearLayoutManager.toPageIndex()`, `LazyListState.toPageIndex()`, `LazyGridState.toPageIndex()`
+  (`ext/PaginationExtension.kt`): compute the last visible item index and wrap it in `PageIndex` directly,
+  as in the examples above.
+
+## Testing
 
 ```bash
 ./gradlew :libraries:pagination:testDebugUnitTest

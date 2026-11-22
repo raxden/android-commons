@@ -18,6 +18,11 @@ fun DialogFragment.setFullscreen() = dialog?.window?.setLayout(
  * `viewLifecycleOwner` or the activity): results are delivered while it is started and the listener is
  * removed when it is destroyed. Does nothing if a fragment with [tag] is already shown.
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use FragmentManager.setFragmentResultListener with DialogFragment.show directly.",
+    level = DeprecationLevel.WARNING,
+)
 fun DialogFragment.showForResult(
     fragmentManager: FragmentManager,
     lifecycleOwner: LifecycleOwner,

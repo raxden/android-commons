@@ -8,6 +8,11 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.google.android.material.tabs.TabLayout
 import org.hamcrest.Matchers
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Keep project-owned Espresso matchers instead.",
+    level = DeprecationLevel.WARNING,
+)
 object TabLayoutMatchers {
 
     fun selectTabAtPosition(

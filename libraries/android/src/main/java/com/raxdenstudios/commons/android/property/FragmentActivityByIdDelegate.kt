@@ -6,6 +6,11 @@ import androidx.fragment.app.FragmentActivity
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use FragmentManager.findFragmentById directly.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("UNCHECKED_CAST")
 class FragmentActivityByIdDelegate<T : Fragment>(
     @IdRes private val fragmentId: Int,

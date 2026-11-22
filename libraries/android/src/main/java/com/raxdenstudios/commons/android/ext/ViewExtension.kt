@@ -34,6 +34,11 @@ fun View.setPaddingTop(
     )
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use View.setOnFocusChangeListener directly.",
+    level = DeprecationLevel.WARNING,
+)
 fun View.onFocusGained(
     onFocusGained: (View) -> Unit = {},
 ) {
@@ -42,6 +47,11 @@ fun View.onFocusGained(
     }
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use View.setOnFocusChangeListener directly.",
+    level = DeprecationLevel.WARNING,
+)
 fun View.onFocusLost(
     onLostFocus: (View) -> Unit = {},
 ) {
@@ -50,6 +60,12 @@ fun View.onFocusLost(
     }
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use WindowInsetsControllerCompat.hide(ime()) instead.",
+    level = DeprecationLevel.WARNING,
+)
+@Suppress("DEPRECATION")
 @SuppressLint("ClickableViewAccessibility")
 fun View.closeKeyboardWhenTouchScreen() {
     // Set up touch listener for non-text box views to hide keyboard.
@@ -96,16 +112,34 @@ fun View.visibleGone(
 
 fun View.isVisible() = visibility == View.VISIBLE
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use the isVisible property from androidx.core.view instead.",
+    replaceWith = ReplaceWith("isVisible = true", "androidx.core.view.isVisible"),
+    level = DeprecationLevel.WARNING,
+)
 fun View.doItVisible() {
     if (visibility != View.VISIBLE) visibility = View.VISIBLE
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use the isGone property from androidx.core.view instead.",
+    replaceWith = ReplaceWith("isGone = true", "androidx.core.view.isGone"),
+    level = DeprecationLevel.WARNING,
+)
 fun View.doItGone() {
     if (visibility != View.GONE) visibility = View.GONE
 }
 
 fun View.isGone() = visibility == View.GONE
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use the isInvisible property from androidx.core.view instead.",
+    replaceWith = ReplaceWith("isInvisible = true", "androidx.core.view.isInvisible"),
+    level = DeprecationLevel.WARNING,
+)
 fun View.doItInvisible() {
     if (visibility != View.INVISIBLE) visibility = View.INVISIBLE
 }
@@ -154,6 +188,11 @@ fun View.setSafeOnClickListener(
     }
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use callbackFlow with setOnClickListener directly or Jetpack Compose.",
+    level = DeprecationLevel.WARNING,
+)
 @OptIn(ExperimentalCoroutinesApi::class)
 fun View.clicks(): Flow<Unit> = callbackFlow {
     setOnClickListener {

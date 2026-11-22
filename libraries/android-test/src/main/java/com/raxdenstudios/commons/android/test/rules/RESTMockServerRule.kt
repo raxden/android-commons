@@ -23,6 +23,11 @@ import org.junit.runner.Description
  * val restMockServerRule = RESTMockServerRule()
  * ```
  */
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Keep a project-owned rule that starts RESTMockServer instead.",
+    level = DeprecationLevel.WARNING,
+)
 class RESTMockServerRule(
     private val useHttps: Boolean = true,
 ) : TestWatcher() {

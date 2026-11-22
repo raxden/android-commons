@@ -5,6 +5,11 @@ import androidx.core.content.edit
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use DataStore or the preferences library of this repository.",
+    level = DeprecationLevel.WARNING,
+)
 @Suppress("UNCHECKED_CAST")
 class SharedPreferencesDelegate<T : Any>(
     private val preferences: SharedPreferences,

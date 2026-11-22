@@ -4,6 +4,11 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Register Application.ActivityLifecycleCallbacks directly.",
+    level = DeprecationLevel.WARNING,
+)
 class ActivityProvider(
     application: Application,
 ) {

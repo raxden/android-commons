@@ -54,6 +54,21 @@ HeadphonesConnectionObserverImpl(applicationContext).observeConnectionChanges()
 - `ViewModel.safeLaunch { }` and `ViewModel.launch(onError) { }`: run work on `viewModelScope`, logging uncaught errors.
 - `WorkManager.enqueueUniqueOneTime<W>(policy, uniqueName, configure)`: enqueues unique one-time work. The default policy is `ExistingWorkPolicy.KEEP`.
 
+## Deprecated (removed in next major)
+
+Marked `@Deprecated` (warning level) and scheduled for removal in the next major version. Nothing was removed and no signature changed.
+
+- `Event` (`getContentIfNotHandled`, `peekContent`) and `observeEvent` / `observe` / `update` in `LiveDataExtension`: use `StateFlow`/`SharedFlow` and `collectAsStateWithLifecycle`.
+- `launchAndCollect` (`StateFlowExtension`): use `repeatOnLifecycle(Lifecycle.State.STARTED)`.
+- `ListDiffAdapter`, `FragmentBottomNavigationDelegate`, `FragmentViewPager2Delegate`, `FragmentDialog2`, `ActivityProvider`.
+- Property delegates: `ActivityArgumentDelegate`, `ActivityContentViewDelegate`, `FragmentActivityByIdDelegate`, `FragmentArgumentDelegate`, `FragmentByIdDelegate`, `SharedPreferencesDelegate`, and the factories `Activity.contentView/argument/fragmentById`, `Fragment.argument/fragmentById`, `SharedPreferences.boolean/long/string/getStringNotNull`.
+- `ViewPagerExtension` (use ViewPager2), `ViewPager2Extension`, `AppBarLayoutExtension` (including `AppBarStateChangeListener` and `AppBarScrollProgressListener`), `TextViewExtension`, `RecyclerViewExtension`, `NestedScrollViewExtension` (including `SHORT_DELAY`), `SwipeRefreshLayoutExtension`, `StringExtension`, `BitmapExtension`, `DrawableExtensions`, `DialogExtension`, `MaterialAlertDialogExtensions`, `NavigationBarExtensions`.
+- `Int.toDp()` / `Int.toPx()`: use Compose `Dp` or `TypedValue.applyDimension`.
+- `KeyboardExtension`: use `WindowInsetsControllerCompat.show(ime())` / `hide(ime())`.
+- `ViewExtension`: `doItVisible()`, `doItGone()`, `doItInvisible()` (use `isVisible`/`isGone`/`isInvisible = true` from `androidx.core.view`), `onFocusGained`, `onFocusLost`, `closeKeyboardWhenTouchScreen`, `clicks()`.
+- `ActivityExtension`: `setStatusBarSafeArea`, `setVirtualNavigationBarSafeArea`, `setResultOKWithData`, `setResultOKWithDataAndFinish`.
+- `Context.createTemporalImageFile()`, `AppCompatActivity.setupToolbar`, `DialogFragment.showForResult`.
+
 ## License
 
 See the [LICENSE](../../LICENSE.txt) file for details.

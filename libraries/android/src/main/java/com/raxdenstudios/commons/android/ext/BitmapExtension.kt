@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.ext
 
 import android.graphics.Bitmap
@@ -5,6 +7,11 @@ import android.graphics.Matrix
 import android.util.Base64
 import java.io.ByteArrayOutputStream
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Bitmap.createScaledBitmap / Matrix directly or an image loading library.",
+    level = DeprecationLevel.WARNING,
+)
 fun Bitmap.toBase64(
     maxSize: Int,
     quality: Int,
@@ -15,6 +22,11 @@ fun Bitmap.toBase64(
     return Base64.encodeToString(byteArrayOutputStream.toByteArray(), flags)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Bitmap.createScaledBitmap / Matrix directly or an image loading library.",
+    level = DeprecationLevel.WARNING,
+)
 fun Bitmap.rotate(
     rotation: Int,
 ): Bitmap {
@@ -25,6 +37,11 @@ fun Bitmap.rotate(
     return Bitmap.createBitmap(this, 0, 0, this.width, this.height, matrix, true)
 }
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use Bitmap.createScaledBitmap / Matrix directly or an image loading library.",
+    level = DeprecationLevel.WARNING,
+)
 fun Bitmap.resize(
     size: Int,
 ): Bitmap {

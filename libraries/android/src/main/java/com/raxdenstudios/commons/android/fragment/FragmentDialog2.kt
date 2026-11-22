@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.raxdenstudios.commons.android.fragment
 
 import android.app.Dialog
@@ -10,6 +12,11 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.raxdenstudios.commons.android.ext.setTransparentBackground
 
+@Deprecated(
+    message = "Will be removed in the next major version. " +
+        "Use DialogFragment directly or a Jetpack Compose dialog.",
+    level = DeprecationLevel.WARNING,
+)
 abstract class FragmentDialog2(
     @LayoutRes private val layoutId: Int,
 ) : DialogFragment() {
