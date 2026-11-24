@@ -184,6 +184,19 @@ answerFlow.collect { answer ->
 }
 ```
 
+## 🔒 Suspend Lock
+
+`SuspendLock` serialises suspend sections behind an interface you can fake in tests; `MutexSuspendLock` backs it with a `Mutex`. Use one instance per lock (a DI singleton), shared by every caller that must not overlap, e.g. a read-modify-write sync started both from app start and from a broadcast receiver. The lock is released when the block finishes, throws or is cancelled. It is not reentrant: calling `withLock` again from inside the block suspends forever. Every lock shares the `SuspendLock` type, so when an app has several (a topic-sync lock and an alarm-schedule lock, say), bind each with its own DI qualifier or a dedicated subtype.
+
+```kotlin
+class SyncTopicUseCase(private val lock: SuspendLock) {
+    suspend operator fun invoke(): Topic = lock.withLock { readSubscribeAndSave() }
+}
+
+// One shared instance, e.g. a DI singleton:
+val topicLock: SuspendLock = MutexSuspendLock()
+```
+
 ## 🔧 Dispatcher Provider
 
 Abstraction for coroutine dispatchers (useful for testing):
