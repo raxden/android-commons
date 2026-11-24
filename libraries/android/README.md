@@ -36,6 +36,18 @@ In `com.raxdenstudios.commons.android.ext`:
 - `isFullScreenIntentAllowed()`: always `true` below API 34, otherwise `NotificationManager.canUseFullScreenIntent()`.
 - `getPackageInfo()`: the app's `PackageInfo`, using the typed flags overload on API 33+.
 
+### BroadcastReceiver
+
+`BroadcastReceiver.goAsync(scope, timeout, onTimeout) { ... }` in `com.raxdenstudios.commons.android.ext` runs suspend work from `onReceive`. It calls the platform `goAsync()`, launches the block in `scope` and always calls `PendingResult.finish()`, also when the block throws, is cancelled (even before it starts) or times out. With a `timeout`, the block is cancelled after it and `onTimeout` is called. An exception from the block is not caught: it reaches `scope`'s exception handling, so catch it inside the block when it must not fail the scope. Keep the work well under the ~10 s the system allows a broadcast.
+
+```kotlin
+override fun onReceive(context: Context, intent: Intent) {
+    goAsync(scope = coroutineScopeProvider.default, timeout = 8.seconds, onTimeout = { Timber.w("Sync timed out") }) {
+        syncTopic()
+    }
+}
+```
+
 ### ActivityHolder
 
 `ActivityHolder.resumedActivity()` returns the attached activity only while it is resumed, or `null`.
