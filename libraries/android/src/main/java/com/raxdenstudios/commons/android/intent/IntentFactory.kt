@@ -6,7 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.core.net.toUri
-import com.raxdenstudios.commons.core.ext.EMPTY
+import com.raxdenstudios.commons.android.ext.releasePackageName
 
 /**
  * Builds the [Intent] that opens the screen or action described by an [IntentType].
@@ -66,7 +66,7 @@ class IntentFactoryImpl(
 
     private fun buildPlayStoreIntent(): Intent = Intent(
         Intent.ACTION_VIEW,
-        "market://details?id=${getReleasePackageName()}".toUri(),
+        "market://details?id=${context.releasePackageName()}".toUri(),
     ).apply {
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
@@ -100,6 +100,4 @@ class IntentFactoryImpl(
         data = "package:${context.packageName}".toUri()
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-
-    private fun getReleasePackageName(): String = context.packageName.replace(".debug", String.EMPTY)
 }

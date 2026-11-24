@@ -26,6 +26,19 @@ fun Context.getPackageInfo(): PackageInfo = when {
         packageManager.getPackageInfo(packageName, 0)
 }
 
+/**
+ * Returns the package name without [debugSuffix], for example to build Play Store or share links
+ * to the release app from a debug build. [debugSuffix] defaults to `.debug`.
+ *
+ * Only a trailing suffix is removed, and only once: `com.example.app.debug.debug` becomes
+ * `com.example.app.debug`. A name that does not end with [debugSuffix] is returned unchanged.
+ */
+fun Context.releasePackageName(
+    debugSuffix: String = DEBUG_PACKAGE_SUFFIX,
+): String = packageName.removeSuffix(debugSuffix)
+
+private const val DEBUG_PACKAGE_SUFFIX = ".debug"
+
 /** Epoch millis when this app was first installed (kept across updates), or `0` when it cannot be read. */
 fun Context.firstInstallTimeMillis(): Long = runCatching { getPackageInfo().firstInstallTime }
     .getOrDefault(0L)

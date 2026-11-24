@@ -98,4 +98,32 @@ internal class ContextExtensionTest {
             unmockkStatic(NotificationManagerCompat::class)
         }
     }
+
+    @Test
+    fun `Given a release package, When releasePackageName is called, Then return it unchanged`() {
+        every { context.packageName } returns "com.app"
+
+        assertEquals("com.app", context.releasePackageName())
+    }
+
+    @Test
+    fun `Given a debug package, When releasePackageName is called, Then strip the debug suffix`() {
+        every { context.packageName } returns "com.app.debug"
+
+        assertEquals("com.app", context.releasePackageName())
+    }
+
+    @Test
+    fun `Given a custom suffix, When releasePackageName is called, Then strip that suffix`() {
+        every { context.packageName } returns "com.app.dev"
+
+        assertEquals("com.app", context.releasePackageName(debugSuffix = ".dev"))
+    }
+
+    @Test
+    fun `Given debug in the middle of the package, When releasePackageName is called, Then return it unchanged`() {
+        every { context.packageName } returns "com.debug.app"
+
+        assertEquals("com.debug.app", context.releasePackageName())
+    }
 }
