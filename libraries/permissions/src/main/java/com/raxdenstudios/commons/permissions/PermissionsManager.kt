@@ -38,8 +38,9 @@ interface PermissionsManager : DefaultLifecycleObserver {
     /**
      * Attach activity. Its result launcher is registered when the activity is created: until then, requests
      * that need the system dialog report [Callbacks.onDenied] without showing it, even if an activity below in
-     * the stack could show it. Calling this before `super.onCreate` is fine; requests must wait until it returns. Call it before the
-     * activity is STARTED (not from `onStart` or `onResume`): the launcher cannot be registered after that.
+     * the stack could show it. Calling this before `super.onCreate` is fine; requests must wait until it returns.
+     * Call it before the activity is STARTED (not from `onStart` or `onResume`): the launcher cannot be registered
+     * after that.
      *
      * @param activity
      */
