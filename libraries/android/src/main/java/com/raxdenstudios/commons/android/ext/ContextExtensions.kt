@@ -9,6 +9,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
+import androidx.core.app.NotificationManagerCompat
 import com.raxdenstudios.commons.android.util.Network
 
 /**
@@ -59,6 +60,14 @@ fun Context.isExactAlarmAllowed(): Boolean = Build.VERSION.SDK_INT < Build.VERSI
  */
 fun Context.isFullScreenIntentAllowed(): Boolean = Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE ||
     getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
+
+/**
+ * Whether this app can post notifications right now: the notification permission is granted (API 33+) and the
+ * user has not turned the app's notifications off. Reflects [NotificationManagerCompat.areNotificationsEnabled].
+ *
+ * When this returns `false`, request `POST_NOTIFICATIONS` (API 33+) or open `IntentType.NotificationSettings`.
+ */
+fun Context.areNotificationsEnabled(): Boolean = NotificationManagerCompat.from(this).areNotificationsEnabled()
 
 fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this

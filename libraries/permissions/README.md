@@ -26,6 +26,45 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
+### Several activities
+
+Attach every activity that may ask for permissions, each in its own `onCreate`. The manager keeps them as a stack and each one registers its own result launcher when it is created. Requests, `shouldShowRationale` and `hasPermission` use the most recently attached activity that is still alive: when the one on top is destroyed (for example a full-screen alarm screen shown over the main activity), the manager falls back to the one below. Share one manager (a singleton from DI) for this:
+
+```kotlin
+class AlarmActivity : ComponentActivity() {
+    private val permissionsManager: PermissionsManager by inject()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        permissionsManager.attach(this)
+    }
+}
+```
+
+A request waiting for the dialog belongs to the activity that showed it: it is denied when that activity is destroyed for good, and kept when it is recreated after a configuration change (the new instance keeps its place in the stack). Destroying another activity does not affect it. If the activity on top is attached but not created yet, requests report `onDenied` without showing the dialog, even when an activity below could show it.
+
+The recreated instance is matched through an id the manager keeps in the activity's saved state, so only the activity that was recreated takes the old place back. Any other activity created meanwhile (a deep link or a notification tap, for example) becomes a new entry on top. Because Android creates the new instance right after destroying the old one, the old place is dropped, and its pending request denied, as soon as another attached activity is created before it comes back.
+
+### Notifications
+
+Apps can use the manager instead of their own notification permission launcher:
+
+```kotlin
+val canPost = when {
+    context.areNotificationsEnabled() -> true
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> false // no runtime permission: open IntentType.NotificationSettings
+    else -> {
+        permissionsManager.requestPermissionAfterRationale(Permission.PostNotifications)
+        context.areNotificationsEnabled()
+    }
+}
+```
+
+- Below API 33 `POST_NOTIFICATIONS` is not a runtime permission: do not request it, check `areNotificationsEnabled()` and send the user to the notification settings.
+- `Context.areNotificationsEnabled()` (`commons-android`) is the source of truth after the dialog. `Granted` only reflects the permission, not whether the user turned notifications off for the app or a channel.
+- `Denied` does not tell apart no attached activity, an activity not created yet, the user saying no, or a permanent block. Use `shouldShowRationale` before asking, and the settings screen when the dialog no longer shows.
+
+
 ### Request Single Permission
 
 ```kotlin
@@ -83,7 +122,7 @@ permissionsManager.hasPermission(
 )
 ```
 
-`hasPermission` works without an attached activity when the manager was given a context (see [Background use](#background-use)). It checks the attached activity first, then the application context, and reports `false` when neither is available.
+`hasPermission` works without an attached activity when the manager was given a context (see [Background use](#background-use)). It checks the most recently attached activity still alive first, then the application context, and reports `false` when neither is available.
 
 ### Background use
 
@@ -123,7 +162,7 @@ when (val result = permissionsManager.requestPermission(Permission.RecordAudio))
 
 ### Rationale check
 
-`shouldShowRationale(permission)` tells whether the attached activity should explain the permission before asking again. It returns `false` when no activity is attached, even if the manager has a context: unlike `hasPermission`, it has no application-context fallback.
+`shouldShowRationale(permission)` tells whether the most recently attached activity still alive should explain the permission before asking again. It returns `false` when no activity is attached, even if the manager has a context: unlike `hasPermission`, it has no application-context fallback.
 
 `shouldShowRationale` is a new `PermissionsManager` interface member: custom implementations of the interface must add it (source-breaking).
 
@@ -165,7 +204,7 @@ val customPermission = Permission.Other("android.permission.CUSTOM_PERMISSION")
 #### Methods
 
 - `PermissionsManagerImpl(context: Context? = null)` - Default implementation; the optional context enables `hasPermission` without an attached activity
-- `attach(activity: ComponentActivity)` - Attach to activity lifecycle
+- `attach(activity: ComponentActivity)` - Attach to activity lifecycle; several activities can be attached, the most recent one alive is used
 - `requestPermission(callbacks: Callbacks, vararg permissions: Permission)` - Request permissions (needs an attached activity)
 - `hasPermission(onGranted: (Boolean) -> Unit, permission: Permission)` - Check permission status (attached activity, then application context, else `false`)
 

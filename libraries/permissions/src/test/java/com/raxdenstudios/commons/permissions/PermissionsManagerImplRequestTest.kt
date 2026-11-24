@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.permissions
 
 import android.content.pm.PackageManager
+import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -9,18 +10,26 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
+import androidx.savedstate.SavedStateRegistry
 import com.google.common.truth.Truth.assertThat
 import com.raxdenstudios.commons.permissions.model.Permission
 import io.mockk.MockKVerificationScope
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 internal class PermissionsManagerImplRequestTest {
 
     private val activity: ComponentActivity = mockk(relaxed = true)
@@ -28,6 +37,8 @@ internal class PermissionsManagerImplRequestTest {
     private val launcher: ActivityResultLauncher<Array<String>> = mockk(relaxed = true)
     private val keys = mutableListOf<String>()
     private val resultCallbacks = mutableListOf<ActivityResultCallback<Map<String, Boolean>>>()
+    private val savedStateRegistry: SavedStateRegistry = mockk(relaxed = true)
+    private val providers = mutableListOf<SavedStateRegistry.SavedStateProvider>()
     private val events = mutableListOf<String>()
     private lateinit var manager: PermissionsManagerImpl
 
@@ -37,6 +48,8 @@ internal class PermissionsManagerImplRequestTest {
         every { ContextCompat.checkSelfPermission(any(), any()) } returns PackageManager.PERMISSION_DENIED
         every { activity.lifecycle } returns mockk<LifecycleRegistry>(relaxed = true)
         every { activity.activityResultRegistry } returns registry
+        every { activity.savedStateRegistry } returns savedStateRegistry
+        every { savedStateRegistry.registerSavedStateProvider(any(), capture(providers)) } just runs
         every {
             registry.register(
                 capture(keys),
@@ -281,10 +294,13 @@ internal class PermissionsManagerImplRequestTest {
         every { activity.isChangingConfigurations } returns true
         manager.requestPermission(callbacks(), Permission.Camera)
 
+        val saved = providers.last().saveState()
+
         manager.onDestroy(activity)
         assertThat(events).isEmpty()
-        manager.attach(activity)
-        manager.onCreate(activity)
+        val recreated = recreatedActivity(saved)
+        manager.attach(recreated)
+        manager.onCreate(recreated)
         resultCallbacks.last().onActivityResult(mapOf(Permission.Camera.value to true))
 
         assertThat(events).containsExactly("granted:Camera")
@@ -302,6 +318,28 @@ internal class PermissionsManagerImplRequestTest {
         assertThat(manager.shouldShowRationale(Permission.Camera)).isTrue()
         manager.requestPermission(callbacks("second"), Permission.AccessFineLocation)
         verify { launcher.launch(launched(Permission.AccessFineLocation)) }
+    }
+
+    private fun recreatedActivity(
+        saved: Bundle,
+    ): ComponentActivity {
+        val recreated: ComponentActivity = mockk(relaxed = true)
+        val recreatedRegistry: ActivityResultRegistry = mockk()
+        val recreatedSavedState: SavedStateRegistry = mockk(relaxed = true)
+        every { recreated.lifecycle } returns mockk<LifecycleRegistry>(relaxed = true)
+        every { recreated.activityResultRegistry } returns recreatedRegistry
+        every { recreated.savedStateRegistry } returns recreatedSavedState
+        every { recreatedSavedState.isRestored } returns true
+        every { recreatedSavedState.consumeRestoredStateForKey(any()) } returns saved
+        every {
+            recreatedRegistry.register(
+                capture(keys),
+                any<LifecycleOwner>(),
+                any<ActivityResultContract<Array<String>, Map<String, Boolean>>>(),
+                capture(resultCallbacks),
+            )
+        } returns launcher
+        return recreated
     }
 
     private fun create() {

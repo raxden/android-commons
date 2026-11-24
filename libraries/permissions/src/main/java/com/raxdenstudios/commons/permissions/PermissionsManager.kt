@@ -36,7 +36,11 @@ import com.raxdenstudios.commons.permissions.model.Permission
 interface PermissionsManager : DefaultLifecycleObserver {
 
     /**
-     * Attach activity
+     * Attach activity. Its result launcher is registered when the activity is created: until then, requests
+     * that need the system dialog report [Callbacks.onDenied] without showing it, even if an activity below in
+     * the stack could show it. Calling this before `super.onCreate` is fine; requests must wait until it returns.
+     * Call it before the activity is STARTED (not from `onStart` or `onResume`): the launcher cannot be registered
+     * after that.
      *
      * @param activity
      */
@@ -81,9 +85,10 @@ interface PermissionsManager : DefaultLifecycleObserver {
     }
 
     /**
-     * Reports whether [permission] is granted, without requesting it. The check uses the attached activity when
-     * there is one, otherwise the application context: the one given to the manager, or else the application
-     * context of the first attached activity. With no activity and no context it reports `false`.
+     * Reports whether [permission] is granted, without requesting it. The check uses the most recently attached
+     * activity still alive when there is one, otherwise the application context: the one given to the manager,
+     * or else the application context of the first attached activity. With no activity and no context it reports
+     * `false`.
      *
      * [onGranted] is called synchronously on the calling thread, before this function returns. When the manager
      * was created with a context, this is safe from background callers (services, workers, FCM messages) with no
@@ -98,9 +103,9 @@ interface PermissionsManager : DefaultLifecycleObserver {
     )
 
     /**
-     * Whether the attached activity should explain [permission] before asking for it again. Returns `false`
-     * when no activity is attached. Permissions never requested, or denied with "don't ask again", also return
-     * `false`, so this does not tell a first request apart from a permanent denial.
+     * Whether the most recently attached activity still alive should explain [permission] before asking for it
+     * again. Returns `false` when no activity is attached. Permissions never requested, or denied with "don't ask
+     * again", also return `false`, so this does not tell a first request apart from a permanent denial.
      */
     fun shouldShowRationale(
         permission: Permission,

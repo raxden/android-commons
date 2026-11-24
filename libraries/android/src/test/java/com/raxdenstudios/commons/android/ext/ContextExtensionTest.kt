@@ -6,9 +6,13 @@ import android.content.ContextWrapper
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import androidx.core.app.NotificationManagerCompat
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -68,6 +72,31 @@ internal class ContextExtensionTest {
         val result = context.findActivity()
 
         assertTrue(result != null)
+    }
+
+    @Test
+    fun `Given notifications are enabled When areNotificationsEnabled is called Then return true`() {
+        assertEquals(true, areNotificationsEnabledWith(enabled = true))
+    }
+
+    @Test
+    fun `Given notifications are disabled When areNotificationsEnabled is called Then return false`() {
+        assertFalse(areNotificationsEnabledWith(enabled = false))
+    }
+
+    private fun areNotificationsEnabledWith(
+        enabled: Boolean,
+    ): Boolean {
+        val manager: NotificationManagerCompat = mockk()
+        mockkStatic(NotificationManagerCompat::class)
+        try {
+            every { NotificationManagerCompat.from(context) } returns manager
+            every { manager.areNotificationsEnabled() } returns enabled
+
+            return context.areNotificationsEnabled()
+        } finally {
+            unmockkStatic(NotificationManagerCompat::class)
+        }
     }
 
     @Test

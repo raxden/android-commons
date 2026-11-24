@@ -17,7 +17,7 @@ import kotlin.coroutines.resume
  * If the manager is not attached and created yet, returns [PermissionResult.Denied] instead of showing the
  * dialog. Cancelling the calling coroutine stops the wait. Starting another request that shows the dialog
  * while this one is still waiting resumes this one with [PermissionResult.Denied], as does destroying the
- * activity for a reason other than a configuration change.
+ * activity that showed the dialog for a reason other than a configuration change.
  *
  * ## Usage
  *
