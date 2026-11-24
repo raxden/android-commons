@@ -34,6 +34,7 @@ In `com.raxdenstudios.commons.android.ext`:
 - `firstInstallTimeMillis()`: first install time in epoch millis, or `0` if it cannot be read.
 - `isExactAlarmAllowed()`: always `true` below API 31, otherwise `AlarmManager.canScheduleExactAlarms()`.
 - `isFullScreenIntentAllowed()`: always `true` below API 34, otherwise `NotificationManager.canUseFullScreenIntent()`.
+- `releasePackageName(debugSuffix = ".debug")`: the package name without the trailing debug suffix, e.g. for Play Store or share links built from a debug build. Only a trailing suffix is removed.
 - `getPackageInfo()`: the app's `PackageInfo`, using the typed flags overload on API 33+.
 
 ### ActivityHolder

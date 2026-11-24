@@ -53,6 +53,15 @@ internal class IntentFactoryImplTest {
     }
 
     @Test
+    fun `Given debug in the middle of the package, When PlayStore is built, Then the package is unchanged`() {
+        every { context.packageName } returns "com.debug.app"
+
+        val intent = factory.build(IntentType.PlayStore)
+
+        assertThat(intent.data.toString()).isEqualTo("market://details?id=com.debug.app")
+    }
+
+    @Test
     fun `Given ShareText, When build is called, Then return send intent with text and subject`() {
         val intent = factory.build(IntentType.ShareText(subject = "A subject", text = "Some text"))
 
