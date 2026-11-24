@@ -36,6 +36,22 @@ In `com.raxdenstudios.commons.android.ext`:
 - `isFullScreenIntentAllowed()`: always `true` below API 34, otherwise `NotificationManager.canUseFullScreenIntent()`.
 - `getPackageInfo()`: the app's `PackageInfo`, using the typed flags overload on API 33+.
 
+### MonotonicClock
+
+`com.raxdenstudios.commons.android.util.MonotonicClock` measures intervals (timers, play time, debounce) with `SystemClock.elapsedRealtime()`, which never jumps when the user or the network changes the wall clock. Inject `MonotonicClock.System` and pass a lambda in tests.
+
+```kotlin
+class PlayTimer(private val clock: MonotonicClock = MonotonicClock.System) {
+    private val startedAt = clock.elapsedRealtimeMillis()
+    fun elapsedMillis(): Long = clock.elapsedRealtimeMillis() - startedAt
+}
+
+// In a test, driven by virtual time:
+val timer = PlayTimer(clock = MonotonicClock { testScheduler.currentTime })
+```
+
+For the wall-clock time and today's date, inject `java.time.Clock` (`Clock.systemDefaultZone()`) and read `LocalDate.now(clock)`; tests use `MutableClock` or `virtualClock()` from `commons-coroutines-test`.
+
 ### ActivityHolder
 
 `ActivityHolder.resumedActivity()` returns the attached activity only while it is resumed, or `null`.
