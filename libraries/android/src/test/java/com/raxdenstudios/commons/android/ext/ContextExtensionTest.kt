@@ -1,6 +1,7 @@
 package com.raxdenstudios.commons.android.ext
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
 import android.net.ConnectivityManager
@@ -11,8 +12,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -125,5 +128,38 @@ internal class ContextExtensionTest {
         every { context.packageName } returns "com.debug.app"
 
         assertEquals("com.debug.app", context.releasePackageName())
+    }
+
+    @Test
+    fun `Given application context When registering on application Then registers on application`() {
+        val application: Application = mockk(relaxed = true)
+        val callbacks: Application.ActivityLifecycleCallbacks = mockk(relaxed = true)
+        every { context.applicationContext } returns application
+
+        context.registerActivityLifecycleCallbacksOnApplication(callbacks)
+
+        verify(exactly = 1) { application.registerActivityLifecycleCallbacks(callbacks) }
+    }
+
+    @Test
+    fun `Given non Application context When registering on application Then throws IllegalStateException`() {
+        val callbacks: Application.ActivityLifecycleCallbacks = mockk(relaxed = true)
+        every { context.applicationContext } returns mockk<Context>(relaxed = true)
+
+        val exception = assertThrows(IllegalStateException::class.java) {
+            context.registerActivityLifecycleCallbacksOnApplication(callbacks)
+        }
+
+        assertEquals("applicationContext is not an Application", exception.message)
+    }
+
+    @Test
+    fun `Given null application context When registering on application Then throws IllegalStateException`() {
+        val callbacks: Application.ActivityLifecycleCallbacks = mockk(relaxed = true)
+        every { context.applicationContext } returns null
+
+        assertThrows(IllegalStateException::class.java) {
+            context.registerActivityLifecycleCallbacksOnApplication(callbacks)
+        }
     }
 }
