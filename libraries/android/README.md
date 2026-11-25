@@ -66,6 +66,31 @@ val timer = PlayTimer(clock = MonotonicClock { testScheduler.currentTime })
 
 For the wall-clock time and today's date, inject `java.time.Clock` (`Clock.systemDefaultZone()`) and read `LocalDate.now(clock)`; tests use `MutableClock` or `virtualClock()` from `commons-coroutines-test`.
 
+### Activity lifecycle callbacks
+
+- `com.raxdenstudios.commons.android.util.ActivityLifecycleCallbacksAdapter`: an `open class` implementing `Application.ActivityLifecycleCallbacks` with every callback as a no-op, so you override only the ones you need. The seven callbacks are abstract on every API level (API 29 only added default `onActivityPre*` / `onActivityPost*` methods) so the adapter is useful on every API level, including below API 29.
+- `Context.registerActivityLifecycleCallbacksOnApplication(callbacks)` in `com.raxdenstudios.commons.android.ext`: registers the callbacks on the `Application` behind the context, for androidx.startup `Initializer`s and any code that only holds a `Context`. It is not called `registerActivityLifecycleCallbacks` because, inside an activity, the member `Activity.registerActivityLifecycleCallbacks` (API 29+, observes only that activity) would silently win over the extension. It throws `IllegalStateException` if `applicationContext` is not an `Application` or is `null`. Keep a reference to the callbacks if you need to unregister them later.
+- `Application.doOnActivityCreated<A> { activity -> }`: calls the action for every activity created from now on that is an `A`, and returns the registered callbacks so you can pass them to `unregisterActivityLifecycleCallbacks`.
+
+```kotlin
+class ScreenTrackingInitializer : Initializer<Unit> {
+
+    override fun create(context: Context) {
+        context.registerActivityLifecycleCallbacksOnApplication(
+            object : ActivityLifecycleCallbacksAdapter() {
+                override fun onActivityResumed(activity: Activity) {
+                    Timber.d("Resumed ${activity::class.simpleName}")
+                }
+            },
+        )
+        (context.applicationContext as? Application)
+            ?.doOnActivityCreated<ComponentActivity> { activity -> activity.enableEdgeToEdge() }
+    }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
+}
+```
+
 ### ActivityHolder
 
 `ActivityHolder.resumedActivity()` returns the attached activity only while it is resumed, or `null`.
