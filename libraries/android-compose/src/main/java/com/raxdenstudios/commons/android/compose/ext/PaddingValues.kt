@@ -50,6 +50,37 @@ fun PaddingValues.copy(
 )
 
 /**
+ * Returns a copy of these paddings whose bottom is the larger of this bottom and the bottom of [other]. Start,
+ * top and end are kept from this padding. Unlike [plus], the bottoms are not added.
+ *
+ * Use it when both paddings already include the navigation bar inset, e.g. a pushed screen's own padding and the
+ * bottom bar padding of a host scaffold. Adding them would count the inset twice. The current [LocalLayoutDirection]
+ * resolves the start and end sides of the copy.
+ *
+ * Outside composition, use the overload that takes a [LayoutDirection].
+ */
+@Composable
+fun PaddingValues.coerceBottomAtLeast(
+    other: PaddingValues,
+): PaddingValues = coerceBottomAtLeast(layoutDirection = LocalLayoutDirection.current, other = other)
+
+/**
+ * Returns a copy of these paddings whose bottom is the larger of this bottom and the bottom of [other]. Start,
+ * top and end are kept from this padding. Unlike [plus], the bottoms are not added.
+ *
+ * Use it when both paddings already include the navigation bar inset, e.g. a pushed screen's own padding and the
+ * bottom bar padding of a host scaffold. Adding them would count the inset twice. [layoutDirection] resolves the
+ * start and end sides of the copy. Unlike the composable overload, it can be called outside composition.
+ */
+fun PaddingValues.coerceBottomAtLeast(
+    layoutDirection: LayoutDirection,
+    other: PaddingValues,
+): PaddingValues = copy(
+    layoutDirection = layoutDirection,
+    bottom = maxOf(calculateBottomPadding(), other.calculateBottomPadding()),
+)
+
+/**
  * Sums two paddings side by side: each side of the result is the sum of the same side in both values.
  *
  * The sum is resolved lazily, so paddings backed by state (e.g. window insets) stay up to date. Two sums of
