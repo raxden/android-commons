@@ -38,6 +38,14 @@ In `com.raxdenstudios.commons.android.ext`:
 - `releasePackageName(debugSuffix = ".debug")`: the package name without the trailing debug suffix, e.g. for Play Store or share links built from a debug build. Only a trailing suffix is removed.
 - `getPackageInfo()`: the app's `PackageInfo`, using the typed flags overload on API 33+.
 
+### PendingIntentFlags
+
+`com.raxdenstudios.commons.android.util.PendingIntentFlags.UPDATE_IMMUTABLE` combines `FLAG_UPDATE_CURRENT` and `FLAG_IMMUTABLE`: an existing `PendingIntent` keeps its identity but gets the new extras, and other apps cannot change it. Mutability flags are required from API 31; minSdk 28 means no SDK check is needed.
+
+```kotlin
+val pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntentFlags.UPDATE_IMMUTABLE)
+```
+
 ### BroadcastReceiver
 
 `BroadcastReceiver.goAsync(scope, timeout, onTimeout) { ... }` in `com.raxdenstudios.commons.android.ext` runs suspend work from `onReceive`. It calls the platform `goAsync()`, launches the block in `scope` and always calls `PendingResult.finish()`, also when the block throws, is cancelled (even before it starts) or times out. With a `timeout`, the block is cancelled after it and `onTimeout` is called. An exception from the block is not caught: it reaches `scope`'s exception handling, so catch it inside the block when it must not fail the scope. Keep the work well under the ~10 s the system allows a broadcast.
