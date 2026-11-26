@@ -176,4 +176,54 @@ internal class PaddingValuesTest {
         assertThat(actual.calculateTopPadding()).isEqualTo(expected.calculateTopPadding())
         assertThat(actual.calculateBottomPadding()).isEqualTo(expected.calculateBottomPadding())
     }
+
+    @Test
+    fun `Given other with larger bottom When coerceBottomAtLeast Then bottom is the other one`() {
+        val result = first.coerceBottomAtLeast(LayoutDirection.Ltr, second)
+
+        assertThat(result.calculateBottomPadding()).isEqualTo(40.dp)
+    }
+
+    @Test
+    fun `Given other with smaller bottom When coerceBottomAtLeast Then bottom is kept`() {
+        val result = second.coerceBottomAtLeast(LayoutDirection.Ltr, first)
+
+        assertThat(result.calculateBottomPadding()).isEqualTo(40.dp)
+    }
+
+    @Test
+    fun `Given Ltr When coerceBottomAtLeast Then start top and end are kept`() {
+        val result = first.coerceBottomAtLeast(LayoutDirection.Ltr, second)
+
+        assertThat(result.calculateStartPadding(LayoutDirection.Ltr)).isEqualTo(1.dp)
+        assertThat(result.calculateTopPadding()).isEqualTo(2.dp)
+        assertThat(result.calculateEndPadding(LayoutDirection.Ltr)).isEqualTo(3.dp)
+    }
+
+    @Test
+    fun `Given Rtl When coerceBottomAtLeast Then start and end resolve with the direction`() {
+        val result = first.coerceBottomAtLeast(LayoutDirection.Rtl, second)
+
+        assertThat(result.calculateStartPadding(LayoutDirection.Rtl)).isEqualTo(1.dp)
+        assertThat(result.calculateEndPadding(LayoutDirection.Rtl)).isEqualTo(3.dp)
+        assertThat(result.calculateLeftPadding(LayoutDirection.Rtl)).isEqualTo(3.dp)
+        assertThat(result.calculateRightPadding(LayoutDirection.Rtl)).isEqualTo(1.dp)
+        assertThat(result.calculateBottomPadding()).isEqualTo(40.dp)
+    }
+
+    @Test
+    fun `Given Rtl When composable coerceBottomAtLeast Then it matches the overload`() {
+        var composed: PaddingValues? = null
+        activity.setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                composed = first.coerceBottomAtLeast(second)
+            }
+        }
+        shadowOf(Looper.getMainLooper()).idle()
+
+        val actual = checkNotNull(composed)
+        assertThat(actual.calculateStartPadding(LayoutDirection.Rtl)).isEqualTo(1.dp)
+        assertThat(actual.calculateEndPadding(LayoutDirection.Rtl)).isEqualTo(3.dp)
+        assertThat(actual.calculateBottomPadding()).isEqualTo(40.dp)
+    }
 }

@@ -70,8 +70,9 @@ In `com.raxdenstudios.commons.android.compose.ext`:
 
 In `com.raxdenstudios.commons.android.compose.ext`:
 
-- `PaddingValues.copy(start, top, end, bottom)`: `@Composable` copy that overrides only the given sides.
+- `PaddingValues.copy(start, top, end, bottom)`: `@Composable` copy that overrides only the given sides. Outside composition, pass a `LayoutDirection` to the overload that takes it.
 - `PaddingValues + PaddingValues`: sums two paddings side by side.
+- `PaddingValues.coerceBottomAtLeast(other)`: keeps start, top and end, and takes the larger bottom instead of the sum. Use it when both paddings already include the navigation bar inset (e.g. a pushed screen and a host scaffold's bottom bar), so the inset is not counted twice. Also available as `coerceBottomAtLeast(layoutDirection, other)` outside composition.
 
 ### LockScreenOrientation
 
