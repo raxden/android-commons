@@ -71,4 +71,22 @@ internal class DurationExtensionTest {
         assertThat((1.hours + 2.minutes + 3.seconds).toClockText()).isEqualTo("1:02:03")
         assertThat(65.seconds.toClockText()).isEqualTo("01:05")
     }
+
+    @Test
+    fun `Given 95 seconds When toClockText without pad minutes Then returns 1 35`() {
+        assertThat(95.seconds.toClockText(padMinutes = false)).isEqualTo("1:35")
+    }
+
+    @Test
+    fun `Given 5 seconds When toClockText without pad minutes Then returns 0 05`() {
+        assertThat(5.seconds.toClockText(padMinutes = false)).isEqualTo("0:05")
+    }
+
+    @Test
+    fun `Given hours When toClockText with either pad minutes Then format is unchanged`() {
+        val duration = 1.hours + 2.minutes + 3.seconds
+
+        assertThat(duration.toClockText(padMinutes = true)).isEqualTo("1:02:03")
+        assertThat(duration.toClockText(padMinutes = false)).isEqualTo("1:02:03")
+    }
 }
