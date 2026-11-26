@@ -21,11 +21,16 @@ In `com.raxdenstudios.commons.core.ext`:
 - `String.alphanumericOnly()`: keeps only ASCII letters and digits. It also drops non-ASCII letters, so call `removeDiacritics()` first.
 - `String.collapseWhitespace()`: trims and replaces runs of whitespace with one space.
 - `String.toFlagEmoji()`: the flag for an ISO 3166-1 alpha-2 code, e.g. `"es"`. Returns `""` for any other input.
+- `String.toDisplayCountry(locale)`: the country name for a region code, e.g. `"ES"` becomes `"Spain"` (or `"España"` in Spanish). Returns `null` for an invalid or blank code, or when the platform has no name for it.
+- `String.capitalized(locale)`: upper-cases the first character with the titlecase rules of `locale` and keeps the rest. Replaces the deprecated `capitalize`.
 
 ```kotlin
 "Canción".removeDiacritics().alphanumericOnly()  // "Cancion"
 "fr".toFlagEmoji()                               // flag of France
 "ESP".toFlagEmoji()                              // "" (not a two-letter code)
+"ES".toDisplayCountry(Locale.US)                 // "Spain"
+"XX".toDisplayCountry(Locale.US)                 // null (no name for the code)
+"hola".capitalized()                             // "Hola"
 ```
 
 ### Lists

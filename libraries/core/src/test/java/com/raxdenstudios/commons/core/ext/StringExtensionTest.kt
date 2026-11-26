@@ -152,4 +152,61 @@ internal class StringExtensionTest {
 
         assertThat(result).isEqualTo(1.5)
     }
+
+    @Test
+    fun `Given a lowercase word When capitalized Then first letter is uppercase`() {
+        assertThat("españa".capitalized(Locale.ENGLISH)).isEqualTo("España")
+    }
+
+    @Test
+    fun `Given an empty string When capitalized Then it stays empty`() {
+        assertThat("".capitalized(Locale.ENGLISH)).isEmpty()
+    }
+
+    @Test
+    fun `Given an already capitalized word When capitalized Then it is unchanged`() {
+        assertThat("Madrid rocks".capitalized(Locale.ENGLISH)).isEqualTo("Madrid rocks")
+    }
+
+    @Test
+    fun `Given a Turkish locale When capitalized istanbul Then uses dotted capital I`() {
+        assertThat("istanbul".capitalized(Locale("tr"))).isEqualTo("İstanbul")
+    }
+
+    @Test
+    fun `Given an ISO code When toDisplayCountry in English Then returns the country name`() {
+        assertThat("ES".toDisplayCountry(Locale.ENGLISH)).isEqualTo("Spain")
+    }
+
+    @Test
+    fun `Given a lowercase code When toDisplayCountry Then it still resolves`() {
+        assertThat("es".toDisplayCountry(Locale.ENGLISH)).isEqualTo("Spain")
+    }
+
+    @Test
+    fun `Given a code with spaces When toDisplayCountry Then input is trimmed`() {
+        assertThat("  ES ".toDisplayCountry(Locale.ENGLISH)).isEqualTo("Spain")
+    }
+
+    @Test
+    fun `Given a Spanish locale When toDisplayCountry GB Then returns the localized name`() {
+        assertThat("GB".toDisplayCountry(Locale("es"))).isEqualTo("Reino Unido")
+    }
+
+    @Test
+    fun `Given a blank string When toDisplayCountry Then returns null`() {
+        assertThat("".toDisplayCountry(Locale.ENGLISH)).isNull()
+        assertThat("   ".toDisplayCountry(Locale.ENGLISH)).isNull()
+    }
+
+    @Test
+    fun `Given an invalid code When toDisplayCountry Then returns null`() {
+        assertThat("ESPX".toDisplayCountry(Locale.ENGLISH)).isNull()
+        assertThat("1A".toDisplayCountry(Locale.ENGLISH)).isNull()
+    }
+
+    @Test
+    fun `Given a code without a platform name When toDisplayCountry Then returns null`() {
+        assertThat("XZ".toDisplayCountry(Locale.ENGLISH)).isNull()
+    }
 }

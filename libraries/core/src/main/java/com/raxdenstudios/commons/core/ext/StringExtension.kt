@@ -89,6 +89,28 @@ fun String.toFlagEmoji(): String {
         .joinToString(String.EMPTY) { codePoint -> String(Character.toChars(codePoint)) }
 }
 
+/**
+ * Upper-cases the first character of this string with the titlecase rules of [locale], and leaves the rest
+ * unchanged, e.g. "hola" becomes "Hola" and "hOLA" becomes "HOLA". Replaces the deprecated `capitalize`.
+ */
+fun String.capitalized(
+    locale: Locale = Locale.getDefault(),
+): String = replaceFirstChar { char -> char.titlecase(locale) }
+
+/**
+ * Returns the name of the country for this ISO 3166-1 alpha-2 region code, written in [locale]. The code is
+ * trimmed first, so "ES" becomes "Spain" in English or "España" in Spanish.
+ *
+ * Returns `null` when the code is invalid or blank, or when the platform has no name for it. In that last case
+ * the platform would only echo the code back, so it is not treated as a name. Pair it with [toFlagEmoji] to show
+ * a flag next to the name.
+ */
+fun String.toDisplayCountry(
+    locale: Locale = Locale.getDefault(),
+): String? = kotlin.runCatching { Locale.Builder().setRegion(trim()).build().getDisplayCountry(locale) }
+    .getOrNull()
+    ?.takeIf { name -> name.isNotBlank() && !name.equals(trim(), ignoreCase = true) }
+
 private val DIACRITICS = Regex("""\p{Mn}+""")
 private val NON_ALPHANUMERIC = Regex("""[^A-Za-z0-9]""")
 private val WHITESPACES = Regex("""\s+""")
